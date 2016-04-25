@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AmbientLightSystem.cpp" />
+    <ClCompile Include="AmbientOcclusion.cpp" />
+    <ClCompile Include="AreaLight.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
+    <ClCompile Include="BoxFilter.cpp" />
+    <ClCompile Include="BSDF.cpp" />
+    <ClCompile Include="Bvh.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="CDF.cpp" />
+    <ClCompile Include="Conductor.cpp" />
+    <ClCompile Include="Dielectric.cpp" />
+    <ClCompile Include="DifferentialGeometry.cpp" />
+    <ClCompile Include="Diffuse.cpp" />
+    <ClCompile Include="DiffuseSystem.cpp" />
+    <ClCompile Include="DirectLighting.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="DirectLightingIS.cpp" />
+    <ClCompile Include="DirectLightingMIS.cpp" />
+    <ClCompile Include="DistantLight.cpp" />
+    <ClCompile Include="EnvironmentLight.cpp" />
+    <ClCompile Include="Fresnel.cpp" />
+    <ClCompile Include="HDRLoader.cpp" />
+    <ClCompile Include="IMeshLoader.cpp" />
+    <ClCompile Include="GaussianFilter.cpp" />
+    <ClCompile Include="GeometricShapeFactory.cpp" />
+    <ClCompile Include="Integrator.cpp" />
+    <ClCompile Include="Intersection.cpp" />
+    <ClCompile Include="ISampledShape.cpp" />
+    <ClCompile Include="Job.cpp" />
+    <ClCompile Include="JobManager.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mapping.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshLight.cpp" />
+    <ClCompile Include="Microfacet.cpp" />
+    <ClCompile Include="Mirror.cpp" />
+    <ClCompile Include="MitchellNetravaliFilter.cpp" />
+    <ClCompile Include="NoriPerspective.cpp" />
+    <ClCompile Include="NormalIntegrator.cpp" />
+    <ClCompile Include="GeometricShape.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
+    <ClCompile Include="ObjectFactoryManager.cpp" />
+    <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="Orthographic.cpp" />
+    <ClCompile Include="Parameters.cpp" />
+    <ClCompile Include="PathTracingMIS.cpp" />
+    <ClCompile Include="Perspective.cpp" />
+    <ClCompile Include="Phong.cpp" />
+    <ClCompile Include="PLYLoader.cpp" />
+    <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="Primitive.cpp" />
+    <ClCompile Include="RandomSampler.cpp" />
+    <ClCompile Include="Ray.cpp" />
+    <ClCompile Include="ReconstructionFilter.cpp" />
+    <ClCompile Include="ReflectionSystem.cpp" />
+    <ClCompile Include="Rng.cpp" />
+    <ClCompile Include="RoughConductor.cpp" />
+    <ClCompile Include="RoughDielectric.cpp" />
+    <ClCompile Include="SampleJob.cpp" />
+    <ClCompile Include="Sampler.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="SpecularSystem.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="System.cpp" />
+    <ClCompile Include="TestBvh.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="tinystr.cpp" />
+    <ClCompile Include="tinyxml.cpp" />
+    <ClCompile Include="tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxmlparser.cpp" />
+    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="Geometry.cpp" />
+    <ClCompile Include="XMLLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AmbientLightSystem.h" />
+    <ClInclude Include="AmbientOcclusion.h" />
+    <ClInclude Include="AreaLight.h" />
+    <ClInclude Include="BoundingBox.h" />
+    <ClInclude Include="BoxFilter.h" />
+    <ClInclude Include="BSDF.h" />
+    <ClInclude Include="Bvh.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="CDF.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Conductor.h" />
+    <ClInclude Include="Dielectric.h" />
+    <ClInclude Include="DifferentialGeometry.h" />
+    <ClInclude Include="Diffuse.h" />
+    <ClInclude Include="DiffuseSystem.h" />
+    <ClInclude Include="DirectLighting.h" />
+    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="Array2D.h" />
+    <ClInclude Include="DirectLightingIS.h" />
+    <ClInclude Include="DirectLightingMIS.h" />
+    <ClInclude Include="DistantLight.h" />
+    <ClInclude Include="EnvironmentLight.h" />
+    <ClInclude Include="Fresnel.h" />
+    <ClInclude Include="GeometricShapeFactory.h" />
+    <ClInclude Include="HDRLoader.h" />
+    <ClInclude Include="IMeshLoader.h" />
+    <ClInclude Include="GaussianFilter.h" />
+    <ClInclude Include="Integrator.h" />
+    <ClInclude Include="Intersection.h" />
+    <ClInclude Include="ISampledShape.h" />
+    <ClInclude Include="Job.h" />
+    <ClInclude Include="JobManager.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="Mapping.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshFactory.h" />
+    <ClInclude Include="MeshLight.h" />
+    <ClInclude Include="Microfacet.h" />
+    <ClInclude Include="Mirror.h" />
+    <ClInclude Include="MitchellNetravaliFilter.h" />
+    <ClInclude Include="NonCopyable.h" />
+    <ClInclude Include="NoriPerspective.h" />
+    <ClInclude Include="NormalIntegrator.h" />
+    <ClInclude Include="GeometricShape.h" />
+    <ClInclude Include="ObjectFactory.h" />
+    <ClInclude Include="ObjectFactoryManager.h" />
+    <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="Orthographic.h" />
+    <ClInclude Include="Parameters.h" />
+    <ClInclude Include="PathTracingMIS.h" />
+    <ClInclude Include="Perspective.h" />
+    <ClInclude Include="Phong.h" />
+    <ClInclude Include="PLYLoader.h" />
+    <ClInclude Include="PointLight.h" />
+    <ClInclude Include="Primitive.h" />
+    <ClInclude Include="RandomSampler.h" />
+    <ClInclude Include="Ray.h" />
+    <ClInclude Include="ReconstructionFilter.h" />
+    <ClInclude Include="ReflectionSystem.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Rng.h" />
+    <ClInclude Include="RoughConductor.h" />
+    <ClInclude Include="RoughDielectric.h" />
+    <ClInclude Include="SampleJob.h" />
+    <ClInclude Include="Sampler.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Screen.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SpecularSystem.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="System.h" />
+    <ClInclude Include="TestBvh.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="tinystr.h" />
+    <ClInclude Include="tinyxml.h" />
+    <ClInclude Include="Tools.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="XMLLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="Scene1.xml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RaytracerNew2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Scenes\Ajax-IS.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Scenes\Buddha-MIS.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Scenes\DepthOfField.xml" />
+    <Xml Include="Scenes\Odyssey-IS.xml" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{699DE8F6-A6AB-4BF3-92C8-2BFEC2C96CDC}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>RaytracerNew2</RootNamespace>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
+      <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TIXML_USE_STL;USE_ALIGN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
+      <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <Profile>false</Profile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>No</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <Profile>true</Profile>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,74 @@
+#pragma once
+
+#include "Job.h"
+
+#include <vector>
+#include <queue>
+
+#ifdef VS_2010
+#include <SFML/System.hpp>
+#else
+#include <thread>
+#include <mutex>
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief This class allows multithreaded computation of image chunks
+///////////////////////////////////////////////////////////////////////////////
+class JobManager
+{
+public:
+	JobManager();
+	~JobManager(void);
+
+	///////////////////////////////////////////////////////////////////////////////
+	/// Defines the number of threads to be used.
+	///////////////////////////////////////////////////////////////////////////////
+	void setThreadNumber(int number);
+
+	///////////////////////////////////////////////////////////////////////////////
+	/// Returns the number of threads to be used.
+	/// \return Number of threads.
+	///////////////////////////////////////////////////////////////////////////////
+	int getThreadNumber() const {return myThreadNumber;}
+
+	///////////////////////////////////////////////////////////////////////////////
+	/// Returns the number of active tasks (threads).
+	///////////////////////////////////////////////////////////////////////////////
+	int remainingTasks();
+
+	///////////////////////////////////////////////////////////////////////////////
+	/// Pauses the program execution until the end of all the jobs.
+	///////////////////////////////////////////////////////////////////////////////
+	void join();
+
+	bool isFinished();
+
+	void addJobs(const std::vector<std::shared_ptr<Job> >& jobs);
+
+	//void stopJobs();
+
+	void initJobs();
+	
+	void jobRun();
+
+	void destroyThreads();
+
+protected:
+	int myThreadNumber;
+#ifdef VS_2010
+	std::vector<sf::Thread*> myThreads;
+	sf::Mutex* myMutex ;
+	sf::Mutex* myRemainingTasksMutex ;
+#else
+	std::vector<std::shared_ptr<std::thread> > myThreads;
+	std::mutex myMutex;
+	std::mutex myRemainingTasksMutex;
+#endif
+	int myNumberRunning;
+	std::vector<std::shared_ptr<Job> > myJobs;
+
+	
+};
+
+

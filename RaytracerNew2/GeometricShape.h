@@ -1,0 +1,100 @@
+#ifndef H__OBJECT_170520151951__H
+#define H__OBJECT_170520151951__H
+
+#include "DifferentialGeometry.h"
+#include "Geometry.h"
+#include "Ray.h"
+#include "BoundingBox.h"
+#include "Transform.h"
+#include "Parameters.h"
+#include "ISampledShape.h"
+
+class Intersection;
+
+#include <memory>
+#include <vector>
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Superclass of shape. Provides abstract functions to compute geometric
+/// quantities related to the shape.
+///////////////////////////////////////////////////////////////////////////////
+class GeometricShape : public ISampledShape
+{
+public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+public:
+	typedef std::shared_ptr<GeometricShape> ptr;
+
+public:
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Default constructor.
+	///////////////////////////////////////////////////////////////////////////
+	GeometricShape() {}
+
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Constructor.
+	///////////////////////////////////////////////////////////////////////////
+	GeometricShape(const Parameters& params);
+
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Destructor
+	///////////////////////////////////////////////////////////////////////////
+	virtual ~GeometricShape(void);
+
+public:
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Computes the centroid of the shape
+	///
+	/// \return The position of the centroid in world coordinates
+	///////////////////////////////////////////////////////////////////////////
+	virtual Point3d getCentroid() { throw std::runtime_error("no"); }
+
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Computes the normal vector at the given point
+	///
+	/// \param intersection Position of the considered point.
+	///
+	/// \return The normal vector
+	///////////////////////////////////////////////////////////////////////////
+	virtual Vector3d normal(const Point3d& intersection) const = 0;
+
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Determines if the given ray intersects the shape.
+	///
+	/// \param ray The considered ray.
+	///
+	/// \param t Out parameter indicating the parametric distance of the 
+	/// intersection point to the ray origin, if an intersection was found.
+	///
+	/// \param shadowRay Indicates whether the ray is a shadow ray (faster 
+	/// intersection routines) of not.
+	///////////////////////////////////////////////////////////////////////////
+	//virtual bool intersection(const Ray& ray, double& t, DifferentialGeometry& trueGeom, DifferentialGeometry& shadingGeom, bool shadowRay = false) = 0;
+	virtual bool intersection(const Ray& ray,
+		double& t,
+		Point2d& uv) = 0;
+
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Returns the bounding box of the shape in local coordinates.
+	///////////////////////////////////////////////////////////////////////////
+	virtual BoundingBox getLocalBoundingBox() const = 0;
+
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Returns the bounding box of the shape in world coordinates.
+	///////////////////////////////////////////////////////////////////////////
+	virtual BoundingBox getWorldBoundingBox() const { return myObjectToWorld->transform(getLocalBoundingBox()); }
+
+	virtual void getDifferentialGeometry(DifferentialGeometry& trueGeometry,
+		DifferentialGeometry& shadingGeometry, Intersection& inter) = 0;
+
+protected:
+	Transform::ptr myObjectToWorld; 
+
+	//static std::string myObjectType;
+};
+
+
+
+
+#endif

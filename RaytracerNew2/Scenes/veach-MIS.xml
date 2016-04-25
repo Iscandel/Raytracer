@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MI test scene from Eric Veach's thesis - modeled
+     after a file by Steve Marschner (CS667) -->
+
+<scene>
+  <camera type="NoriPerspective">
+    <transform type="lookAt" name="toWorld">
+      <scale>
+        <sx>-1.</sx>
+        <sy>1.</sy>
+        <sz>1.</sz>
+      </scale>
+      <origin>0 6 27.5</origin>
+      <lookAt>0 -1.5 2.5</lookAt>
+      <up>0 1 0</up>
+    </transform>
+
+    <double name="fov" value="25"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="512"/>
+
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>8</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+  </parameters>
+
+	<sampler type="RandomSampler">
+		<integer name="sampleNumber" value="128"/>
+	</sampler>
+
+  <integrator type="DirectLightingMIS">
+    <integer name="depth" value="1"/>
+    <integer name="sampleNumber" value="1"/>
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+
+	<!-- distant light to provide overall illumination -->
+  <lights>
+    <light type="DistantLight">
+		  <color name="radiance" value="5 5 5"/>
+	 
+		  <double name="theta" value="180"/>
+	 	 
+	  </light>
+  </lights>
+  <!--<lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./test"/>
+      <transform name="toWorld">
+        <rotation>
+          <rx>90.</rx>
+          <ry>180.</ry>
+          <rz>0.</rz>
+        </rotation>
+      </transform>
+    </light>
+  </lights>-->
+  
+  <objects>
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/sphere.obj"/>
+		<transform name="toWorld">
+      <scale>
+        <sx>0.1</sx>
+        <sy>0.1</sy>
+        <sz>0.1</sz>
+      </scale>
+      <translation>
+        <tx>-1.25</tx>
+        <ty>0.</ty>
+        <tz>0.</tz>
+      </translation>
+		</transform>
+		<light type="MeshLight">
+      <color name="radiance" value="100 100 100"/>
+		</light>
+		<bsdf type="Diffuse">
+			<color name="albedo" value="0 0 0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/sphere.obj"/>
+		<transform name="toWorld">
+      <scale>
+        <sx>0.03333</sx>
+        <sy>0.03333</sy>
+        <sz>0.03333</sz>
+      </scale>
+      <translation>
+        <tx>-3.75</tx>
+        <ty>0.</ty>
+        <tz>0.</tz>
+      </translation>
+		</transform>
+		<light type="MeshLight">
+			<color name="radiance" value="901.803 901.803 901.803"/>
+		</light>
+		<bsdf type="Diffuse">
+			<color name="albedo" value="0 0 0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/sphere.obj"/>
+		<transform name="toWorld">
+      <scale>
+        <sx>0.3</sx>
+        <sy>0.3</sy>
+        <sz>0.3</sz>
+      </scale>
+      <translation>
+        <tx>1.25</tx>
+        <ty>0.</ty>
+        <tz>0.</tz>
+      </translation>
+		</transform>
+		<light type="MeshLight">
+      <color name="radiance" value="11.1111 11.1111 11.1111"/>
+		</light>
+		<bsdf type="Diffuse">
+			<color name="albedo" value="0 0 0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/sphere.obj"/>
+		<transform name="toWorld">
+      <scale>
+        <sx>0.9</sx>
+        <sy>0.9</sy>
+        <sz>0.9</sz>
+      </scale>
+      <translation>
+        <tx>3.75</tx>
+        <ty>0.</ty>
+        <tz>0.</tz>
+      </translation>
+		</transform>
+		<light type="MeshLight">
+      <color name="radiance" value="1.23457 1.23457 1.23457"/>
+		</light>
+		<bsdf type="Diffuse">
+			<color name="albedo" value="0 0 0"/>
+		</bsdf>
+	</shape>
+
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/plate1.obj"/>
+		<bsdf type="Microfacet">
+			<color name="kd" value="0.0175 0.0225 0.0325"/>
+			<double name="alpha" value="0.005"/>
+		</bsdf>
+	</shape>
+
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/plate2.obj"/>
+		<bsdf type="Microfacet">
+			<color name="kd" value="0.0175 0.0225 0.0325"/>
+			<double name="alpha" value="0.02"/>
+		</bsdf>
+	</shape>
+
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/plate3.obj"/>
+		<bsdf type="Microfacet">
+			<color name="kd" value="0.0175 0.0225 0.0325"/>
+			<double name="alpha" value="0.05"/>
+		</bsdf>
+	</shape>
+
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/plate4.obj"/>
+		<bsdf type="Microfacet">
+			<color name="kd" value="0.0175 0.0225 0.0325"/>
+			<double name="alpha" value="0.1"/>
+		</bsdf>
+	</shape>
+
+	<shape type="Mesh">
+		<string name="path" value="./data/veach_mi/floor.obj"/>
+		<bsdf type="Diffuse">
+			<color name="albedo" value="0.1 0.1 0.1"/>
+		</bsdf>
+	</shape>
+ </objects>
+</scene>

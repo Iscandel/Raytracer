@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform type="lookAt" name="toWorld">
+      <origin>-65.6055 47.5762 24.3583</origin>
+      <lookAt>-64.8161 47.2211 23.8576</lookAt>
+      <up>0.299858 0.934836 -0.190177</up>
+    </transform>
+    <!--<transform>
+      <rotation>
+        <rx>0.</rx>
+        <ry>0.</ry>
+        <rz>0.</rz>
+      </rotation>
+      <translation>
+        --><!--<tx>0</tx>
+        <ty>-30.15</ty>
+        <tz>-10.55</tz>--><!--
+        <tx>0</tx>
+        <ty>-0.15</ty>
+        <tz>14.55</tz>
+        --><!--<tx>0.</tx>
+        <ty>-0.15</ty>
+        <tz>0.</tz>--><!--
+      </translation>
+    </transform>-->
+    <focal>0.05</focal>
+    <mPerPixel>0.0002</mPerPixel> <!--0.00005-->
+    <double name="focal" value="0.05"/>
+    <double name="meterPixelSize" value="0.0002"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="768"/>
+    <!--<dimensions>
+      --><!--<sizeX>640</sizeX>
+      <sizeY>480</sizeY>--><!--
+      <sizeX>768</sizeX>
+      <sizeY>768</sizeY>
+    </dimensions>-->
+    <!--<type>perspective</type>-->
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+  
+  <parameters>
+    <threadNumber>8</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="32"/>
+  </sampler>
+
+  <integrator type="DirectLighting">
+    <integer name="depth" value="1"/>
+  </integrator>
+  
+  <!--<systemList>
+    --><!--<system>reflection</system>--><!--
+    <system>ambient</system>
+    <system>diffuse</system>
+    <system>specular</system>
+    --><!--<system>refraction</system>--><!--
+  </systemList>-->
+
+  <lights>
+    <light type="PointLight">
+      <point name="position" value="0. 40. 0."/>
+      <color name="intensity" value="500. 500. 500."/>
+    </light>
+  
+    <light type="PointLight">
+      <point name="position" value="-30. 40. 20."/>
+      <color name="intensity" value="500. 500. 500."/>
+    </light>
+  </lights>
+  
+  <objects>
+    <shape type="Mesh">
+      <string name="path" value ="./data/ajax.obj"/>
+      <!--<transform name="toWorld">
+        <rotation>
+          <rx>90.</rx>
+          <ry>0.</ry>
+          <rz>0.</rz>
+        </rotation>
+        <translation>
+          <tx>0.</tx>
+          <ty>0.</ty>
+          <tz>-0.1</tz>
+        </translation>
+      </transform>-->
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.8 0.73 0.64"/>
+        <double name="alpha" value="150"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+        <transform name="toWorld">
+        <!--<rotation>
+          <rx>90.</rx>
+          <ry>0.</ry>
+          <rz>0.</rz>
+        </rotation>
+        <translation>
+          <tx>0.</tx>
+          <ty>0.</ty>
+          <tz>-0.1</tz>
+        </translation>-->
+        <scale>
+          <sx>100</sx>
+          <sy>1</sy>
+          <sz>100</sz>
+        </scale>
+      </transform>-->
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.8 0.2 0.3"/>
+      </bsdf>
+    </shape>
+    <!--<shape type="Sphere">
+      <double name = "radius" value="0.60"/>
+      <transform name = "toWorld">
+        <translation>
+          <tx>-1</tx>
+          <ty>4</ty>
+          <tz>1</tz>
+        </translation>
+      </transform>
+    </shape>
+    <shape type="Sphere">
+      <double name = "radius" value="1.35"/>
+      <transform name = "toWorld">
+        <translation>
+          <tx>1</tx>
+          <ty>8</ty>
+          <tz>0</tz>
+        </translation>
+      </transform>
+    </shape>-->
+    <!--<sphere>
+      <position>
+        <x>1</x>
+        <y>8</y>
+        <z>0</z>
+      </position>
+      <radius>1.35</radius>
+    </sphere>-->
+  </objects>
+</scene>
