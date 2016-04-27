@@ -7,6 +7,7 @@
 
 PathTracingMIS::PathTracingMIS(const Parameters& params)
 {
+	myStrategy = LightSamplingStrategy::ONE_LIGHT_UNIFORM;// params.getString("strategy", "uniform");
 }
 
 
@@ -56,38 +57,48 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 		for (unsigned int i = 0; i < lights.size(); i++)
 		{
 			Color value = sampleOneLight(lights[i], intersection.myPoint, sampler->getNextSample2D(), scene, lightInfos);
+			if (!value.isZero())
+			{
+				Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
+				Vector3d localWo = intersection.toLocal(-ray.direction());
+				double cosTheta = DifferentialGeometry::cosTheta(localWi);
+
+				BSDFSamplingInfos bsdfInfos(localWi, localWo);
+				bsdfInfos.uv = inter.myUv; //
+
+				//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
+				//Add the MIS heuristic
+				double weight = powerHeuristic(lightInfos.pdf, bsdf->pdf(bsdfInfos));
+
+				radiance += value * bsdf->eval(bsdfInfos) * cosTheta * weight;
+			}
+		}
+	}
+	else
+	{
+		Color value = sampleLightDirect(intersection.myPoint, sampler->getNextSample2D(), scene, lightInfos, myStrategy);
+		if (!value.isZero())
+		{
 			Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 			Vector3d localWo = intersection.toLocal(-ray.direction());
 			double cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 			BSDFSamplingInfos bsdfInfos(localWi, localWo);
+			bsdfInfos.uv = intersection.myUv;
 
 			//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
 			//Add the MIS heuristic
 			double weight = powerHeuristic(lightInfos.pdf, bsdf->pdf(bsdfInfos));
 
 			radiance += value * bsdf->eval(bsdfInfos) * cosTheta * weight;
+			if (radiance.isNan())
+				std::cout << "nan 1 " << std::endl;
 		}
-	}
-	else
-	{
-		Color value = sampleLightDirect(intersection.myPoint, sampler->getNextSample2D(), scene, lightInfos, myStrategy);
-		Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
-		Vector3d localWo = intersection.toLocal(-ray.direction());
-		double cosTheta = DifferentialGeometry::cosTheta(localWi);
-
-		BSDFSamplingInfos bsdfInfos(localWi, localWo);
-
-		//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
-		//Add the MIS heuristic
-		double weight = powerHeuristic(lightInfos.pdf, bsdf->pdf(bsdfInfos));
-
-		radiance += value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 	}
 	
 
 	//Light sampling strategy
-	////For all the lights
+	//For all the lights
 	//const Scene::LightVector& lights = scene.getLights();
 	////for (unsigned int i = 0; i < lights.size(); i++)
 	//{
@@ -100,14 +111,14 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 	//	//	continue;
 
 	//	//Generate a shadow ray from the first inter to the light sampled point
-	//	Vector3d interToLight = lightInfos.samplingPoint - intersection.myPoint;
-	//	Ray shadowRay(intersection.myPoint, lightInfos.wi, tools::EPSILON, interToLight.norm() - tools::EPSILON);
+	//	Vector3d interToLight = lightInfos.sampledPoint - intersection.myPoint;
+	//	Ray shadowRay(intersection.myPoint, lightInfos.interToLight, tools::EPSILON, interToLight.norm() - tools::EPSILON);
 	//	Intersection tmp;
 
 	//	//If the light point is visible from the the inter point
 	//	if (lightInfos.intensity.luminance() > 0 && !scene.computeIntersection(shadowRay, tmp, true))
 	//	{
-	//		Vector3d localWi = intersection.toLocal(lightInfos.wi);
+	//		Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 	//		Vector3d localWo = intersection.toLocal(-ray.direction());
 	//		double cosTheta = DifferentialGeometry::cosTheta(localWi);
 
@@ -128,6 +139,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 	//BSDF sampling strategy
 	Vector3d localWi = intersection.toLocal(-ray.direction());
 	BSDFSamplingInfos bsdfInfos(localWi);
+	bsdfInfos.uv = intersection.myUv; //
 	Color bsdfValue = bsdf->sample(bsdfInfos, sampler->getNextSample2D()); 
 	if (bsdfValue.isZero())
 		return radiance;
@@ -158,7 +170,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 
 			Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
 			radiance += radianceLight * bsdfValue * weight;
-			if(std::isnan(radiance.r))
+			if(radiance.isNan())
 				std::cout << "nan 2 " << std::endl;
 		}
 	}

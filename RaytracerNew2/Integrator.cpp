@@ -29,7 +29,7 @@ Color Integrator::sampleLightDirect(const Point3d& interPoint, const Point2d& _s
 		double lightWeight;
 		Light::ptr light;
 		const Scene::LightVector& lights = scene.getLights();
-		Point2d sample = sample;
+		Point2d sample = _sample;
 
 		if (strategy == LightSamplingStrategy::ONE_LIGHT_WEIGHTED)
 		{
@@ -64,10 +64,10 @@ Color Integrator::sampleLightDirect(const Point3d& interPoint, const Point2d& _s
 		return value;
 	}
 
-Color Integrator::sampleOneLight(Light::ptr light, const Point3d & interPoint, const Point2d & sample, const Scene & scene, LightSamplingInfos & infos)
+Color Integrator::sampleOneLight(Light::ptr light, const Point3d & interPoint, const Point2d & sample, const Scene & scene, LightSamplingInfos & lightInfos)
 {
 	//Sample the light
-	LightSamplingInfos lightInfos = light->sample(interPoint, sample);
+	lightInfos = light->sample(interPoint, sample);
 
 	Ray shadowRay(interPoint, lightInfos.interToLight, tools::EPSILON, lightInfos.distance - tools::EPSILON);
 	Intersection tmp;

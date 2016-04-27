@@ -146,14 +146,14 @@ void Triangle::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 	inter.myPoint = bary.x() * p0 + bary.y() * p1 + bary.z() * p2;
 
 	/* Compute proper texture coordinates if provided by the mesh */
-	//if (myMesh->myUVs.size() > 4)
-	//{
-	//	const Point2d& uv0 = myMesh->myUVs[index0];
-	//	const Point2d& uv1 = myMesh->myUVs[index1];
-	//	const Point2d& uv2 = myMesh->myUVs[index2];
+	if (myMesh->myUVs.size() >= 3)//4)
+	{
+		const Point2d& uv0 = myMesh->myUVs[index0];
+		const Point2d& uv1 = myMesh->myUVs[index1];
+		const Point2d& uv2 = myMesh->myUVs[index2];
 
-	//	inter.myUv = bary.x() * uv0 + bary.y() * uv1 + bary.z() * uv2;
-	//}
+		inter.myUv = bary.x() * uv0 + bary.y() * uv1 + bary.z() * uv2;
+	}
 
 	//Compute the geometric normal
 #ifdef USE_ALIGN

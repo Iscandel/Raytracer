@@ -104,4 +104,6 @@ struct BSDFSamplingInfos
 
 	///PDF associated to the reflected direction sampled
 	double pdf;
+
+	Point2d uv;
 };
