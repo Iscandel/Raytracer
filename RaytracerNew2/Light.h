@@ -8,6 +8,7 @@
 #include <memory>
 
 class Scene;
+class Light;
 
 struct LightSamplingInfos
 {
@@ -37,6 +38,8 @@ struct LightSamplingInfos
 
 	///Probability density associated to the sampled point
 	double pdf;
+
+	std::shared_ptr<Light> light;
 };
 
 class Light
@@ -54,6 +57,8 @@ public:
 	virtual double pdf(const Point3d& pFrom, const LightSamplingInfos& infos) = 0;
 
 	virtual Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const = 0;
+
+	virtual bool isDelta() const = 0;
 
 	virtual void initialize(const Scene&) {}
 public:

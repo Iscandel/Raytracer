@@ -23,6 +23,8 @@ public:
 
 	Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const override;
 
+	bool isDelta() const override { return false; }
+
 	Color interp2(const Point2d& xy) const;
 
 	std::vector<CDF> myRowCDFs;

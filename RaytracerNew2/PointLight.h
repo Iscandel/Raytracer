@@ -27,6 +27,8 @@ public:
 		return Color();
 	}
 
+	bool isDelta() const override { return true; }
+
 protected:
 	Point3d myPosition;
 	Color myIntensity;

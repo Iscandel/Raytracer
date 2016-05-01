@@ -28,6 +28,8 @@ public:
 
 	virtual Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const override;
 
+	bool isDelta() const override { return false; }
+
 	void initialize(const Scene& scene) override;
 
 protected:

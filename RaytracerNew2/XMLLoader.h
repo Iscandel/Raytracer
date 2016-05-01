@@ -29,12 +29,14 @@ public:
 	ReconstructionFilter::ptr handleReconstructionFilter(Scene& scene, TiXmlElement* element);
 	Transform::ptr handleTransform(TiXmlElement* element);
 	
-	std::vector<double>handleRotationTransform(TiXmlElement* element);
-	std::vector<double> handleTranslationTransform(TiXmlElement* element);
-	std::vector<double> handleScaleTransform(TiXmlElement* element);
+	Transform handleRotationTransform(TiXmlElement* element);
+	Transform handleTranslationTransform(TiXmlElement* element);
+	Transform handleScaleTransform(TiXmlElement* element);
+	Transform handleMatrixTransform(TiXmlElement* element);
+	Transform handleLookAtTransform(TiXmlElement* element);
 
 	std::vector<int> handleCameraDimensions(TiXmlElement* element);
-	std::vector<double> handleObjectPosition(TiXmlElement* element);
+	//std::vector<double> handleObjectPosition(TiXmlElement* element);
 	void handleProperty(TiXmlElement* element, Parameters& params);
 };
 

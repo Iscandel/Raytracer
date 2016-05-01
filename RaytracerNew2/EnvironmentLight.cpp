@@ -20,7 +20,7 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 		for (unsigned int x = 0; x <im.getSize().x; x++)
 		{
 			sf::Color col = im.getPixel(x, y);
-			myArray(x, y) = Color(col.r / 255., col.g / 255., col.b / 255.) / 1.5;
+			myArray(x, y) = Color(col.r / 255., col.g / 255., col.b / 255.);
 		}
 	}
 

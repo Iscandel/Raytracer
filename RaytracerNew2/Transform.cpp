@@ -13,10 +13,18 @@ Transform::Transform(void)
 ///////////////////////////////////////////////////////////////////////////////
 Transform::Transform(double values[16])
 {
-	for (auto i = 0; i < 16; i++)
-	{
-		myMatrix << values[i];
-	}
+	//nb : matrix constructor stacks in a column-wise order, don't use it
+	myMatrix << values[0], values[1], values[2], values[3],
+				values[4], values[5], values[6], values[7],
+				values[8], values[9], values[10], values[11],
+				values[12], values[13], values[14], values[15];
+
+	myInvMatrix = myMatrix.inverse();
+
+	//for (auto i = 0; i < 16; i++)
+	//{
+	//	myMatrix << values[i];
+	//}
 }
 
 //=============================================================================

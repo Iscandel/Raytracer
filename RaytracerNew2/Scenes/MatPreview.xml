@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <scene>
   <camera type="NoriPerspective">
-    <transform type="lookAt" name="toWorld">
-      <origin>0 1.2 -10</origin>
-      <lookAt>0 1.2 -9</lookAt>
-      <up>0 1 0</up>
+    <transform name="toWorld">
+      <lookAt>
+        <origin>0 1.2 -10</origin>
+        <lookAt>0 1.2 -9</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
     </transform>
     <focal>0.05</focal>
     <mPerPixel>0.0002</mPerPixel>
@@ -32,12 +34,12 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="32"/>
+    <integer name="sampleNumber" value="64"/>
   </sampler>
 
   <integrator type="DirectLightingMIS">
     <integer name="depth" value="10"/>
-    <integer name="sampleNumber" value="8"/>
+    <integer name="sampleNumber" value="4"/>
     <!--<bool name="bsdfSampling" value="true"/>-->
   </integrator>
 
@@ -153,9 +155,9 @@
       <bsdf type="Diffuse">
         <color name="albedo" value="0.7 0.7 0.3"/>
       </bsdf>
-    </shape>-->
+    </shape>
 
-    <!--<shape type="Mesh">
+    <shape type="Mesh">
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <rotation>

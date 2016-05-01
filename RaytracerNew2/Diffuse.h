@@ -1,6 +1,7 @@
 #pragma once
 #include "BSDF.h"
 #include "Parameters.h"
+#include "CheckerTexture.h"
 
 class Diffuse :
 	public BSDF
@@ -17,5 +18,6 @@ public:
 
 protected:
 	Color myAlbedo;
+	CheckerTexture myTexture;
 };
 

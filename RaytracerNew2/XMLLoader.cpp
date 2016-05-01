@@ -349,9 +349,9 @@ ReconstructionFilter::ptr XMLLoader::handleReconstructionFilter(Scene& scene, Ti
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-std::vector<double> XMLLoader::handleRotationTransform(TiXmlElement* element)
+Transform XMLLoader::handleRotationTransform(TiXmlElement* element)
 {
-	std::vector<double> res(3, 0.);
+	std::vector<double> rot(3, 0.);
 	
 	element = element->FirstChildElement();
 	for(element; element; element = element->NextSiblingElement())
@@ -359,24 +359,27 @@ std::vector<double> XMLLoader::handleRotationTransform(TiXmlElement* element)
 		std::string key = element->ValueStr();
 		if(key == "rx")
 		{
-			res[0] = tools::stringToNum<double>(element->GetText());
+			rot[0] = tools::stringToNum<double>(element->GetText());
 		}
 		else if(key == "ry")
 		{
-			res[1] = tools::stringToNum<double>(element->GetText());
+			rot[1] = tools::stringToNum<double>(element->GetText());
 		}
 		else if(key == "rz")
 		{
-			res[2] = tools::stringToNum<double>(element->GetText());
+			rot[2] = tools::stringToNum<double>(element->GetText());
 		}
 	}
 
-	return res;
+	Transform rotateX = Transform::rotateX(rot[0]);
+	Transform rotateY = Transform::rotateY(rot[1]);
+	Transform rotateZ = Transform::rotateZ(rot[2]);
+	return rotateX * rotateY * rotateZ ;
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-std::vector<double> XMLLoader::handleScaleTransform(TiXmlElement* element)
+Transform XMLLoader::handleScaleTransform(TiXmlElement* element)
 {
 	std::vector<double> res(3, 1.);
 
@@ -398,12 +401,12 @@ std::vector<double> XMLLoader::handleScaleTransform(TiXmlElement* element)
 		}
 	}
 
-	return res;
+	return Transform::scale(Point3d(res[0], res[1], res[2]));
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-std::vector<double> XMLLoader::handleTranslationTransform(TiXmlElement* element)
+Transform XMLLoader::handleTranslationTransform(TiXmlElement* element)
 {
 	std::vector<double> res(3, 0.);
 	
@@ -425,7 +428,53 @@ std::vector<double> XMLLoader::handleTranslationTransform(TiXmlElement* element)
 		}
 	}
 
-	return res;
+	return Transform::translate(Point3d(res[0], res[1], res[2]));
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+Transform XMLLoader::handleMatrixTransform(TiXmlElement* element)
+{
+	std::vector<double> res;
+
+	std::string values = element->Attribute("value");
+
+	char delim = ' ';
+	std::stringstream ss(values);
+	std::string item;
+	while (std::getline(ss, item, delim)) {
+		res.push_back(tools::stringToNum<double>(item));
+	}
+
+	return Transform(res.data());
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+Transform XMLLoader::handleLookAtTransform(TiXmlElement* element)
+{
+	Vector3d origin, lookAt, up;
+
+	element = element->FirstChildElement();
+	for (element; element; element = element->NextSiblingElement())
+	{
+		std::string key = element->ValueStr();
+
+		if (element->ValueStr() == "origin")
+		{
+			origin = tools::stringToVector<double>(element->GetText());
+		}
+		else if (element->ValueStr() == "lookAt")
+		{
+			lookAt = tools::stringToVector<double>(element->GetText());
+		}
+		else if (element->ValueStr() == "up")
+		{
+			up = tools::stringToVector<double>(element->GetText());
+		}
+	}
+
+	return Transform::fromLookAt(origin, lookAt, up);
 }
 
 //=============================================================================
@@ -502,33 +551,6 @@ std::vector<int> XMLLoader::handleCameraDimensions(TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-//std::vector<double> XMLLoader::handleObjectPosition(TiXmlElement* element)
-//{
-//	std::vector<double> res(3, 0.);
-//	
-//	element = element->FirstChildElement();
-//	for(element; element; element = element->NextSiblingElement())
-//	{
-//		std::string key = element->ValueStr();
-//		if(key == "x")
-//		{
-//			res[0] = tools::stringToNum<double>(element->GetText());
-//		}
-//		else if(key == "y")
-//		{
-//			res[1] = tools::stringToNum<double>(element->GetText());
-//		}
-//		else if(key == "z")
-//		{
-//			res[2] = tools::stringToNum<double>(element->GetText());
-//		}
-//	}
-//
-//	return res;
-//}
-
-//=============================================================================
-///////////////////////////////////////////////////////////////////////////////
 Transform::ptr XMLLoader::handleTransform(TiXmlElement* element)
 {
 	Transform::ptr transform(new Transform);
@@ -538,70 +560,51 @@ Transform::ptr XMLLoader::handleTransform(TiXmlElement* element)
 
 	const std::string* type = element->Attribute(std::string("type"));
 	element = element->FirstChildElement();
-	//Look at transform
-	if (type && (*type) == "lookAt")
+
+	for (element; element; element = element->NextSiblingElement())
 	{
-		Vector3d origin, lookAt, up;
-
-		for (element; element; element = element->NextSiblingElement())
+		if (element->ValueStr() == "rotation")
 		{
-			if (element->ValueStr() == "origin")
-			{
-				origin = tools::stringToVector<double>(element->GetText());
-			}
-			else if (element->ValueStr() == "lookAt")
-			{
-				lookAt = tools::stringToVector<double>(element->GetText());
-			}
-			else if(element->ValueStr() == "up")
-			{
-				up = tools::stringToVector<double>(element->GetText());
-			}
-			else if (element->ValueStr() == "scale")
-			{ 
-				//warning : camera transform shoudn't have a scale factor. It is only used to invert axis direction
-				scaleVect = handleScaleTransform(element);
-			}
+			Transform matrix = handleRotationTransform(element);
+			//Transform rotateX = Transform::rotateX(rot[0]);
+			//Transform rotateY = Transform::rotateY(rot[1]);
+			//Transform rotateZ = Transform::rotateZ(rot[2]);
+			//(*transform) = rotateX * rotateY * rotateZ * (*transform);
+			(*transform) = matrix * (*transform);
 		}
-
-		transform = Transform::ptr(new Transform(Transform::fromLookAt(origin, lookAt, up)));
-		Transform scale = Transform::scale(Point3d(scaleVect[0], scaleVect[1], scaleVect[2]));
-		*transform = scale * (*transform);
-	}
-	else
-	{
-		for (element; element; element = element->NextSiblingElement())
+		else if (element->ValueStr() == "translation")
 		{
-			if (element->ValueStr() == "rotation")
-			{
-				rot = handleRotationTransform(element);
-				Transform rotateX = Transform::rotateX(rot[0]);
-				Transform rotateY = Transform::rotateY(rot[1]);
-				Transform rotateZ = Transform::rotateZ(rot[2]);
-				(*transform) = rotateX * rotateY * rotateZ * (*transform);
-			}
-			else if (element->ValueStr() == "translation")
-			{
-				translateVect = handleTranslationTransform(element);
-				Transform translate = Transform::translate(Point3d(translateVect[0], translateVect[1], translateVect[2]));
-				(*transform) = translate * (*transform);
-			}
-			else if (element->ValueStr() == "scale")
-			{
-				scaleVect = handleScaleTransform(element);
-				Transform scale = Transform::scale(Point3d(scaleVect[0], scaleVect[1], scaleVect[2]));
-				(*transform) = scale * (*transform);
-			}
+			Transform translate = handleTranslationTransform(element);
+			//Transform translate = Transform::translate(Point3d(translateVect[0], translateVect[1], translateVect[2]));
+			(*transform) = translate * (*transform);
 		}
-
-		//Transform translate = Transform::translate(Point3d(translateVect[0], translateVect[1], translateVect[2]));
-		//Transform rotateX = Transform::rotateX(rot[0]);
-		//Transform rotateY = Transform::rotateY(rot[1]);
-		//Transform rotateZ = Transform::rotateZ(rot[2]);
-		//Transform scale = Transform::scale(Point3d(scaleVect[0], scaleVect[1], scaleVect[2]));
-
-		//transform = Transform::ptr(new Transform(scale * translate * rotateX * rotateY * rotateZ));
+		else if (element->ValueStr() == "scale")
+		{
+			Transform scale = handleScaleTransform(element);
+			//Transform scale = Transform::scale(Point3d(scaleVect[0], scaleVect[1], scaleVect[2]));
+			(*transform) = scale * (*transform);
+		}
+		else if (element->ValueStr() == "matrix")
+		{
+			Transform matrix = handleMatrixTransform(element);
+			//Transform matrix = Transform(mat.data());
+			(*transform) = matrix * (*transform);
+		}
+		else if (element->ValueStr() == "lookAt")
+		{
+			Transform mat = handleLookAtTransform(element);
+			(*transform) = mat * (*transform);
+		}
 	}
+
+	//Transform translate = Transform::translate(Point3d(translateVect[0], translateVect[1], translateVect[2]));
+	//Transform rotateX = Transform::rotateX(rot[0]);
+	//Transform rotateY = Transform::rotateY(rot[1]);
+	//Transform rotateZ = Transform::rotateZ(rot[2]);
+	//Transform scale = Transform::scale(Point3d(scaleVect[0], scaleVect[1], scaleVect[2]));
+
+	//transform = Transform::ptr(new Transform(scale * translate * rotateX * rotateY * rotateZ));
+	
 	//don't use make_shared with types that need to be aligned
 	//transform = std::make_shared<Transform>(new Transform(scale * translate * rotateX * rotateY * rotateZ));
 

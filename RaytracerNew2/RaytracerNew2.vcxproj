@@ -69,6 +69,7 @@
     <ClCompile Include="Orthographic.cpp" />
     <ClCompile Include="Parameters.cpp" />
     <ClCompile Include="PathTracingMIS.cpp" />
+    <ClCompile Include="PerlinNoiseTexture.cpp" />
     <ClCompile Include="Perspective.cpp" />
     <ClCompile Include="Phong.cpp" />
     <ClCompile Include="PLYLoader.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Orthographic.h" />
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="PathTracingMIS.h" />
+    <ClInclude Include="PerlinNoiseTexture.h" />
     <ClInclude Include="Perspective.h" />
     <ClInclude Include="Phong.h" />
     <ClInclude Include="PLYLoader.h" />
@@ -199,11 +201,20 @@
     <Xml Include="Scenes\Ajax-IS.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="Scenes\bathroom-rtPT.xml" />
     <Xml Include="Scenes\Buddha-MIS.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="Scenes\cbox_path.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\DepthOfField.xml" />
+    <Xml Include="Scenes\MatPreview.xml" />
+    <Xml Include="Scenes\MatPreview2.xml" />
     <Xml Include="Scenes\Odyssey-IS.xml" />
+    <Xml Include="Scenes\SphereAO-MIS.xml" />
+    <Xml Include="Scenes\Table-MIS.xml" />
+    <Xml Include="Scenes\veach-MIS.xml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{699DE8F6-A6AB-4BF3-92C8-2BFEC2C96CDC}</ProjectGuid>
@@ -311,6 +322,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared\lib\include\OpenEXR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

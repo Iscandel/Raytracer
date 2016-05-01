@@ -61,6 +61,9 @@
     <Filter Include="IO">
       <UniqueIdentifier>{166366fc-d96f-42ee-a6d8-34a6e7e8d545}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{1e75cf18-3d75-4e4a-97f8-107b35c35153}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp">
@@ -297,10 +300,13 @@
     <ClCompile Include="PathTracingMIS.cpp">
       <Filter>Integrators</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="CheckerTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinNoiseTexture.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -552,9 +558,12 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Textures</Filter>
     </ClInclude>
     <ClInclude Include="CheckerTexture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoiseTexture.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -580,6 +589,27 @@
       <Filter>Scenes</Filter>
     </Xml>
     <Xml Include="Scenes\Odyssey-IS.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\bathroom-rtPT.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\cbox_path.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\MatPreview.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\MatPreview2.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\SphereAO-MIS.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\Table-MIS.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\veach-MIS.xml">
       <Filter>Scenes</Filter>
     </Xml>
   </ItemGroup>

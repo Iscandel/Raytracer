@@ -8,6 +8,7 @@
 PathTracingMIS::PathTracingMIS(const Parameters& params)
 {
 	myStrategy = LightSamplingStrategy::ONE_LIGHT_UNIFORM;// params.getString("strategy", "uniform");
+	myMaxDepth = params.getInt("maxDepth", 1000);
 }
 
 
@@ -50,9 +51,10 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 		radiance += intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
 
 	//Light sampling strategy
-	LightSamplingInfos lightInfos;
+	
 	if (myStrategy == LightSamplingStrategy::ALL_LIGHT)
 	{
+		LightSamplingInfos lightInfos;
 		const Scene::LightVector& lights = scene.getLights();
 		for (unsigned int i = 0; i < lights.size(); i++)
 		{
@@ -68,7 +70,10 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 
 				//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
 				//Add the MIS heuristic
-				double weight = powerHeuristic(lightInfos.pdf, bsdf->pdf(bsdfInfos));
+				//Same as specular BSDF : delta lights cannot be intersected during 
+				//BSDF sampling. Then, MIS is not applyable and the "weight" is 1
+				double bsdfPDF = lights[i]->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
+				double weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
 
 				radiance += value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 			}
@@ -76,6 +81,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 	}
 	else
 	{
+		LightSamplingInfos lightInfos;
 		Color value = sampleLightDirect(intersection.myPoint, sampler->getNextSample2D(), scene, lightInfos, myStrategy);
 		if (!value.isZero())
 		{
@@ -87,8 +93,12 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 			bsdfInfos.uv = intersection.myUv;
 
 			//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
+			
+			//Same as specular BSDF : delta lights cannot be intersected during 
+			//BSDF sampling. Then, MIS is not applyable and the "weight" is 1
+			double bsdfPDF = lightInfos.light->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
 			//Add the MIS heuristic
-			double weight = powerHeuristic(lightInfos.pdf, bsdf->pdf(bsdfInfos));
+			double weight = powerHeuristic(lightInfos.pdf, bsdfPDF);//bsdf->pdf(bsdfInfos));
 
 			radiance += value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 			if (radiance.isNan())
@@ -146,7 +156,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 
 	Intersection toLightInter;
 	//Go to world coord to "orientate" the hemisphere
-	Ray reflected(intersection.myPoint, intersection.toWorld(bsdfInfos.wo));
+	Ray reflected(intersection.myPoint, intersection.toWorld(bsdfInfos.wo));//, ray.myMinT, ray.myMaxT); //min, max, ok ?
 
 	//Trace a ray from the inter point to the bsdf sampled direction
 	if (scene.computeIntersection(reflected, toLightInter))
@@ -187,14 +197,14 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 			if (!std::isnan(weight))
 				radiance += lightValue * bsdfValue * weight;
 		}
-		else 
-			return radiance;
+
+		return radiance;
 	}
 	
 	throughput *= bsdfValue;
 	eta *= bsdfInfos.relativeEta;
 
-	if (depth > 3)
+	if (depth > 3 && depth < myMaxDepth)
 	{
 		depth++;
 		double stopVal = 0.8;//std::min(0.9, throughput.luminance() * eta * eta);
@@ -212,7 +222,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, i
 			return radiance;
 		}
 	}
-	else
+	else if(depth < myMaxDepth)
 	{
 		depth++;
 		radiance += bsdfValue * li(scene, sampler, reflected, depth, toLightInter, throughput, eta);

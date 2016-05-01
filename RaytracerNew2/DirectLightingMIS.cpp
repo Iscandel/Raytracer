@@ -67,7 +67,8 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 
 							//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
 							//Add the MIS heuristic
-							double weight = (1. / mySampleNumber) * powerHeuristic(0.5, lightInfos.pdf, 0.5, bsdf->pdf(bsdfInfos));
+							double bsdfPDF = lights[i]->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
+							double weight = (1. / mySampleNumber) * powerHeuristic(0.5, lightInfos.pdf, 0.5, bsdfPDF);//0.5, bsdf->pdf(bsdfInfos));
 							if (std::isnan(weight))
 							{
 								weight = 0.5;
@@ -105,7 +106,8 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 							lightInfos.normal = toLightInter.myShadingGeometry.myN;
 							lightInfos.sampledPoint = toLightInter.myPoint; //and wi ??????????
 							Light::ptr light = toLightInter.myPrimitive->getLight();
-							double weight = (1. / mySampleNumber)  * powerHeuristic(0.5, bsdfInfos.pdf, 0.5, light->pdf(intersection.myPoint, lightInfos));
+							double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : light->pdf(intersection.myPoint, lightInfos);
+							double weight = (1. / mySampleNumber)  * powerHeuristic(0.5, bsdfInfos.pdf, 0.5, pdfLight);
 
 							Color radianceLight = toLightInter.myPrimitive->le(-shadowRay.direction(), toLightInter.myShadingGeometry.myN);
 							radiance += radianceLight * bsdfValue * weight;
@@ -119,7 +121,8 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 						if (envLight != nullptr)
 						{
 							Color lightValue = envLight->le(shadowRay.direction());
-							double weight = (1. / mySampleNumber)  * powerHeuristic(0.5, bsdfInfos.pdf, 0.5, envLight->pdf(intersection.myPoint, lightInfos));
+							double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : envLight->pdf(intersection.myPoint, lightInfos);
+							double weight = (1. / mySampleNumber)  * powerHeuristic(0.5, bsdfInfos.pdf, 0.5, pdfLight);
 							radiance += lightValue * bsdfValue * weight;
 						}		
 					}

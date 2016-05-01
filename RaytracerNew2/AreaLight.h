@@ -33,6 +33,8 @@ public:
 
 	void setShape(std::shared_ptr<ISampledShape> shape) { myShape = shape; }
 
+	bool isDelta() const override { return false; }
+
 protected:
 	std::weak_ptr<ISampledShape> myShape;
 

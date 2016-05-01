@@ -47,6 +47,8 @@ Color Integrator::sampleLightDirect(const Point3d& interPoint, const Point2d& _s
 
 		value /= lightWeight;
 
+		 //To check
+
 		////Sample the light
 		//LightSamplingInfos lightInfos = light->sample(interPoint, sample);
 		//lightInfos.pdf *= lightWeight;
@@ -68,6 +70,7 @@ Color Integrator::sampleOneLight(Light::ptr light, const Point3d & interPoint, c
 {
 	//Sample the light
 	lightInfos = light->sample(interPoint, sample);
+	lightInfos.light = light;
 
 	Ray shadowRay(interPoint, lightInfos.interToLight, tools::EPSILON, lightInfos.distance - tools::EPSILON);
 	Intersection tmp;
