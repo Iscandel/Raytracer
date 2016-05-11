@@ -19,7 +19,7 @@ Orthographic::~Orthographic()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Ray Orthographic::getRay(double px, double py, const Point2d& apertureSample)
+Ray Orthographic::getRay(double px, double py, const Point2d&)
 {
 	//imagePlane = Point3d(
 	//	px * myMPerPixel - myMPerPixel * getSizeX() / 2.,

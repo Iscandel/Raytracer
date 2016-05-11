@@ -49,7 +49,7 @@ public:
 protected:
 	//Vector used to store light associated to the mesh (if any)
 	std::vector<std::shared_ptr<GeometricShape>> myLightTriangles;
-	Rng rng;
+	//Rng rng;
 	//CDF
 	CDF myCDF;
 

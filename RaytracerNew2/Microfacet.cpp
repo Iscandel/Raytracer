@@ -1,5 +1,6 @@
 #include "Microfacet.h"
 
+#include "ConstantTexture.h"
 #include "DifferentialGeometry.h"
 #include "Fresnel.h"
 #include "Mapping.h"
@@ -11,7 +12,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 Microfacet::Microfacet(const Parameters& params)
 {
-	myKd = params.getColor("kd", Color());
+	//if (params.hasTexture("kd"))
+	//	myKdTexture = params.getTexture("kd", nullptr);
+	//else
+	//	myKdTexture = Texture::ptr(new ConstantTexture(params.getColor("kd", Color(0.5))));
+
+	//myKd = params.getColor("kd", Color());
 	myAlpha = params.getDouble("alpha", 0.2);
 	myEtaExt = params.getDouble("etaExt", 1.000277);     /* Interior IOR (default: BK7 borosilicate optical glass) */
 	myEtaInt = params.getDouble("etaInt", 1.5946);

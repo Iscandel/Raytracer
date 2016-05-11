@@ -16,7 +16,7 @@ DistantLight::~DistantLight()
 {
 }
 
-Color DistantLight::le(const Vector3d& direction, const Normal3d& normal) const
+Color DistantLight::le(const Vector3d& direction, const Normal3d&) const
 {
 	Vector3d localDir = myLightToWorld->inv().transform(direction);
 	localDir.normalize();
@@ -40,7 +40,7 @@ LightSamplingInfos DistantLight::sample(const Point3d& pFrom, const Point2d& sam
 	Vector3d dir = Mapping::squareToSphericalCap(sample, std::cos(tools::toRadian(myAngle)));
 	infos.intensity = myRadiance;
 	infos.interToLight = myLightToWorld->transform(dir);
-	infos.distance = mySphereRadius;
+	infos.distance = mySphereRadius; //Compute the true distance ?
 	//Should be already normalized (?)
 	infos.interToLight.normalize();
 	infos.sampledPoint = Ray(pFrom, infos.interToLight).getPointAt(mySphereRadius);// Point3d(100000, 1000000, 100000);//infos.wi; //No !!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -49,7 +49,7 @@ LightSamplingInfos DistantLight::sample(const Point3d& pFrom, const Point2d& sam
 	return infos;
 }
 
-double DistantLight::pdf(const Point3d& pFrom, const LightSamplingInfos& infos)
+double DistantLight::pdf(const Point3d&, const LightSamplingInfos& infos)
 {
 	double cosTheta = std::cos(tools::toRadian(myAngle));
 	Vector3d localWi = myLightToWorld->inv().transform(infos.interToLight);

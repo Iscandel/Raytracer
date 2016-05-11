@@ -297,16 +297,31 @@
     <ClCompile Include="DistantLight.cpp">
       <Filter>Lights</Filter>
     </ClCompile>
-    <ClCompile Include="PathTracingMIS.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
     <ClCompile Include="CheckerTexture.cpp">
       <Filter>Textures</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Textures</Filter>
     </ClCompile>
+    <ClCompile Include="RecursivePathTracingMIS.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="PathTracingMIS.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
     <ClCompile Include="PerlinNoiseTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageLoader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="LayeredBSDF.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -551,19 +566,34 @@
     <ClInclude Include="DistantLight.h">
       <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="PathTracingMIS.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Textures</Filter>
     </ClInclude>
     <ClInclude Include="CheckerTexture.h">
       <Filter>Textures</Filter>
     </ClInclude>
+    <ClInclude Include="RecursivePathTracingMIS.h">
+      <Filter>Integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="PathTracingMIS.h">
+      <Filter>Integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantTexture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageTexture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
     <ClInclude Include="PerlinNoiseTexture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageLoader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="LayeredBSDF.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

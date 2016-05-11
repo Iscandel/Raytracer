@@ -28,6 +28,7 @@ public:
 	void handleSampler(Scene& scene, TiXmlElement* element);
 	ReconstructionFilter::ptr handleReconstructionFilter(Scene& scene, TiXmlElement* element);
 	Transform::ptr handleTransform(TiXmlElement* element);
+	Texture::ptr handleTexture(TiXmlElement* element);
 	
 	Transform handleRotationTransform(TiXmlElement* element);
 	Transform handleTranslationTransform(TiXmlElement* element);

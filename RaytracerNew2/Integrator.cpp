@@ -4,8 +4,11 @@
 
 Integrator::Integrator()
 {
+	for (unsigned int i = 0; i < LightSamplingStrategy::END; i++)
+	{
+		myStrategiesByName[lightStrategy::STRING[i]] = (LightSamplingStrategy) i;
+	}
 }
-
 
 Integrator::~Integrator()
 {

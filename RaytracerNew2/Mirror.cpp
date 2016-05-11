@@ -4,7 +4,7 @@
 #include "ObjectFactoryManager.h"
 #include "Parameters.h"
 
-Mirror::Mirror(const Parameters& params)
+Mirror::Mirror(const Parameters&)
 {
 	//myAlbedo = params.getColor("albedo", Color(0.));
 	////myEta = params.getDouble("eta", 0.);

@@ -18,7 +18,13 @@ returnType Parameters::get##TypeName(const std::string& name, typeArg defaultVal
 	{ \
 		return defaultValue; \
 	} \
-}
+}\
+bool Parameters::has##TypeName(const std::string& name) const\
+{ \
+	std::map<std::string, returnType>::const_iterator it = my##TypeName.find(name); \
+	return (it != my##TypeName.end()); \
+} 
+
 
 Parameters::Parameters()
 {
@@ -39,3 +45,4 @@ CREATE_PARAM_FUNC(const Color&, Color, Color)
 CREATE_PARAM_FUNC(Transform::ptr, Transform::ptr, Transform)
 CREATE_PARAM_FUNC(BSDF::ptr, BSDF::ptr, BSDF)
 CREATE_PARAM_FUNC(Light::ptr, Light::ptr, Light)
+CREATE_PARAM_FUNC(Texture::ptr, Texture::ptr, Texture)

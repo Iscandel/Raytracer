@@ -49,7 +49,11 @@
     <string name="path" value="./data/cbox/walls2.obj"/>
 
     <bsdf type="Diffuse">
-      <color name="albedo" value="0.725 0.71 0.68"/>
+      <!--<color name="albedo" value="0.725 0.71 0.68"/>-->
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/20060807_wells6_hd.hdr"/>
+        </texture>
+   
     </bsdf>
   </shape>
 

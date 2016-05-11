@@ -31,6 +31,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="CDF.cpp" />
     <ClCompile Include="Conductor.cpp" />
+    <ClCompile Include="ConstantTexture.cpp" />
     <ClCompile Include="Dielectric.cpp" />
     <ClCompile Include="DifferentialGeometry.cpp" />
     <ClCompile Include="Diffuse.cpp" />
@@ -43,6 +44,8 @@
     <ClCompile Include="EnvironmentLight.cpp" />
     <ClCompile Include="Fresnel.cpp" />
     <ClCompile Include="HDRLoader.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
+    <ClCompile Include="ImageTexture.cpp" />
     <ClCompile Include="IMeshLoader.cpp" />
     <ClCompile Include="GaussianFilter.cpp" />
     <ClCompile Include="GeometricShapeFactory.cpp" />
@@ -51,6 +54,7 @@
     <ClCompile Include="ISampledShape.cpp" />
     <ClCompile Include="Job.cpp" />
     <ClCompile Include="JobManager.cpp" />
+    <ClCompile Include="LayeredBSDF.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
@@ -69,6 +73,7 @@
     <ClCompile Include="Orthographic.cpp" />
     <ClCompile Include="Parameters.cpp" />
     <ClCompile Include="PathTracingMIS.cpp" />
+    <ClCompile Include="RecursivePathTracingMIS.cpp" />
     <ClCompile Include="PerlinNoiseTexture.cpp" />
     <ClCompile Include="Perspective.cpp" />
     <ClCompile Include="Phong.cpp" />
@@ -115,6 +120,7 @@
     <ClInclude Include="CDF.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Conductor.h" />
+    <ClInclude Include="ConstantTexture.h" />
     <ClInclude Include="Dielectric.h" />
     <ClInclude Include="DifferentialGeometry.h" />
     <ClInclude Include="Diffuse.h" />
@@ -129,6 +135,8 @@
     <ClInclude Include="Fresnel.h" />
     <ClInclude Include="GeometricShapeFactory.h" />
     <ClInclude Include="HDRLoader.h" />
+    <ClInclude Include="ImageLoader.h" />
+    <ClInclude Include="ImageTexture.h" />
     <ClInclude Include="IMeshLoader.h" />
     <ClInclude Include="GaussianFilter.h" />
     <ClInclude Include="Integrator.h" />
@@ -136,6 +144,7 @@
     <ClInclude Include="ISampledShape.h" />
     <ClInclude Include="Job.h" />
     <ClInclude Include="JobManager.h" />
+    <ClInclude Include="LayeredBSDF.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Mapping.h" />
@@ -155,6 +164,7 @@
     <ClInclude Include="Orthographic.h" />
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="PathTracingMIS.h" />
+    <ClInclude Include="RecursivePathTracingMIS.h" />
     <ClInclude Include="PerlinNoiseTexture.h" />
     <ClInclude Include="Perspective.h" />
     <ClInclude Include="Phong.h" />
@@ -201,7 +211,9 @@
     <Xml Include="Scenes\Ajax-IS.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="Scenes\bathroom-rtPT.xml" />
+    <Xml Include="Scenes\bathroom-rtPT.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\Buddha-MIS.xml">
       <SubType>Designer</SubType>
     </Xml>
@@ -209,7 +221,9 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Scenes\DepthOfField.xml" />
-    <Xml Include="Scenes\MatPreview.xml" />
+    <Xml Include="Scenes\MatPreview.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\MatPreview2.xml" />
     <Xml Include="Scenes\Odyssey-IS.xml" />
     <Xml Include="Scenes\SphereAO-MIS.xml" />
@@ -317,7 +331,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>

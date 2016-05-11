@@ -69,8 +69,20 @@ bool Sphere::intersection(const Ray& ray, double& t, Point2d& uv) //Differential
 
 		//trueGeom.myN = normal(ray.myOrigin + t * ray.direction());
 		//shadingGeom = trueGeom;
+
+		bool intersect = t >= ray.myMinT && t <= ray.myMaxT;
+		if (intersect)
+		{
+			//UV mapping from spherical coords
+			Vector3d normalizedInterPoint = ray.getPointAt(t).normalized();
+			uv.x() = sphericalPhiFromCartesian(normalizedInterPoint) / (2 * tools::PI);
+			uv.y() = sphericalThetaFromCartesian(normalizedInterPoint) / tools::PI;
+			return true;
+		}
+		return false;
+
+		//return t >= ray.myMinT && t <= ray.myMaxT;
 		
-		return t >= ray.myMinT && t <= ray.myMaxT;
 	}
 }
 
@@ -86,6 +98,7 @@ void Sphere::getDifferentialGeometry(DifferentialGeometry & trueGeometry, Differ
 ///////////////////////////////////////////////////////////////////////////////
 //We would need the 3d point 'pFrom' to check the dot(normal, pFrom) and correct the sampled point if dot < 0 (avoid wasting sample)
 //Algorithm from http://mathworld.wolfram.com/SpherePointPicking.html
+//Nb : We should sample the spherical cap
 void Sphere::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 {
 	////Point3d center = myObjectToWorld->transform(Point3d(0., 0., 0.));
@@ -103,7 +116,7 @@ void Sphere::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 	double phi = std::acos(2 * p.y() - 1.);
 
 	double u = std::cos(phi);
-	double sqrtVal = std::sqrt( 1 -u * u);
+	double sqrtVal = std::sqrt(1 - u * u);
 	sampled.x() = sqrtVal * std::cos(theta);
 	sampled.y() = sqrtVal * std::sin(theta);
 	sampled.z() = u;

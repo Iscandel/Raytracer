@@ -1,5 +1,6 @@
 #include "EnvironmentLight.h"
 
+#include "ImageLoader.h"
 #include "ObjectFactoryManager.h"
 #include "Scene.h"
 #include "Tools.h"
@@ -11,22 +12,36 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 	std::string path = params.getString("path", "");
 	myLightToWorld = params.getTransform("toWorld", Transform::ptr(new Transform));
 	myWorldToLight = Transform::ptr(new Transform(myLightToWorld->inv()));
+	myFactor = params.getDouble("factor", 1.);
 
-	sf::Image im;
-	im.loadFromFile(path);
-	myArray.setSize(im.getSize().x, im.getSize().y);
-	for (unsigned int y = 0; y < im.getSize().y; y++)
+	ImageLoader::load(path, myArray);
+
+	if (myFactor != 1.)
 	{
-		for (unsigned int x = 0; x <im.getSize().x; x++)
+		for (unsigned int i = 0; i < myArray.getHeight(); i++)
 		{
-			sf::Color col = im.getPixel(x, y);
-			myArray(x, y) = Color(col.r / 255., col.g / 255., col.b / 255.);
+			for (unsigned int j = 0; j < myArray.getWidth(); j++)
+			{
+				myArray(j, i) *= myFactor;
+			}
 		}
 	}
 
+	//sf::Image im;
+	//im.loadFromFile(path);
+	//myArray.setSize(im.getSize().x, im.getSize().y);
+	//for (unsigned int y = 0; y < im.getSize().y; y++)
+	//{
+	//	for (unsigned int x = 0; x <im.getSize().x; x++)
+	//	{
+	//		sf::Color col = im.getPixel(x, y);
+	//		myArray(x, y) = Color(col.r / 255., col.g / 255., col.b / 255.) * 0.3;
+	//	}
+	//}
+
 	for (unsigned int i = 0; i < myArray.getHeight(); i++)
 	{
-		double weight = std::sin(tools::PI * (i + 0.5) / im.getSize().y);
+		double weight = std::sin(tools::PI * (i + 0.5) / myArray.getHeight());//.getSize().y);
 		myRowCDFs.push_back(CDF());
 		for (unsigned int j = 0; j < myArray.getWidth(); j++)
 		{
@@ -86,7 +101,7 @@ LightSamplingInfos EnvironmentLight::sample(const Point3d & pFrom, const Point2d
 	return infos;
 }
 
-double EnvironmentLight::pdf(const Point3d & pFrom, const LightSamplingInfos & infos)
+double EnvironmentLight::pdf(const Point3d &, const LightSamplingInfos & infos)
 {
 	Vector3d dir = myWorldToLight->transform(infos.interToLight);
 	//transform world to light
@@ -102,7 +117,7 @@ double EnvironmentLight::pdf(const Point3d & pFrom, const LightSamplingInfos & i
 	return pdf;
 }
 
-Color EnvironmentLight::le(const Vector3d & direction, const Normal3d & normal) const
+Color EnvironmentLight::le(const Vector3d & direction, const Normal3d &) const
 {
 	Vector3d dir = myWorldToLight->transform(direction);
 	//transform world to light

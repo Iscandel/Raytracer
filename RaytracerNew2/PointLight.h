@@ -16,16 +16,14 @@ public:
 
 	LightSamplingInfos sample(const Point3d& pFrom, const Point2d& sample) override;
 
-	double pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override
+	double pdf(const Point3d&, const LightSamplingInfos&) override
 	{
+		//Point lights cannot be intersected
 		return 0.;
 	}
 
 	//Shouldn't be called I think
-	Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const
-	{
-		return Color();
-	}
+	Color le(const Vector3d& dir, const Normal3d& normal = Normal3d()) const;
 
 	bool isDelta() const override { return true; }
 

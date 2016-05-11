@@ -184,6 +184,8 @@ public:
 
 	const BoundingBox& getBoundingBox() const { return myBoundingBox; }
 
+	void setShowProgress(bool show);
+
 protected:
 	Camera::ptr myCamera;
 

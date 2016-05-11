@@ -166,8 +166,8 @@ void XMLLoader::handleLights(Scene& scene, TiXmlElement* element)
 ///////////////////////////////////////////////////////////////////////////////
 void XMLLoader::handleParameters(Scene& scene, TiXmlElement* element)
 {
-	int blockSizeX;
-	int blockSizeY;
+	int blockSizeX = 32;
+	int blockSizeY = 32;
 
 	element = element->FirstChildElement();
 	for(element; element; element = element->NextSiblingElement())
@@ -199,6 +199,15 @@ void XMLLoader::handleParameters(Scene& scene, TiXmlElement* element)
 		else if (element->ValueStr() == "blockSizeY")
 		{
 			blockSizeY = tools::stringToNum<int>(element->GetText());
+		}
+		else if (element->ValueStr() == "showProgress")
+		{
+			int show = tools::stringToNum<int>(element->GetText());
+			scene.setShowProgress((bool)show);
+		}
+		else
+		{
+			ILogger::log() << "Unknown parameter " << element->ValueStr() << ".\n";
 		}
 	}
 
@@ -257,7 +266,6 @@ void XMLLoader::handleCamera(Scene& scene, TiXmlElement* element)
 ///////////////////////////////////////////////////////////////////////////////
 void XMLLoader::handleObject(Scene& scene, TiXmlElement* element)
 {
-	double radius = 0.;
 	std::vector<double> pos;
 	BSDF::ptr bsdf;
 	Light::ptr light;
@@ -330,7 +338,7 @@ void XMLLoader::handleObject(Scene& scene, TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-ReconstructionFilter::ptr XMLLoader::handleReconstructionFilter(Scene& scene, TiXmlElement* element)
+ReconstructionFilter::ptr XMLLoader::handleReconstructionFilter(Scene&, TiXmlElement* element)
 {
 	Parameters params;
 	std::string type = element->Attribute("type");
@@ -369,6 +377,10 @@ Transform XMLLoader::handleRotationTransform(TiXmlElement* element)
 		{
 			rot[2] = tools::stringToNum<double>(element->GetText());
 		}
+		else
+		{
+			ILogger::log() << "Unknown parameter " << key << ".\n";
+		}
 	}
 
 	Transform rotateX = Transform::rotateX(rot[0]);
@@ -399,6 +411,10 @@ Transform XMLLoader::handleScaleTransform(TiXmlElement* element)
 		{
 			res[2] = tools::stringToNum<double>(element->GetText());
 		}
+		else
+		{
+			ILogger::log() << "Unknown parameter " << key << ".\n";
+		}
 	}
 
 	return Transform::scale(Point3d(res[0], res[1], res[2]));
@@ -426,6 +442,10 @@ Transform XMLLoader::handleTranslationTransform(TiXmlElement* element)
 		{
 			res[2] = tools::stringToNum<double>(element->GetText());
 		}
+		else
+		{
+			ILogger::log() << "Unknown parameter " << key << ".\n";
+		}
 	}
 
 	return Transform::translate(Point3d(res[0], res[1], res[2]));
@@ -451,6 +471,25 @@ Transform XMLLoader::handleMatrixTransform(TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
+Texture::ptr XMLLoader::handleTexture(TiXmlElement* element)
+{
+	Parameters params;
+	std::string type = element->Attribute("type");
+
+	element = element->FirstChildElement();
+	for (element; element; element = element->NextSiblingElement())
+	{
+		handleProperty(element, params);
+	}
+
+	auto factory = ObjectFactoryManager<Texture>::getInstance()->getFactory(type);
+	Texture::ptr texture = factory->create(params);
+	
+	return texture;
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 Transform XMLLoader::handleLookAtTransform(TiXmlElement* element)
 {
 	Vector3d origin, lookAt, up;
@@ -472,6 +511,10 @@ Transform XMLLoader::handleLookAtTransform(TiXmlElement* element)
 		{
 			up = tools::stringToVector<double>(element->GetText());
 		}
+		else
+		{
+			ILogger::log() << "Unknown parameter " << element->ValueStr() << ".\n";
+		}
 	}
 
 	return Transform::fromLookAt(origin, lookAt, up);
@@ -485,7 +528,11 @@ void XMLLoader::handleProperty(TiXmlElement* element, Parameters& params)
 	const std::string* attName = element->Attribute(std::string("name"));
 	const std::string* attValue = element->Attribute(std::string("value"));
 	if (attName == nullptr)
+	{
+		ILogger::log() << "No name attribut specified for " << 
+			element->ValueStr() << " property.\n";
 		return;
+	}
 
 	if (element->ValueStr() == "bool")
 	{
@@ -520,6 +567,11 @@ void XMLLoader::handleProperty(TiXmlElement* element, Parameters& params)
 		Transform::ptr transform = handleTransform(element);
 		params.addTransform(*attName, transform);
 	}
+	else if (element->ValueStr() == "texture")
+	{
+		Texture::ptr texture = handleTexture(element);
+		params.addTexture(*attName, texture);
+	}
 	else
 	{
 		ILogger::log() << "Unknown property " << *attName << "\n";
@@ -544,6 +596,10 @@ std::vector<int> XMLLoader::handleCameraDimensions(TiXmlElement* element)
 		{
 			res[1] = tools::stringToNum<int>(element->GetText());
 		}
+		else
+		{
+			ILogger::log() << "Unknown parameter " << key << ".\n";
+		}
 	}
 
 	return res;
@@ -558,7 +614,6 @@ Transform::ptr XMLLoader::handleTransform(TiXmlElement* element)
 	std::vector<double> rot(3, 0.);
 	std::vector<double> scaleVect(3, 1.);
 
-	const std::string* type = element->Attribute(std::string("type"));
 	element = element->FirstChildElement();
 
 	for (element; element; element = element->NextSiblingElement())
@@ -594,6 +649,10 @@ Transform::ptr XMLLoader::handleTransform(TiXmlElement* element)
 		{
 			Transform mat = handleLookAtTransform(element);
 			(*transform) = mat * (*transform);
+		}
+		else
+		{
+			ILogger::log() << "Unknown parameter " << element->ValueStr() << ".\n";
 		}
 	}
 

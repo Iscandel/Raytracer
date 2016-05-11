@@ -34,4 +34,11 @@ LightSamplingInfos PointLight::sample(const Point3d & pFrom, const Point2d&)
 	return infos;
 }
 
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+Color PointLight::le(const Vector3d&, const Normal3d&) const
+{
+	return Color();
+}
+
 RT_REGISTER_TYPE(PointLight, Light)

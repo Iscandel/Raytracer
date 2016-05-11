@@ -1,5 +1,6 @@
 #include "Conductor.h"
 
+#include "ConstantTexture.h"
 #include "DifferentialGeometry.h"
 #include "Fresnel.h"
 #include "ObjectFactoryManager.h"
@@ -10,7 +11,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 Conductor::Conductor(const Parameters& params)
 {
-	myAlbedo = params.getColor("albedo", Color(1.));
+	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
+
 	myEta = params.getColor("eta", Color(0.));
 	myAbsorption = params.getColor("absorption", Color(0.));
 }
@@ -33,7 +35,7 @@ Color Conductor::eval(const BSDFSamplingInfos& infos)
 
 	double cosI = DifferentialGeometry::cosTheta(infos.wi);
 
-	return myAlbedo * fresnel::fresnelConductor(myEta, myAbsorption, cosI);
+	return myReflectanceTexture->eval(infos.uv) * fresnel::fresnelConductor(myEta, myAbsorption, cosI);
 }
 
 //=============================================================================
@@ -49,12 +51,11 @@ Color Conductor::sample(BSDFSamplingInfos& infos, const Point2d&)
 	infos.pdf = 1.;
 
 	double cosI = DifferentialGeometry::cosTheta(infos.wi);
-	double cosWo = DifferentialGeometry::cosTheta(infos.wo);
 
 	//pdf = 1, no need to divide
-	//no need to multiply by cos theta : brdf is fresnel / cos theta
+	//no need to multiply by cos thetaWo : brdf is fresnel / cos theta
 	//check pbrt book p 470
-	return myAlbedo * fresnel::fresnelConductor(myEta, myAbsorption, cosI);// *cosWo;
+	return myReflectanceTexture->eval(infos.uv) * fresnel::fresnelConductor(myEta, myAbsorption, cosI);// *cosWo;
 }
 
 

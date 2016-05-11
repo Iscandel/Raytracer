@@ -2,6 +2,7 @@
 #include "BSDF.h"
 
 #include "Parameters.h"
+#include "Texture.h"
 
 class RoughConductor :
 	public BSDF
@@ -24,13 +25,10 @@ protected:
 	double shadowingTermG1(const Vector3d& v, const Vector3d& m);
 
 protected:
-	//Color myKd;
-	//double myKs;
+	Texture::ptr myReflectanceTexture;
 	double myAlpha;
 	double myR;
 	Color myEta;
 	Color myAbsorption;
-
-	//Color myAlbedo;
 };
 

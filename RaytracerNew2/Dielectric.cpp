@@ -3,11 +3,15 @@
 #include "DifferentialGeometry.h"
 #include "Fresnel.h"
 #include "ObjectFactoryManager.h"
+#include "ConstantTexture.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Dielectric::Dielectric(const Parameters& params)
 {
+	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
+	myTransmittedTexture = params.getTexture("transmittedTexture", Texture::ptr(new ConstantTexture(Color(1.))));
+
 	myEtaI = params.getDouble("etaExt", 1.000277); //incident
 	myEtaT = params.getDouble("etaInt", 1.5046); //transmitted
 }
@@ -20,8 +24,11 @@ Dielectric::~Dielectric()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Color Dielectric::eval(const BSDFSamplingInfos & infos)
+Color Dielectric::eval(const BSDFSamplingInfos &)
 {
+	//Same as conductors & specular BSDF. The proba to have wo corresponding to 
+	//refracted wi is close to 0. Return a lazy (?) 0. (see pbrt book ? The 
+	//integral evaluates to 0 for specular ?)
 	return Color(0.);
 }
 
@@ -71,8 +78,8 @@ Color Dielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 		infos.wo = reflect(infos.wi);
 		infos.pdf = fr;
 		
-		//divide by cos theta ?
-		return Color(1.);// / fr;
+		//brdf is the same as it is for conductors : fr / cos(theta)
+		return myReflectanceTexture->eval(infos.uv);// * fr;
 	}
 	else
 	{
@@ -81,15 +88,15 @@ Color Dielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 		//infos.wo.normalize(); //?
 		infos.pdf = 1 - fr;
 	
-		//btdf is eta * eta * (1 - fr), which is transmitted energy
-		//divide by cos theta ?
-		return Color(1.) * relativeEta * relativeEta;// / (1. - fr);
+		//btdf is eta * eta * (1 - fr) / cos(theta), which is transmitted energy
+		
+		return myTransmittedTexture->eval(infos.uv) * relativeEta * relativeEta;// * (1. - fr);
 	}
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double Dielectric::pdf(const BSDFSamplingInfos & infos)
+double Dielectric::pdf(const BSDFSamplingInfos &)
 {
 	//Check if infos.wo corresponds to infos.wi, given infos.sampledType ? Would be correct
 	//to avoid returning lazy 0. pdf. We could call pdf() everywhere

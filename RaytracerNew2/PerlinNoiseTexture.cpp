@@ -1,9 +1,34 @@
 #include "PerlinNoiseTexture.h"
 
+#include "ObjectFactoryManager.h"
 
+static int permutation[] = { 151,160,137,91,90,15,
+131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
+190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
+88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
+77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
+102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
+135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
+5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
+223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
+129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
+251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
+49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
+138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
+};
 
-PerlinNoiseTexture::PerlinNoiseTexture()
+PerlinNoiseTexture::PerlinNoiseTexture(const Parameters& params)
 {
+	for (int i = 0; i < 256; i++) {
+		p[256 + i] = p[i] = permutation[i];
+	}
+
+	myColor1 = Color(0.4, 0.2, 0.8);
+	myColor2 = Color(0.1, 0.7, 0.3);
+
+
+	persistence = 0.5;
+	NumberOfOctaves = 4;
 }
 
 
@@ -13,9 +38,73 @@ PerlinNoiseTexture::~PerlinNoiseTexture()
 
 Color PerlinNoiseTexture::eval(const Point2d & uv)
 {
-	return Color();
+	//double noiseCoef = 0;
+	//double fac = 0.05;
+	//for (int level = 1; level < 10; level++)
+	//{
+	//	noiseCoef += (1.0f / level)
+	//		* fabsf(float(noise(level * 0.05 * uv.x(),
+	//			level * 0.05 * uv.y(),
+	//			level * 0.05 * 0.4)));//((int)(uv.x() * 256) & 21 + (int)(uv.y() * 256) & 21))));
+	//}
+	//	
+	//return noiseCoef * myColor1 + (1. - noiseCoef) * myColor2;
+
+	double coeff = PerlinNoise_2D(uv.x() * 100., uv.y()* 100.);
+	return coeff * myColor1 + (1. - coeff) * myColor2;
 }
 
+double PerlinNoiseTexture::Noise1(int x, int y)
+{
+	int n = x + y * 57;
+	n = (n << 13) ^ n;
+	return (1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
+}
+
+double PerlinNoiseTexture::SmoothedNoise_1(double x, double y) {
+	double corners = (Noise1(x - 1, y - 1) + Noise1(x + 1, y - 1) + Noise1(x - 1, y + 1) + Noise1(x + 1, y + 1)) / 16;
+	double sides = (Noise1(x - 1, y) + Noise1(x + 1, y) + Noise1(x, y - 1) + Noise1(x, y + 1)) / 8;
+	double center = Noise1(x, y) / 4;
+	return corners + sides + center;
+}
+
+double PerlinNoiseTexture::InterpolatedNoise_1(double x, double y)
+{
+	int integer_X = int(x);
+	double fractional_X = x - integer_X;
+
+	int integer_Y = int(y);
+	double fractional_Y = y - integer_Y;
+
+	double v1 = SmoothedNoise_1(integer_X, integer_Y);
+	double v2 = SmoothedNoise_1(integer_X + 1, integer_Y);
+	double v3 = SmoothedNoise_1(integer_X, integer_Y + 1);
+	double v4 = SmoothedNoise_1(integer_X + 1, integer_Y + 1);
+
+	double i1 = lerp(fractional_X, v1, v2);
+	double i2 = lerp(fractional_X, v3, v4);
+
+	return lerp(fractional_Y, i1, i2);
+}
+
+
+double PerlinNoiseTexture::PerlinNoise_2D(double x, double y)
+{
+	double total = 0;
+	int n = NumberOfOctaves - 1;
+
+	for (unsigned int i = 0; i < n; i++)
+	{
+		double frequency = std::pow(2, i);
+		double amplitude = std::pow(persistence, i);
+
+		total = total + InterpolatedNoise_1(x * frequency, y * frequency) * amplitude;
+	}
+
+	return total;
+}
+
+RT_REGISTER_TYPE(PerlinNoiseTexture, Texture)
 
 
 

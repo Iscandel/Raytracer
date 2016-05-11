@@ -16,7 +16,7 @@ IPrimitive::~IPrimitive()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-bool SimplePrimitive::intersection(const Ray & ray, Intersection & inter, bool shadowRay)
+bool SimplePrimitive::intersection(const Ray & ray, Intersection & inter, bool)
 {
 	double t;
 	//DifferentialGeometry trueGeom;

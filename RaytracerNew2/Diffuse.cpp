@@ -3,13 +3,17 @@
 #include "DifferentialGeometry.h"
 #include "Mapping.h"
 #include "ObjectFactoryManager.h"
+#include "ConstantTexture.h"
 #include "Tools.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Diffuse::Diffuse(const Parameters& list)
 {
-	myAlbedo = list.getColor("albedo", Color(0.5, 0.5, 0.5));
+	if(list.hasTexture("albedo"))
+		myAlbedoTexture = list.getTexture("albedo", nullptr);
+	else
+		myAlbedoTexture = Texture::ptr(new ConstantTexture(list.getColor("albedo", Color(0.5))));
 }
 
 //=============================================================================
@@ -26,7 +30,7 @@ Color Diffuse::eval(const BSDFSamplingInfos& infos)
 		DifferentialGeometry::cosTheta(infos.wo) <= 0.)
 		return Color();
 
-	return myAlbedo * tools::INV_PI;
+	return myAlbedoTexture->eval(infos.uv) * tools::INV_PI;
 }
 
 //inline void sincosf(float theta, float *_sin, float *_cos) {
@@ -83,7 +87,7 @@ Color Diffuse::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 	infos.pdf = pdf(infos);
 
 	//eval() * cos theta / pdf = albedo	
-	return myAlbedo;
+	return myAlbedoTexture->eval(infos.uv);
 }
 
 //=============================================================================

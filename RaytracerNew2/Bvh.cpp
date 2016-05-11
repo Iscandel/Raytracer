@@ -390,7 +390,7 @@ bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 	inter.computeIntersect = false;
 	
 	int stack[64];
-	double minT = tools::MAX_DOUBLE;
+	//double minT = tools::MAX_DOUBLE;
 	int currentNode = 0;
 	
 	int dirIsNeg[3] = { _ray.invDir().x() < 0,  _ray.invDir().y() < 0,  _ray.invDir().z() < 0 };

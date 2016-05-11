@@ -4,6 +4,7 @@
 
 #include "Microfacet.h"
 
+#include "ConstantTexture.h"
 #include "DifferentialGeometry.h"
 #include "Fresnel.h"
 #include "Mapping.h"
@@ -15,6 +16,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 RoughDielectric::RoughDielectric(const Parameters& params)
 {
+	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
+	myTransmittedTexture = params.getTexture("transmittedTexture", Texture::ptr(new ConstantTexture(Color(1.))));
+
 	myAlpha = params.getDouble("alpha", 0.2);
 	myEtaExt = params.getDouble("etaExt", 1.000277);     /* Interior IOR (default: BK7 borosilicate optical glass) */
 	myEtaInt = params.getDouble("etaInt", 1.5046);
@@ -96,7 +100,7 @@ Color RoughDielectric::evalReflection(const BSDFSamplingInfos & infos)
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
 
-	Color term =  distributionBeckmann(wh) *
+	Color term = myReflectanceTexture->eval(infos.uv) * distributionBeckmann(wh) *
 		fresnel(myEtaExt, myEtaInt, cosThetaI) *
 		shadowingTerm(infos.wi, infos.wo, wh) / (4 * cosThetaI * cosThetaO);
 
@@ -117,8 +121,8 @@ Color RoughDielectric::evalRefraction(const BSDFSamplingInfos & infos)
 	//Color fr = fresnel(myEtaExt, myEtaInt, infos.wi.dot(wt), etaI, etaT, relativeEta, cosThetaT);
 	Vector3d wt = (-(etaI * infos.wi + etaT * infos.wo)).normalized();// / (infos.wi + infos.wo).squaredNorm();
 	
-	double left = infos.wi.dot(wt) * infos.wo.dot(wt) / (cosThetaI * cosThetaO);
-	Color term =  left * etaT *etaT * ((-1. * fr) + 1.) *  
+	double left =  infos.wi.dot(wt) * infos.wo.dot(wt) / (cosThetaI * cosThetaO);
+	Color term =  myTransmittedTexture->eval(infos.uv) * left * etaT *etaT * ((-1. * fr) + 1.) *  
 		shadowingTerm(infos.wi, infos.wo, wt) * distributionBeckmann(wt) ;
 	double denom = (etaI * (infos.wi.dot(wt)) + etaT * infos.wo.dot(wt));
 	term /= (denom * denom);
@@ -202,7 +206,7 @@ Color RoughDielectric::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 		//	return Color();
 		//}
 			
-		infos.pdf = pdfReflection(infos);
+		infos.pdf = pdfReflection(infos) * fr; //pdfReflection or weighted sum of pdfs ?
 		if (infos.pdf <= 0)
 			return Color();
 
@@ -227,7 +231,7 @@ Color RoughDielectric::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 		//	return Color();
 		//}
 		
-		infos.pdf = pdfRefraction(infos);
+		infos.pdf = pdfRefraction(infos) * (1. - fr); //pdfRefraction or weighted sum of pdfs ?
 		if (infos.pdf <= 0)
 			return Color();
 
@@ -241,13 +245,9 @@ Color RoughDielectric::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 double RoughDielectric::pdfRefraction(const BSDFSamplingInfos& infos)
 {
 	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
-
-	//if (cosThetaI <= 0. || cosThetaO <= 0.)
-	//	return 0.;
 
 	double etaI, etaT, relativeEta, cosThetaT;
-	double fr = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
+	fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT);
 
 	Vector3d wt = (-(etaI * infos.wi + etaT * infos.wo)).normalized();// / (infos.wi + infos.wo).squaredNorm();
 	double cosThetaWt = DifferentialGeometry::cosTheta(wt);
@@ -262,8 +262,8 @@ double RoughDielectric::pdfRefraction(const BSDFSamplingInfos& infos)
 ///////////////////////////////////////////////////////////////////////////////
 double RoughDielectric::pdfReflection(const BSDFSamplingInfos& infos)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+	//double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	//double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 	//if (cosThetaI <= 0. || cosThetaO <= 0.)
 	//	return 0.;
@@ -289,7 +289,7 @@ double RoughDielectric::pdf(const BSDFSamplingInfos& infos)
 	else
 		return pdfRefraction(infos) * (1. - fr);
 	
-	return fr * pdfReflection(infos) + (1. - fr) * pdfRefraction(infos);
+//	return fr * pdfReflection(infos) + (1. - fr) * pdfRefraction(infos);
 }
 
 RT_REGISTER_TYPE(RoughDielectric, BSDF)

@@ -1,5 +1,6 @@
 #pragma once
 #include "BSDF.h"
+#include "Texture.h"
 
 class Parameters;
 
@@ -17,9 +18,7 @@ public:
 	double pdf(const BSDFSamplingInfos& infos) override;
 
 protected:
-	Color myAlbedo;
-	//double myEta;
-	//double myAbsorption;
+	Texture::ptr myReflectanceTexture;
 	Color myEta;
 	Color myAbsorption;
 };

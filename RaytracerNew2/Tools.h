@@ -1,6 +1,7 @@
 #ifndef H__TOOLS_230520152033__H
 #define H__TOOLS_230520152033__H
 
+#include "Array2D.h"
 #include "Color.h"
 #include "Geometry.h"
 #include <string>
@@ -149,6 +150,23 @@ template<class T>
 T thresholding(T val, T min, T max)
 {
 	return val < min ? min : val  > max ? max : val;
+}
+
+inline Color interp2(const Point2d& xy, const Array2D<Color>& array)
+{
+	double advanceX = xy.x() - (int)xy.x();
+	double advanceY = xy.y() - (int)xy.y();
+	int xMin = tools::thresholding((int)xy.x(), 0, (int)array.getWidth());
+	int yMin = tools::thresholding((int)xy.y(), 0, (int)array.getHeight());
+	int xMax = xMin + 1 < (int)array.getWidth() ? xMin + 1 : xMin;
+	xMax = thresholding(xMax, 0, (int)array.getWidth() - 1);
+	int yMax = yMin + 1 < (int)array.getHeight() ? yMin + 1 : yMin;
+	yMax = thresholding(yMax, 0, (int)array.getHeight() - 1);
+
+	return (1 - advanceX) * (1 - advanceY) * array(xMin, yMin) +
+		(1 - advanceX) * advanceY * array(xMin, yMax) +
+		advanceX * (1 - advanceY) * array(xMax, yMin) +
+		advanceX * advanceY * array(xMax, yMax);
 }
 
 ///////////////////////////////////////////////////////////////////////////

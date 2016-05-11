@@ -1,5 +1,6 @@
 #include "RoughConductor.h"
 
+#include "ConstantTexture.h"
 #include "DifferentialGeometry.h"
 #include "Fresnel.h"
 #include "ObjectFactoryManager.h"
@@ -10,6 +11,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 RoughConductor::RoughConductor(const Parameters& params)
 {
+	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
+
 	myAlpha = params.getDouble("alpha", 0.2);
 
 	//Gold
@@ -72,7 +75,7 @@ Color RoughConductor::eval(const BSDFSamplingInfos & infos)
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
 
-	Color specularPart = distributionBeckmann(wh) *
+	Color specularPart = myReflectanceTexture->eval(infos.uv) * distributionBeckmann(wh) *
 		fresnel::fresnelConductor(myEta, myAbsorption, cosThetaI) *
 		shadowingTerm(infos.wi, infos.wo, wh) / (4 * cosThetaI * cosThetaO);
 

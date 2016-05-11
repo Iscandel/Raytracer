@@ -54,21 +54,32 @@ public:
 
 	void destroyThreads();
 
+	void showProgress();
+
+	void setShowProgress(bool show) { myIsShowProgress = show; }
+
 protected:
 	int myThreadNumber;
 #ifdef VS_2010
 	std::vector<sf::Thread*> myThreads;
 	sf::Mutex* myMutex ;
 	sf::Mutex* myRemainingTasksMutex ;
+	sf::Mutex* myProgressMutex;
 #else
 	std::vector<std::shared_ptr<std::thread> > myThreads;
 	std::mutex myMutex;
 	std::mutex myRemainingTasksMutex;
+	std::mutex myProgressMutex;
 #endif
 	int myNumberRunning;
 	std::vector<std::shared_ptr<Job> > myJobs;
 
-	
+	bool myIsShowProgress;
+
+	int myJobsDone;
+	int myTotalJobs;
+	int myCoeff;
+	double myShowValue;
 };
 
 

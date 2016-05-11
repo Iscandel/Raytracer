@@ -10,7 +10,7 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="256"/>
+    <integer name="sampleNumber" value="128"/>
   </sampler>
 
   <!-- Use a direct illumination integrator -->
@@ -21,10 +21,12 @@
 
   <!-- Render the scene as viewed by a perspective camera -->
   <camera type="NoriPerspective">
-    <transform type="lookAt" name="toWorld">
-      <origin>5 5 1</origin>
-      <lookAt>0 0 0</lookAt>
-      <up>0 0 1</up>
+    <transform name="toWorld">
+      <lookAt>
+        <origin>5 5 1</origin>
+        <lookAt>0 0 0</lookAt>
+        <up>0 0 1</up>
+      </lookAt> 
     </transform>
 
     <double name="fov" value="40" />

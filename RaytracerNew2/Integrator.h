@@ -6,9 +6,20 @@
 #include "Ray.h"
 #include "Sampler.h"
 
+#include <map>
 #include <memory>
 class Scene;
 class Intersection;
+
+//Macro to associate strings and enum
+#define MYLIST(x)       \
+x(ALL_LIGHT, "all_lights") \
+x(ONE_LIGHT_UNIFORM, "one_light_uniform") \
+x(ONE_LIGHT_WEIGHTED, "one_light_weighted") \
+x(END, "null") \
+
+#define USE_FIRST_ELEMENT(x, y)  x,
+#define USE_SECOND_ELEMENT(x, y) y,
 
 class Integrator
 {
@@ -17,19 +28,18 @@ public:
 public:
 	enum LightSamplingStrategy
 	{
-		ALL_LIGHT,
-		ONE_LIGHT_UNIFORM,
-		ONE_LIGHT_WEIGHTED
+		MYLIST(USE_FIRST_ELEMENT)
 	};
 public:
 	Integrator();
-	~Integrator();
+	virtual ~Integrator();
 
 	void initialize(Scene& scene);
 
 	///Chooses a light in the scene according to the given strategy and then samples it.
 	Color sampleLightDirect(const Point3d& interPoint, const Point2d& sample, 
 		const Scene& scene, LightSamplingInfos& infos, LightSamplingStrategy strategy = ONE_LIGHT_UNIFORM);
+
 	virtual Color li(Scene& scene, Sampler::ptr sampler, const Ray& ray) = 0;
 
 	Color sampleOneLight(Light::ptr light, const Point3d& interPoint, const Point2d& sample,
@@ -49,5 +59,19 @@ public:
 
 protected:
 	CDF myLightWeights;
+
+	std::map<std::string, LightSamplingStrategy> myStrategiesByName;
 };
 
+namespace lightStrategy
+{
+	static const char *STRING[] =
+	{
+		MYLIST(USE_SECOND_ELEMENT)
+	};
+};
+
+
+#undef MYLIST
+#undef USE_FIRST_ELEMENT
+#undef USE_SECOND_ELEMENT

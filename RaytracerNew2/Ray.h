@@ -52,7 +52,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Returns the point on the ray at the given distance
 	///////////////////////////////////////////////////////////////////////////
-	Point3d getPointAt(double distance) { return myOrigin + distance * myDirection; }
+	Point3d getPointAt(double distance) const { return myOrigin + distance * myDirection; }
 
 	Point3d myOrigin;
 	double myMinT;

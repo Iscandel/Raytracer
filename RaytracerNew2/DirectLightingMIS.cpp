@@ -52,8 +52,8 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 							continue;
 
 						//Generate a shadow ray from the first inter to the light sampled point
-						Vector3d interToLight = lightInfos.sampledPoint - intersection.myPoint;
-						Ray shadowRay(intersection.myPoint, lightInfos.interToLight, tools::EPSILON, interToLight.norm() - tools::EPSILON);
+						//Vector3d interToLight = lightInfos.sampledPoint - intersection.myPoint;
+						Ray shadowRay(intersection.myPoint, lightInfos.interToLight, tools::EPSILON, lightInfos.distance/*interToLight.norm()*/ - tools::EPSILON);
 						Intersection tmp;
 
 						//If the light point is visible from the the inter point

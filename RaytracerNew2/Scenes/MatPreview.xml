@@ -31,13 +31,14 @@
     <blockSizeX>32</blockSizeX>
     <blockSizeY>32</blockSizeY>
     <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="64"/>
+    <integer name="sampleNumber" value="32"/>
   </sampler>
 
-  <integrator type="DirectLightingMIS">
+  <integrator type="PathTracingMIS">
     <integer name="depth" value="10"/>
     <integer name="sampleNumber" value="4"/>
     <!--<bool name="bsdfSampling" value="true"/>-->
@@ -46,6 +47,7 @@
   <lights>
     <light type="EnvironmentLight">
       <string name="path" value="./data/20060807_wells6_hd.jpg"/>
+      <double name="factor" value="0.7"/>
       <transform name="toWorld">
         <rotation>
           <rx>90.</rx>

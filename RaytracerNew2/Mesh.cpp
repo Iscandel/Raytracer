@@ -27,8 +27,8 @@ void Mesh::sample(const Point2d& p, Point3d& sampled, Normal3d& normal)
 	Point2d sample(p);
 
 	//choose a triangle wrt the surface
-	int index = rng.random(0, myIndices.size() / 3 - 1);
-	//int index = myCDF.sampleAndReuse(sample.x());
+	//int index = rng.random(0, myIndices.size() / 3 - 1);
+	int index = myCDF.sampleAndReuse(sample.x());
 	myLightTriangles[index]->sample(sample, sampled, normal);
 }
 

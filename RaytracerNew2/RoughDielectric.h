@@ -34,6 +34,8 @@ protected:
 	Color evalRefraction(const BSDFSamplingInfos & infos);
 
 protected:
+	Texture::ptr myReflectanceTexture;
+	Texture::ptr myTransmittedTexture;
 	double myAlpha;
 	double myEtaInt;
 	double myEtaExt;

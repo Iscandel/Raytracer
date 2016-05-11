@@ -10,10 +10,15 @@
 JobManager::JobManager()
 :myThreadNumber(1)
 ,myNumberRunning(0)
+,myIsShowProgress(false)
+,myJobsDone(0)
+,myCoeff(0)
+,myShowValue(0.1)
 {
 #ifdef VS_2010
 	myMutex = new sf::Mutex;
 	myRemainingTasksMutex = new sf::Mutex;
+	myProgressMutex = new sf::Mutex;
 #else
 	//myMutex = new std::mutex;
 	//myRemainingTasksMutex = new std::mutex;
@@ -105,6 +110,8 @@ void JobManager::addJobs(const std::vector<std::shared_ptr<Job> >& jobs)
 		myJobs.push_back(jobs[i]);
 	}
 
+	myTotalJobs = myJobs.size();
+
 	//Single threaded processing
 	if(myThreadNumber == 1)
 	{
@@ -187,6 +194,11 @@ void JobManager::jobRun()
 	
 			job = myJobs.back();
 			myJobs.pop_back();
+
+			if (myIsShowProgress)
+			{
+				showProgress();
+			}
 		}
 
 		job->run();
@@ -198,4 +210,20 @@ void JobManager::jobRun()
 	std::lock_guard<std::mutex> lock(myRemainingTasksMutex);
 #endif
 	myNumberRunning--;
+}
+
+void JobManager::showProgress()
+{
+#ifdef VS_2010
+	sf::Lock lock(*myProgressMutex);
+#else
+	std::lock_guard<std::mutex> lock(myProgressMutex);
+#endif
+	myJobsDone++;
+
+	if ((double)myJobsDone / myTotalJobs > myShowValue * myCoeff)
+	{
+		ILogger::log() << myShowValue * myCoeff * 100 << "%\n";
+		myCoeff++;
+	}
 }

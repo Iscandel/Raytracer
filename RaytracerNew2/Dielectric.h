@@ -17,9 +17,9 @@ public:
 	double pdf(const BSDFSamplingInfos& infos) override;
 
 protected:
-	Color myAlbedo;
-	//double myEta;
-	//double myAbsorption;
+	Texture::ptr myReflectanceTexture;
+	Texture::ptr myTransmittedTexture;
+	
 	double myEtaI;
 	double myEtaT;
 };

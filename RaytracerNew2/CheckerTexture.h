@@ -1,10 +1,13 @@
 #pragma once
 #include "Texture.h"
+
+class Parameters;
+
 class CheckerTexture :
 	public Texture
 {
 public:
-	CheckerTexture();
+	CheckerTexture(const Parameters& params);
 
 	~CheckerTexture();
 
@@ -12,13 +15,13 @@ public:
 	{
 		//std::cout << uv.x() << " " << uv.y() << std::endl;
 		bool firstColor = false;
-		int x = uv.x() / mySquareSize;
+		int x = (int)(uv.x() / mySquareSize);
 		if (x % 2 == 0)
 			firstColor = true;
 		else
 			firstColor = false;
 
-		int y = uv.y() / mySquareSize;
+		int y = (int)(uv.y() / mySquareSize);
 		if (y % 2 == 0)
 		{
 			if (firstColor)

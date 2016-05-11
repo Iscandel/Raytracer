@@ -40,6 +40,8 @@ protected:
 	Transform::ptr myLightToWorld;
 	Transform::ptr myWorldToLight;
 
+	double myFactor;
+
 	//Bounding sphere
 	double mySphereRadius;
 	Point3d myCenter;

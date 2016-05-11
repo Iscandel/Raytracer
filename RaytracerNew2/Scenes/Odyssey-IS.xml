@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene>
   <camera type="NoriPerspective">
-    <transform type="lookAt" name="toWorld">
-      <origin>20 20 50</origin>
+    <transform name="toWorld">
+      <lookAt>
+        <origin>20 20 50</origin>
       <lookAt>0 4 0</lookAt>
       <up>0 1 0</up>
+      </lookAt>
     </transform>
     <double name="fov" value="39.3077"/>
     <integer name="sizeX" value="768"/>

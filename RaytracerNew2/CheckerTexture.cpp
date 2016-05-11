@@ -1,15 +1,18 @@
 #include "CheckerTexture.h"
 
+#include "ObjectFactoryManager.h"
+#include "Parameters.h"
 
-
-CheckerTexture::CheckerTexture()
+CheckerTexture::CheckerTexture(const Parameters& params)
 {
-	mySquareSize = 0.2;
-	mySecondColor = Color(0.4, 0, 0);
-	myFirstColor = Color(1, 0.8, 1);
+	mySquareSize = params.getDouble("squareSize", 0.2);
+	myFirstColor = params.getColor("firstColor", Color(1.));
+	mySecondColor = params.getColor("secondColor", Color(0.));
 }
 
 
 CheckerTexture::~CheckerTexture()
 {
 }
+
+RT_REGISTER_TYPE(CheckerTexture, Texture)

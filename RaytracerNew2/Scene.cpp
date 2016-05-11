@@ -70,9 +70,6 @@ void Scene::compute(const std::string& filePath)
 	//readPly();
 
 	ILogger::log() << "Scene parsed...\n";
-	
-	myAccelerator.reset(new Bvh(myObjects));
-	myBoundingBox = myAccelerator->getWorldBoundingBox();
 
 	initialize();
 
@@ -113,9 +110,21 @@ bool Scene::computeIntersection(const Ray& ray, Intersection& inter, bool shadow
 
 void Scene::initialize()
 {
+	myAccelerator.reset(new Bvh(myObjects));
+	myBoundingBox = myAccelerator->getWorldBoundingBox();
+
+	for (Light::ptr light : myLights)
+	{
+		light->initialize(*this);
+	}
+
 	if (myIntegrator == nullptr)
 		ILogger::log() << "No integrator defined.\n";
 
-	
 	myIntegrator->initialize(*this);
+}
+
+void Scene::setShowProgress(bool show)
+{
+	myManager.setShowProgress(show);
 }
