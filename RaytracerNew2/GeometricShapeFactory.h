@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Logger.h"
 #include "ObjectFactory.h"
 #include "Primitive.h"
 
@@ -44,7 +45,8 @@ public:
 			((AreaLight*)light.get())->setShape(shape);
 			primitive->addLight(light);
 		}
-			
+		
+		ILogger::log(ILogger::ALL) << "Bounding box " << primitive->getWorldBoundingBox() << "\n";
 		return primitive;
 	}
 };

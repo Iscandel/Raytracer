@@ -23,7 +23,8 @@
 #endif
 
 //
-
+#include <ImfRgbaFile.h>
+#include <ImfRgba.h>
 
 void run(int argc, char* argv[]);
 
@@ -74,7 +75,7 @@ void shToneMapper()
 	shader.setParameter("gamma", std::pow(2.f, (0.5 - 0.5f) * 20));
 }
 
-void toneMapper(Screen& film, sf::Image& out)
+void toneMapper(Screen& film, sf::Image& out, double gamma)
 {
 	auto toSRGB = [&](double value) {
 		if (value < 0.0031308)
@@ -82,7 +83,7 @@ void toneMapper(Screen& film, sf::Image& out)
 		return 1.055 * pow(value, 0.41666) - 0.055;
 	};
 
-	double gamma = std::pow(2., (0.5 - 0.5) * 20);
+	//double gamma = std::pow(2., (0.5 - 0.5) * 20);
 
 	for (unsigned int y = 0; y < out.getSize().y; y++)
 	{
@@ -91,11 +92,100 @@ void toneMapper(Screen& film, sf::Image& out)
 			Color col = film(x, y) * gamma;
 			col.r = toSRGB(col.r); col.g = toSRGB(col.g); col.b = toSRGB(col.b);
 			out.setPixel(x, y, sf::Color(tools::thresholding(col.r * 255, 0., 255.), tools::thresholding(col.g * 255, 0., 255.), tools::thresholding(col.b * 255, 0., 255.)));
-			if (x == 600 && y == 130)
-				std::cout <<(int) out.getPixel(x, y).r << " " << (int)out.getPixel(x, y).g << " " << (int)out.getPixel(x, y).b;
 		}
 	}
 }
+
+void EXRToRGB(Screen& film, sf::Image& out)
+{
+	for (unsigned int y = 0; y < out.getSize().y; y++)
+	{
+		for (unsigned int x = 0; x < out.getSize().x; x++)
+		{
+			Color col = film(x, y);
+			out.setPixel(x, y, sf::Color(tools::thresholding(col.r * 255, 0., 255.), tools::thresholding(col.g * 255, 0., 255.), tools::thresholding(col.b * 255, 0., 255.)));
+		}
+	}
+}
+
+void applyProcessing(bool toneMap, Screen& filmOrig, sf::Image& image, double gamma)
+{
+	if (toneMap)
+	{
+		toneMapper(filmOrig, image, gamma);
+	}
+	else
+	{
+		EXRToRGB(filmOrig, image);
+	}
+}
+
+void writeEXR(const std::string& path, const Screen& film) //const Array2D<Pixel>& array)
+{
+	int width = film.getSizeX();//.getWidth();
+	int height = film.getSizeY();//array.getHeight();
+	Imf_2_2::Rgba* pixels = new Imf_2_2::Rgba[width * height];
+
+	for (unsigned int y = 0; y < height; y++)
+	{
+		for (unsigned int x = 0; x < width; x++)
+		{
+			Color col = film(x, y);
+			Imf_2_2::Rgba tmp((half)col.r, (half)col.g, (half)col.b);
+			*(pixels + x + y * width) = tmp;
+		}
+	}
+	
+	Imf_2_2::RgbaOutputFile file(path.c_str(), width, height, Imf_2_2::WRITE_RGBA); 
+	file.setFrameBuffer(pixels, 1, width);                   
+	file.writePixels(height);                               
+}
+
+class DisplayableText
+{
+public:
+	DisplayableText(float x, float y)
+	{
+		myIsShown = false;
+		myFont.loadFromFile("./PORKYS_.TTF");
+		myText.setFont(myFont);
+		myText.setPosition(x, y);
+		myText.setColor(sf::Color::White);
+		
+	}
+
+	//DisplayableText(const std::string& text)
+	//{
+	//	setText(text);
+	//}
+
+	void setText(const std::string& text)
+	{
+		myIsShown = true;
+		myText.setString(text);
+		myTimer.reset();
+	}
+
+	void show(sf::RenderWindow& window)
+	{
+		if (myIsShown)
+		{
+			window.draw(myText);			
+		}
+	}
+
+	void update()
+	{
+		if (myTimer.elapsedTime() > 1.5)
+			myIsShown = false;
+	}
+
+protected:
+	sf::Text myText;
+	sf::Font myFont;
+	Timer myTimer;
+	bool myIsShown;
+};
 
 
 
@@ -154,18 +244,18 @@ void run(int argc, char* argv[])
 
 	scene.compute(filePath);
 
-	int remaining = 0;
+	//int remaining = 0;
 	
-	while(scene.myManager.remainingTasks() > 0)
-	{
-		int tmp = scene.myManager.remainingTasks();
-		if(tmp != remaining)
-		{
-			ILogger::log() << "Remaining task " << tmp <<"\n";
-	
-			remaining = tmp;
-		}
-	}
+	//while(scene.myManager.remainingTasks() > 0)
+	//{
+	//	int tmp = scene.myManager.remainingTasks();
+	//	if(tmp != remaining)
+	//	{
+	//		ILogger::log() << "Remaining task " << tmp <<"\n";
+	//
+	//		remaining = tmp;
+	//	}
+	//}
 
 	ILogger::log() << "Scene computed\n";
 #ifdef VS_2010
@@ -181,27 +271,33 @@ void run(int argc, char* argv[])
 #else
 	image.create(width, height, sf::Color::Black);
 #endif
-	sf::RenderWindow window(sf::VideoMode(width, height),"");
+	sf::RenderWindow window(sf::VideoMode(width, height), "");
 
-	Screen& film = scene.getScreen();
-	film.postProcessColor();
+	Screen& filmOrig = scene.getScreen();
+	//Array2D<Pixel> film = filmOrig.getPixels();
+	filmOrig.postProcessColor();
 
-	for(int y = 0; y < height; y++)
-	{
-		for(int x = 0; x < width; x++)
-		{			
-			sf::Color col((sf::Uint8) film(x, y).r, (sf::Uint8) film(x, y).g, (sf::Uint8) film(x, y).b);
-#ifdef VS_2010
-			image.SetPixel(x, y, col);
-#else
-			image.setPixel(x, y, col);
-#endif
-		}
-	}
+	bool toneMap = false;
+	double gamma = std::pow(2., (0.5 - 0.5) * 20);
+
+	applyProcessing(toneMap, filmOrig, image, gamma);
+//	for(int y = 0; y < height; y++)
+//	{
+//		for(int x = 0; x < width; x++)
+//		{			
+//			sf::Color col((sf::Uint8) filmOrig(x, y).r, (sf::Uint8) filmOrig(x, y).g, (sf::Uint8) filmOrig(x, y).b);
+//#ifdef VS_2010
+//			image.SetPixel(x, y, col);
+//#else
+//			image.setPixel(x, y, col);
+//#endif
+//		}
+//	}
 
 	//toneMapper(film, image);
 
 	window.setFramerateLimit(60);
+	window.setKeyRepeatEnabled(true);
 
 	sf::Sprite sp;
 	sf::Texture texture;
@@ -209,7 +305,14 @@ void run(int argc, char* argv[])
 	sp.setTexture(texture);
 
 	if (scene.getFileName() != "")
-		image.saveToFile(scene.getFileName());
+	{
+		std::string fileName = scene.getFileName();
+		image.saveToFile(fileName);
+		writeEXR(fileName.substr(0, fileName.size() - 4) + ".exr", filmOrig);
+	}
+
+	DisplayableText gammaText(0.f, 0.f);
+	DisplayableText toneMapText(width / 2.f, height / 2.f);//height);
 
 	while (window.isOpen())
 	{
@@ -221,11 +324,55 @@ void run(int argc, char* argv[])
 				window.close();
 			else if (ev.type == sf::Event::MouseButtonReleased)
 				std::cout << ev.mouseButton.x << " " << ev.mouseButton.y << std::endl;
+			else if (ev.type == sf::Event::KeyReleased)
+			{
+				if (ev.key.code == sf::Keyboard::T)
+				{
+					toneMap = !toneMap;
+
+					applyProcessing(toneMap, filmOrig, image, gamma);
+
+					texture.loadFromImage(image);
+					sp.setTexture(texture);
+
+					if (toneMap)
+						toneMapText.setText("Tone map ON");
+					else
+						toneMapText.setText("Tone map OFF");
+				}
+				else if (ev.key.code == sf::Keyboard::Return)
+				{
+					applyProcessing(toneMap, filmOrig, image, gamma);
+					texture.loadFromImage(image);
+					sp.setTexture(texture);
+				}
+
+			}
+			else if (ev.type == sf::Event::TextEntered)
+			{
+				if (ev.text.unicode == '+')
+				{
+					gamma += 0.1;
+					gammaText.setText("gamma = " + tools::numToString(gamma));
+				}
+				else if (ev.text.unicode == '-')
+				{
+					gamma -= 0.1;
+					gammaText.setText("gamma = " + tools::numToString(gamma));
+				}
+			}
 		}
 
-		window.clear();
+		//update
+		gammaText.update();
+		toneMapText.update();
 
+		//draw
+		window.clear();
+	
 		window.draw(sp);
+		gammaText.show(window);
+		toneMapText.show(window);
 
 		window.display();
 	}

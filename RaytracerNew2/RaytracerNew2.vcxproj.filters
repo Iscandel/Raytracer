@@ -318,11 +318,14 @@
     <ClCompile Include="PerlinNoiseTexture.cpp">
       <Filter>Textures</Filter>
     </ClCompile>
-    <ClCompile Include="ImageLoader.cpp">
+    <ClCompile Include="LayeredBSDF.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="MicrofacetDistribution.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="LayeredBSDF.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="ImageLoader.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -587,14 +590,17 @@
     <ClInclude Include="PerlinNoiseTexture.h">
       <Filter>Textures</Filter>
     </ClInclude>
-    <ClInclude Include="ImageLoader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Common.h">
       <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="LayeredBSDF.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="MicrofacetDistribution.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageLoader.h">
+      <Filter>IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

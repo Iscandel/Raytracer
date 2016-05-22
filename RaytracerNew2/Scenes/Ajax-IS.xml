@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <scene>
   <camera type="NoriPerspective">
-    <transform type="lookAt" name="toWorld">
-      <origin>-65.6055 47.5762 24.3583</origin>
-      <lookAt>-64.8161 47.2211 23.8576</lookAt>
-      <up>0.299858 0.934836 -0.190177</up>
+    <transform name="toWorld">
+      <lookAt>
+        <origin>-65.6055 47.5762 24.3583</origin>
+        <lookAt>-64.8161 47.2211 23.8576</lookAt>
+        <up>0.299858 0.934836 -0.190177</up>
+      </lookAt>
     </transform>
     <!--<transform>
       <rotation>

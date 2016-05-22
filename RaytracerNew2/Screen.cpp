@@ -14,8 +14,8 @@ void Pixel::applyColor()
 		myWeight = 0;
 	} 
 
-	myColor.validate();
-	myColor *= 255;
+	//myColor.validate();
+	//myColor *= 255;
 }
 
 //=============================================================================

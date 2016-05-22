@@ -3,6 +3,8 @@
 
 #include <cmath>
 #include <limits.h>
+#include <iostream>
+
 class Color
 {
 public:
@@ -43,6 +45,12 @@ public:
 	double b;
 };
 
+inline std::ostream& operator << (std::ostream& o, const Color& color)
+{
+	o << "[" << color.r << " " << color.g << " " << color.b << "]" << std::endl;
+
+	return o;
+}
 
 bool operator == (const Color& c1, const Color& c2);
 

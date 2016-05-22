@@ -38,10 +38,11 @@
     <blockSizeX>32</blockSizeX>
     <blockSizeY>32</blockSizeY>
     <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="32"/>
+    <integer name="sampleNumber" value="8"/>
   </sampler>
   
   <objects>
@@ -49,10 +50,10 @@
     <string name="path" value="./data/cbox/walls2.obj"/>
 
     <bsdf type="Diffuse">
-      <!--<color name="albedo" value="0.725 0.71 0.68"/>-->
-        <texture name="albedo" type="ImageTexture">
+      <color name="albedo" value="0.725 0.71 0.68"/>
+        <!--<texture name="albedo" type="ImageTexture">
           <string name="path" value="./data/20060807_wells6_hd.hdr"/>
-        </texture>
+        </texture>-->
    
     </bsdf>
   </shape>
@@ -83,8 +84,28 @@
     <shape type="Mesh">
     <string name="path" value="./data/cbox/sphere2.obj"/>
 
-    <bsdf type="Dielectric"/>
+      <bsdf type="RoughDielectric">
+        <color name="albedo" value="0.8 0.4 0.1"/>
+        <double name="alpha" value="0.02"/>
+        <string name="distribution" value="ggx"/>
+      </bsdf>
   </shape>
+    
+    <!--<shape type="Sphere">
+      <bsdf type="Dielectric">
+        <double name="alpha" value="0.01"/>
+        <string name="distribution" value="beckmann"/>
+        <color name="albedo" value="0.2 0.4 0.1"/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <tx>0.42</tx>
+          <ty>0.34</ty>
+          <tz>0.29</tz>
+        </translation>
+      </transform>
+    <double name="radius" value="0.32"/>
+    </shape>-->
 
   <shape type="Mesh">
     <string name="path" value="./data/cbox/light.obj"/>
@@ -92,7 +113,7 @@
     <light type="MeshLight">
       <color name="radiance" value="15 15 15"/>
     </light>
-    <bsdf type="Dielectric"/>
+    <bsdf type="Diffuse"/>
 
   </shape>
 

@@ -1,1 +1,1 @@
-./Scenes/MatPreview.xml
+./Scenes/cbox_path.xml

@@ -24,11 +24,11 @@ Sphere::~Sphere(void)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Vector3d Sphere::normal(const Point3d& intersection) const
+Normal3d Sphere::normal(const Point3d& intersection) const
 {
 	Point3d localPoint = myObjectToWorld->inv().transform(intersection);
 
-	Vector3d normalSphere = localPoint - myCenter;
+	Normal3d normalSphere = localPoint - myCenter;
 	normalSphere.normalize();
 	return normalSphere;
 }
@@ -62,15 +62,39 @@ bool Sphere::intersection(const Ray& ray, double& t, Point2d& uv) //Differential
 		double t1 = (-b + sqrt(delta)) / (2 * a);
 		double t2 = (-b - sqrt(delta)) / (2 * a);
 	
-		if (t1 <= 0) t = t2;
-		if (t2 <= 0) t = t1;
-		if (t1 > 0 && t2 > 0)
-			t = std::min(t1, t2);
+		//if (t1 <= 0) t = t2;
+		//if (t2 <= 0) t = t1;
+		//if (t1 > 0 && t2 > 0)
+		//	t = std::min(t1, t2);
+		//bool intersect = t >= ray.myMinT && t <= ray.myMaxT;
+
+		double tNear = t1;
+		double tFar = t2;
+		if (tNear > tFar)
+			std::swap(tNear, tFar);
 
 		//trueGeom.myN = normal(ray.myOrigin + t * ray.direction());
 		//shadingGeom = trueGeom;
 
-		bool intersect = t >= ray.myMinT && t <= ray.myMaxT;
+		bool intersect = false;
+
+		//if (!(tNear >= ray.myMinT && tFar <= ray.myMaxT))
+		//	return false;
+
+		if (tNear <= ray.myMinT)
+		{
+			if (tFar > ray.myMinT && tFar < ray.myMaxT)
+			{
+				t = tFar;
+				intersect = true;
+			}
+		}
+		else if (tNear > ray.myMinT && tNear < ray.myMaxT)
+		{
+			intersect = true;
+			t = tNear;
+		}
+
 		if (intersect)
 		{
 			//UV mapping from spherical coords
@@ -90,7 +114,7 @@ bool Sphere::intersection(const Ray& ray, double& t, Point2d& uv) //Differential
 ///////////////////////////////////////////////////////////////////////////////
 void Sphere::getDifferentialGeometry(DifferentialGeometry & trueGeometry, DifferentialGeometry & shadingGeometry, Intersection & inter)
 {
-	trueGeometry.myN = normal(inter.myPoint);
+	trueGeometry = DifferentialGeometry(myObjectToWorld->transform(normal(inter.myPoint)));
 	shadingGeometry = trueGeometry;
 }
 
@@ -122,9 +146,9 @@ void Sphere::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 	sampled.z() = u;
 
 	sampled *= myRadius;
-
+	n = myObjectToWorld->transform(normal(sampled));
 	sampled = myObjectToWorld->transform(sampled);
-	n = normal(sampled);
+	
 }
 
 //=============================================================================
@@ -137,6 +161,7 @@ void Sphere::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 //-> cos theta = ...
 double Sphere::pdf(const Point3d& pFrom, const Point3d& sampled, const Normal3d& n)
 {
+	//return 1. / (4 * tools::PI);
 	Point3d center = myObjectToWorld->transform(Point3d(0., 0., 0.));
 	Vector3d interToCenter = pFrom - center;
 	double squaredDistance = interToCenter.squaredNorm();//interToCenter.x() * interToCenter.x() + interToCenter.y() * interToCenter.y() + interToCenter.z() * interToCenter.z();

@@ -1,6 +1,7 @@
 #pragma once
 #include "BSDF.h"
 
+#include "MicrofacetDistribution.h"
 #include "Parameters.h"
 #include "Texture.h"
 
@@ -18,7 +19,6 @@ public:
 	double pdf(const BSDFSamplingInfos& infos);
 
 protected:
-	double distributionBlinn(const Vector3d& hr);
 	double distributionBeckmann(const Vector3d& hr);
 
 	double shadowingTerm(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh);
@@ -30,5 +30,6 @@ protected:
 	double myR;
 	Color myEta;
 	Color myAbsorption;
+	MicrofacetDistribution myDistribution;
 };
 

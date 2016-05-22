@@ -49,7 +49,9 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Utility function to access pixel values
 	///////////////////////////////////////////////////////////////////////////
-	inline Color& operator() (int x, int y) {return myPixels(x, y).myColor;}
+	Color& operator() (int x, int y) {return myPixels(x, y).myColor;}
+
+	const Color& operator() (int x, int y) const { return myPixels(x, y).myColor; }
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Computes the final pixel values when all the samples have been 
@@ -71,6 +73,12 @@ public:
 	/// \brief 
 	///////////////////////////////////////////////////////////////////////////
 	Pixel& getPixel(int x, int y) { return myPixels(x, y); }
+
+	const Pixel& getPixel(int x, int y) const { return myPixels(x, y); }
+
+	Array2D<Pixel>& getPixels() { return myPixels; }
+
+	const Array2D<Pixel>& getPixels() const { return myPixels; }
 
 	int getMinX() const { return myMinX; }
 	int getMinY() const { return myMinY; }

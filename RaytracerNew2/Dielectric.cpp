@@ -89,7 +89,11 @@ Color Dielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 		infos.pdf = 1 - fr;
 	
 		//btdf is eta * eta * (1 - fr) / cos(theta), which is transmitted energy
-		
+		//NB : Solid angle compression (eta * eta) implies that there is a compression and...
+		//a decompression (relativeEta becomes 1 / relativeEta), ie light enters the glass 
+		//mesh and exits in another point.
+		//For "sheet-large" glass meshes, there is no exit point, so no decompression and the 
+		//glass darkens the area it covers.
 		return myTransmittedTexture->eval(infos.uv) * relativeEta * relativeEta;// * (1. - fr);
 	}
 }

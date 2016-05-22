@@ -57,7 +57,7 @@ public:
 	///
 	/// \return The normal vector
 	///////////////////////////////////////////////////////////////////////////
-	virtual Vector3d normal(const Point3d& intersection) const = 0;
+	virtual Normal3d normal(const Point3d& intersection) const = 0;
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Determines if the given ray intersects the shape.

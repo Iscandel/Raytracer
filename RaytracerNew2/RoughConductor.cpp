@@ -18,6 +18,7 @@ RoughConductor::RoughConductor(const Parameters& params)
 	//Gold
 	myEta = params.getColor("eta", Color(0.22273, 0.42791, 1.2597));
 	myAbsorption = params.getColor("absorption", Color(3.0325, 2.3345, 1.7531));
+	myDistribution = MicrofacetDistribution(params.getString("distribution", "beckmann"));
 }
 
 //=============================================================================
@@ -75,9 +76,12 @@ Color RoughConductor::eval(const BSDFSamplingInfos & infos)
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
 
-	Color specularPart = myReflectanceTexture->eval(infos.uv) * distributionBeckmann(wh) *
+	double D = myDistribution.D(wh, myAlpha);
+	double G = myDistribution.G(infos.wi, infos.wo, wh, myAlpha);
+
+	Color specularPart = myReflectanceTexture->eval(infos.uv) * D * //distributionBeckmann(wh) *
 		fresnel::fresnelConductor(myEta, myAbsorption, cosThetaI) *
-		shadowingTerm(infos.wi, infos.wo, wh) / (4 * cosThetaI * cosThetaO);
+		G/*shadowingTerm(infos.wi, infos.wo, wh)*/ / (4 * cosThetaI * cosThetaO);
 
 	return specularPart;
 }
@@ -89,12 +93,14 @@ Color RoughConductor::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 	if (DifferentialGeometry::cosTheta(infos.wi) <= 0.)
 		return Color();
 
-	infos.sampledType = BSDF::GLOSSY;
+	infos.sampledType = BSDF::GLOSSY_REFLECTION;
 
-	double theta = std::atan(std::sqrt(- myAlpha * myAlpha * std::log(1 - sample.x())));
-	double phi = 2 * tools::PI * sample.y();
+	//double theta = std::atan(std::sqrt(- myAlpha * myAlpha * std::log(1 - sample.x())));
+	//double phi = 2 * tools::PI * sample.y();
 
-	Normal3d normal(std::sin(theta) * std::cos(phi), std::sin(theta) * std::sin(phi), std::cos(theta));
+	//Normal3d normal(std::sin(theta) * std::cos(phi), std::sin(theta) * std::sin(phi), std::cos(theta));
+	double alpha = (1.2 - 0.2 * std::sqrt(std::abs(DifferentialGeometry::cosTheta(infos.wi)))) * myAlpha;
+	Normal3d normal = myDistribution.sampleNormal(sample, alpha);
 
 	//infos.sampledType = BSDF::DELTA_REFLECTION; //to change
 	infos.wo = reflect(infos.wi, normal);//2 * infos.wi.dot(normal) * normal - infos.wi;
@@ -110,17 +116,6 @@ Color RoughConductor::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 		return Color();
 
 	return eval(infos)  * std::abs(cosThetaO) / infos.pdf;
-
-	//Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
-
-
-	//double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	//double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
-
-	//Color specularPart = distributionBeckmann(wh) *
-	//	fresnel::fresnelConductor(myEta, myAbsorption, cosThetaI) *
-	//	shadowingTerm(infos.wi, infos.wo, wh) / (4 * cosThetaI * cosThetaO);
-	//return specularPart * std::abs(cosThetaO) / pdf(infos);
 }
 
 //=============================================================================
@@ -137,7 +132,8 @@ double RoughConductor::pdf(const BSDFSamplingInfos& infos)
 	double cosThetaH = DifferentialGeometry::cosTheta(wh);
 
 	double Jh = 1. / (4 * std::abs(wh.dot(infos.wo)));
-	return distributionBeckmann(wh) * cosThetaH * Jh;
+	double D = myDistribution.D(wh, myAlpha);
+	return D /*distributionBeckmann(wh)*/ * cosThetaH * Jh;
 }
 
 RT_REGISTER_TYPE(RoughConductor, BSDF)

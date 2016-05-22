@@ -2,10 +2,12 @@
 
 <scene>
   <camera type="NoriPerspective">
-    <transform type="lookAt" name="toWorld">
-      <origin>32.1259 -68.0505 36.597</origin>
-      <lookAt>31.6866 -67.2776 36.1392</lookAt>
-      <up>-0.22886 0.39656 0.889024</up>
+    <transform name="toWorld">
+      <lookAt>
+        <origin>32.1259 -68.0505 36.597</origin>
+        <lookAt>31.6866 -67.2776 36.1392</lookAt>
+        <up>-0.22886 0.39656 0.889024</up>
+      </lookAt>
     </transform>
   
     <double name="fov" value="35"/>
@@ -30,7 +32,7 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="64"/>
+    <integer name="sampleNumber" value="32"/>
   </sampler>
 
 	<!-- Use the path tracer with multiple importance sampling -->

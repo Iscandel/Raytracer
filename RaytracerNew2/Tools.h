@@ -152,6 +152,14 @@ T thresholding(T val, T min, T max)
 	return val < min ? min : val  > max ? max : val;
 }
 
+template<class T>
+int sign(T val)
+{
+	if (val >= (T)0)
+		return 1;
+	return -1;
+}
+
 inline Color interp2(const Point2d& xy, const Array2D<Color>& array)
 {
 	double advanceX = xy.x() - (int)xy.x();

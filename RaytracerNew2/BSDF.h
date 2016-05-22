@@ -41,16 +41,25 @@ public:
 	//in local coords, N = (0,0,1) -> Reflected = 2 N (N.D) - D = (0,0,2dz) - (dx, dy, dz) = (-dx, -dy, dz) ?
 	Vector3d reflect(const Vector3d& vect) { return Vector3d(-vect.x(), -vect.y(), vect.z()); }
 
-	Vector3d reflect(const Vector3d& vect, const Normal3d& normal) { return  2 * vect.dot(normal) * normal - vect;}
+	Vector3d reflect(const Vector3d& vect, const Normal3d& normal) { return  2 * vect.dot(normal) * Vector3d(normal) - vect;}
 
 	Vector3d refract(const Vector3d& vect, double cosThetaT, double relativeEta) { return Vector3d(relativeEta * -vect.x(), relativeEta * -vect.y(), cosThetaT); }
 
-	Vector3d refract(const Vector3d& vect, double relativeEta, const Normal3d& normal) 
+	Vector3d refract(const Vector3d& vect, const Normal3d& normal, double relativeEta, double cosThetaT)
+	{
+		return normal * (vect.dot(normal) * relativeEta + cosThetaT) - vect * relativeEta;
+	}
+
+	bool refract(const Vector3d& vect, Vector3d& refracted, double relativeEta, const Normal3d& normal) 
 	{ 
 		double c = vect.dot(normal);
 		int sign = vect.z() >= 0 ? 1 : -1;
-		double left = (relativeEta * c - sign * std::sqrt(1 + relativeEta * (c * c - 1)));
-		return left *normal - relativeEta * vect;
+		double sqrtTerm = 1 + relativeEta * relativeEta * (c * c - 1);
+		if (sqrtTerm < 0)
+			return false;
+		double left = relativeEta * c - sign * std::sqrt(std::max(0., (sqrtTerm)));
+		refracted = left * normal - relativeEta * vect;
+		return true;
 	}
 
 	virtual Color eval(const BSDFSamplingInfos& infos) = 0;

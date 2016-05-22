@@ -119,7 +119,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 		Ray reflected(intersection.myPoint, intersection.toWorld(bsdfInfos.wo));//, ray.myMinT, ray.myMaxT); //min, max, ok ?
 
 		Light::ptr lightCaught;
-
+		Color radianceLight;
 		//Trace a ray from the inter point to the bsdf sampled direction
 		if (scene.computeIntersection(reflected, toLightInter))
 		{
@@ -127,6 +127,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			if (toLightInter.myPrimitive->isLight())
 			{
 				lightCaught = toLightInter.myPrimitive->getLight();
+				radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
 			}
 		}
 		else
@@ -134,13 +135,15 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			lightCaught = scene.getEnvironmentLight();
 			if (lightCaught == nullptr)
 				return radiance;
+
+			radianceLight = lightCaught->le(reflected.direction());
 		}
 
 		if (lightCaught != nullptr)
 		{
 			LightSamplingInfos lightInfos;
-			lightInfos.normal = toLightInter.myShadingGeometry.myN;
-			lightInfos.sampledPoint = toLightInter.myPoint; //and wi ??????????
+			lightInfos.normal = toLightInter.myShadingGeometry.myN; //to change
+			lightInfos.sampledPoint = toLightInter.myPoint; //to change
 			lightInfos.interToLight = reflected.direction();
 			//Light::ptr light = toLightInter.myPrimitive->getLight();
 
@@ -153,10 +156,10 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : lightCaught->pdf(intersection.myPoint, lightInfos);
 			double weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 
-			Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+			//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
 			radiance += throughput * radianceLight * bsdfValue * weight;
 			if (radiance.isNan())
-				std::cout << "nan 2 " << std::endl;
+				std::cout << "nan 2 " << throughput << " " << radianceLight << " " << bsdfValue << " " << weight << std::endl;
 
 			if (lightCaught == scene.getEnvironmentLight())
 				return radiance;
@@ -165,11 +168,11 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 		throughput *= bsdfValue;
 		eta *= bsdfInfos.relativeEta;
 
-		if (depth > 0)
+		if (depth >= 0)
 		{
 			
-			double stopVal = 0.8;//std::min(0.9, throughput.luminance() * eta * eta);
-			if (sampler->getNextSample1D() < stopVal)//proba)
+			double stopVal = 0.9;//std::min(0.9, throughput.luminance() * eta * eta);
+			if (sampler->getNextSample1D() < stopVal)
 			{
 				throughput /= stopVal;
 			}

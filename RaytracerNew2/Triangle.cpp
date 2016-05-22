@@ -23,7 +23,7 @@ Triangle::~Triangle(void)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Vector3d Triangle::normal(const Point3d&) const
+Normal3d Triangle::normal(const Point3d&) const
 {
 	const Point3d& p0 =  myMesh->myVertices[myMesh->myIndices[myIndice]];
 	const Point3d& p1 = myMesh->myVertices[myMesh->myIndices[myIndice + 1]];
@@ -32,9 +32,9 @@ Vector3d Triangle::normal(const Point3d&) const
 	Vector3d e2 = p2 - p0;
 
 #ifdef USE_ALIGN
-	Vector3d normal = e1.cross3(e2);
+	Normal3d normal = e1.cross3(e2);
 #else
-	Vector3d normal = e1.cross(e2);
+	Normal3d normal = e1.cross(e2);
 #endif
 	normal.normalize();
 	return normal;

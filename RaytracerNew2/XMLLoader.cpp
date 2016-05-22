@@ -492,7 +492,8 @@ Texture::ptr XMLLoader::handleTexture(TiXmlElement* element)
 ///////////////////////////////////////////////////////////////////////////////
 Transform XMLLoader::handleLookAtTransform(TiXmlElement* element)
 {
-	Vector3d origin, lookAt, up;
+	Point3d origin, lookAt;
+	Vector3d up;
 
 	element = element->FirstChildElement();
 	for (element; element; element = element->NextSiblingElement())

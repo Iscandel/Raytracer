@@ -62,7 +62,7 @@ public:
 	static Transform rotateY(double angle);
 	static Transform rotateZ(double angle);
 
-	static Transform fromLookAt(const Vector3d& origin, const Vector3d& lookAt, const Vector3d& up);
+	static Transform fromLookAt(const Point3d& origin, const Point3d& lookAt, const Vector3d& up);
 
 	friend std::ostream& operator << (std::ostream& o, const Transform& t);
 
