@@ -30,7 +30,8 @@ Conductor::~Conductor()
 Color Conductor::eval(const BSDFSamplingInfos& infos)
 {
 	if (DifferentialGeometry::cosTheta(infos.wi) <= 0. ||
-		DifferentialGeometry::cosTheta(infos.wo) <= 0.)
+		DifferentialGeometry::cosTheta(infos.wo) <= 0. ||
+		infos.measure != Measure::DISCRETE)
 		return Color();
 
 	double cosI = DifferentialGeometry::cosTheta(infos.wi);

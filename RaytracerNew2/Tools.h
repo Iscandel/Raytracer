@@ -164,8 +164,8 @@ inline Color interp2(const Point2d& xy, const Array2D<Color>& array)
 {
 	double advanceX = xy.x() - (int)xy.x();
 	double advanceY = xy.y() - (int)xy.y();
-	int xMin = tools::thresholding((int)xy.x(), 0, (int)array.getWidth());
-	int yMin = tools::thresholding((int)xy.y(), 0, (int)array.getHeight());
+	int xMin = tools::thresholding((int)xy.x(), 0, (int)array.getWidth() - 2);
+	int yMin = tools::thresholding((int)xy.y(), 0, (int)array.getHeight() - 2);
 	int xMax = xMin + 1 < (int)array.getWidth() ? xMin + 1 : xMin;
 	xMax = thresholding(xMax, 0, (int)array.getWidth() - 1);
 	int yMax = yMin + 1 < (int)array.getHeight() ? yMin + 1 : yMin;

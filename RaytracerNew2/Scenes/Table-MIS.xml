@@ -29,6 +29,7 @@
     <blockSizeX>32</blockSizeX>
     <blockSizeY>32</blockSizeY>
     <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
   </parameters>
 
   <sampler type="RandomSampler">

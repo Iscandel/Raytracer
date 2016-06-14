@@ -327,6 +327,15 @@
     <ClCompile Include="ImageLoader.cpp">
       <Filter>IO</Filter>
     </ClCompile>
+    <ClCompile Include="SmoothLayeredBSDF.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SpectralDielectric.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalMapping.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.h">
@@ -602,6 +611,15 @@
     <ClInclude Include="ImageLoader.h">
       <Filter>IO</Filter>
     </ClInclude>
+    <ClInclude Include="SmoothLayeredBSDF.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="SpectralDielectric.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalMapping.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -646,6 +664,9 @@
       <Filter>Scenes</Filter>
     </Xml>
     <Xml Include="Scenes\veach-MIS.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\AudiRS6.xml">
       <Filter>Scenes</Filter>
     </Xml>
   </ItemGroup>

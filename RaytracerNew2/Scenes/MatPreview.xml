@@ -123,13 +123,20 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <scale>
-          <sx>10</sx>
+          <sx>2</sx>
           <sy>1</sy>
-          <sz>10</sz>
+          <sz>2</sz>
         </scale>
-      </transform>-->
+      </transform>
+       <!--<bsdf type="NormalMapping">
+        <texture name="normalMap" type="ImageTexture">
+          <string name="path" value ="./data/Well Preserved Chesterfield - (Normal Map_2).png"/>
+        </texture>-->
       <bsdf type="Diffuse">
-        <color name="albedo" value="0.8 0.2 0.3"/>
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/parquet-acacia.jpg"/>
+        </texture>
+        <!--<color name="albedo" value="0.8 0.2 0.3"/>-->
       </bsdf>
     </shape>
     <!--<shape type="Mesh">

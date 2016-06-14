@@ -68,6 +68,7 @@
     <ClCompile Include="NoriPerspective.cpp" />
     <ClCompile Include="NormalIntegrator.cpp" />
     <ClCompile Include="GeometricShape.cpp" />
+    <ClCompile Include="NormalMapping.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="ObjectFactoryManager.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
@@ -92,6 +93,8 @@
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="SmoothLayeredBSDF.cpp" />
+    <ClCompile Include="SpectralDielectric.cpp" />
     <ClCompile Include="SpecularSystem.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="System.cpp" />
@@ -160,6 +163,7 @@
     <ClInclude Include="NoriPerspective.h" />
     <ClInclude Include="NormalIntegrator.h" />
     <ClInclude Include="GeometricShape.h" />
+    <ClInclude Include="NormalMapping.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="ObjectFactoryManager.h" />
     <ClInclude Include="ObjLoader.h" />
@@ -186,6 +190,8 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SmoothLayeredBSDF.h" />
+    <ClInclude Include="SpectralDielectric.h" />
     <ClInclude Include="SpecularSystem.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="System.h" />
@@ -213,6 +219,9 @@
     <Xml Include="Scenes\Ajax-IS.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="Scenes\AudiRS6.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\bathroom-rtPT.xml">
       <SubType>Designer</SubType>
     </Xml>
@@ -230,7 +239,9 @@
     <Xml Include="Scenes\Odyssey-IS.xml" />
     <Xml Include="Scenes\SphereAO-MIS.xml" />
     <Xml Include="Scenes\Table-MIS.xml" />
-    <Xml Include="Scenes\veach-MIS.xml" />
+    <Xml Include="Scenes\veach-MIS.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{699DE8F6-A6AB-4BF3-92C8-2BFEC2C96CDC}</ProjectGuid>

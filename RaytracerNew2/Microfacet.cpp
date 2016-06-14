@@ -12,18 +12,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 Microfacet::Microfacet(const Parameters& params)
 {
-	//if (params.hasTexture("kd"))
-	//	myKdTexture = params.getTexture("kd", nullptr);
-	//else
-	//	myKdTexture = Texture::ptr(new ConstantTexture(params.getColor("kd", Color(0.5))));
+	if (params.hasTexture("kd"))
+		myKdTexture = params.getTexture("kd", nullptr);
+	else
+		myKdTexture = Texture::ptr(new ConstantTexture(params.getColor("kd", Color(0.))));
 
 	//myKd = params.getColor("kd", Color());
 	myAlpha = params.getDouble("alpha", 0.2);
 	myEtaExt = params.getDouble("etaExt", 1.000277);     /* Interior IOR (default: BK7 borosilicate optical glass) */
 	myEtaInt = params.getDouble("etaInt", 1.5946);
 
-	double max = std::max(myKd.b, std::max(myKd.r, myKd.g));
-	myKs = 1 - max;
+	myDistribution = MicrofacetDistribution(params.getString("distribution", "ggx"));
+	myKs = params.getDouble("probabilitySpecular", 1.);
+
+	//Color kd = myKdTexture->eval(Point2d());
+	//double max = std::max(kd.b, std::max(kd.r, kd.g));
+	//myKs = 1 - max;
+
 }
 
 //=============================================================================
@@ -78,10 +83,10 @@ Color Microfacet::eval(const BSDFSamplingInfos & infos)
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
 
-	Color diffusePart = myKd * tools::INV_PI;
-	Color specularPart = myKs * distributionBeckmann(wh) * 
+	Color diffusePart = (1 - myKs) * myKdTexture->eval(infos.uv) * tools::INV_PI; //new : (1-ks)
+	Color specularPart = myKs * myDistribution.D(wh, myAlpha) /*distributionBeckmann(wh)*/ *
 		fresnel(myEtaExt, myEtaInt, infos.wi.dot(wh)) * //cosThetaI) *
-		shadowingTerm(infos.wi, infos.wo, wh) / (4 * cosThetaI * cosThetaO);
+		myDistribution.G(infos.wi, infos.wo, wh, myAlpha) /*shadowingTerm(infos.wi, infos.wo, wh) */ / (4 * cosThetaI * cosThetaO);
 
 	return diffusePart + specularPart;
 }
@@ -111,6 +116,8 @@ Color Microfacet::fresnel(double etaExt, double etaInt, double cosThetaI)
 	{
 		//We want "aperture" of angle, so put abs()
 		fr = fresnel::fresnelDielectric(Color(etaI), Color(etaT), std::abs(cosThetaI), cosThetaT);
+		//if (isEntering)
+		//	cosThetaT = -cosThetaT;
 	}
 
 	return fr;
@@ -121,10 +128,14 @@ Color Microfacet::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 	if (DifferentialGeometry::cosTheta(infos.wi) <= 0.)
 		return Color();
 
-	double theta = std::atan(std::sqrt(-myAlpha * myAlpha * std::log(1 - sample.x())));
-	double phi = 2 * tools::PI * sample.y();
+	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	double alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlpha;
+	Normal3d normal = myDistribution.sampleNormal(sample, alpha);
 
-	Normal3d normal(std::sin(theta) * std::cos(phi), std::sin(theta) * std::sin(phi), std::cos(theta));
+	//double theta = std::atan(std::sqrt(-myAlpha * myAlpha * std::log(1 - sample.x())));
+	//double phi = 2 * tools::PI * sample.y();
+
+	//Normal3d normal(std::sin(theta) * std::cos(phi), std::sin(theta) * std::sin(phi), std::cos(theta));
 
 	if (sample.x() <= myKs)
 	{
@@ -141,11 +152,11 @@ Color Microfacet::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 	//if cosTheta <= 0, return 0, because pdf = 0...so NaN
-	if (cosThetaO <= 0.)
-		return Color();
+	//if (cosThetaO <= 0.)
+	//	return Color();
 
 	infos.pdf = pdf(infos);
-	if (infos.pdf <= 0)
+	if (infos.pdf == 0)
 		return Color();
 
 	return eval(infos) * std::abs(cosThetaO) / infos.pdf;
@@ -156,14 +167,16 @@ double Microfacet::pdf(const BSDFSamplingInfos& infos)
 	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
-	if (cosThetaI <= 0. || cosThetaO <= 0.)
-		return 0.;
+	//if (cosThetaI <= 0. || cosThetaO <= 0.)
+	//	return 0.;
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();
 	double cosThetaH = DifferentialGeometry::cosTheta(wh);
 
+	double alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlpha;
+
 	double Jh = 1. / (4 * wh.dot(infos.wo));
-	return myKs * distributionBeckmann(wh) * cosThetaH * Jh + (1 - myKs) * cosThetaO * tools::INV_PI;
+	return myKs * myDistribution.D(wh, alpha) /*distributionBeckmann(wh)*/ * cosThetaH * Jh + (1 - myKs) * cosThetaO * tools::INV_PI;
 }
 
 RT_REGISTER_TYPE(Microfacet, BSDF)

@@ -64,7 +64,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 					Vector3d localWo = intersection.toLocal(-ray.direction());
 					double cosTheta = DifferentialGeometry::cosTheta(localWi);
 
-					BSDFSamplingInfos bsdfInfos(localWi, localWo);
+					BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 					bsdfInfos.uv = intersection.myUv; //
 
 					//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
@@ -89,7 +89,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 				Vector3d localWo = intersection.toLocal(-ray.direction());
 				double cosTheta = DifferentialGeometry::cosTheta(localWi);
 
-				BSDFSamplingInfos bsdfInfos(localWi, localWo);
+				BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 				bsdfInfos.uv = intersection.myUv;
 
 				//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
@@ -108,7 +108,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 		//BSDF sampling strategy
 		Vector3d localWi = intersection.toLocal(-ray.direction());
-		BSDFSamplingInfos bsdfInfos(localWi);
+		BSDFSamplingInfos bsdfInfos(intersection, localWi);
 		bsdfInfos.uv = intersection.myUv; //
 		Color bsdfValue = bsdf->sample(bsdfInfos, sampler->getNextSample2D());
 		if (bsdfValue.isZero())
@@ -147,7 +147,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			lightInfos.interToLight = reflected.direction();
 			//Light::ptr light = toLightInter.myPrimitive->getLight();
 
-			//pbrt book p 750 :  light'pdf is 0 is BSDF is specular because there is no chance of 
+			//pbrt book p 750 :  light'pdf is 0 if BSDF is specular because there is no chance of 
 			//the light sampling the specular direction
 			//Or, better : ompf2.com : MIS Question. BRDF is 0 for specular materials. So direct light 
 			//sampling with MIS is not valid for specular (delta) mats. The only valid technique is
@@ -178,6 +178,12 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			}
 			else
 			{
+				//Light::ptr tmp = scene.getEnvironmentLight();
+				//if (tmp == nullptr)
+				//	return radiance;
+
+				//radianceLight = tmp->le(reflected.direction());
+				//radiance += throughput * radianceLight;
 				return radiance;
 			}
 		}

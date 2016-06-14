@@ -64,6 +64,7 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 							double cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 							BSDFSamplingInfos bsdfInfos(localWi, localWo);
+							bsdfInfos.uv = intersection.myUv; //
 
 							//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
 							//Add the MIS heuristic
@@ -87,6 +88,7 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 						break;
 					Vector3d localWi = intersection.toLocal(-_ray.direction());
 					BSDFSamplingInfos bsdfInfos(localWi);
+					bsdfInfos.uv = intersection.myUv; //
 					Color bsdfValue = bsdf->sample(bsdfInfos, sampler->getNextSample2D()); //To change sampler
 					if (bsdfValue.isZero())
 						continue;
@@ -145,6 +147,7 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 			}
 
 			BSDFSamplingInfos infos(intersection.toLocal(-_ray.direction()), BSDF::DELTA | BSDF::GLOSSY);
+			infos.uv = intersection.myUv; //
 			Color test = bsdf->sample(infos, sampler->getNextSample2D()); //To change sampler
 			//check if direction agrees with surface normal. If not, color is zero
 			if (test.isZero())

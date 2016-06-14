@@ -1,6 +1,7 @@
 #pragma once
 #include "BSDF.h"
 #include "Parameters.h"
+#include "MicrofacetDistribution.h"
 
 class Microfacet :
 	public BSDF
@@ -25,11 +26,15 @@ protected:
 	Color fresnel(double myEtaExt, double myEtaInt, double cosThetaI);
 
 protected:
-	Color myKd;
+	Texture::ptr myKdTexture;
+	//Color myKd;
 	double myKs;
 	double myAlpha;
 	//double myR;
 	double myEtaInt;
 	double myEtaExt;
+	double myProbabilitySpecular;
+
+	MicrofacetDistribution myDistribution;
 };
 

@@ -82,7 +82,7 @@ double MicrofacetDistribution::D(const Vector3d & wh, double alpha)
 
 		double cosThetaH = DifferentialGeometry::cosTheta(wh);
 
-		return (alpha + 2.) / (2 * tools::PI) * std::pow(cosThetaH, alpha);
+		return ((alpha + 2.) / (2 * tools::PI)) * std::pow(cosThetaH, alpha);
 	}
 }
 

@@ -49,16 +49,41 @@
   <shape type="Mesh">
     <string name="path" value="./data/cbox/walls2.obj"/>
 
-    <bsdf type="Diffuse">
-      <color name="albedo" value="0.725 0.71 0.68"/>
-        <!--<texture name="albedo" type="ImageTexture">
-          <string name="path" value="./data/20060807_wells6_hd.hdr"/>
-        </texture>-->
-   
+    <bsdf type="NormalMapping">
+      <texture name="normalMap" type="ImageTexture">
+        <string name="path" value ="./data/brickwork-normal.jpg"/>
+      </texture>
     </bsdf>
+    <!--<bsdf type="Diffuse">
+      <color name="albedo" value="0.725 0.71 0.68"/>
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/20060807_wells6_hd.hdr"/>
+        </texture>
+   
+    </bsdf>-->
   </shape>
 
 
+    <!--<shape type="Mesh">
+      <string name="path" value="./data/Diamond2.obj"/>
+      <transform name="toWorld">
+        <scale>
+          <sx>0.006</sx>
+          <sy>0.006</sy>
+          <sz>0.006</sz>
+        </scale>
+        <translation>
+          <tx>0.</tx>
+          <ty>0.4</ty>
+          <tz>0.</tz>
+        </translation>
+      </transform>
+      <bsdf type="SpectralDielectric">
+        --><!--<color name="albedo" value="0.161 0.133 0.427"/>--><!--
+      </bsdf>
+    </shape>-->
+
+    
     <shape type="Mesh">
     <string name="path" value="./data/cbox/rightwall2.obj"/>
 
@@ -75,10 +100,10 @@
     </bsdf>
   </shape>
 
-    <shape type="Mesh">
+    <!--<shape type="Mesh">
     <string name="path" value="./data/cbox/sphere1.obj"/>
 
-    <bsdf type="Mirror"/>
+    <bsdf type="LayeredBSDF"/>
   </shape>
 
     <shape type="Mesh">
@@ -89,7 +114,7 @@
         <double name="alpha" value="0.02"/>
         <string name="distribution" value="ggx"/>
       </bsdf>
-  </shape>
+  </shape>-->
     
     <!--<shape type="Sphere">
       <bsdf type="Dielectric">

@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "BSDF.h"
 
 #include "Rng.h"
@@ -7,12 +8,12 @@
 
 class Parameters;
 
-class LayeredBSDF :
+class SmoothLayeredBSDF :
 	public BSDF
 {
 public:
-	LayeredBSDF(const Parameters& params);
-	~LayeredBSDF();
+	SmoothLayeredBSDF(const Parameters& params);
+	~SmoothLayeredBSDF();
 
 	Color eval(const BSDFSamplingInfos& infos) override;
 
@@ -25,6 +26,8 @@ public:
 
 	Color evalReflection(const BSDFSamplingInfos & infos, const Color& fr, double alpha);
 
+	Color eval2(const BSDFSamplingInfos & infos);
+
 	RoughDielectric dielectric;
 	RoughConductor conductor;
 
@@ -32,8 +35,7 @@ public:
 
 	double myEtaExt;
 	double myEtaInt;
-	double myAlphaTop;
-	double myAlphaBase;
+	double myAlpha;
 	double myThickness;
 	Color myAbsorbance;
 	Rng myRng;
@@ -41,4 +43,5 @@ public:
 	Color myEta;
 	Color myAbsorption;
 };
+
 

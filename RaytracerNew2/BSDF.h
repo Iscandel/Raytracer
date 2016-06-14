@@ -2,11 +2,14 @@
 
 #include "Color.h"
 #include "Common.h"
+#include "DifferentialGeometry.h"
 #include "Geometry.h"
 
 #include <memory>
 
 //enum BSDF::BSDFType;
+
+class Intersection;
 
 struct BSDFSamplingInfos;
 
@@ -72,6 +75,10 @@ public:
 
 struct BSDFSamplingInfos
 {
+	BSDFSamplingInfos(const Intersection& inter, const Vector3d& _wi, const Vector3d& _wo);
+
+	BSDFSamplingInfos(const Intersection& inter, const Vector3d& _wi);
+
 	BSDFSamplingInfos(const Vector3d& _wi, BSDF::BSDFType _request = BSDF::ALL)
 		:wi(_wi)
 		, request(_request)
@@ -115,4 +122,6 @@ struct BSDFSamplingInfos
 	double pdf;
 
 	Point2d uv;
+
+	DifferentialGeometry shadingFrame;
 };

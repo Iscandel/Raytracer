@@ -10,9 +10,11 @@
         <sy>1.</sy>
         <sz>1.</sz>
       </scale>
-      <origin>0 6 27.5</origin>
-      <lookAt>0 -1.5 2.5</lookAt>
-      <up>0 1 0</up>
+      <lookAt>
+        <origin>0 6 27.5</origin>
+        <lookAt>0 -1.5 2.5</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
     </transform>
 
     <double name="fov" value="25"/>
