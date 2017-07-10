@@ -490,6 +490,24 @@ Texture::ptr XMLLoader::handleTexture(TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
+BSDF::ptr XMLLoader::handleBSDF(TiXmlElement* element)
+{
+	std::string bsdfType = element->Attribute("type");
+	TiXmlElement* bsdfElement = element->FirstChildElement();
+
+	Parameters bsdfParams;
+	for (bsdfElement; bsdfElement; bsdfElement = bsdfElement->NextSiblingElement())
+	{
+		handleProperty(bsdfElement, bsdfParams);
+	}
+	ObjectFactory<BSDF>::ptr factory = ObjectFactoryManager<BSDF>::getInstance()->getFactory(bsdfType);
+	BSDF::ptr bsdf = factory->create(bsdfParams);
+
+	return bsdf;
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 Transform XMLLoader::handleLookAtTransform(TiXmlElement* element)
 {
 	Point3d origin, lookAt;
@@ -572,6 +590,11 @@ void XMLLoader::handleProperty(TiXmlElement* element, Parameters& params)
 	{
 		Texture::ptr texture = handleTexture(element);
 		params.addTexture(*attName, texture);
+	}
+	else if (element->ValueStr() == "bsdf")
+	{
+		BSDF::ptr bsdf = handleBSDF(element);
+		params.addBSDF(*attName, bsdf);
 	}
 	else
 	{

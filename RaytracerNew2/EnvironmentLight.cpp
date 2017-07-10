@@ -109,7 +109,7 @@ double EnvironmentLight::pdf(const Point3d &, const LightSamplingInfos & infos)
 	double theta = (sphericalThetaFromCartesian(dir) / tools::PI) * myArray.getHeight();
 	double sinTheta = std::sin(theta);
 	double normalizationFactor = myWeight[(int)theta] / (myMarginalCDF.getSum() * (2 * tools::PI / myArray.getWidth()) * (tools::PI / myArray.getHeight()));
-	double luminance = interp2(Point2d(phi, theta)).luminance();
+	double luminance = tools::interp2(Point2d(phi, theta), myArray).luminance();
 	double pdf = luminance * normalizationFactor;
 	//double pdf = myArray((int)phi, (int)theta).luminance() / normalizationFactor;
 	pdf /= std::max(std::abs(sinTheta), tools::EPSILON);
@@ -124,7 +124,7 @@ Color EnvironmentLight::le(const Vector3d & direction, const Normal3d &) const
 	double phi = (sphericalPhiFromCartesian(dir) / (2 * tools::PI)) * myArray.getWidth();
 	double theta = (sphericalThetaFromCartesian(dir) / tools::PI) * myArray.getHeight();
 	
-	return interp2(Point2d(phi, theta));
+	return tools::interp2(Point2d(phi, theta), myArray);
 	//double advanceX = phi - (int)phi;
 	//double advanceY = theta - (int)theta;
 	//int xMin = (int)phi;
@@ -138,22 +138,22 @@ Color EnvironmentLight::le(const Vector3d & direction, const Normal3d &) const
 	//	   advanceX * advanceY * myArray(xMax, yMax);
 }
 
-Color EnvironmentLight::interp2(const Point2d& xy) const
-{
-	double advanceX = xy.x() - (int)xy.x();
-	double advanceY = xy.y() - (int)xy.y();
-	int xMin = tools::thresholding((int)xy.x(), 0, (int)myArray.getWidth());
-	int yMin = tools::thresholding((int)xy.y(), 0, (int)myArray.getHeight());
-	int xMax = xMin + 1 < myArray.getWidth() ? xMin + 1 : xMin;
-	xMax = tools::thresholding(xMax, 0, (int)myArray.getWidth() - 1);
-	int yMax = yMin + 1 < myArray.getHeight() ? yMin + 1 : yMin;
-	yMax = tools::thresholding(yMax, 0, (int)myArray.getHeight() - 1);
-
-	return (1 - advanceX) * (1 - advanceY) * myArray(xMin, yMin) +
-		(1 - advanceX) * advanceY * myArray(xMin, yMax) +
-		advanceX * (1 - advanceY) * myArray(xMax, yMin) +
-		advanceX * advanceY * myArray(xMax, yMax);
-}
+//Color EnvironmentLight::interp2(const Point2d& xy) const
+//{
+//	double advanceX = xy.x() - (int)xy.x();
+//	double advanceY = xy.y() - (int)xy.y();
+//	int xMin = tools::thresholding((int)xy.x(), 0, (int)myArray.getWidth());
+//	int yMin = tools::thresholding((int)xy.y(), 0, (int)myArray.getHeight());
+//	int xMax = xMin + 1 < myArray.getWidth() ? xMin + 1 : xMin;
+//	xMax = tools::thresholding(xMax, 0, (int)myArray.getWidth() - 1);
+//	int yMax = yMin + 1 < myArray.getHeight() ? yMin + 1 : yMin;
+//	yMax = tools::thresholding(yMax, 0, (int)myArray.getHeight() - 1);
+//
+//	return (1 - advanceX) * (1 - advanceY) * myArray(xMin, yMin) +
+//		(1 - advanceX) * advanceY * myArray(xMin, yMax) +
+//		advanceX * (1 - advanceY) * myArray(xMax, yMin) +
+//		advanceX * advanceY * myArray(xMax, yMax);
+//}
 
 void EnvironmentLight::initialize(const Scene & scene)
 {

@@ -160,6 +160,12 @@ int sign(T val)
 	return -1;
 }
 
+template<class T>
+inline double interp1(double advance, T start, T end)
+{
+	return (1 - advance) * start + advance * end;
+}
+
 inline Color interp2(const Point2d& xy, const Array2D<Color>& array)
 {
 	double advanceX = xy.x() - (int)xy.x();
@@ -190,6 +196,17 @@ inline Color interp2(const Point2d& xy, const Array2D<Color>& array)
 inline double random(double min, double max) 
 {
 	return (rand() / (double) RAND_MAX) * (max - min) + min;
+}
+
+inline std::string getExtension(const std::string& s)
+{
+	int index = s.find_last_of('.');
+	if (index != std::string::npos)
+	{
+		return s.substr(index);
+	}
+
+	return "";
 }
 
 }

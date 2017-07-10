@@ -134,9 +134,9 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 		}
 		else if (type == "f")
 		{
-			std::string lineVert[4];
+			std::string lineVert[5];
 			Point2d text;
-			sLine >> lineVert[0] >> lineVert[1] >> lineVert[2] >> lineVert[3];
+			sLine >> lineVert[0] >> lineVert[1] >> lineVert[2] >> lineVert[3] >> lineVert[4];
 
 			VertexObj tmpVert[6];
 			int nbVertices = 3;
@@ -147,6 +147,10 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 			//If not empty, this is a quad we have to split into two triangles
 			if (!lineVert[3].empty())
 			{
+				//std::vector<std::string> polygonVert;
+				//polygonVert.assign(tmpVert, tmpVert + 3);
+				if (!lineVert[4].empty())
+					ILogger::log() << "This mesh has polygonal faces.\n";
 				tmpVert[3] = VertexObj(lineVert[3]);
 				tmpVert[4] = tmpVert[0];
 				tmpVert[5] = tmpVert[2];

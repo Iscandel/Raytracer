@@ -64,6 +64,9 @@
     <Filter Include="Textures">
       <UniqueIdentifier>{1e75cf18-3d75-4e4a-97f8-107b35c35153}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Medium">
+      <UniqueIdentifier>{4a006a8a-f406-4e24-9339-91eaa49e918d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color.cpp">
@@ -327,14 +330,23 @@
     <ClCompile Include="ImageLoader.cpp">
       <Filter>IO</Filter>
     </ClCompile>
-    <ClCompile Include="SmoothLayeredBSDF.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="SpectralDielectric.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="NormalMapping.cpp">
       <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="SmoothLayeredBSDF.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="SheetDielectric.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="SpectralDielectric.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="Common.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowCatcher.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -611,14 +623,20 @@
     <ClInclude Include="ImageLoader.h">
       <Filter>IO</Filter>
     </ClInclude>
-    <ClInclude Include="SmoothLayeredBSDF.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="SpectralDielectric.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="NormalMapping.h">
       <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="SmoothLayeredBSDF.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="SheetDielectric.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="SpectralDielectric.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowCatcher.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -669,5 +687,6 @@
     <Xml Include="Scenes\AudiRS6.xml">
       <Filter>Scenes</Filter>
     </Xml>
+    <Xml Include="Scenes\lamborghiniAventador.xml" />
   </ItemGroup>
 </Project>

@@ -47,9 +47,9 @@ void ImageLoader::load(const std::string & path, Array2D<Color>& array)
 		file.readPixels(displayWindow.min.y, displayWindow.max.y);
 		array.setSize(width, height);
 
-		for (unsigned int i = 0; i < width; i++)
+		for (int i = 0; i < width; i++)
 		{
-			for (unsigned int j = 0; j < height; j++)
+			for (int j = 0; j < height; j++)
 			{
 				Imf_2_2::Rgba& rgba = pixels[j][i];
 				array(i, j) = Color(rgba.r, rgba.g, rgba.b);	

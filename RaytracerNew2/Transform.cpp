@@ -198,14 +198,27 @@ std::ostream& operator << (std::ostream& o, const Transform& t)
 ///////////////////////////////////////////////////////////////////////////////
 Transform Transform::fromLookAt(const Point3d& origin, const Point3d& target, const Vector3d& up)
 {
-	Eigen::Vector3d dir = (target - origin).normalized();
+	//Eigen::Vector3d dir = (target - origin).normalized();
 
+#ifdef USE_ALIGN
+	Vector3d dir = (target - origin).normalized();
+	Vector3d left = (up.normalized().cross3(dir)).normalized();
+	Vector3d newUp = dir.cross3(left).normalized();
+	Eigen::Matrix4d trafo;
+	trafo << left, newUp, dir, origin;
+	trafo(3, 3) = 1.;
+#else
+	Eigen::Vector3d dir = (target - origin).normalized();
 	Eigen::Vector3d left = (up.normalized().cross(dir)).normalized();
 	Eigen::Vector3d newUp = dir.cross(left).normalized();
-
 	Eigen::Matrix4d trafo;
 	trafo << left, newUp, dir, origin,
 		0, 0, 0, 1;
+#endif
+
+	//Eigen::Matrix4d trafo;
+	//trafo << left, newUp, dir, origin,
+	//	0, 0, 0, 1;
 
 	Eigen::Affine3d affine(trafo);
 

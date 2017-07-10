@@ -211,7 +211,8 @@
         </translation>
       </transform>
       <!--Gold-->
-      <bsdf type="Mirror">
+      <bsdf type="Diffuse">
+        <color name="albedo" value="1. 1. 1."/>
       </bsdf>
     </shape>
   </objects>

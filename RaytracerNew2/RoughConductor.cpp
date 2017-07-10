@@ -1,5 +1,6 @@
 #include "RoughConductor.h"
 
+#include "Color.h"
 #include "ConstantTexture.h"
 #include "DifferentialGeometry.h"
 #include "Fresnel.h"
@@ -15,9 +16,11 @@ RoughConductor::RoughConductor(const Parameters& params)
 
 	myAlpha = params.getDouble("alpha", 0.2);
 
+	IORHelper::evalConductorIOR(params, myEta, myAbsorption);
+
 	//Gold
-	myEta = params.getColor("eta", Color(0.22273, 0.42791, 1.2597));
-	myAbsorption = params.getColor("absorption", Color(3.0325, 2.3345, 1.7531));
+	//myEta = params.getColor("eta", Color(0.22273, 0.42791, 1.2597));
+	//myAbsorption = params.getColor("absorption", Color(3.0325, 2.3345, 1.7531));
 	myDistribution = MicrofacetDistribution(params.getString("distribution", "beckmann"));
 }
 

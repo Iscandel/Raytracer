@@ -64,10 +64,10 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="32"/>
+    <integer name="sampleNumber" value="2"/>
   </sampler>
 
-  <integrator type="DirectLightingIS">
+  <integrator type="DirectLightingMIS">
     <integer name="depth" value="5"/>
     <integer name="sampleNumber" value="5"/>
   </integrator>

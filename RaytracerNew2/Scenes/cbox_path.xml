@@ -42,25 +42,31 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="8"/>
+    <integer name="sampleNumber" value="128"/>
   </sampler>
   
   <objects>
   <shape type="Mesh">
     <string name="path" value="./data/cbox/walls2.obj"/>
 
-    <bsdf type="NormalMapping">
-      <texture name="normalMap" type="ImageTexture">
-        <string name="path" value ="./data/brickwork-normal.jpg"/>
-      </texture>
-    </bsdf>
     <!--<bsdf type="Diffuse">
       <color name="albedo" value="0.725 0.71 0.68"/>
-        <texture name="albedo" type="ImageTexture">
+        --><!--<texture name="albedo" type="ImageTexture">
           <string name="path" value="./data/20060807_wells6_hd.hdr"/>
-        </texture>
+        </texture>--><!--
    
     </bsdf>-->
+  
+        <bsdf type="NormalMapping">
+      <texture name="normalMap" type="ImageTexture">
+          <string name="path" value="./data/Well Preserved Chesterfield - (Normal Map_2).png"/>
+        </texture>
+      <bsdf name="bsdf" type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/cuir.jpg"/>
+        </texture>
+      </bsdf>
+    </bsdf>
   </shape>
 
 

@@ -70,6 +70,8 @@ public:
 	virtual Color sample(BSDFSamplingInfos& infos, const Point2d& sample) = 0;
 
 	virtual double pdf(const BSDFSamplingInfos& infos) = 0;
+
+	virtual bool isShadowCatcher() const { return false; }
 };
 
 
@@ -87,6 +89,7 @@ struct BSDFSamplingInfos
 		pdf = -1.;
 		relativeEta = 1.;
 		measure = Measure::SOLID_ANGLE;
+		shadowCaught = false;
 	}
 
 	BSDFSamplingInfos(const Vector3d& _wi, const Vector3d& _wo)
@@ -98,6 +101,7 @@ struct BSDFSamplingInfos
 		pdf = -1.;
 		relativeEta = 1.;
 		measure = Measure::SOLID_ANGLE;
+		shadowCaught = false;
 	}
 
 	///Incident direction (in local coords), but sense from BSDF intersection point to 
@@ -124,4 +128,8 @@ struct BSDFSamplingInfos
 	Point2d uv;
 
 	DifferentialGeometry shadingFrame;
+
+	bool shadowCaught;
+
+	double ao = 1.;
 };

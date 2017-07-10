@@ -61,7 +61,14 @@ Color NormalMapping::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 	DifferentialGeometry perturbedShading = getFrame(infos);
 	BSDFSamplingInfos perturbedInfos = getPerturbedInfos(perturbedShading, infos);
 
-	return myBSDF->sample(perturbedInfos, sample);
+	Color weight = myBSDF->sample(perturbedInfos, sample);
+	infos.wo = infos.shadingFrame.toLocal(perturbedInfos.shadingFrame.toWorld(perturbedInfos.wo));
+	infos.measure = perturbedInfos.measure;
+	infos.pdf = perturbedInfos.pdf;
+	infos.relativeEta = perturbedInfos.relativeEta;
+	infos.sampledType = perturbedInfos.sampledType;
+
+	return weight;
 }
 
 double NormalMapping::pdf(const BSDFSamplingInfos & infos)

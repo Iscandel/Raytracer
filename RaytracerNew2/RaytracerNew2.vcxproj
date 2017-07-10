@@ -30,6 +30,7 @@
     <ClCompile Include="CheckerTexture.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="CDF.cpp" />
+    <ClCompile Include="Common.cpp" />
     <ClCompile Include="Conductor.cpp" />
     <ClCompile Include="ConstantTexture.cpp" />
     <ClCompile Include="Dielectric.cpp" />
@@ -93,6 +94,8 @@
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="ShadowCatcher.cpp" />
+    <ClCompile Include="SheetDielectric.cpp" />
     <ClCompile Include="SmoothLayeredBSDF.cpp" />
     <ClCompile Include="SpectralDielectric.cpp" />
     <ClCompile Include="SpecularSystem.cpp" />
@@ -189,6 +192,8 @@
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />
+    <ClInclude Include="ShadowCatcher.h" />
+    <ClInclude Include="SheetDielectric.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SmoothLayeredBSDF.h" />
     <ClInclude Include="SpectralDielectric.h" />
@@ -232,6 +237,9 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Scenes\DepthOfField.xml" />
+    <Xml Include="Scenes\lamborghiniAventador.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\MatPreview.xml">
       <SubType>Designer</SubType>
     </Xml>
@@ -313,14 +321,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared\lib\include\OpenEXR;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>D:\C et CPP\Applications\openexr-2.2.0\buildShared\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\C et CPP\Applications\openexr-2.2.0\buildShared\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared\lib\lib;D:\C et CPP\Applications\SFML\SFML-2.3.2\lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -329,14 +337,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TIXML_USE_STL;USE_ALIGN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>D:\C et CPP\Applications\SFML\SFML-2.3.2\lib64;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -360,9 +371,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>false</Profile>
-      <AdditionalLibraryDirectories>D:\C et CPP\Applications\openexr-2.2.0\buildShared\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\C et CPP\Applications\openexr-2.2.0\buildShared\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared\lib\lib;D:\C et CPP\Applications\SFML\SFML-2.3.2\lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -373,18 +384,21 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>No</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>true</Profile>
+      <AdditionalLibraryDirectories>D:\C et CPP\Applications\SFML\SFML-2.3.2\lib64;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

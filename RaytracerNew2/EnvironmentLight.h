@@ -25,7 +25,7 @@ public:
 
 	bool isDelta() const override { return false; }
 
-	Color interp2(const Point2d& xy) const;
+	//Color interp2(const Point2d& xy) const;
 
 	std::vector<CDF> myRowCDFs;
 	CDF myMarginalCDF; //to choose a row (sum of the columns on a row)

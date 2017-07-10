@@ -63,7 +63,7 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 							Vector3d localWo = intersection.toLocal(-_ray.direction());
 							double cosTheta = DifferentialGeometry::cosTheta(localWi);
 
-							BSDFSamplingInfos bsdfInfos(localWi, localWo);
+							BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 							bsdfInfos.uv = intersection.myUv; //
 
 							//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))

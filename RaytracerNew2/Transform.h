@@ -107,7 +107,7 @@ inline Vector3d Transform::transform(const Vector3d & vect)
 inline void Transform::transform(const Vector3d & in, Vector3d & out)
 {
 #ifdef USE_ALIGN
-	//out = myMatrix * in;
+	out = myMatrix * in;
 #else
 	out = myMatrix.topLeftCorner<3, 3>() * in;
 #endif
@@ -171,7 +171,7 @@ inline Normal3d Transform::transform(const Normal3d & n)
 inline void Transform::transform(const Normal3d& inN, Normal3d& outN)
 {
 #ifdef USE_ALIGN
-	//outN = myInvMatrix.transpose() * inN;
+	outN = myInvMatrix.transpose() * inN;
 #else
 	outN = myInvMatrix.topLeftCorner<3, 3>().transpose() * inN;
 #endif

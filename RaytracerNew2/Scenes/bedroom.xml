@@ -1,0 +1,807 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <scale>
+        <sx>-1</sx>
+        <sy>1</sy>
+        <sz>1.</sz>
+      </scale>
+      <lookAt>
+        <origin>120 80 -60</origin>
+        <lookAt>-50 60 110</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
+       <!--<lookAt>
+        <origin>-45 80 300</origin>
+        <lookAt>-80 60 110</lookAt>
+        <up>0 1 0</up>
+      </lookAt>-->
+
+      <!--<lookAt>
+        <origin>850 60 -640</origin>
+        <lookAt>200 150 -120</lookAt>
+        <up>0 1 0</up>
+      </lookAt>-->
+    </transform>
+    <focal>0.05</focal>
+    <mPerPixel>0.0002</mPerPixel>
+    <!--0.00005-->
+    <double name="fov" value="80"/>
+    <double name="focal" value="0.05"/>
+    <double name="meterPixelSize" value="0.0002"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="550"/>
+    <!--<double name="apertureRadius" value="3."/>
+    <double name="focalPlane" value="450"/>-->
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>8</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="32"/>
+  </sampler>
+
+  <integrator type="PathTracingMIS">
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+
+  <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/Audi RS6/jardinVilla.exr"/>
+      <!--20060807_wells6_hd.jpg"/>-->
+      <double name="factor" value="2.4"/>
+      <transform name="toWorld">
+        <rotation>
+          <rx>90.</rx>
+          <ry>180.</ry>
+          <rz>0.</rz>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+
+  <objects>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/murs.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/papier-peintEcru.jpg"/>
+        </texture>
+      </bsdf>
+      
+    
+    <!--<transform name="toWorld">
+        <translation>
+          <tx>0.</tx>
+          <ty>-50.</ty>
+          <tz>0.</tz>
+        </translation>
+      </transform>-->
+    
+    
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/murFond.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/papier-peintEcru.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--Bouteille-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bouteilleBouchon.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.8 0.3 0.3"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bouteilleEtiquette.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/etiquetteBouteille.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bouteilleLiquide.obj"/>
+      <bsdf type="Dielectric">
+        <double name="etaExt" value="1"/>
+        <double name="etaInt" value="1.33"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bouteilleStruct.obj"/>
+      <bsdf type="Dielectric">
+        <double name="etaExt" value="1"/>
+        <double name="etaInt" value="1.50"/>
+      </bsdf>
+    </shape>
+
+    <!--Bureau-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bureauDessus.obj"/>
+       <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/dessusTable.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bureauEtagerePoignees.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.5 0.5 0.5"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bureauEtagerePortes.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois7.jpg"/>
+        </texture>t
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bureauEtagereStruct.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois7.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--Carton-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/carton.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/carton2.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--Chaise-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/chaise2Dossier.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/velours3.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/chaise2Struct.obj"/>
+      -<bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.05"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+        <double name="thickness" value="0.6"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <texture name="albedo" type="ImageTexture">
+            <string name="path" value="./data/bedroom/textures/bois3.jpg"/>
+          </texture>
+        </bsdf>
+      </bsdf>
+      <!--<bsdf type="RoughConductor">
+        <double name="alpha" value="0.09"/>
+        <string name="material" value="aluminium"/>
+      </bsdf>-->
+    </shape>
+
+    <!--Chaise2-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/chaiseDossier.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.5 0.7 0.4"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/chaisePieds.obj"/>
+
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.1"/>
+        <string name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <!--Commode-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/commodeDessus.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois1.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/bedroom/bouteilleStruct.obj"/>
+    </shape>-->
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/commodeLivre.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.5 0.5 0.5"/>
+      </bsdf>
+
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/commodePieds.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois1.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/commodeStruct.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois1.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/commodeTiroirs.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois1.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/commodeTiroirsPoignee.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+
+    <!--Draps couette-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/couette.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/couette.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/drap.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/drapBlanc.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--Encadrement fenêtres-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/encadrementFenetres.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+
+    <!--Etagères-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/etagerePoignee.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois2.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/etageres.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois2.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--Guitare-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/guitareBoutons.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.4 0.4 0.4"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/guitareCordes.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.2 0.2"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/guitareFondStruct.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.80 0.80 0.80"/>
+        </bsdf>
+        <double name="thickness" value="0.1"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/guitareStruct.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <color name="absorbance" value="0.2 0.8 0.9"/>
+        <double name="thickness" value="1.2"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="1. 1. 1."/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/guitareTravers.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.3 0.3 0.3"/>
+      </bsdf>
+    </shape>
+
+    <!--Haltères-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/halteres.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.07"/>
+        <color name="absorbance" value="0.8 0.8 0.8"/>
+        <double name="thickness" value="20"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.08"/>
+          <string name="material" value="iron"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+    <!--Lampe-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeAmpoule.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+      <!--<light type="MeshLight">
+        <color name="radiance" value="10 10 10"/>
+      </light>-->
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeCulot.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeDeco.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeFixation.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+
+    <!--Lampe chevet-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeChevetAmpoule.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+      <light type="MeshLight">
+        <color name="radiance" value="30 30 20"/>
+      </light>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeChevetBaseBouton.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeChevetBouton.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeChevetCache.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeChevetCulot.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeChevetFil.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/lampeChevetStruct.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+
+    <!--Lit-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/litSommier.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.08"/>
+        <color name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/litStruct.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois2.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/litPieds.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois2.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--Objet drôle-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/objetDroleBase.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.2 0.3"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/objetDroleBuste.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+        <double name="thickness" value="0.5"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.86 0.82 0.15"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/objetDroleRessort.obj"/>
+      <bsdf type="Conductor">
+        <string name="material" value="chromium"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/objetDroleTete.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois2.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--Oreiller-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/oreiller.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/drapPois.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcClavierStruct.obj"/>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcClavierTouches.obj"/>
+    </shape>-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcEcranBords.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.25"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+        <double name="thickness" value="0.6"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.4 0.35 0.4"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcEcranBouton.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.2 0.15"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcEcranPied.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.25"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+        <double name="thickness" value="0.6"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.4 0.35 0.4"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcEcranVerre.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcSourisFil.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.15"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+        <double name="thickness" value="0.1"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.1 0.15 0.12"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcSourisTapis.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.25 0.25 0.1"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/pcTour.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.25"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+        <double name="thickness" value="0.6"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.4 0.35 0.4"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+    <!--Plancher-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/plancher.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.1"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+        <double name="thickness" value="0.6"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <texture name="albedo" type="ImageTexture">
+            <string name="path" value="./data/bedroom/textures/bois3.jpg"/>
+          </texture>
+        </bsdf>
+      </bsdf>
+      <!--<bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/bois3.jpg"/>
+        </texture>
+      </bsdf>-->
+    </shape>
+
+    <!--Plante-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/planteFeuilles.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/feuille.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/planteTerre.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.72 0.48 0.34"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/planteTiges.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.82 0.96 0.58"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/planteTronc.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/tronc.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/planteVase.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+        <double name="thickness" value="0.5"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.96 0.62 0.06"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/bedroom/porte.obj"/>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/porteEncadrement.obj"/>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/portePoigneesCharnieres.obj"/>
+    </shape>-->
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/poster1.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/poster2.jpg"/>
+          <bool name="invertX" value="true"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/poster2.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/posterGradConj2.jpg"/>
+          <bool name="invertY" value="true"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/poster3.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/poster4.jpg"/>
+          <bool name="invertX" value="true"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/poster4.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/bedroom/textures/poster6.jpg"/>
+          <bool name="invertX" value="true"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/poubelle.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.2 0.2"/>
+      </bsdf>
+    </shape>
+
+    <!--Radiateur-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/radiateur.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.1"/>
+        <color name="absorbance" value="0.3 0.3 0.3"/>
+        <double name="thickness" value="1.2"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.1"/>
+          <string name="material" value="aluminium"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/radiateurPoignee.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+    <!--Soda-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/sodaBase.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <color name="absorbance" value="0.3 0.8 0.9"/>
+        <double name="thickness" value="1.2"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="1. 1. 1."/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/sodaCache.obj"/>
+      <bsdf type="RoughDielectric">
+        <double name="etaInt" value="1.53"/>
+        <double name="alpha" value="0.2"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/sodaPaille.obj"/>
+      <bsdf type="RoughDielectric">
+        <double name="etaInt" value="1.53"/>
+        <double name="alpha" value="0.15"/>
+      </bsdf>
+    </shape>
+
+    <!--Sono-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/sonoBoutons.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/sonoGrille.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <color name="absorbance" value="0.7 0.8 0.8"/>
+        <double name="thickness" value="20"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="1. 1. 1."/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/sonoPieds.obj"/>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/sonoStruct.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <color name="absorbance" value="0.7 0.8 0.8"/>
+        <double name="thickness" value="5"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="1. 1. 1."/>
+        </bsdf>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/sonoTableau.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <color name="absorbance" value="0.2 0.2 0.2"/>
+        <double name="thickness" value="1.2"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.7 0.7 0.7"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+    <!--Stores-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/storesBarres.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/bedroom/storesLamelles.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.1"/>
+        <color name="absorbance" value="0.3 0.3 0.3"/>
+        <double name="thickness" value="1.2"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.1"/>
+          <string name="material" value="aluminium"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+  </objects>
+</scene>

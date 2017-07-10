@@ -29,7 +29,7 @@ NoriPerspective::NoriPerspective(const Parameters& params)
 	* range from zero to one. Also takes the aspect ratio into account.
 	*/
 	mySampleToCamera = Transform(
-		Eigen::DiagonalMatrix<double, 3>(Vector3d(0.5, -0.5 * aspect, 1.0)) *
+		Eigen::DiagonalMatrix<double, 3>(Eigen::Vector3d(0.5, -0.5 * aspect, 1.0)) *
 		Eigen::Translation<double, 3>(1.0, -1.0 / aspect, 0.0) * perspective).inv();
 
 	myInvOutputSize = Vector3d(1. / getSizeX(), 1. / getSizeY(), 0.);

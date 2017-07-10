@@ -16,5 +16,7 @@ protected:
 	LightSamplingStrategy myStrategy;
 
 	int myMaxDepth;
+
+	int myAOLength;
 };
 

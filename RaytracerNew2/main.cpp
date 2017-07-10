@@ -3,24 +3,24 @@
 #include "Scene.h"
 #include "Timer.h"
 
-#ifdef _DEBUG 
-#pragma comment(lib,"sfml-graphics-d.lib")
-#pragma comment(lib,"sfml-window-d.lib")
-#pragma comment(lib,"sfml-system-d.lib")
-#pragma comment(lib,"sfml-main-d.lib")
-//#pragma comment(lib,"sfml-network-s-d.lib")
-//#pragma comment(lib,"sfml-audio-s-d.lib")
-//#pragma comment(lib,"tinyxmld_STL.lib")
-#else
-#pragma comment(lib,"sfml-graphics.lib")
-#pragma comment(lib,"sfml-window.lib")
-#pragma comment(lib,"sfml-system.lib")
-//#pragma comment(lib,"sfml-network-s.lib")
-//#pragma comment(lib,"sfml-audio-s.lib")
-//#pragma comment(lib,"tinyxml_STL.lib")
-#pragma comment(lib,"sfml-main.lib")
-//#pragma comment(lib,"opengl32.lib")
-#endif
+//#ifdef _DEBUG 
+//#pragma comment(lib,"sfml-graphics-d.lib")
+//#pragma comment(lib,"sfml-window-d.lib")
+//#pragma comment(lib,"sfml-system-d.lib")
+//#pragma comment(lib,"sfml-main-d.lib")
+////#pragma comment(lib,"sfml-network-s-d.lib")
+////#pragma comment(lib,"sfml-audio-s-d.lib")
+////#pragma comment(lib,"tinyxmld_STL.lib")
+//#else
+//#pragma comment(lib,"sfml-graphics.lib")
+//#pragma comment(lib,"sfml-window.lib")
+//#pragma comment(lib,"sfml-system.lib")
+////#pragma comment(lib,"sfml-network-s.lib")
+////#pragma comment(lib,"sfml-audio-s.lib")
+////#pragma comment(lib,"tinyxml_STL.lib")
+//#pragma comment(lib,"sfml-main.lib")
+////#pragma comment(lib,"opengl32.lib")
+//#endif
 
 //
 #include <ImfRgbaFile.h>
@@ -135,10 +135,12 @@ void writeEXR(const std::string& path, const Screen& film) //const Array2D<Pixel
 			*(pixels + x + y * width) = tmp;
 		}
 	}
-	
-	Imf_2_2::RgbaOutputFile file(path.c_str(), width, height, Imf_2_2::WRITE_RGBA); 
-	file.setFrameBuffer(pixels, 1, width);                   
-	file.writePixels(height);                               
+
+	Imf_2_2::RgbaOutputFile file(path.c_str(), width, height, Imf_2_2::WRITE_RGBA);
+	file.setFrameBuffer(pixels, 1, width);
+	file.writePixels(height);
+
+	delete[] pixels;
 }
 
 class DisplayableText
@@ -345,6 +347,17 @@ void run(int argc, char* argv[])
 					applyProcessing(toneMap, filmOrig, image, gamma);
 					texture.loadFromImage(image);
 					sp.setTexture(texture);
+				}
+				else if (ev.key.code == sf::Keyboard::S)
+				{
+					std::string fileName = scene.getFileName();
+					std::size_t found = fileName.find_last_of(".");
+					if (found != std::string::npos)
+					{
+						std::string extension = fileName.substr(found);
+						fileName = fileName.substr(0, found) + "_2" + extension;
+						image.saveToFile(fileName);
+					}
 				}
 
 			}

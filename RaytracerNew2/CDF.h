@@ -42,7 +42,7 @@ public:
 	int sample(double sample) const
 	{
 		std::vector<double>::const_iterator it = std::lower_bound(myCDF.cbegin(), myCDF.cend(), sample);
-		int index = std::max(0, it - myCDF.begin() - 1);
+		int index = std::max(0, (int)(it - myCDF.begin() - 1));
 		//Last entry cannot be reached (1.)
 		return std::min(index, (int) myCDF.size() - 2); 
 	}

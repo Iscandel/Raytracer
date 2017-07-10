@@ -48,8 +48,11 @@ void SampleJob::run()
 
 				double xx = (double)x + sample.x();
 				double yy = (double)y + sample.y();
-				//double xx = 315;(double)x + sample.x();
-				//double yy = 367;(double)y + sample.y();
+				//double xx = 768;(double)x + sample.x();
+				//double yy = 550;(double)y + sample.y();
+				//				
+				//double xx = 313;(double)x + sample.x();
+				//double yy = 416;(double)y + sample.y();
 
 				Ray ray = myCamera->getRay(xx, yy, mySampler->getNextSample2D());
 

@@ -4,6 +4,9 @@
 #include <cmath>
 #include <limits.h>
 #include <iostream>
+#include <vector>
+
+#include "Logger.h"
 
 class Color
 {
@@ -43,6 +46,47 @@ public:
 	double r;
 	double g;
 	double b;
+};
+
+class ColorSpaceConversion 
+{
+public:
+	void precompute();
+
+	std::vector<double> X;
+	std::vector<double> Y;
+	std::vector<double> Z;
+
+	double xyz[3];
+
+	static bool computed;
+
+	static const int LAMBDA_START = 400; 
+	static const int LAMBDA_END = 700;
+	static const int CIE_SAMPLE_NUMBER = 471;
+	const double CIE_Y_INTEGRAL = 106.856895;
+
+	static const int SAMPLE_NUMBER = 30;
+
+	static const double CIE_X[CIE_SAMPLE_NUMBER];
+	static const double CIE_Y[CIE_SAMPLE_NUMBER];
+	static const double CIE_Z[CIE_SAMPLE_NUMBER];
+	static const double CIE_lambda[CIE_SAMPLE_NUMBER];
+
+	ColorSpaceConversion(const std::vector<double>& lambda, const std::vector<double>& spectrum);
+
+	void toRGB(double rgb[3]) const;
+
+	void toXYZ(double _xyz[3]) const;
+
+	void XYZToRGB(const double _xyz[3], double rgb[3]) const;
+
+	double AverageSpectrumSamples(const double *lambda, const double *vals,
+		int n, double lambdaStart, double lambdaEnd);
+
+protected:
+	double c[SAMPLE_NUMBER];
+
 };
 
 inline std::ostream& operator << (std::ostream& o, const Color& color)

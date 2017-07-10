@@ -116,8 +116,11 @@ public:
 		const Point3d& p0 = myMesh->myVertices[index0];
 		const Point3d& p1 = myMesh->myVertices[index1];
 		const Point3d& p2 = myMesh->myVertices[index2];
-
+#ifdef USE_ALIGN
+		return 0.5f * Vector3d((p1 - p0).cross3(p2 - p0)).norm();
+#else
 		return 0.5f * Vector3d((p1 - p0).cross(p2 - p0)).norm();
+#endif
 	}
 		
 public:

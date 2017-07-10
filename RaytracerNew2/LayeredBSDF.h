@@ -1,9 +1,9 @@
 #pragma once
 #include "BSDF.h"
 
+#include "MicrofacetDistribution.h"
+
 #include "Rng.h"
-#include "RoughDielectric.h"
-#include "RoughConductor.h"
 
 class Parameters;
 
@@ -19,14 +19,15 @@ public:
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample) override;
 
 	double pdf(const BSDFSamplingInfos& infos) override;
+
 	//=============================================================================
 	///////////////////////////////////////////////////////////////////////////////
 	Color fresnel(double etaExt, double etaInt, double cosThetaI, double& etaI, double& etaT, double& relativeEta, double& cosThetaT);
 
 	Color evalReflection(const BSDFSamplingInfos & infos, const Color& fr, double alpha);
 
-	RoughDielectric dielectric;
-	RoughConductor conductor;
+	BSDF::ptr myTopBSDF;
+	BSDF::ptr myBaseBSDF;
 
 	MicrofacetDistribution myDistribution;
 

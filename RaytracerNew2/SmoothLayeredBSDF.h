@@ -3,8 +3,11 @@
 #include "BSDF.h"
 
 #include "Rng.h"
-#include "RoughDielectric.h"
-#include "RoughConductor.h"
+#include "Dielectric.h"
+#include "Conductor.h"
+#include "MicrofacetDistribution.h"
+
+#include "Diffuse.h"
 
 class Parameters;
 
@@ -24,14 +27,20 @@ public:
 	///////////////////////////////////////////////////////////////////////////////
 	Color fresnel(double etaExt, double etaInt, double cosThetaI, double& etaI, double& etaT, double& relativeEta, double& cosThetaT);
 
-	Color evalReflection(const BSDFSamplingInfos & infos, const Color& fr, double alpha);
 
-	Color eval2(const BSDFSamplingInfos & infos);
 
-	RoughDielectric dielectric;
-	RoughConductor conductor;
+	inline Vector3d SmoothLayeredBSDF::refractIn(const Vector3d &wi, double &R);
+	inline Vector3d SmoothLayeredBSDF::refractOut(const Vector3d &wi, double &R);
 
-	MicrofacetDistribution myDistribution;
+	double m_specularSamplingWeight;
+	//Color evalReflection(const BSDFSamplingInfos & infos, const Color& fr, double alpha);
+
+	//Color eval2(const BSDFSamplingInfos & infos);
+
+	//Dielectric dielectric;
+	BSDF::ptr myBaseBSDF;
+
+	//MicrofacetDistribution myDistribution;
 
 	double myEtaExt;
 	double myEtaInt;
@@ -40,8 +49,8 @@ public:
 	Color myAbsorbance;
 	Rng myRng;
 
-	Color myEta;
-	Color myAbsorption;
+	//Color myEta;
+	//Color myAbsorption;
 };
 
 

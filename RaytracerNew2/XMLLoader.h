@@ -29,6 +29,7 @@ public:
 	ReconstructionFilter::ptr handleReconstructionFilter(Scene& scene, TiXmlElement* element);
 	Transform::ptr handleTransform(TiXmlElement* element);
 	Texture::ptr handleTexture(TiXmlElement* element);
+	BSDF::ptr XMLLoader::handleBSDF(TiXmlElement* element);
 	
 	Transform handleRotationTransform(TiXmlElement* element);
 	Transform handleTranslationTransform(TiXmlElement* element);

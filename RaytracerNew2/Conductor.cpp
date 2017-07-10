@@ -1,5 +1,6 @@
 #include "Conductor.h"
 
+#include "Common.h"
 #include "ConstantTexture.h"
 #include "DifferentialGeometry.h"
 #include "Fresnel.h"
@@ -13,8 +14,9 @@ Conductor::Conductor(const Parameters& params)
 {
 	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
 
-	myEta = params.getColor("eta", Color(0.));
-	myAbsorption = params.getColor("absorption", Color(0.));
+	IORHelper::evalConductorIOR(params, myEta, myAbsorption);
+	//myEta = params.getColor("eta", Color(0.));
+	//myAbsorption = params.getColor("absorption", Color(0.));
 }
 
 

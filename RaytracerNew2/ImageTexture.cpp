@@ -10,7 +10,8 @@
 ImageTexture::ImageTexture(const Parameters& params)
 {
 	std::string path = params.getString("path", "");
-	//myInvertY = params.getBool("invertY", false);
+	myInvertY = params.getBool("invertY", false);
+	myInvertX = params.getBool("invertX", false);
 
 	ImageLoader::load(path, myArray);
 	//sf::Image im;
@@ -33,16 +34,20 @@ ImageTexture::~ImageTexture()
 
 Color ImageTexture::eval(const Point2d & uv)
 {
-	//if (!myInvertY)
-	//{
-		double x = uv.x() * myArray.getWidth();
-		double y = uv.y() * myArray.getHeight();
-	//}
-	//else
-	//{
-	//	double x = (1. - uv.y()) * myArray.getWidth();
-	//	double y = (1. - uv.x()) * myArray.getHeight();
-	//}
+	double x, y;
+	if (!myInvertY) {
+		y = uv.y() * myArray.getHeight();
+	}
+	else {
+		y = (1. - uv.y()) * myArray.getHeight();
+	}
+
+	if (!myInvertX) {
+		x = uv.x() * myArray.getWidth();
+	} else {
+		x = (1. - uv.x()) * myArray.getWidth();
+	}
+
 	return tools::interp2(Point2d(x, y), myArray);
 	//return myArray(x, y);
 }

@@ -46,7 +46,7 @@
 
   <lights>
     <light type="EnvironmentLight">
-      <string name="path" value="./data/20060807_wells6_hd.jpg"/>
+      <string name="path" value="./data/envmap.exr"/>
       <double name="factor" value="0.7"/>
       <transform name="toWorld">
         <rotation>
@@ -87,9 +87,13 @@
         <!--<double name="alpha" value="0.001"/>
       </bsdf>-->
       <!--Copper-->
-      <bsdf type="Conductor">
-        <color name="albedo" value="1. 1. 1."/>
-        
+      <bsdf type="LayeredBSDF">
+        <double name="alpha" value="0.001"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.001"/>
+          <string name="material" value="silver"/>
+          <!--<color name="albedo" value="0.7 0.1 0.1"/>-->
+        </bsdf>
       <!--611 549 464 nm -->
       
         <color name="eta" value="0.36892 0.68384 1.27 "/>
@@ -149,7 +153,7 @@
         </rotation>
         <translation>
           <tx>0.</tx>
-          <ty>3.5</ty>
+          <ty>2.5</ty>
           <tz>0.</tz>
         </translation>
         <scale>
@@ -159,14 +163,14 @@
         </scale>
       </transform>
       <light type="MeshLight">
-        <color name="radiance" value="5. 5. 5."/>
+        <color name="radiance" value="1.5 1.5 1.5"/>
       </light>
       <bsdf type="Diffuse">
         <color name="albedo" value="0.7 0.7 0.3"/>
       </bsdf>
-    </shape>
+    </shape>-->
 
-    <shape type="Mesh">
+    <!--<shape type="Mesh">
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <rotation>

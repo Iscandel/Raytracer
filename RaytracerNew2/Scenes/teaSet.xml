@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <lookAt>
+        <origin>0 2. -4</origin>
+        <lookAt>0 0.7 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
+    </transform>
+    <!--0.00005-->
+    <double name="focal" value="0.05"/>
+    <double name="meterPixelSize" value="0.0002"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="768"/>
+    
+    <double name="apertureRadius" value="0.05"/>
+    <double name="focalPlane" value="4."/>
+    
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>8</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="128"/>
+  </sampler>
+
+  <integrator type="PathTracingMIS">
+    <integer name="depth" value="10"/>
+    <integer name="sampleNumber" value="4"/>
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+
+  <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/tea set/ennis.exr"/>
+      <double name="factor" value="0.9"/>
+      <transform name="toWorld">
+        <rotation>
+          <rx>90.</rx>
+          <ry>180.</ry>
+          <rz>30.</rz>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+
+  <objects>    
+    <shape type="Mesh">
+      <string name="path" value ="./data/tea set/mug.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.1 0.2 0.9"/>
+        </bsdf>
+        <double name="thickness" value="0.1"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+      </bsdf>
+      <transform name="toWorld">
+        <rotation>
+          <rx>0.</rx>
+          <ry>-25.</ry>
+          <rz>0.</rz>
+        </rotation>
+       <!--<translation>
+          <tx>0.</tx>
+          <ty>0.</ty>
+          <tz>0.2</tz>
+        </translation>-->
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/tea set/spoon.obj"/>
+      <bsdf type="RoughConductor">
+        <string name="material" value="silver"/>
+        <double name="alpha" value="0.08"/>
+      </bsdf>
+      <transform name="toWorld">
+        <scale>
+          <sx>0.7</sx>
+          <sy>0.7</sy>
+          <sz>0.7</sz>
+        </scale>
+        <rotation>
+          <rx>0.</rx>
+          <ry>10</ry>
+          <rz>0.</rz>
+        </rotation>   
+        <translation>
+          <tx>-0.5</tx>
+          <ty>0.</ty>
+          <tz>0.</tz>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/tea set/soucoupe.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.80 0.80 0.80"/>
+        </bsdf>
+        <double name="thickness" value="0.1"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+      </bsdf>
+      <transform name="toWorld">
+        <scale>
+          <sx>0.08</sx>
+          <sy>0.08</sy>
+          <sz>0.08</sz>
+        </scale>
+        <rotation>
+          <rx>0.</rx>
+          <ry>0</ry>
+          <rz>0.</rz>
+        </rotation>
+        <translation>
+          <tx>0.8</tx>
+          <ty>0.</ty>
+          <tz>0.6</tz>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/tea set/teaCup.obj"/>
+      <bsdf type="SmoothLayeredBSDF">
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.80 0.80 0.80"/>
+        </bsdf>
+        <double name="thickness" value="0.1"/>
+        <color name="absorbance" value="0.1 0.1 0.1"/>
+      </bsdf>
+      <transform name="toWorld">
+        <scale>
+          <sx>0.08</sx>
+          <sy>0.08</sy>
+          <sz>0.08</sz>
+        </scale>
+        <rotation>
+          <rx>0.</rx>
+          <ry>0</ry>
+          <rz>0.</rz>
+        </rotation>
+        <translation>
+          <tx>0.8</tx>
+          <ty>0.</ty>
+          <tz>0.6</tz>
+        </translation>
+      </transform>
+    </shape>
+    
+    <shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+        <scale>
+          <sx>2</sx>
+          <sy>1</sy>
+          <sz>2</sz>
+        </scale>
+      </transform>
+      <!--<bsdf type="NormalMapping">
+        <texture name="normalMap" type="ImageTexture">
+          <string name="path" value ="./data/Well Preserved Chesterfield - (Normal Map_2).png"/>
+        </texture>-->
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/tea set/nappeCarreaux2.png"/>
+        </texture>
+      </bsdf>
+    </shape>
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+        <rotation>
+          <rx>180.</rx>
+          <ry>0.</ry>
+          <rz>0.</rz>
+        </rotation>
+        <translation>
+          <tx>0.</tx>
+          <ty>3.5</ty>
+          <tz>0.</tz>
+        </translation>
+        <scale>
+          <sx>1.1</sx>
+          <sy>1</sy>
+          <sz>1</sz>
+        </scale>
+      </transform>
+      <light type="MeshLight">
+        <color name="radiance" value="1.5 1.5 1.5"/>
+      </light>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+      </bsdf>
+    </shape>-->
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+        <rotation>
+          <rx>90.</rx>
+          <ry>0.</ry>
+          <rz>0.</rz>
+        </rotation>
+        <translation>
+          <tx>0.</tx>
+          <ty>0.5</ty>
+          <tz>-11.</tz>
+        </translation>
+        <scale>
+          <sx>2</sx>
+          <sy>1</sy>
+          <sz>1</sz>
+        </scale>
+      </transform>
+      <light type="MeshLight">
+        <color name="radiance" value="15. 15. 15."/>
+      </light>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+      </bsdf>
+    </shape>-->
+  </objects>
+</scene>
