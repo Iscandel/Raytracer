@@ -5,6 +5,10 @@
 #include "Scene.h"
 
 
+//MC enables to solve integrals such : I_a^b f(x) dx <-> Sum_n (1 / N) * f(x) / p(x)
+//<-> Sum_n ((b-a) / N) * f(x) with pdf = 1 / (b-a), which mean proba is 1 over the range
+//In path tracing, we trace 1 ray at each point, so N = 1. In direct lighting, 
+//we casted N shadow rays for each inter point.
 PathTracingMIS::PathTracingMIS(const Parameters& params)
 {
 	std::string sStrategy = params.getString("strategy", lightStrategy::STRING[LightSamplingStrategy::ONE_LIGHT_UNIFORM]);

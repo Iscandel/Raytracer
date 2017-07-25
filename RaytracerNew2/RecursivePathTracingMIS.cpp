@@ -89,7 +89,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 			Vector3d localWo = intersection.toLocal(-ray.direction());
 			double cosTheta = DifferentialGeometry::cosTheta(localWi);
 
-			BSDFSamplingInfos bsdfInfos(localWi, localWo);
+			BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 			bsdfInfos.uv = intersection.myUv;
 
 			//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
@@ -148,7 +148,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 
 	//BSDF sampling strategy
 	Vector3d localWi = intersection.toLocal(-ray.direction());
-	BSDFSamplingInfos bsdfInfos(localWi);
+	BSDFSamplingInfos bsdfInfos(intersection, localWi);
 	bsdfInfos.uv = intersection.myUv; //
 	Color bsdfValue = bsdf->sample(bsdfInfos, sampler->getNextSample2D()); 
 	if (bsdfValue.isZero())

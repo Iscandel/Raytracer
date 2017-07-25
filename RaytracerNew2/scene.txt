@@ -1,1 +1,1 @@
-./Scenes/lamborghiniAventador.xml
+./Scenes/cbox_path.xml

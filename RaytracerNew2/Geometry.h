@@ -10,6 +10,7 @@
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+//typedef double real;
 
 ///Forward declarations
 template<class T, int DIM> struct Point;
@@ -167,6 +168,16 @@ inline double sphericalThetaFromCartesian(const Vector3d& v)
 	//val = val < -1. ? -1. : val  > 1. ? 1. : val;
 	return std::acos(v.z());
 	//return std::acos(v.y());
+}
+
+inline Vector3d cartesianFromSpherical(double theta, double phi)
+{
+	double sinTheta = std::sin(theta);
+	double cosTheta = std::cos(theta);
+	double cosPhi = std::cos(phi);
+	double sinPhi = std::sin(phi);
+
+	return Vector3d(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
 }
 
 #endif

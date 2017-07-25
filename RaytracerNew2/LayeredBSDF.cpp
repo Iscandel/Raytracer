@@ -111,7 +111,8 @@ Color LayeredBSDF::eval(const BSDFSamplingInfos & infos)
 	refractedInfos.wi = refractedWi;
 	refractedInfos.wo = refractedWo;
 	//alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlphaBase;
-	Color f2 = myBaseBSDF->eval(refractedInfos) *relativeEta * relativeEta / DifferentialGeometry::cosTheta(refractedInfos.wo);//evalReflection(refractedInfos, fr2, alpha);
+	relativeEta = myEtaExt / myEtaInt;
+	Color f2 = myBaseBSDF->eval(refractedInfos) *relativeEta * relativeEta * DifferentialGeometry::cosTheta(infos.wo) / DifferentialGeometry::cosTheta(refractedInfos.wo);//evalReflection(refractedInfos, fr2, alpha);
 
 	double wiPDotNormal = refractedWi.z();
 	double woPDotNormal = refractedWo.z();
@@ -266,7 +267,8 @@ double LayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 
 	double weight = 0.5;
 	//return weight * pdfDielectric + (1 - weight) * pdfConductor;
-	return pdfDielectric * fr1 + pdfConductor * (1. - fr1) * relativeEta * relativeEta / DifferentialGeometry::cosTheta(infos.wo);
+	relativeEta = myEtaExt / myEtaInt;
+	return pdfDielectric * fr1 + pdfConductor * (1. - fr1) *relativeEta * relativeEta * DifferentialGeometry::cosTheta(infos.wo) / DifferentialGeometry::cosTheta(refractedInfos.wo);
 }
 
 

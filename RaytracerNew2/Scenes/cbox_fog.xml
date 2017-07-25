@@ -1,0 +1,117 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+
+<scene>
+  <integrator type="VolPathTracing"/>
+
+  <camera type="NoriPerspective">
+    <transform type="lookAt" name="toWorld">
+      <scale>
+        <sx>-1</sx>
+        <sy>1</sy>
+        <sz>1</sz>
+      </scale>
+      <lookAt>
+        <origin>278 273 -800</origin>
+        <lookAt>278 273 -799</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
+      <!--<origin>0 0.919769 5.41159</origin>
+      <lookAt>0 0.89305 4.41198</lookAt>
+      <up>0 1 0</up>-->
+    </transform>
+    <double name="fov" value ="39.3077"/>
+    <integer name="sizeX" value="512"/>
+    <integer name="sizeY" value="512"/>
+
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>4</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="64"/>
+  </sampler>
+
+  <objects>
+    <shape type="Mesh">
+      <string name="path" value="./data/cbox/cbox_floor.obj"/>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.75 0.75 0.75"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/cbox/ceiling_with_hole.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.75 0.75 0.75"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/cbox/cbox_greenwall.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.117 0.373 0.100"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/cbox/cbox_redwall.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.61 0.62 0.06"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/cbox/cbox_back.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.75 0.75 0.75"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/cbox/cbox_smallbox.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.75 0.75 0.75"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/cbox/cbox_largebox.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.75 0.75 0.75"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/cbox/cbox_luminaire.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <tx>0</tx>
+          <ty>50</ty>
+          <tz>0</tz>
+        </translation>
+      </transform>
+      <light type="MeshLight">
+        <color name="radiance" value="30 30 30"/>
+      </light>
+      <bsdf type="Diffuse"/>
+
+    </shape>
+
+
+  </objects>
+</scene>

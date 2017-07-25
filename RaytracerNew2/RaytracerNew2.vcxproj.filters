@@ -67,23 +67,14 @@
     <Filter Include="Medium">
       <UniqueIdentifier>{4a006a8a-f406-4e24-9339-91eaa49e918d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="AccelStruct">
+      <UniqueIdentifier>{484837ea-51e5-4eb8-a0bc-67de6151e3e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{0ac40a80-0ca8-439a-a4d7-5878541471bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Color.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="JobManager.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Ray.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="XMLLoader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -102,12 +93,6 @@
     <ClCompile Include="ReflectionSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="SampleJob.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Job.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="tinystr.cpp">
       <Filter>tinyxml</Filter>
     </ClCompile>
@@ -119,9 +104,6 @@
     </ClCompile>
     <ClCompile Include="tinyxmlparser.cpp">
       <Filter>tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="Screen.cpp">
-      <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="ReconstructionFilter.cpp">
       <Filter>Filters</Filter>
@@ -141,16 +123,7 @@
     <ClCompile Include="RandomSampler.cpp">
       <Filter>Samplers</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Bvh.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Parameters.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
@@ -324,9 +297,6 @@
     <ClCompile Include="LayeredBSDF.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="MicrofacetDistribution.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="ImageLoader.cpp">
       <Filter>IO</Filter>
     </ClCompile>
@@ -345,27 +315,69 @@
     <ClCompile Include="Common.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Medium.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="Homogeneous.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="PhaseFunction.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="MicrofacetDistribution.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
     <ClCompile Include="ShadowCatcher.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="Bvh.cpp">
+      <Filter>AccelStruct</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Job.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="JobManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Parameters.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleJob.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="VolPathTracing.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="HGPhaseFunction.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="IsotropicPhaseFunction.cpp">
+      <Filter>Medium</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Color.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="JobManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectFactory.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="ObjectFactoryManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Ray.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="XMLLoader.h">
@@ -383,20 +395,11 @@
     <ClInclude Include="ReflectionSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="SampleJob.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Job.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="tinystr.h">
       <Filter>tinyxml</Filter>
     </ClInclude>
     <ClInclude Include="tinyxml.h">
       <Filter>tinyxml</Filter>
-    </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Array2D.h">
       <Filter>Fichiers d%27en-tête</Filter>
@@ -419,28 +422,16 @@
     <ClInclude Include="RandomSampler.h">
       <Filter>Samplers</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="BoundingBox.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Bvh.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Parameters.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Primitive.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Intersection.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Geometry.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="GeometricShapeFactory.h">
@@ -617,9 +608,6 @@
     <ClInclude Include="LayeredBSDF.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="MicrofacetDistribution.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="ImageLoader.h">
       <Filter>IO</Filter>
     </ClInclude>
@@ -635,8 +623,62 @@
     <ClInclude Include="SpectralDielectric.h">
       <Filter>BSDF</Filter>
     </ClInclude>
+    <ClInclude Include="Medium.h">
+      <Filter>Medium</Filter>
+    </ClInclude>
+    <ClInclude Include="Homogeneous.h">
+      <Filter>Medium</Filter>
+    </ClInclude>
+    <ClInclude Include="PhaseFunction.h">
+      <Filter>Medium</Filter>
+    </ClInclude>
+    <ClInclude Include="MicrofacetDistribution.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
     <ClInclude Include="ShadowCatcher.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="Bvh.h">
+      <Filter>AccelStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleJob.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Parameters.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Job.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="JobManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="VolPathTracing.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="HGPhaseFunction.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="IsotropicPhaseFunction.h">
+      <Filter>Medium</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

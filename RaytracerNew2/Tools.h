@@ -10,6 +10,7 @@ namespace tools
 {
 	const double PI = 3.14159265358979323846;
 	const double INV_PI = 0.3183098861837906715377;
+	const double INV_FOUR_PI = 0.07957747154594766788450883936693;
 	const double MAX_DOUBLE = 10e9;
 	const double EPSILON = 1e-4;
 

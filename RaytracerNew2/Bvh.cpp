@@ -384,7 +384,7 @@ bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 	bool shouldCompute = inter.computeIntersect;
 	if (!shouldCompute) //Not really useful, but...
 	{
-		inter.t = tools::MAX_DOUBLE;
+		//inter.t = tools::MAX_DOUBLE;
 	}
 
 	inter.computeIntersect = false;

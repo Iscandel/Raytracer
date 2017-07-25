@@ -223,8 +223,8 @@ Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sampl
 		Vector3d refractedWi = -refract(infos.wi, cosThetaT, relativeEta);
 		refractedWi.normalize();
 
-		infos.sampledType = BSDF::DELTA_REFLECTION;
-		infos.measure = Measure::DISCRETE;
+		infos.sampledType = BSDF::UNKNOWN;//BSDF::DELTA_REFLECTION;
+		//infos.measure = Measure::DISCRETE;
 
 		//
 		Color f1 = Color();//Color(1.) * relativeEta * relativeEta;

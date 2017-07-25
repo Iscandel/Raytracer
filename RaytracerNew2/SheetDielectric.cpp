@@ -162,7 +162,7 @@ Color SheetDielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 	}
 	else
 	{
-		infos.sampledType = BSDF::DELTA_TRANSMISSION;
+		infos.sampledType = BSDF::UNKNOWN;//::DELTA_TRANSMISSION;
 		infos.wo = -infos.wi;
 		//infos.wo.normalize(); //?
 		infos.pdf = 1 - fr;

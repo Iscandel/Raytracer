@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 
 <scene>
-  <integrator type="PathTracingMIS"/>
+  <integrator type="VolPathTracing"/>
 
   <camera type="NoriPerspective">
     <transform type="lookAt" name="toWorld">
@@ -32,7 +32,7 @@
   </camera>
 
   <parameters>
-    <threadNumber>8</threadNumber>
+    <threadNumber>4</threadNumber>
     <!--<samplesPerPixel>1</samplesPerPixel>-->
     <!--<recursionLevel>10</recursionLevel>-->
     <blockSizeX>32</blockSizeX>
@@ -42,7 +42,7 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="128"/>
+    <integer name="sampleNumber" value="64"/>
   </sampler>
   
   <objects>

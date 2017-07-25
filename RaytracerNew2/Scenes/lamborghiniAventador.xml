@@ -102,7 +102,7 @@
 
     <shape type="Mesh">
       <string name="path" value ="./data/lamborghini Aventador/carrosserie.obj"/>
-      <bsdf type="LayeredBSDF">
+      <bsdf type="SmoothLayeredBSDF">
         <double name="alphaTop" value="0.01"/>
         <color name="absorbance" value="0.001 0.5 0.85"/>
         <!--<color name="absorbance" value="0.001 0.37 0.81"/>-->
