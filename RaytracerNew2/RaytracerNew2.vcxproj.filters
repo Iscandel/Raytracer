@@ -363,14 +363,14 @@
     <ClCompile Include="SampleJob.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="VolPathTracing.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="HGPhaseFunction.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="IsotropicPhaseFunction.cpp">
       <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="VolPathTracing.cpp">
+      <Filter>Integrators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -671,14 +671,14 @@
     <ClInclude Include="Geometry.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="VolPathTracing.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="HGPhaseFunction.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="IsotropicPhaseFunction.h">
       <Filter>Medium</Filter>
+    </ClInclude>
+    <ClInclude Include="VolPathTracing.h">
+      <Filter>Integrators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -708,9 +708,6 @@
     <Xml Include="Scenes\bathroom-rtPT.xml">
       <Filter>Scenes</Filter>
     </Xml>
-    <Xml Include="Scenes\cbox_path.xml">
-      <Filter>Scenes</Filter>
-    </Xml>
     <Xml Include="Scenes\MatPreview.xml">
       <Filter>Scenes</Filter>
     </Xml>
@@ -730,5 +727,11 @@
       <Filter>Scenes</Filter>
     </Xml>
     <Xml Include="Scenes\lamborghiniAventador.xml" />
+    <Xml Include="Scenes\cbox_path_text.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\cbox_path_vol.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

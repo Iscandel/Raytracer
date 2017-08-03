@@ -1,11 +1,13 @@
 #pragma once
 #include "PhaseFunction.h"
 
+#include "Parameters.h"
+
 class IsotropicPhaseFunction :
 	public PhaseFunction
 {
 public:
-	IsotropicPhaseFunction();
+	IsotropicPhaseFunction(const Parameters&);
 	~IsotropicPhaseFunction();
 
 	double sample(PhaseFunctionSamplingInfos &infos, const Point2d &sample) const override;

@@ -1,12 +1,20 @@
 #include "Homogeneous.h"
 
-
+#include "ObjectFactoryManager.h"
 
 Homogeneous::Homogeneous(const Parameters& params)
 :Medium(params)
 {
 	mySigmaA = params.getColor("sigmaA", Color(0.15));//0.002, 0.002, 0.002));
 	mySigmaS = params.getColor("sigmaS", Color(0.15));//0.0005, 0.0005, 0.0005));
+	myScale = params.getDouble("scale", 1.);
+
+	if (myScale != 1.)
+	{
+		mySigmaA *= myScale;
+		mySigmaS *= myScale;
+	}
+
 	mySigmaT = mySigmaA + mySigmaS;
 }
 
@@ -23,10 +31,17 @@ Color Homogeneous::transmittance(const Ray& ray)
 
 bool Homogeneous::sampleDistance(const Ray &ray, Point2d& sample, double &t, Color &weight)
 {
-	//check inter
+	//check inter ?
+	int channel = (int)(sample.y() * 3.);
+	double extinctionValue;
+	if (channel == 0) extinctionValue = mySigmaT.r; 
+	if (channel == 1) extinctionValue = mySigmaT.g; 
+	if (channel == 2) extinctionValue = mySigmaT.b;
 
-	double max = tools::EPSILON + std::max(mySigmaT.b, std::max(mySigmaT.r, mySigmaT.g));
-	t = -std::log(1. - sample.x()) / max;
+	extinctionValue += tools::EPSILON;
+
+	//double max = tools::EPSILON + std::max(mySigmaT.b, std::max(mySigmaT.r, mySigmaT.g));
+	t = -std::log(1. - sample.x()) / extinctionValue;
 
 	if (t > ray.myMaxT)
 	{
@@ -43,7 +58,10 @@ bool Homogeneous::sampleDistance(const Ray &ray, Point2d& sample, double &t, Col
 		t += ray.myMinT;
 		tmpRay.myMaxT = t;
 		weight = mySigmaS * transmittance(tmpRay) / pdf;
+		//std::cout << weight << " " << transmittance(tmpRay) << " " << tmpRay.myMaxT << " " << tmpRay.myMinT << " " << mySigmaS << " " << pdf << " " << mySigmaS / pdf << std::endl;
 
 		return true;
 	}
 }
+
+RT_REGISTER_TYPE(Homogeneous, Medium)

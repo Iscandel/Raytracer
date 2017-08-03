@@ -11,7 +11,7 @@ public:
 	~VolPathTracing();
 
 	Color li(Scene & scene, Sampler::ptr sampler, const Ray & ray) override;
-	Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, int depth, const Intersection& inter, Color& throughput, double& eta);
+	Color li(Scene & scene, Sampler::ptr sampler, const Ray & ray, int depth, const Intersection& inter, Color& throughput, double& eta);
 
 protected:
 	LightSamplingStrategy myStrategy;
@@ -20,6 +20,6 @@ protected:
 
 	int myAOLength;
 
-	Homogeneous myMedium;
+	//Homogeneous myMedium;
 };
 

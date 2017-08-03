@@ -36,6 +36,25 @@ public:
 		return myShadingGeometry.toWorld(v);
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief 
+	///////////////////////////////////////////////////////////////////////////
+	bool isMediumTransition()
+	{
+		return myPrimitive->getInteriorMedium() != myPrimitive->getExteriorMedium();
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Returns the appropriate medium
+	///////////////////////////////////////////////////////////////////////////
+	Medium::ptr getMedium(const Ray& r)
+	{
+		if (myShadingGeometry.myN.dot(r.direction()) < 0.)
+			return myPrimitive->getInteriorMedium();
+
+		return myPrimitive->getExteriorMedium();
+	}
+
 	///Parametric intersection distance
 	double t;
 	///True differential geometry (for ex. face normal and not interpolated

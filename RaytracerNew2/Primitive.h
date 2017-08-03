@@ -3,6 +3,7 @@
 #include "AreaLight.h"
 #include "Ray.h"
 #include "GeometricShape.h"
+#include "Medium.h"
 
 #include <memory>
 
@@ -85,6 +86,14 @@ public:
 
 	Color le(const Vector3d& direction, const Normal3d& normal) const { return myLight->le(direction, normal); }
 
+	virtual Medium::ptr getInteriorMedium() {
+		throw std::runtime_error("This primitive class shouldn't call getInteriorMedium().\n");
+	}
+
+	virtual Medium::ptr getExteriorMedium() {
+		throw std::runtime_error("This primitive class shouldn't call getExteriorMedium().\n");
+	}
+
 protected:
 	Light::ptr myLight;
 
@@ -99,7 +108,8 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Constructor
 	///////////////////////////////////////////////////////////////////////////
-	SimplePrimitive(GeometricShape::ptr object, BSDF::ptr bsdf = BSDF::ptr()) :myObject(object), myBSDF(bsdf) {}
+	SimplePrimitive(GeometricShape::ptr object, BSDF::ptr bsdf = BSDF::ptr(), Medium::ptr interior = Medium::ptr(), Medium::ptr exterior = Medium::ptr())
+		:myObject(object), myBSDF(bsdf), myInteriorMedium(interior), myExteriorMedium(exterior) {}
 public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Determines if the given ray intersects the primitive.
@@ -151,11 +161,20 @@ public:
 	{
 		return myBSDF;
 	}
+
+	Medium::ptr getInteriorMedium() override {
+		return myInteriorMedium;
+	}
+
+	Medium::ptr getExteriorMedium() override {
+		return myExteriorMedium;
+	}
 		
 protected:
 	GeometricShape::ptr myObject;
 	BSDF::ptr myBSDF;
-	//Material::ptr myMaterial;
+	Medium::ptr myInteriorMedium;
+	Medium::ptr myExteriorMedium;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -202,6 +221,14 @@ public:
 	{ 
 		myPrimitive->addLight(light);
 		IPrimitive::addLight(light);
+	}
+
+	Medium::ptr getInteriorMedium() override {
+		return myPrimitive->getInteriorMedium();
+	}
+
+	Medium::ptr getExteriorMedium() override {
+		return myPrimitive->getExteriorMedium();
 	}
 
 protected:

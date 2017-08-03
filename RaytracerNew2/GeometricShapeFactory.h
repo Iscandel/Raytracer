@@ -38,7 +38,9 @@ public:
 		GeometricShape::ptr shape = std::make_shared<ObjectType>(params);
 		BSDF::ptr bsdf = params.getBSDF("bsdf", BSDF::ptr());
 		Light::ptr light = params.getLight("light", Light::ptr());
-		typename BaseType::ptr primitive = std::make_shared<SimplePrimitive>(shape, bsdf); 
+		Medium::ptr interiorMedium = params.getMedium("interior", Medium::ptr());
+		Medium::ptr exteriorMedium = params.getMedium("exterior", Medium::ptr());
+		typename BaseType::ptr primitive = std::make_shared<SimplePrimitive>(shape, bsdf, interiorMedium, exteriorMedium);
 
 		if (light)
 		{

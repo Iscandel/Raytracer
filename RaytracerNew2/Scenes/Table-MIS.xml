@@ -23,7 +23,7 @@
   </camera>
 
   <parameters>
-    <threadNumber>8</threadNumber>
+    <threadNumber>4</threadNumber>
     <!--<samplesPerPixel>1</samplesPerPixel>-->
     <!--<recursionLevel>10</recursionLevel>-->
     <blockSizeX>32</blockSizeX>
@@ -37,7 +37,7 @@
   </sampler>
 
 	<!-- Use the path tracer with multiple importance sampling -->
-  <integrator type="PathTracingMIS">
+  <integrator type="VolPathTracing">
     <integer name="depth" value="20"/>
     <integer name="sampleNumber" value="4"/>
     <!--<bool name="bsdfSampling" value="true"/>-->
@@ -156,7 +156,11 @@
           <tz>0.</tz>
         </translation>
       </transform>
-
+      <medium name="interior" type="Homogeneous">
+        <color name="sigmaS" value="0.9124 1.0744 1.2492"/>
+        <color name="sigmaA" value="0.00287 0.00575 0.01150"/>
+        <double name="scale" value="10"/>
+      </medium>
       <bsdf type="Dielectric">
         <double name="etaExt" value="1"/>
         <double name="etaInt" value="1.33"/>
@@ -194,7 +198,11 @@
           <tz>0.</tz>
         </translation>
       </transform>
-
+      <medium name="interior" type="Homogeneous">
+        <color name="sigmaS" value="0.9124 1.0744 1.2492"/>
+        <color name="sigmaA" value="0.00287 0.00575 0.01150"/>
+        <double name="scale" value="10"/>
+      </medium>
       <bsdf type="Dielectric">
         <double name="etaExt" value="1.5"/>
         <double name="etaInt" value="1.33"/>

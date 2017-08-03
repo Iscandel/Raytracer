@@ -6,8 +6,12 @@
 
 struct PhaseFunctionSamplingInfos
 {
+	PhaseFunctionSamplingInfos(const Vector3d& _wi) : wi(_wi) {}
+	PhaseFunctionSamplingInfos(const Vector3d& _wi, const Vector3d& _wo) : wi(_wi), wo(_wo) {}
+
 	Vector3d wi;
 	Vector3d wo;
+	double pdf;
 };
 
 class PhaseFunction

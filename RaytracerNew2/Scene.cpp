@@ -6,6 +6,7 @@
 #include "Logger.h"
 #include "Timer.h"
 #include "Bvh.h"
+#include "DirectLightingMIS.h"
 
 #include <Eigen\StdVector>
 
@@ -13,10 +14,12 @@
 #include <fstream>
 #include <unordered_map>
 
+
+#include "Homogeneous.h"
+
 Scene::Scene(void)
 {
-
-
+	//myCameraMedium = Medium::ptr(new Homogeneous(Parameters()));
 }
 
 //=============================================================================
@@ -119,7 +122,10 @@ void Scene::initialize()
 	}
 
 	if (myIntegrator == nullptr)
-		ILogger::log() << "No integrator defined.\n";
+	{
+		ILogger::log() << "No integrator defined. Default assigned.\n";
+		myIntegrator = Integrator::ptr(new DirectLightingMIS(Parameters()));
+	}
 
 	myIntegrator->initialize(*this);
 }

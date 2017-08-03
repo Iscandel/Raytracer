@@ -3,6 +3,7 @@
 #include "CDF.h"
 #include "Color.h"
 #include "Light.h"
+#include "Medium.h"
 #include "Ray.h"
 #include "Sampler.h"
 
@@ -39,6 +40,11 @@ public:
 	///Chooses a light in the scene according to the given strategy and then samples it.
 	Color sampleLightDirect(const Point3d& interPoint, const Point2d& sample, 
 		const Scene& scene, LightSamplingInfos& infos, LightSamplingStrategy strategy = ONE_LIGHT_UNIFORM);
+
+	Color sampleAttenuatedLightDirect(const Point3d& interPoint, const Point2d& sample,
+		const Scene& scene, LightSamplingInfos& infos, Medium::ptr medium);
+
+	Color evalTransmittance(const Scene& scene, const Ray& ray, Medium::ptr medium);
 
 	virtual Color li(Scene& scene, Sampler::ptr sampler, const Ray& ray) = 0;
 

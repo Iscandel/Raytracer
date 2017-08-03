@@ -59,6 +59,8 @@ public:
 		
 		BSDF::ptr bsdf = params.getBSDF("bsdf", BSDF::ptr());
 		Light::ptr light = params.getLight("light", Light::ptr());
+		Medium::ptr interiorMedium = params.getMedium("interior", Medium::ptr());
+		Medium::ptr exteriorMedium = params.getMedium("exterior", Medium::ptr());
 
 		if(light)
 			((AreaLight*) light.get())->setShape(mesh);
@@ -68,7 +70,7 @@ public:
 		{
 			GeometricShape::ptr shape = std::shared_ptr<Triangle>(new Triangle(params, mesh, i));
 			
-			IPrimitive::ptr triPrimitive(std::make_shared<SimplePrimitive>(shape, bsdf));
+			IPrimitive::ptr triPrimitive(std::make_shared<SimplePrimitive>(shape, bsdf, interiorMedium, exteriorMedium));
 			if (light)
 			{
 				mesh->addLightTriangle(shape);

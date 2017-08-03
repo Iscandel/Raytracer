@@ -29,7 +29,9 @@ public:
 	ReconstructionFilter::ptr handleReconstructionFilter(Scene& scene, TiXmlElement* element);
 	Transform::ptr handleTransform(TiXmlElement* element);
 	Texture::ptr handleTexture(TiXmlElement* element);
-	BSDF::ptr XMLLoader::handleBSDF(TiXmlElement* element);
+	BSDF::ptr handleBSDF(TiXmlElement* element);
+	Medium::ptr handleMedium(TiXmlElement* element);
+	PhaseFunction::ptr handlePhase(TiXmlElement* element);
 	
 	Transform handleRotationTransform(TiXmlElement* element);
 	Transform handleTranslationTransform(TiXmlElement* element);
@@ -38,6 +40,7 @@ public:
 	Transform handleLookAtTransform(TiXmlElement* element);
 
 	std::vector<int> handleCameraDimensions(TiXmlElement* element);
+	void handleCameraMedium(Scene& scene, TiXmlElement* element);
 	//std::vector<double> handleObjectPosition(TiXmlElement* element);
 	void handleProperty(TiXmlElement* element, Parameters& params);
 };

@@ -6,7 +6,7 @@
 
 #include <memory>
 
-#include "Parameters.h"
+class Parameters;
 
 class Medium
 {

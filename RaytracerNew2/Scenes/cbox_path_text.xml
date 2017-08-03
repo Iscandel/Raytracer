@@ -30,7 +30,10 @@
       <double name = "C" value = "0.3333333333333"/>-->
     </filter>
   </camera>
-
+  <medium type="Homogeneous">
+    <color name="sigmaA" value="0.15 0.15 0.15"/>
+    <color name="sigmaS" value="0.15 0.15 0.15"/>
+  </medium>
   <parameters>
     <threadNumber>4</threadNumber>
     <!--<samplesPerPixel>1</samplesPerPixel>-->

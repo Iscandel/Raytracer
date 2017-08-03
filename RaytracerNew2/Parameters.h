@@ -1,9 +1,10 @@
 #pragma once
 
 #include "BSDF.h"
+#include "Color.h"
 #include "Light.h"
 #include "Geometry.h"
-#include "Color.h"
+#include "Medium.h"
 #include "PhaseFunction.h"
 #include "Transform.h"
 #include "Texture.h"
@@ -36,6 +37,7 @@ public:
 	void addBSDF(const std::string& name, BSDF::ptr val);
 	void addLight(const std::string& name, Light::ptr val);
 	void addTexture(const std::string& name, Texture::ptr val);
+	void addMedium(const std::string& name, Medium::ptr val);
 	void addPhaseFunction(const std::string& name, PhaseFunction::ptr val);
 	
 
@@ -50,6 +52,7 @@ public:
 	BSDF::ptr getBSDF(const std::string& name, BSDF::ptr defaultValue) const;
 	Light::ptr getLight(const std::string& name, Light::ptr defaultValue) const;
 	Texture::ptr getTexture(const std::string& name, Texture::ptr defaultValue) const;
+	Medium::ptr getMedium(const std::string& name, Medium::ptr defaultValue) const;
 	PhaseFunction::ptr getPhaseFunction(const std::string& name, PhaseFunction::ptr defaultValue) const;
 
 	bool hasInt(const std::string& name) const;
@@ -63,6 +66,7 @@ public:
 	bool hasBSDF(const std::string& name) const;
 	bool hasLight(const std::string& name) const;
 	bool hasTexture(const std::string& name) const;
+	bool hasMedium(const std::string& name) const;
 	bool hasPhaseFunction(const std::string& name) const;
 	
 
@@ -101,6 +105,8 @@ protected:
 	std::map<std::string, Light::ptr> myLight;
 	//Texture
 	std::map<std::string, Texture::ptr> myTexture;
+	//Medium
+	std::map<std::string, Medium::ptr> myMedium;
 	//PhaseFunction
 	std::map<std::string, PhaseFunction::ptr> myPhaseFunction;
 

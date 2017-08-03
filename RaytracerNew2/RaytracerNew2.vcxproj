@@ -245,9 +245,10 @@
     <Xml Include="Scenes\Buddha-MIS.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="Scenes\cbox_path.xml">
+    <Xml Include="Scenes\cbox_path_text.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="Scenes\cbox_path_vol.xml" />
     <Xml Include="Scenes\DepthOfField.xml" />
     <Xml Include="Scenes\lamborghiniAventador.xml">
       <SubType>Designer</SubType>

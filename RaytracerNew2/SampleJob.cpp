@@ -45,7 +45,8 @@ void SampleJob::run()
 			for(int i = 0; i < mySampler->getSampleNumber(); i++)
 			{
 				Point2d sample = mySampler->getNextSample2D();
-
+				//472 113
+				//477 172
 				double xx = (double)x + sample.x();
 				double yy = (double)y + sample.y();
 				//double xx = 768;(double)x + sample.x();

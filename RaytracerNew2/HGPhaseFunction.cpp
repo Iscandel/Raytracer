@@ -25,13 +25,19 @@ HGPhaseFunction::~HGPhaseFunction()
 */
 double HGPhaseFunction::sample(PhaseFunctionSamplingInfos &infos, const Point2d &sample) const
 {
-	double cosTheta = (1 + myG * myG - ((1 - myG * myG) * (1 - myG * myG) / (1 - myG + 2 * myG * sample.x()))) / (2 * myG);
+	double cosTheta;
+	if (myG < tools::EPSILON)
+		cosTheta = 1. - 2. * sample.x();
+	else
+		cosTheta = (1 + myG * myG - ((1 - myG * myG) * (1 - myG * myG) / (1 - myG + 2 * myG * sample.x()))) / (2 * myG);
 	double theta = std::acos(cosTheta);
+
 	double phi = 2 * tools::PI * sample.y();
 
 	infos.wo = cartesianFromSpherical(theta, phi);
+	infos.pdf = pdf(infos);
 
-	return eval(infos) / pdf(infos);
+	return 1.;//eval(infos) / pdf(infos);
 }
 
 /**
@@ -66,8 +72,9 @@ double HGPhaseFunction::eval(const PhaseFunctionSamplingInfos &infos) const
 
 double HGPhaseFunction::pdf(const PhaseFunctionSamplingInfos &infos) const
 {
-	double cosTheta = (-infos.wi).dot(infos.wo);
-	return (1 - myG * myG) / (2 * std::pow(1 + myG * myG - 2 * myG * cosTheta, 1.5));
+	return eval(infos);
+	//double cosTheta = (-infos.wi).dot(infos.wo);
+	//return (1 - myG * myG) / (2 * std::pow(1 + myG * myG - 2 * myG * cosTheta, 1.5));
 }
 
 RT_REGISTER_TYPE(HGPhaseFunction, PhaseFunction)

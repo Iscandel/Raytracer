@@ -3,9 +3,11 @@
 #include "IsotropicPhaseFunction.h"
 #include "HGPhaseFunction.h"
 
+#include "Parameters.h"
+
 Medium::Medium(const Parameters& params)
 {
-	myPhaseFunction = params.getPhaseFunction("phaseFunction", PhaseFunction::ptr(new IsotropicPhaseFunction()));//Parameters())));
+	myPhaseFunction = params.getPhaseFunction("phaseFunction", PhaseFunction::ptr(new IsotropicPhaseFunction(params)));//Parameters())));
 }
 
 

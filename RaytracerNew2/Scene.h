@@ -1,21 +1,19 @@
 #pragma once
 
-#include "Light.h"
-#include "DirectionalLight.h"
-#include "Ray.h"
 #include "Color.h"
 #include "Camera.h"
 #include "GeometricShape.h"
-#include "ObjectFactoryManager.h"
-#include "System.h"
-#include "JobManager.h"
-#include "Sampler.h"
-#include "Primitive.h"
 #include "Integrator.h"
+#include "JobManager.h"
+#include "Light.h"
+#include "Medium.h"
+#include "ObjectFactoryManager.h"
+#include "Primitive.h"
+#include "Ray.h"
+#include "Sampler.h"
 
-#include <vector>
 #include <Eigen/StdVector>
-
+#include <vector>
 
 
 class Bvh;
@@ -186,6 +184,13 @@ public:
 
 	void setShowProgress(bool show);
 
+	///////////////////////////////////////////////////////////////////////////////
+	/// \brief Initializes the scene.
+	///////////////////////////////////////////////////////////////////////////////
+	Medium::ptr getCameraMedium() { return myCameraMedium; }
+
+	void setCameraMedium(Medium::ptr medium) { myCameraMedium = medium; }
+
 protected:
 	Camera::ptr myCamera;
 
@@ -206,6 +211,8 @@ protected:
 	Point2i myBlockSize;
 
 	BoundingBox myBoundingBox;
+
+	Medium::ptr myCameraMedium;
 
 public:
 	JobManager myManager;

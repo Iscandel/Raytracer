@@ -17,5 +17,7 @@ protected:
 	Color mySigmaA;
 	Color mySigmaS;
 	Color mySigmaT;
+
+	double myScale;
 };
 

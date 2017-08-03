@@ -81,6 +81,12 @@ bool XMLLoader::loadScene(Scene& scene, const std::string& path)
 			handleIntegrator(scene, element);
 			ILogger::log(ILogger::ALL) << "integrator parsed...\n";
 		}
+		else if (key == "medium")
+		{
+			ILogger::log(ILogger::ALL) << "Parsing camera medium...\n";
+			handleCameraMedium(scene, element);
+			ILogger::log(ILogger::ALL) << "camera medium parsed...\n";
+		}
 		else if(key == "objects")
 		{
 			ILogger::log(ILogger::ALL) << "Parsing objects...\n";
@@ -95,6 +101,10 @@ bool XMLLoader::loadScene(Scene& scene, const std::string& path)
 			
 			ILogger::log(ILogger::ALL) << "Objects parsed...\n";
 		}
+		//else
+		//{
+		//	handleProperty(element, params);
+		//}
 
 		element = element->NextSiblingElement();
 	}
@@ -117,6 +127,23 @@ void XMLLoader::handleIntegrator(Scene& scene, TiXmlElement* element)
 	ObjectFactory<Integrator> ::ptr factory = ObjectFactoryManager<Integrator>::getInstance()->getFactory(type);
 	auto object = factory->create(params);
 	scene.addIntegrator(object);
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void XMLLoader::handleCameraMedium(Scene& scene, TiXmlElement* element)
+{
+	Parameters params;
+	std::string type = element->Attribute("type");
+	element = element->FirstChildElement();
+	for (element; element; element = element->NextSiblingElement())
+	{
+		handleProperty(element, params);
+	}
+
+	ObjectFactory<Medium>::ptr factory = ObjectFactoryManager<Medium>::getInstance()->getFactory(type);
+	auto object = factory->create(params);
+	scene.setCameraMedium(object);
 }
 
 //=============================================================================
@@ -508,6 +535,43 @@ BSDF::ptr XMLLoader::handleBSDF(TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
+Medium::ptr XMLLoader::handleMedium(TiXmlElement* element)
+{
+	std::string mediumType = element->Attribute("type");
+	TiXmlElement* mediumElement = element->FirstChildElement();
+
+	Parameters mediumParams;
+	for (mediumElement; mediumElement; mediumElement = mediumElement->NextSiblingElement())
+	{
+		handleProperty(mediumElement, mediumParams);
+	}
+	ObjectFactory<Medium>::ptr factory = ObjectFactoryManager<Medium>::getInstance()->getFactory(mediumType);
+	Medium::ptr medium = factory->create(mediumParams);
+
+	return medium;
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+PhaseFunction::ptr XMLLoader::handlePhase(TiXmlElement* element)
+{
+	Parameters params;
+	std::string type = element->Attribute("type");
+
+	element = element->FirstChildElement();
+	for (element; element; element = element->NextSiblingElement())
+	{
+		handleProperty(element, params);
+	}
+
+	auto factory = ObjectFactoryManager<PhaseFunction>::getInstance()->getFactory(type);
+	PhaseFunction::ptr phase = factory->create(params);
+
+	return phase;
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 Transform XMLLoader::handleLookAtTransform(TiXmlElement* element)
 {
 	Point3d origin, lookAt;
@@ -595,6 +659,16 @@ void XMLLoader::handleProperty(TiXmlElement* element, Parameters& params)
 	{
 		BSDF::ptr bsdf = handleBSDF(element);
 		params.addBSDF(*attName, bsdf);
+	}
+	else if (element->ValueStr() == "medium")
+	{
+		Medium::ptr medium = handleMedium(element);
+		params.addMedium(*attName, medium);
+	}
+	else if (element->ValueStr() == "phase")
+	{
+		PhaseFunction::ptr phase = handlePhase(element);
+		params.addPhaseFunction(*attName, phase);
 	}
 	else
 	{

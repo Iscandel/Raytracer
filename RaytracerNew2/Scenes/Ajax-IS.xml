@@ -98,6 +98,10 @@
         <color name="albedo" value="0.8 0.73 0.64"/>
         <double name="alpha" value="150"/>
       </bsdf>-->
+      <!--<medium name="interior" type="Homogeneous">
+        <color name="sigmaA" value="0.5 0.5 0.001"/>
+        <color name="sigmaS" value="0. 0. 0."/>
+      </medium>-->
       <bsdf type="Conductor">
         <color name="albedo" value="1. 1. 1."/>
         <color name="eta" value="0.22273 0.42791 1.2597 "/>
