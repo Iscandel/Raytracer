@@ -6,10 +6,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 Camera::Camera(const Parameters& params)
 {
+	myNeedDoFSample = false;
+
 	int sizeX = params.getInt("sizeX", 768);
 	int sizeY = params.getInt("sizeY", 768);
 	myLensRadius = params.getDouble("apertureRadius", 0.);
 	myFocalPlane = params.getDouble("focalPlane", tools::MAX_DOUBLE); //focusPlane
+
+	if (myLensRadius > 0.)
+		myNeedDoFSample = true;
 
 	setSize(sizeX, sizeY);
 

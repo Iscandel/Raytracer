@@ -33,6 +33,7 @@
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Conductor.cpp" />
     <ClCompile Include="ConstantTexture.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Dielectric.cpp" />
     <ClCompile Include="DifferentialGeometry.cpp" />
     <ClCompile Include="Diffuse.cpp" />
@@ -42,9 +43,11 @@
     <ClCompile Include="DirectLightingIS.cpp" />
     <ClCompile Include="DirectLightingMIS.cpp" />
     <ClCompile Include="DistantLight.cpp" />
+    <ClCompile Include="EmptyBSDF.cpp" />
     <ClCompile Include="EnvironmentLight.cpp" />
     <ClCompile Include="Fresnel.cpp" />
     <ClCompile Include="HDRLoader.cpp" />
+    <ClCompile Include="Heterogeneous.cpp" />
     <ClCompile Include="HGPhaseFunction.cpp" />
     <ClCompile Include="Homogeneous.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
@@ -81,6 +84,7 @@
     <ClCompile Include="Parameters.cpp" />
     <ClCompile Include="PathTracingMIS.cpp" />
     <ClCompile Include="PhaseFunction.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="RecursivePathTracingMIS.cpp" />
     <ClCompile Include="PerlinNoiseTexture.cpp" />
     <ClCompile Include="Perspective.cpp" />
@@ -105,6 +109,7 @@
     <ClCompile Include="SpectralDielectric.cpp" />
     <ClCompile Include="SpecularSystem.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="System.cpp" />
     <ClCompile Include="TestBvh.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -134,6 +139,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Conductor.h" />
     <ClInclude Include="ConstantTexture.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="Dielectric.h" />
     <ClInclude Include="DifferentialGeometry.h" />
     <ClInclude Include="Diffuse.h" />
@@ -144,10 +150,12 @@
     <ClInclude Include="DirectLightingIS.h" />
     <ClInclude Include="DirectLightingMIS.h" />
     <ClInclude Include="DistantLight.h" />
+    <ClInclude Include="EmptyBSDF.h" />
     <ClInclude Include="EnvironmentLight.h" />
     <ClInclude Include="Fresnel.h" />
     <ClInclude Include="GeometricShapeFactory.h" />
     <ClInclude Include="HDRLoader.h" />
+    <ClInclude Include="Heterogeneous.h" />
     <ClInclude Include="HGPhaseFunction.h" />
     <ClInclude Include="Homogeneous.h" />
     <ClInclude Include="ImageLoader.h" />
@@ -184,6 +192,7 @@
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="PathTracingMIS.h" />
     <ClInclude Include="PhaseFunction.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="RecursivePathTracingMIS.h" />
     <ClInclude Include="PerlinNoiseTexture.h" />
     <ClInclude Include="Perspective.h" />
@@ -210,6 +219,7 @@
     <ClInclude Include="SpectralDielectric.h" />
     <ClInclude Include="SpecularSystem.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="TestBvh.h" />
     <ClInclude Include="Texture.h" />
@@ -248,7 +258,9 @@
     <Xml Include="Scenes\cbox_path_text.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="Scenes\cbox_path_vol.xml" />
+    <Xml Include="Scenes\cbox_path_vol.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\DepthOfField.xml" />
     <Xml Include="Scenes\lamborghiniAventador.xml">
       <SubType>Designer</SubType>
@@ -258,9 +270,20 @@
     </Xml>
     <Xml Include="Scenes\MatPreview2.xml" />
     <Xml Include="Scenes\Odyssey-IS.xml" />
+    <Xml Include="Scenes\SimpleSmoke.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\SphereAO-MIS.xml" />
-    <Xml Include="Scenes\Table-MIS.xml" />
+    <Xml Include="Scenes\steam.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Scenes\Table-MIS.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\veach-MIS.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Scenes\velvet.xml">
       <SubType>Designer</SubType>
     </Xml>
   </ItemGroup>
@@ -397,11 +420,13 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;USE_ALIGN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C et CPP\Applications\tbb_20170604\include;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <OmitFramePointers>
+      </OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -409,9 +434,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>true</Profile>
-      <AdditionalLibraryDirectories>D:\C et CPP\Applications\SFML\SFML-2.3.2\lib64;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\C et CPP\Applications\tbb_20170604\lib\intel64\vc14;D:\C et CPP\Applications\SFML\SFML-2.3.2\lib64;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

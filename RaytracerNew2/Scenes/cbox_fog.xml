@@ -6,9 +6,9 @@
   <camera type="NoriPerspective">
     <transform type="lookAt" name="toWorld">
       <scale>
-        <sx>-1</sx>
-        <sy>1</sy>
-        <sz>1</sz>
+        <x>-1</x>
+        <y>1</y>
+        <z>1</z>
       </scale>
       <lookAt>
         <origin>278 273 -800</origin>
@@ -32,7 +32,7 @@
   </camera>
 
   <parameters>
-    <threadNumber>4</threadNumber>
+    <threadNumber>2</threadNumber>
     <!--<samplesPerPixel>1</samplesPerPixel>-->
     <!--<recursionLevel>10</recursionLevel>-->
     <blockSizeX>32</blockSizeX>
@@ -42,9 +42,14 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="64"/>
+    <integer name="sampleNumber" value="32"/>
   </sampler>
 
+  <medium type="Homogeneous">
+    <color name="sigmaA" value="0.002 0.002 0.002"/>
+    <color name="sigmaS" value="0.0005 0.0005 0.0005"/>
+  </medium>
+  
   <objects>
     <shape type="Mesh">
       <string name="path" value="./data/cbox/cbox_floor.obj"/>
@@ -100,13 +105,13 @@
       <string name="path" value="./data/cbox/cbox_luminaire.obj"/>
       <transform name="toWorld">
         <translation>
-          <tx>0</tx>
-          <ty>50</ty>
-          <tz>0</tz>
+          <x>0</x>
+          <y>50</y>
+          <z>0</z>
         </translation>
       </transform>
       <light type="MeshLight">
-        <color name="radiance" value="30 30 30"/>
+        <color name="radiance" value="100 100 100"/>
       </light>
       <bsdf type="Diffuse"/>
 

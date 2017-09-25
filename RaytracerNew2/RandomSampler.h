@@ -18,6 +18,11 @@ public:
 	//Override
 	Sampler::ptr clone() override;
 
+	void seed(uint64_t s, uint64_t l)
+	{
+		myRng.seed(s, l);
+	}
+
 protected:
 	Rng myRng;
 };

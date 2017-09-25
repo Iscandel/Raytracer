@@ -12,7 +12,7 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 	std::string path = params.getString("path", "");
 	myLightToWorld = params.getTransform("toWorld", Transform::ptr(new Transform));
 	myWorldToLight = Transform::ptr(new Transform(myLightToWorld->inv()));
-	myFactor = params.getDouble("factor", 1.);
+	myFactor = params.getDouble("scale", 1.);
 
 	ImageLoader::load(path, myArray);
 

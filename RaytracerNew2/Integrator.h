@@ -41,10 +41,10 @@ public:
 	Color sampleLightDirect(const Point3d& interPoint, const Point2d& sample, 
 		const Scene& scene, LightSamplingInfos& infos, LightSamplingStrategy strategy = ONE_LIGHT_UNIFORM);
 
-	Color sampleAttenuatedLightDirect(const Point3d& interPoint, const Point2d& sample,
+	Color sampleAttenuatedLightDirect(const Point3d& interPoint, Sampler::ptr sampler,
 		const Scene& scene, LightSamplingInfos& infos, Medium::ptr medium);
 
-	Color evalTransmittance(const Scene& scene, const Ray& ray, Medium::ptr medium);
+	Color evalTransmittance(const Scene& scene, const Ray& ray, Medium::ptr medium, Sampler::ptr sampler);
 
 	virtual Color li(Scene& scene, Sampler::ptr sampler, const Ray& ray) = 0;
 

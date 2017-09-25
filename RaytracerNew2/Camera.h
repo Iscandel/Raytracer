@@ -103,6 +103,8 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	Screen& getScreen() {return *myScreen;}
 
+	bool needsDoFSample() const { return myNeedDoFSample; }
+
 protected:
 	int mySizeX;
 	int mySizeY;
@@ -110,6 +112,8 @@ protected:
 	std::shared_ptr<Screen> myScreen;
 
 	Transform::ptr myWorldTransform;
+
+	bool myNeedDoFSample;
 
 	double myLensRadius;
 	double myFocalPlane;

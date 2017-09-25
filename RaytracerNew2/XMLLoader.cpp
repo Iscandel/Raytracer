@@ -392,15 +392,15 @@ Transform XMLLoader::handleRotationTransform(TiXmlElement* element)
 	for(element; element; element = element->NextSiblingElement())
 	{
 		std::string key = element->ValueStr();
-		if(key == "rx")
+		if(key == "x")
 		{
 			rot[0] = tools::stringToNum<double>(element->GetText());
 		}
-		else if(key == "ry")
+		else if(key == "y")
 		{
 			rot[1] = tools::stringToNum<double>(element->GetText());
 		}
-		else if(key == "rz")
+		else if(key == "z")
 		{
 			rot[2] = tools::stringToNum<double>(element->GetText());
 		}
@@ -426,15 +426,15 @@ Transform XMLLoader::handleScaleTransform(TiXmlElement* element)
 	for (element; element; element = element->NextSiblingElement())
 	{
 		std::string key = element->ValueStr();
-		if (key == "sx")
+		if (key == "x")
 		{
 			res[0] = tools::stringToNum<double>(element->GetText());
 		}
-		else if (key == "sy")
+		else if (key == "y")
 		{
 			res[1] = tools::stringToNum<double>(element->GetText());
 		}
-		else if (key == "sz")
+		else if (key == "z")
 		{
 			res[2] = tools::stringToNum<double>(element->GetText());
 		}
@@ -457,15 +457,15 @@ Transform XMLLoader::handleTranslationTransform(TiXmlElement* element)
 	for(element; element; element = element->NextSiblingElement())
 	{
 		std::string key = element->ValueStr();
-		if(key == "tx")
+		if(key == "x")
 		{
 			res[0] = tools::stringToNum<double>(element->GetText());
 		}
-		else if(key == "ty")
+		else if(key == "y")
 		{
 			res[1] = tools::stringToNum<double>(element->GetText());
 		}
-		else if(key == "tz")
+		else if(key == "z")
 		{
 			res[2] = tools::stringToNum<double>(element->GetText());
 		}

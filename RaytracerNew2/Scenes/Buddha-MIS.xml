@@ -10,23 +10,23 @@
     </transform>
     <!--<transform>
       <rotation>
-        <rx>0.</rx>
-        <ry>0.</ry>
-        <rz>0.</rz>
+        <x>0.</x>
+        <y>0.<y>
+        <z>0.<z>
       </rotation>
       <translation>
         -->
-    <!--<tx>0</tx>
-        <ty>-30.15</ty>
-        <tz>-10.55</tz>-->
+    <!--<x>0<x>
+        <y>-30.15</y>
+        <z>-10.55</z>-->
     <!--
-        <tx>0</tx>
-        <ty>-0.15</ty>
-        <tz>14.55</tz>
+        <x>0<x>
+        <y>-0.15</y>
+        <z>14.55</z>
         -->
-    <!--<tx>0.</tx>
-        <ty>-0.15</ty>
-        <tz>0.</tz>-->
+    <!--<x>0.<x>
+        <y>-0.15</y>
+        <z>0.</z>-->
     <!--
       </translation>
     </transform>-->
@@ -69,12 +69,12 @@
   <lights>
     <light type="EnvironmentLight">
       <string name="path" value="./data/20060807_wells6_hd.exr"/>
-      <double name="factor" value="0.7"/>
+      <double name="scale" value="0.7"/>
      <transform name="toWorld">
          <rotation>
-          <rx>90.</rx>
-          <ry>180.</ry>
-          <rz>0.</rz>
+          <x>90.</x>
+          <y>180.</y>
+          <z>0.</z>
         </rotation>
       </transform>
     </light>
@@ -92,19 +92,19 @@
       <string name="path" value ="./data/happy_vrip_res2.obj"/>
       <transform name="toWorld">
         <rotation>
-          <rx>-90.</rx>
-          <ry>180.</ry>
-          <rz>0.</rz>
+          <x>-90.</x>
+          <y>180.</y>
+          <z>0.</z>
         </rotation>
         <translation>
-          <tx>0.10.</tx>
-          <ty>-0.049</ty>
-          <tz>0.</tz>
+          <x>0.10.</x>
+          <y>-0.049</y>
+          <z>0.</z>
         </translation>
         <scale>
-          <sx>10</sx>
-          <sy>10</sy>
-          <sz>10</sz>
+          <x>10</x>
+          <y>10</y>
+          <z>10</z>
         </scale>
       </transform>
       <!--<bsdf type="Diffuse">
@@ -133,19 +133,19 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <!--<rotation>
-          <rx>90.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>90.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>0.</ty>
-          <tz>-0.1</tz>
+          <x>0.<x>
+          <y>0.</y>
+          <z>-0.1</z>
         </translation>-->
         <scale>
-          <sx>10</sx>
-          <sy>1</sy>
-          <sz>10</sz>
+          <x>10</x>
+          <y>1</y>
+          <z>10</z>
         </scale>
       </transform>-->
       <bsdf type="Diffuse">
@@ -156,19 +156,19 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <rotation>
-          <rx>180.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>180.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>3.5</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>3.5</y>
+          <z>0.</z>
         </translation>
         <scale>
-          <sx>2</sx>
-          <sy>1</sy>
-          <sz>1</sz>
+          <x>2</x>
+          <y>1</y>
+          <z>1</z>
         </scale>
       </transform>
       <light type="MeshLight">
@@ -182,19 +182,19 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <rotation>
-          <rx>-90.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>-90.</x>
+          <y>0.</y>
+          <z>0.</z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>0</ty>
-          <tz>3.</tz>
+          <x>0.</x>
+          <y>0</y>
+          <z>3.</z>
         </translation>
         <scale>
-          <sx>2</sx>
-          <sy>2</sy>
-          <sz>1</sz>
+          <x>2</x>
+          <y>2</y>
+          <z>1</z>
         </scale>
       </transform>
       <bsdf type="Mirror">
@@ -205,9 +205,9 @@
       <double name="radius" value="1"/>
       <transform name="toWorld">
         <translation>
-          <tx>-0.5</tx>
-          <ty>1</ty>
-          <tz>-0.8</tz>
+          <x>-0.5</x>
+          <y>1</y>
+          <z>-0.8</z>
         </translation>
       </transform>
       <!--Gold-->

@@ -10,9 +10,9 @@ public:
 	Homogeneous(const Parameters& params);
 	~Homogeneous();
 
-	Color transmittance(const Ray& ray) override;
+	Color transmittance(const Ray& ray, Sampler::ptr sampler) override;
 
-	bool sampleDistance(const Ray &ray, Point2d& sample, double &t, Color &weight);
+	bool sampleDistance(const Ray &ray, Sampler::ptr sample, double &t, Color &weight) override;
 protected:
 	Color mySigmaA;
 	Color mySigmaS;

@@ -87,6 +87,7 @@ void Scene::compute(const std::string& filePath)
 		for(int currentX = 0; currentX < myCamera->getSizeX(); currentX += myBlockSize.x())
 		{	
 			std::shared_ptr<Sampler> sampler(mySampler->clone());
+			sampler->seed(currentX, currentY);
 		
 			std::shared_ptr<Job> job(new SampleJob(currentX, currentY, myBlockSize.x(), myBlockSize.y(), this, myCamera, sampler));
 			jobs.push_back(job);			

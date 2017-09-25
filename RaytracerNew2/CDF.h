@@ -81,7 +81,7 @@ public:
 	double getSum() const { return mySum; }
 
 	//first entry is a 0. So size - 1
-	int getSize() const { return myCDF.size() - 1; }
+	int getSize() const { return (int)(myCDF.size()) - 1; }
 
 protected:
 	std::vector<double> myCDF;

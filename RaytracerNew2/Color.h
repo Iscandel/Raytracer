@@ -1,6 +1,7 @@
 #ifndef H__COLOR_170520151941__H
 #define H__COLOR_170520151941__H
 
+#include <algorithm>
 #include <cmath>
 #include <limits.h>
 #include <iostream>
@@ -22,6 +23,11 @@ public:
 		r = r > 1. ? 1. : r < 0. ? 0. : r;
 		g = g > 1. ? 1. : g < 0. ? 0. : g;
 		b = b > 1. ? 1. : b < 0. ? 0. : b;
+	}
+
+	double max()
+	{
+		return std::max(r, std::max(g, b));
 	}
 
 	double luminance() const

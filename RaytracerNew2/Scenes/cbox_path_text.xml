@@ -6,9 +6,9 @@
   <camera type="NoriPerspective">
     <transform type="lookAt" name="toWorld">
       <scale>
-        <sx>-1</sx>
-        <sy>1</sy>
-        <sz>1</sz>
+        <x>-1</x>
+        <y>1</y>
+        <z>1</z>
       </scale>
       <lookAt>
         <origin>0 0.919769 5.41159</origin>
@@ -77,14 +77,14 @@
       <string name="path" value="./data/Diamond2.obj"/>
       <transform name="toWorld">
         <scale>
-          <sx>0.006</sx>
-          <sy>0.006</sy>
-          <sz>0.006</sz>
+          <x>0.006</x>
+          <y>0.006</y>
+          <z>0.006</z>
         </scale>
         <translation>
-          <tx>0.</tx>
-          <ty>0.4</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>0.4</y>
+          <z>0.</z>
         </translation>
       </transform>
       <bsdf type="SpectralDielectric">
@@ -133,9 +133,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.42</tx>
-          <ty>0.34</ty>
-          <tz>0.29</tz>
+          <x>0.42<x>
+          <y>0.34</y>
+          <z>0.29</z>
         </translation>
       </transform>
     <double name="radius" value="0.32"/>

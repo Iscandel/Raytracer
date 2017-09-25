@@ -40,7 +40,7 @@ Color SpectralDielectric::sample(BSDFSamplingInfos & infos, const Point2d & samp
 	double etaI = myEtaI;
 	double etaT;
 
-	int wavelength = myRng.random(0, 2);
+	int wavelength = 0;//myRng.random(0, 2); to change !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	switch (wavelength)
 	{
 	case 0: etaT = myEtaT.r; break;

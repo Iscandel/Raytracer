@@ -35,6 +35,8 @@ void SampleJob::run()
 	std::unique_ptr<Screen> subScreen = 
 		myCamera->getScreen().createSubScreen(endX - startX, endY - startY, myOffsetX, myOffsetY);
 
+	Integrator* integrator = myScene->getIntegrator().get();
+
 	for(int y = myOffsetY; y < endY; y++)
 	{
 		//std::cout << y << std::endl;
@@ -45,7 +47,7 @@ void SampleJob::run()
 			for(int i = 0; i < mySampler->getSampleNumber(); i++)
 			{
 				Point2d sample = mySampler->getNextSample2D();
-				//472 113
+				//458 478
 				//477 172
 				double xx = (double)x + sample.x();
 				double yy = (double)y + sample.y();
@@ -55,9 +57,12 @@ void SampleJob::run()
 				//double xx = 313;(double)x + sample.x();
 				//double yy = 416;(double)y + sample.y();
 
-				Ray ray = myCamera->getRay(xx, yy, mySampler->getNextSample2D());
+				Point2d lensSample;
+				if(myCamera->needsDoFSample())
+					lensSample = mySampler->getNextSample2D();
+				Ray ray = myCamera->getRay(xx, yy, lensSample);
 
-				Color col = myScene->getIntegrator()->li(*myScene, mySampler, ray);
+				Color col = integrator->li(*myScene, mySampler, ray);
 
 				subScreen->addSample(xx, yy, col);
 				//myCamera->getScreen().addSample(xx, yy, col);

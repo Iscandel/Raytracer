@@ -12,6 +12,7 @@ VolPathTracing::VolPathTracing(const Parameters& params)
 	std::string sStrategy = params.getString("strategy", lightStrategy::STRING[LightSamplingStrategy::ONE_LIGHT_UNIFORM]);
 	myStrategy = myStrategiesByName[sStrategy];
 
+	myMinDepth = params.getInt("minDepth", 3);
 	myMaxDepth = params.getInt("maxDepth", 1000);
 }
 
@@ -30,17 +31,17 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 	Ray ray(_ray);
 	bool shadowCaught = false;
 	Intersection intersection;
-	if (!scene.computeIntersection(ray, intersection))
-	{
-		Light::ptr envLight = scene.getEnvironmentLight();
-		if (envLight != nullptr)
-		{
-			radiance += envLight->le(ray.direction());
-		}
+	bool wasIntersected = scene.computeIntersection(ray, intersection);
+	//{
+	//	Light::ptr envLight = scene.getEnvironmentLight();
+	//	if (envLight != nullptr)
+	//	{
+	//		radiance += envLight->le(ray.direction());
+	//	}
 
-		return radiance;
-	}
-	bool noIntersection = false;
+	//	return radiance;
+	//}
+	
 
 	//Go to world coord to "orientate" the hemisphere
 	bool fromMedia = false;
@@ -51,10 +52,9 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 	{
 		double t;
 		Color weightMedium;
-		Ray mediumRay(ray);
 		//ray.myMaxT = intersection.t;
 
-		if (medium && medium->sampleDistance(Ray(ray.myOrigin, ray.direction(), ray.myMinT, intersection.t), sampler->getNextSample2D(), t, weightMedium))
+		if (medium && medium->sampleDistance(Ray(ray.myOrigin, ray.direction(), ray.myMinT, intersection.t), sampler, t, weightMedium))
 		{
 			throughput *= weightMedium;
 			//std::cout << weightMedium << std::endl;
@@ -67,7 +67,7 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			/////////////////////////////////////////////
 			//Light sampling
 			LightSamplingInfos lightInfos;
-			Color value = sampleAttenuatedLightDirect(intersection.myPoint, sampler->getNextSample2D(), scene, lightInfos, medium);
+			Color value = sampleAttenuatedLightDirect(intersection.myPoint, sampler, scene, lightInfos, medium);
 
 			if (!value.isZero())
 			{
@@ -94,15 +94,16 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 			throughput *= pfWeight;
 
-			if (!scene.computeIntersection(ray, intersection))
+			wasIntersected = scene.computeIntersection(ray, intersection);
+			if(!wasIntersected)
 			{
-				Light::ptr envLight = scene.getEnvironmentLight();
-				if (envLight != nullptr)
-				{
-					radiance += throughput * envLight->le(ray.direction()); //tr ?
-				}
+				//Light::ptr envLight = scene.getEnvironmentLight();
+				//if (envLight != nullptr)
+				//{
+				//	radiance += throughput * envLight->le(ray.direction()); //tr ?
+				//}
 
-				return radiance;
+				//return radiance;
 			}
 			else
 			{
@@ -112,7 +113,7 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 					Light::ptr lightCaught = intersection.myPrimitive->getLight();
 					Color radianceLight = lightCaught->le(-ray.direction(), intersection.myShadingGeometry.myN);
 
-					Color tr = medium->transmittance(Ray(ray.myOrigin, ray.direction(), 0., intersection.t));
+					Color tr = medium->transmittance(Ray(ray.myOrigin, ray.direction(), 0., intersection.t), sampler);
 																		
 					double pdfLight = lightCaught->pdf(intersection.myPoint, lightInfos);
 					double weight = powerHeuristic(pfInfos.pdf, pdfLight);
@@ -123,6 +124,21 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 		}
 		else
 		{
+			if (medium)
+				throughput *= weightMedium;
+
+			//Should not happen. Medium should be bounded, especially with env maps
+			if (!wasIntersected)
+			{
+				Light::ptr envLight = scene.getEnvironmentLight();
+				if (envLight != nullptr)
+				{
+					radiance += throughput * envLight->le(ray.direction()); //tr ?
+				}
+
+				return radiance;
+			}
+
 			fromMedia = false;
 			BSDF::ptr bsdf = intersection.myPrimitive->getBSDF();
 
@@ -131,11 +147,9 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 				ray = Ray(intersection.myPoint, ray.direction());
 				if (intersection.isMediumTransition())
 					medium = intersection.getMedium(ray);
+				wasIntersected = scene.computeIntersection(ray, intersection);
 				continue;
 			}
-	
-			if (medium)
-				throughput *= weightMedium;
 
 			//If we have intersected a light, add the radiance
 			if ((depth == 0 && intersection.myPrimitive->isLight()))// || (fromMedia && intersection.myPrimitive->isLight()))
@@ -143,7 +157,7 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			
 			//Light sampling strategy
 			LightSamplingInfos lightInfos;
-			Color value = sampleAttenuatedLightDirect(intersection.myPoint, sampler->getNextSample2D(), scene, lightInfos, medium);
+			Color value = sampleAttenuatedLightDirect(intersection.myPoint, sampler, scene, lightInfos, medium);
 			if (!value.isZero())
 			{
 				Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
@@ -198,10 +212,9 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			Color radianceLight;
 			Point3d pFrom = intersection.myPoint; //for the light pdf
 			//Trace a ray from the inter point to the bsdf sampled direction
-			if (scene.computeIntersection(ray, intersection))
+			wasIntersected = scene.computeIntersection(ray, intersection);
+			if(wasIntersected)
 			{
-				
-
 				//If we caught a light
 				if (intersection.myPrimitive->isLight())
 				{
@@ -211,11 +224,16 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			}
 			else
 			{
-				lightCaught = scene.getEnvironmentLight();
-				if (lightCaught == nullptr)
-					return radiance;
+				//if (medium)
+				//	ILogger::log() << "Should not happen. Medium must be bounded\n";
+				if(!medium)
+				{
+					lightCaught = scene.getEnvironmentLight();
+					if (lightCaught == nullptr)
+						return radiance;
 
-				radianceLight = lightCaught->le(ray.direction());
+					radianceLight = lightCaught->le(ray.direction());
+				}
 			}
 
 			if (lightCaught != nullptr)
@@ -237,7 +255,7 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 				Color tr(1.);
 				if(medium)
-					tr = medium->transmittance(Ray(ray.myOrigin, ray.direction(), 0., intersection.t));
+					tr = medium->transmittance(Ray(ray.myOrigin, ray.direction(), 0., intersection.t), sampler);
 
 				//std::cout << tr << std::endl;
 
@@ -246,7 +264,7 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 				if (radiance.isNan())
 					std::cout << "nan 2 " << throughput << " " << radianceLight << " " << bsdfValue << " " << weight << std::endl;
 
-				if (lightCaught == scene.getEnvironmentLight())
+				if (lightCaught == scene.getEnvironmentLight() && !medium)
 					//noIntersection = true;
 					return radiance;
 			}
@@ -256,10 +274,10 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 		}
 
-		if (depth >= 0)
+		if (depth >= myMinDepth)
 		{
 
-			double stopVal = 0.9;//std::min(0.9, throughput.luminance() * eta * eta);
+			double stopVal = std::min(0.95, throughput.max() * eta * eta);
 			if (sampler->getNextSample1D() < stopVal)
 			{
 				throughput /= stopVal;

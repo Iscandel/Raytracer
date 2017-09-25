@@ -6,9 +6,9 @@
   <camera type="NoriPerspective">
     <transform type="lookAt" name="toWorld">
       <scale>
-        <sx>-1</sx>
-        <sy>1</sy>
-        <sz>1</sz>
+        <x>-1</x>
+        <y>1</y>
+        <z>1</z>
       </scale>
       <lookAt>
         <origin>0 0.999769 3.41159</origin>
@@ -51,14 +51,14 @@
       <string name="path" value ="./data/mitsuba2.obj"/>
       <transform name="toWorld">
         <scale>
-          <sx>0.3</sx>
-          <sy>0.3</sy>
-          <sz>0.3</sz>
+          <x>0.3</x>
+          <y>0.3</y>
+          <z>0.3</z>
         </scale>
         <translation>
-          <tx>0.2</tx>
-          <ty>0</ty>
-          <tz>-0.5</tz>
+          <x>0.2</x>
+          <y>0</y>
+          <z>-0.5</z>
         </translation>
       </transform>
       <bsdf type="Conductor">
@@ -72,14 +72,14 @@
       </bsdf>
       <transform name="toWorld">
         <scale>
-          <sx>0.3</sx>
-          <sy>0.3</sy>
-          <sz>0.3</sz>
+          <x>0.3</x>
+          <y>0.3</y>
+          <z>0.3</z>
         </scale>
         <translation>
-          <tx>0.2</tx>
-          <ty>0</ty>
-          <tz>-0.5</tz>
+          <x>0.2</x>
+          <y>0</y>
+          <z>-0.5</z>
         </translation>
       </transform>
     </shape>
@@ -113,14 +113,14 @@
       <string name="path" value="./data/Diamond2.obj"/>
       <transform name="toWorld">
         <scale>
-          <sx>0.006</sx>
-          <sy>0.006</sy>
-          <sz>0.006</sz>
+          <x>0.006</x>
+          <y>0.006</y>
+          <z>0.006</z>
         </scale>
         <translation>
-          <tx>0.</tx>
-          <ty>0.4</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>0.4</y>
+          <z>0.</z>
         </translation>
       </transform>
       <bsdf type="SpectralDielectric">
@@ -173,9 +173,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.42</tx>
-          <ty>0.34</ty>
-          <tz>0.29</tz>
+          <x>0.42<x>
+          <y>0.34</y>
+          <z>0.29</z>
         </translation>
       </transform>
     <double name="radius" value="0.32"/>
@@ -210,9 +210,9 @@
   <camera type="NoriPerspective">
     <transform type="lookAt" name="toWorld">
       <scale>
-        <sx>-1</sx>
-        <sy>1</sy>
-        <sz>1</sz>
+        <x>-1</x>
+        <y>1</y>
+        <z>1</z>
       </scale>
       <lookAt>
         <origin>-1. 0.999769 -0.7</origin>
@@ -255,19 +255,19 @@
       <string name="path" value ="./data/mitsuba2.obj"/>
       <transform name="toWorld">
         <scale>
-          <sx>0.3</sx>
-          <sy>0.3</sy>
-          <sz>0.3</sz>
+          <x>0.3</x>
+          <y>0.3</y>
+          <z>0.3</z>
         </scale>
         <rotation>
-          <rx>0.</rx>
-          <ry>-90</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>-90<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.2</tx>
-          <ty>0</ty>
-          <tz>-0.5</tz>
+          <x>0.2<x>
+          <y>0</y>
+          <z>-0.5</z>
         </translation>
       </transform>
       <bsdf type="Conductor">
@@ -281,19 +281,19 @@
       </bsdf>
       <transform name="toWorld">
         <scale>
-          <sx>0.3</sx>
-          <sy>0.3</sy>
-          <sz>0.3</sz>
+          <x>0.3</x>
+          <y>0.3</y>
+          <z>0.3</z>
         </scale>
         <rotation>
-          <rx>0.</rx>
-          <ry>90</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>90<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.2</tx>
-          <ty>0</ty>
-          <tz>-0.5</tz>
+          <x>0.2<x>
+          <y>0</y>
+          <z>-0.5</z>
         </translation>
       </transform>
     </shape>
@@ -334,14 +334,14 @@
       </bsdf>
       <transform name="toWorld">
         <rotation>
-          <rx>0.</rx>
-          <ry>90</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>90<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>0.</ty>
-          <tz>-0.8</tz>
+          <x>0.<x>
+          <y>0.</y>
+          <z>-0.8</z>
         </translation>
       </transform>
     </shape>
@@ -350,14 +350,14 @@
       <string name="path" value="./data/Diamond2.obj"/>
       <transform name="toWorld">
         <scale>
-          <sx>0.006</sx>
-          <sy>0.006</sy>
-          <sz>0.006</sz>
+          <x>0.006</x>
+          <y>0.006</y>
+          <z>0.006</z>
         </scale>
         <translation>
-          <tx>0.</tx>
-          <ty>0.4</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>0.4</y>
+          <z>0.</z>
         </translation>
       </transform>
       <bsdf type="SpectralDielectric">
@@ -410,9 +410,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.42</tx>
-          <ty>0.34</ty>
-          <tz>0.29</tz>
+          <x>0.42<x>
+          <y>0.34</y>
+          <z>0.29</z>
         </translation>
       </transform>
     <double name="radius" value="0.32"/>

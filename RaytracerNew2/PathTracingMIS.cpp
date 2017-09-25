@@ -14,6 +14,7 @@ PathTracingMIS::PathTracingMIS(const Parameters& params)
 	std::string sStrategy = params.getString("strategy", lightStrategy::STRING[LightSamplingStrategy::ONE_LIGHT_UNIFORM]);
 	myStrategy = myStrategiesByName[sStrategy];
 
+	myMinDepth = params.getInt("minDepth", 3);
 	myMaxDepth = params.getInt("maxDepth", 1000);
 }
 
@@ -209,10 +210,10 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 		throughput *= bsdfValue;
 		eta *= bsdfInfos.relativeEta;
 
-		if (depth >= 0)
+		if (depth >= myMinDepth)
 		{
 			
-			double stopVal = 0.9;//std::min(0.9, throughput.luminance() * eta * eta);
+			double stopVal = std::min(0.95, throughput.luminance() * eta * eta);
 			if (sampler->getNextSample1D() < stopVal)
 			{
 				throughput /= stopVal;

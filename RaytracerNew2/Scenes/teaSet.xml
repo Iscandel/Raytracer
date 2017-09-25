@@ -48,12 +48,12 @@
   <lights>
     <light type="EnvironmentLight">
       <string name="path" value="./data/tea set/ennis.exr"/>
-      <double name="factor" value="0.9"/>
+      <double name="scale" value="0.9"/>
       <transform name="toWorld">
         <rotation>
-          <rx>90.</rx>
-          <ry>180.</ry>
-          <rz>30.</rz>
+          <x>90.</x>
+          <y>180.</y>
+          <z>30.</z>
         </rotation>
       </transform>
     </light>
@@ -71,14 +71,14 @@
       </bsdf>
       <transform name="toWorld">
         <rotation>
-          <rx>0.</rx>
-          <ry>-25.</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>-25.</y>
+          <z>0.</z>
         </rotation>
        <!--<translation>
-          <tx>0.</tx>
-          <ty>0.</ty>
-          <tz>0.2</tz>
+          <x>0.<x>
+          <y>0.</y>
+          <z>0.2</z>
         </translation>-->
       </transform>
     </shape>
@@ -91,19 +91,19 @@
       </bsdf>
       <transform name="toWorld">
         <scale>
-          <sx>0.7</sx>
-          <sy>0.7</sy>
-          <sz>0.7</sz>
+          <x>0.7</x>
+          <y>0.7</y>
+          <z>0.7</z>
         </scale>
         <rotation>
-          <rx>0.</rx>
-          <ry>10</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>10</y>
+          <z>0.</z>
         </rotation>   
         <translation>
-          <tx>-0.5</tx>
-          <ty>0.</ty>
-          <tz>0.</tz>
+          <x>-0.5</x>
+          <y>0.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -119,19 +119,19 @@
       </bsdf>
       <transform name="toWorld">
         <scale>
-          <sx>0.08</sx>
-          <sy>0.08</sy>
-          <sz>0.08</sz>
+          <x>0.08</x>
+          <y>0.08</y>
+          <z>0.08</z>
         </scale>
         <rotation>
-          <rx>0.</rx>
-          <ry>0</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>0</y>
+          <z>0.</z>
         </rotation>
         <translation>
-          <tx>0.8</tx>
-          <ty>0.</ty>
-          <tz>0.6</tz>
+          <x>0.8</x>
+          <y>0.</y>
+          <z>0.6</z>
         </translation>
       </transform>
     </shape>
@@ -147,19 +147,19 @@
       </bsdf>
       <transform name="toWorld">
         <scale>
-          <sx>0.08</sx>
-          <sy>0.08</sy>
-          <sz>0.08</sz>
+          <x>0.08</x>
+          <y>0.08</y>
+          <z>0.08</z>
         </scale>
         <rotation>
-          <rx>0.</rx>
-          <ry>0</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>0</y>
+          <z>0.</z>
         </rotation>
         <translation>
-          <tx>0.8</tx>
-          <ty>0.</ty>
-          <tz>0.6</tz>
+          <x>0.8</x>
+          <y>0.</y>
+          <z>0.6</z>
         </translation>
       </transform>
     </shape>
@@ -168,9 +168,9 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <scale>
-          <sx>2</sx>
-          <sy>1</sy>
-          <sz>2</sz>
+          <x>2</x>
+          <y>1</y>
+          <z>2</z>
         </scale>
       </transform>
       <!--<bsdf type="NormalMapping">
@@ -187,19 +187,19 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <rotation>
-          <rx>180.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>180.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>3.5</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>3.5</y>
+          <z>0.</z>
         </translation>
         <scale>
-          <sx>1.1</sx>
-          <sy>1</sy>
-          <sz>1</sz>
+          <x>1.1</x>
+          <y>1</y>
+          <z>1</z>
         </scale>
       </transform>
       <light type="MeshLight">
@@ -214,19 +214,19 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <rotation>
-          <rx>90.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>90.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>0.5</ty>
-          <tz>-11.</tz>
+          <x>0.<x>
+          <y>0.5</y>
+          <z>-11.</z>
         </translation>
         <scale>
-          <sx>2</sx>
-          <sy>1</sy>
-          <sz>1</sz>
+          <x>2</x>
+          <y>1</y>
+          <z>1</z>
         </scale>
       </transform>
       <light type="MeshLight">

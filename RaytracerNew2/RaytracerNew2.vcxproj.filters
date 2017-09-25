@@ -210,9 +210,6 @@
     <ClCompile Include="AmbientOcclusion.cpp">
       <Filter>Integrators</Filter>
     </ClCompile>
-    <ClCompile Include="ISampledShape.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="AreaLight.cpp">
       <Filter>Lights</Filter>
     </ClCompile>
@@ -372,6 +369,24 @@
     <ClCompile Include="VolPathTracing.cpp">
       <Filter>Integrators</Filter>
     </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="ISampledShape.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Heterogeneous.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="EmptyBSDF.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ObjectFactory.h">
@@ -517,9 +532,6 @@
     </ClInclude>
     <ClInclude Include="AmbientOcclusion.h">
       <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="ISampledShape.h">
-      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="AreaLight.h">
       <Filter>Lights</Filter>
@@ -680,6 +692,24 @@
     <ClInclude Include="VolPathTracing.h">
       <Filter>Integrators</Filter>
     </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="ISampledShape.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Heterogeneous.h">
+      <Filter>Medium</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="EmptyBSDF.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -733,5 +763,10 @@
     <Xml Include="Scenes\cbox_path_vol.xml">
       <Filter>Scenes</Filter>
     </Xml>
+    <Xml Include="Scenes\SimpleSmoke.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\steam.xml" />
+    <Xml Include="Scenes\velvet.xml" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,9 @@
         <up>-0.22886 0.39656 0.889024</up>
       </lookAt>
     </transform>
-  
+
+    <!--<double name="focal" value="0.15"/>
+    <double name="meterPixelSize" value="0.0001"/>-->
     <double name="fov" value="35"/>
     <integer name="sizeX" value="800"/>
     <integer name="sizeY" value="600"/>
@@ -37,7 +39,7 @@
   </sampler>
 
 	<!-- Use the path tracer with multiple importance sampling -->
-  <integrator type="VolPathTracing">
+  <integrator type="PathTracingMIS">
     <integer name="depth" value="20"/>
     <integer name="sampleNumber" value="4"/>
     <!--<bool name="bsdfSampling" value="true"/>-->
@@ -48,9 +50,9 @@
       <string name="path" value="./data/20100905-21_hd.jpg"/>
      <transform name="toWorld">
          <rotation>
-          <rx>90.</rx>
-          <ry>180.</ry>
-          <rz>0.</rz>
+          <x>90.</x>
+          <y>180.<y>
+          <z>0.<z>
         </rotation>
       </transform>
     </light>
@@ -71,14 +73,14 @@
 
       <transform name="toWorld">
         <scale>
-          <sx>0.06</sx>
-          <sy>0.06</sy>
-          <sz>-1.</sz>
+          <x>0.06</x>
+          <y>0.06</y>
+          <z>-1.</z>
         </scale>
         <translation>
-          <tx>10.</tx>
-          <ty>0.</ty>
-          <tz>25</tz>
+          <x>10.</x>
+          <y>0.</y>
+          <z>25</z>
         </translation>
       </transform>
     </shape>
@@ -96,14 +98,14 @@
 
       <transform name="toWorld">
         <scale>
-          <sx>0.3</sx>
-          <sy>0.3</sy>
-          <sz>-1.</sz>
+          <x>0.3</x>
+          <y>0.3</y>
+          <z>-1.</z>
         </scale>
         <translation>
-          <tx>0.</tx>
-          <ty>0.</ty>
-          <tz>60.</tz>
+          <x>0.</x>
+          <y>0.</y>
+          <z>60.</z>
         </translation>
       </transform>
     </shape>
@@ -117,9 +119,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>3.</tx>
-          <ty>0.</ty>
-          <tz>0.</tz>
+          <x>3.</x>
+          <y>0.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -134,14 +136,14 @@
 
       <transform name="toWorld">
         <scale>
-          <sx>0.2</sx>
-          <sy>0.35</sy>
-          <sz>0.5</sz>
+          <x>0.2</x>
+          <y>0.35</y>
+          <z>0.5</z>
         </scale>
         <translation>
-          <tx>-35</tx>
-          <ty>25.</ty>
-          <tz>0.</tz>
+          <x>-35</x>
+          <y>25.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -151,9 +153,9 @@
       <string name="path" value="./data/table/meshes/mesh_2.obj"/>
       <transform name="toWorld">
         <translation>
-          <tx>-1.</tx>
-          <ty>0.</ty>
-          <tz>0.</tz>
+          <x>-1.</x>
+          <y>0.</y>
+          <z>0.</z>
         </translation>
       </transform>
       <medium name="interior" type="Homogeneous">
@@ -174,9 +176,9 @@
       <string name="path" value="./data/table/meshes/mesh_3.obj"/>
       <transform name="toWorld">
         <translation>
-          <tx>-1.</tx>
-          <ty>0.</ty>
-          <tz>0.</tz>
+          <x>-1.</x>
+          <y>0.</y>
+          <z>0.</z>
         </translation>
       </transform>
 
@@ -193,9 +195,9 @@
       <string name="path" value="./data/table/meshes/mesh_4.obj"/>
       <transform name="toWorld">
         <translation>
-          <tx>-1.</tx>
-          <ty>0.</ty>
-          <tz>0.</tz>
+          <x>-1.</x>
+          <y>0.</y>
+          <z>0.</z>
         </translation>
       </transform>
       <medium name="interior" type="Homogeneous">

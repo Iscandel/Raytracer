@@ -10,23 +10,23 @@
     <double name="focalPlane" value="20"/>
     <!--<transform>
       <rotation>
-        <rx>0.</rx>
-        <ry>0.</ry>
-        <rz>0.</rz>
+        <x>0.</x>
+        <y>0.<y>
+        <z>0.<z>
       </rotation>
       <translation>
         -->
-    <!--<tx>0</tx>
-        <ty>-30.15</ty>
-        <tz>-10.55</tz>-->
+    <!--<x>0<x>
+        <y>-30.15</y>
+        <z>-10.55</z>-->
     <!--
-        <tx>0</tx>
-        <ty>-0.15</ty>
-        <tz>14.55</tz>
+        <x>0<x>
+        <y>-0.15</y>
+        <z>14.55</z>
         -->
-    <!--<tx>0.</tx>
-        <ty>-0.15</ty>
-        <tz>0.</tz>-->
+    <!--<x>0.<x>
+        <y>-0.15</y>
+        <z>0.</z>-->
     <!--
       </translation>
     </transform>-->
@@ -94,9 +94,9 @@
       <double name="radius" value="1.5"/>
       <transform name="toWorld">
         <translation>
-          <tx>-2.</tx>
-          <ty>0.</ty>
-          <tz>0</tz>
+          <x>-2.</x>
+          <y>0.</y>
+          <z>0</z>
         </translation>
       </transform>
       <bsdf type="Diffuse">
@@ -108,9 +108,9 @@
       <double name="radius" value="1.5"/>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>1.</ty>
-          <tz>5</tz>
+          <x>0.</x>
+          <y>1.</y>
+          <z>5</z>
         </translation>
       </transform>
       <bsdf type="Diffuse">
@@ -122,9 +122,9 @@
       <double name="radius" value="1.5"/>
       <transform name="toWorld">
         <translation>
-          <tx>2.</tx>
-          <ty>2.</ty>
-          <tz>15</tz>
+          <x>2.</x>
+          <y>2.</y>
+          <z>15</z>
         </translation>
       </transform>-->
       <bsdf type="Diffuse">
@@ -136,19 +136,19 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <rotation>
-          <rx>180.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>180.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>8</ty>
-          <tz>4.</tz>
+          <x>0.<x>
+          <y>8</y>
+          <z>4.</z>
         </translation>
         <scale>
-          <sx>4</sx>
-          <sy>1</sy>
-          <sz>4</sz>
+          <x>4</x>
+          <y>1</y>
+          <z>4</z>
         </scale>
       </transform>
       <light type="MeshLight">

@@ -41,7 +41,7 @@ public:
 		double tmp = std::sqrt(1 - sample.y() * sample.y());
 
 		res.x() = std::cos(2 * tools::PI * sample.x()) * tmp;
-		res.x() = std::sin(2 * tools::PI * sample.x()) * tmp;
+		res.y() = std::sin(2 * tools::PI * sample.x()) * tmp;
 		res.z() = sample.y();
 		res.normalize();
 

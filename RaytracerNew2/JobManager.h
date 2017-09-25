@@ -12,6 +12,10 @@
 #include <mutex>
 #endif
 
+class Camera;
+class Sampler;
+class Scene;
+
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief This class allows multithreaded computation of image chunks
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,6 +61,9 @@ public:
 	void showProgress();
 
 	void setShowProgress(bool show) { myIsShowProgress = show; }
+
+
+	void run(int myOffsetX, int myOffsetY, Camera::ptr myCamera, int mySizeX, int mySizeY, std::shared_ptr<Sampler> mySampler, Scene* myScene);
 
 protected:
 	int myThreadNumber;

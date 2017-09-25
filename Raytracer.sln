@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testBvh", "testBvh\testBvh.
 		{699DE8F6-A6AB-4BF3-92C8-2BFEC2C96CDC} = {699DE8F6-A6AB-4BF3-92C8-2BFEC2C96CDC}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestRealCast", "TestRealCast\TestRealCast.vcxproj", "{12054C01-54EF-47F1-8FA9-9D09711C5915}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -58,6 +60,14 @@ Global
 		{2CDA44CA-9B38-4FBF-BA4A-3BC5553B951C}.Release|Win32.Build.0 = Release|Win32
 		{2CDA44CA-9B38-4FBF-BA4A-3BC5553B951C}.Release|x64.ActiveCfg = Release|x64
 		{2CDA44CA-9B38-4FBF-BA4A-3BC5553B951C}.Release|x64.Build.0 = Release|x64
+		{12054C01-54EF-47F1-8FA9-9D09711C5915}.Debug|Win32.ActiveCfg = Debug|Win32
+		{12054C01-54EF-47F1-8FA9-9D09711C5915}.Debug|Win32.Build.0 = Debug|Win32
+		{12054C01-54EF-47F1-8FA9-9D09711C5915}.Debug|x64.ActiveCfg = Debug|x64
+		{12054C01-54EF-47F1-8FA9-9D09711C5915}.Debug|x64.Build.0 = Debug|x64
+		{12054C01-54EF-47F1-8FA9-9D09711C5915}.Release|Win32.ActiveCfg = Release|Win32
+		{12054C01-54EF-47F1-8FA9-9D09711C5915}.Release|Win32.Build.0 = Release|Win32
+		{12054C01-54EF-47F1-8FA9-9D09711C5915}.Release|x64.ActiveCfg = Release|x64
+		{12054C01-54EF-47F1-8FA9-9D09711C5915}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

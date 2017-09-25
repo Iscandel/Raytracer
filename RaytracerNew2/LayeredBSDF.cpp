@@ -149,7 +149,7 @@ Color LayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
 	double alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlphaTop;
-	Normal3d normal = myDistribution.sampleNormal(Point2d(myRng.random(0., 1.), myRng.random(0., 1.)), alpha);
+	Normal3d normal = myDistribution.sampleNormal(Point2d(myRng.nextFloat(), myRng.nextFloat()), alpha);//.random(0., 1.), myRng.random(0., 1.)), alpha);
 
 	double etaI, etaT, relativeEta, cosThetaT;
 	double fr1 = fresnel(myEtaExt, myEtaInt,infos.wi.dot(normal), etaI, etaT, relativeEta, cosThetaT).r;

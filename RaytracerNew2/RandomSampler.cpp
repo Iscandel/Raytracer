@@ -27,12 +27,14 @@ RandomSampler::~RandomSampler(void)
 ///////////////////////////////////////////////////////////////////////////////
 Point2d RandomSampler::getNextSample2D()
 {
-	return Point2d(myRng.random(0., 1.), myRng.random(0., 1.));
+	return Point2d(myRng.nextFloat(), myRng.nextFloat());
+	//return Point2d(myRng.random(0., 1.), myRng.random(0., 1.));
 }
 
 double RandomSampler::getNextSample1D()
 {
-	return myRng.random(0., 1.);
+	return myRng.nextFloat();
+	//return myRng.random(0., 1.);
 }
 
 //=============================================================================

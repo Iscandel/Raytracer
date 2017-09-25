@@ -6,9 +6,9 @@
   <camera type="NoriPerspective">
     <transform type="lookAt" name="toWorld">
       <scale>
-        <sx>-1</sx>
-        <sy>1</sy>
-        <sz>1</sz>
+        <x>-1</x>
+        <y>1</y>
+        <z>1</z>
       </scale>
       <lookAt>
         <origin>0 0.919769 5.41159</origin>
@@ -48,6 +48,20 @@
     <integer name="sampleNumber" value="64"/>
   </sampler>
 
+  <lights>
+    <light type="SpotLight">
+      <transform name="toWorld">
+        <translation>
+          <x>0.5</x>
+          <y>0.5</y>
+          <z>0.5</z>
+        </translation>
+      </transform>
+      <point name="position" value="0. 40. 0."/>
+      <color name="intensity" value="100. 100. 100."/>
+    </light>
+  </lights>
+
   <objects>
     <shape type="Mesh">
       <string name="path" value="./data/cbox/walls2.obj"/>
@@ -63,14 +77,14 @@
       <string name="path" value="./data/Diamond2.obj"/>
       <transform name="toWorld">
         <scale>
-          <sx>0.006</sx>
-          <sy>0.006</sy>
-          <sz>0.006</sz>
+          <x>0.006</x>
+          <y>0.006</y>
+          <z>0.006</z>
         </scale>
         <translation>
-          <tx>0.</tx>
-          <ty>0.4</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>0.4</y>
+          <z>0.</z>
         </translation>
       </transform>
       <bsdf type="SpectralDielectric">
@@ -121,15 +135,15 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.42</tx>
-          <ty>0.34</ty>
-          <tz>0.29</tz>
+          <x>0.42<x>
+          <y>0.34</y>
+          <z>0.29</z>
         </translation>
       </transform>
     <double name="radius" value="0.32"/>
     </shape>-->
 
-    <shape type="Mesh">
+    <!--<shape type="Mesh">
       <string name="path" value="./data/cbox/light.obj"/>
 
       <light type="MeshLight">
@@ -137,7 +151,7 @@
       </light>
       <bsdf type="Diffuse"/>
 
-    </shape>
+    </shape>-->
 
 
   </objects>

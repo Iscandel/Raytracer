@@ -50,9 +50,9 @@
       <!--<double name="theta" value="180"/>
       <transform name="toWorld">
         <rotation>
-          <rx>0.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
       </transform>-->
       
@@ -61,9 +61,9 @@
 
       <transform name="toWorld">
         <rotation>
-          <rx>45.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>45.</x>
+          <y>0.</y>
+          <z>0.</z>
         </rotation>
       </transform>
     </light>
@@ -81,19 +81,19 @@
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
         <rotation>
-          <rx>180.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>180.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>6.5</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>6.5</y>
+          <z>0.</z>
         </translation>
         <scale>
-          <sx>2</sx>
-          <sy>1</sy>
-          <sz>1</sz>
+          <x>2</x>
+          <y>1</y>
+          <z>1</z>
         </scale>
       </transform>
       <light type="MeshLight">
@@ -113,19 +113,19 @@
       </bsdf>
       <transform name="toWorld">
         <scale>
-          <sx>10</sx>
-          <sy>1</sy>
-          <sz>10</sz>
+          <x>10</x>
+          <y>1</y>
+          <z>10</z>
         </scale>
         <rotation>
-          <rx>90.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>90.</x>
+          <y>0.</y>
+          <z>0.</z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>0.</ty>
-          <tz>-1.</tz>
+          <x>0.</x>
+          <y>0.</y>
+          <z>-1.</z>
         </translation>
       </transform>
     </shape>

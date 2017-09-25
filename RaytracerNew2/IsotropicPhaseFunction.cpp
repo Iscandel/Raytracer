@@ -22,12 +22,12 @@ double IsotropicPhaseFunction::sample(PhaseFunctionSamplingInfos &infos, const P
 	return 1.;
 }
 
-double IsotropicPhaseFunction::eval(const PhaseFunctionSamplingInfos &infos) const
+double IsotropicPhaseFunction::eval(const PhaseFunctionSamplingInfos &) const
 {
 	return tools::INV_FOUR_PI;
 }
 
-double IsotropicPhaseFunction::pdf(const PhaseFunctionSamplingInfos &infos) const
+double IsotropicPhaseFunction::pdf(const PhaseFunctionSamplingInfos &) const
 {
 	return tools::INV_FOUR_PI;
 }

@@ -1,13 +1,13 @@
-#include "Rng.h"
-
-
-
-Rng::Rng()
-{
-	randomize();
-}
-
-
-Rng::~Rng()
-{
-}
+//#include "Rng.h"
+//
+//
+//
+//Rng::Rng()
+//{
+//	randomize();
+//}
+//
+//
+//Rng::~Rng()
+//{
+//}

@@ -8,20 +8,20 @@
     </transform>
     <!--<transform>
       <rotation>
-        <rx>0.</rx>
-        <ry>0.</ry>
-        <rz>0.</rz>
+        <x>0.</x>
+        <y>0.<y>
+        <z>0.<z>
       </rotation>
       <translation>
-        --><!--<tx>0</tx>
-        <ty>-30.15</ty>
-        <tz>-10.55</tz>--><!--
-        <tx>0</tx>
-        <ty>-0.15</ty>
-        <tz>14.55</tz>
-        --><!--<tx>0.</tx>
-        <ty>-0.15</ty>
-        <tz>0.</tz>--><!--
+        --><!--<x>0<x>
+        <y>-30.15</y>
+        <z>-10.55</z>--><!--
+        <x>0<x>
+        <y>-0.15</y>
+        <z>14.55</z>
+        --><!--<x>0.<x>
+        <y>-0.15</y>
+        <z>0.</z>--><!--
       </translation>
     </transform>-->
     <focal>0.05</focal>
@@ -87,14 +87,14 @@
       <string name="path" value ="./data/ajax.obj"/>
       <!--<transform name="toWorld">
         <rotation>
-          <rx>90.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>90.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>0.</ty>
-          <tz>-0.1</tz>
+          <x>0.<x>
+          <y>0.</y>
+          <z>-0.1</z>
         </translation>
       </transform>-->
       <bsdf type="Diffuse">
@@ -106,19 +106,19 @@
       <string name="path" value ="./data/plane.obj"/>
         <transform name="toWorld">
         <!--<rotation>
-          <rx>90.</rx>
-          <ry>0.</ry>
-          <rz>0.</rz>
+          <x>90.</x>
+          <y>0.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>0.</tx>
-          <ty>0.</ty>
-          <tz>-0.1</tz>
+          <x>0.<x>
+          <y>0.</y>
+          <z>-0.1</z>
         </translation>-->
         <scale>
-          <sx>100</sx>
-          <sy>1</sy>
-          <sz>100</sz>
+          <x>100</x>
+          <y>1</y>
+          <z>100</z>
         </scale>
       </transform>-->
       <bsdf type="Diffuse">
@@ -129,9 +129,9 @@
       <double name = "radius" value="0.60"/>
       <transform name = "toWorld">
         <translation>
-          <tx>-1</tx>
-          <ty>4</ty>
-          <tz>1</tz>
+          <x>-1<x>
+          <y>4</y>
+          <z>1</z>
         </translation>
       </transform>
     </shape>
@@ -139,9 +139,9 @@
       <double name = "radius" value="1.35"/>
       <transform name = "toWorld">
         <translation>
-          <tx>1</tx>
-          <ty>8</ty>
-          <tz>0</tz>
+          <x>1<x>
+          <y>8</y>
+          <z>0</z>
         </translation>
       </transform>
     </shape>-->

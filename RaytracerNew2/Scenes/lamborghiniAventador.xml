@@ -3,9 +3,9 @@
   <camera type="NoriPerspective">
     <transform name="toWorld">
       <scale>
-        <sx>-1</sx>
-        <sy>1</sy>
-        <sz>1.</sz>
+        <x>-1</x>
+        <y>1</y>
+        <z>1.</z>
       </scale>
       <lookAt>
         <origin>2 2 -3</origin>
@@ -81,12 +81,12 @@
     <light type="EnvironmentLight">
       <string name="path" value="./data/hdrmaps_com_free_068_Ref.exr"/>
       <!--20060807_wells6_hd.jpg"/>-->
-      <double name="factor" value="1."/>
+      <double name="scale" value="1."/>
       <transform name="toWorld">
         <rotation>
-          <rx>90.</rx>
-          <ry>180.</ry>
-          <rz>-80.</rz>
+          <x>90.</x>
+          <y>180.</y>
+          <z>-80.</z>
         </rotation>
       </transform>
     </light>
@@ -563,9 +563,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -584,9 +584,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -598,9 +598,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -619,9 +619,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -635,9 +635,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -649,9 +649,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -663,9 +663,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -697,9 +697,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -723,9 +723,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -737,9 +737,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -758,9 +758,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -779,9 +779,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -800,9 +800,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -814,9 +814,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -828,9 +828,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -849,9 +849,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -863,9 +863,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -883,9 +883,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -904,9 +904,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -917,9 +917,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -930,9 +930,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -943,9 +943,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -956,9 +956,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -970,9 +970,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -991,9 +991,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -1014,9 +1014,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -1025,29 +1025,29 @@
       <string name="path" value ="./data/Audi RS6/texteLogo.obj"/>
       <transform name="toWorld">
         <translation>
-          <tx>460.4</tx>
-          <ty>-67.8</ty>
-          <tz>-124.8</tz>
+          <x>460.4<x>
+          <y>-67.8</y>
+          <z>-124.8</z>
         </translation>
         <scale>
-          <sx>1.3</sx>
-          <sy>1.3</sy>
-          <sz>1.3</sz>
+          <x>1.3</x>
+          <y>1.3</y>
+          <z>1.3</z>
         </scale>
         <rotation>
-          <rx>0.</rx>
-          <ry>200.</ry>
-          <rz>0.</rz>
+          <x>0.</x>
+          <y>200.<y>
+          <z>0.<z>
         </rotation>
         <translation>
-          <tx>-470</tx>
-          <ty>67.8</ty>
-          <tz>124.8</tz>
+          <x>-470<x>
+          <y>67.8</y>
+          <z>124.8</z>
         </translation>
         <translation>
-          <tx>0.</tx>
-          <ty>-48.</ty>
-          <tz>52</tz>
+          <x>0.<x>
+          <y>-48.</y>
+          <z>52</z>
         </translation>
       </transform>
       <bsdf type="RoughConductor">
@@ -1079,9 +1079,9 @@
     <!--
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -1092,9 +1092,9 @@
       </bsdf>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-50.</ty>
-          <tz>0.</tz>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
         </translation>
       </transform>
     </shape>
@@ -1105,9 +1105,9 @@
       <transform name="toWorld">
 
         <scale>
-          <sx>5</sx>
-          <sy>5</sy>
-          <sz>5</sz>
+          <x>5</x>
+          <y>5</y>
+          <z>5</z>
         </scale>
       </transform>
 

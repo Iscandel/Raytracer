@@ -42,14 +42,14 @@
       <string name="path" value="./data/cube.obj"/>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>0.5</ty>
-          <tz>0.</tz>
+          <x>0.</x>
+          <y>0.5</y>
+          <z>0.</z>
         </translation>
         <scale>
-          <sx>1</sx>
-          <sy>9</sy>
-          <sz>4</sz>
+          <x>1</x>
+          <y>9</y>
+          <z>4</z>
         </scale>
       </transform>
       <bsdf type="Diffuse">
@@ -63,14 +63,14 @@
       <string name="path" value="./data/cube.obj"/>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>-0.5</ty>
-          <tz>0.</tz>
+          <x>0.</x>
+          <y>-0.5</y>
+          <z>0.</z>
         </translation>
         <scale>
-          <sx>25</sx>
-          <sy>1</sy>
-          <sz>18</sz>
+          <x>25</x>
+          <y>1</y>
+          <z>18</z>
         </scale>
       </transform>
       <bsdf type="Diffuse">
@@ -84,19 +84,19 @@
       <string name="path" value="./data/cube.obj"/>
       <transform name="toWorld">
         <translation>
-          <tx>0.</tx>
-          <ty>0.5</ty>
-          <tz>0.</tz>
+          <x>0.</x>
+          <y>0.5</y>
+          <z>0.</z>
         </translation>
         <scale>
-          <sx>1</sx>
-          <sy>10</sy>
-          <sz>18</sz>
+          <x>1</x>
+          <y>10</y>
+          <z>18</z>
         </scale>
         <translation>
-          <tx>-12</tx>
-          <ty>0.</ty>
-          <tz>0.</tz>
+          <x>-12</x>
+          <y>0.</y>
+          <z>0.</z>
         </translation>
       </transform>
       <bsdf type="Diffuse">

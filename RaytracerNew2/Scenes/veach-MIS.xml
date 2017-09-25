@@ -6,9 +6,9 @@
   <camera type="NoriPerspective">
     <transform type="lookAt" name="toWorld">
       <scale>
-        <sx>-1.</sx>
-        <sy>1.</sy>
-        <sz>1.</sz>
+        <x>-1.</x>
+        <y>1.</y>
+        <z>1.</z>
       </scale>
       <lookAt>
         <origin>0 6 27.5</origin>
@@ -62,9 +62,9 @@
       <string name="path" value="./test"/>
       <transform name="toWorld">
         <rotation>
-          <rx>90.</rx>
-          <ry>180.</ry>
-          <rz>0.</rz>
+          <x>90.</x>
+          <y>180.<y>
+          <z>0.<z>
         </rotation>
       </transform>
     </light>
@@ -75,14 +75,14 @@
 		<string name="path" value="./data/veach_mi/sphere.obj"/>
 		<transform name="toWorld">
       <scale>
-        <sx>0.1</sx>
-        <sy>0.1</sy>
-        <sz>0.1</sz>
+        <x>0.1</x>
+        <y>0.1</y>
+        <z>0.1</z>
       </scale>
       <translation>
-        <tx>-1.25</tx>
-        <ty>0.</ty>
-        <tz>0.</tz>
+        <x>-1.25</x>
+        <y>0.</y>
+        <z>0.</z>
       </translation>
 		</transform>
 		<light type="MeshLight">
@@ -97,14 +97,14 @@
 		<string name="path" value="./data/veach_mi/sphere.obj"/>
 		<transform name="toWorld">
       <scale>
-        <sx>0.03333</sx>
-        <sy>0.03333</sy>
-        <sz>0.03333</sz>
+        <x>0.03333</x>
+        <y>0.03333</y>
+        <z>0.03333</z>
       </scale>
       <translation>
-        <tx>-3.75</tx>
-        <ty>0.</ty>
-        <tz>0.</tz>
+        <x>-3.75</x>
+        <y>0.</y>
+        <z>0.</z>
       </translation>
 		</transform>
 		<light type="MeshLight">
@@ -119,14 +119,14 @@
 		<string name="path" value="./data/veach_mi/sphere.obj"/>
 		<transform name="toWorld">
       <scale>
-        <sx>0.3</sx>
-        <sy>0.3</sy>
-        <sz>0.3</sz>
+        <x>0.3</x>
+        <y>0.3</y>
+        <z>0.3</z>
       </scale>
       <translation>
-        <tx>1.25</tx>
-        <ty>0.</ty>
-        <tz>0.</tz>
+        <x>1.25</x>
+        <y>0.</y>
+        <z>0.</z>
       </translation>
 		</transform>
 		<light type="MeshLight">
@@ -141,14 +141,14 @@
 		<string name="path" value="./data/veach_mi/sphere.obj"/>
 		<transform name="toWorld">
       <scale>
-        <sx>0.9</sx>
-        <sy>0.9</sy>
-        <sz>0.9</sz>
+        <x>0.9</x>
+        <y>0.9</y>
+        <z>0.9</z>
       </scale>
       <translation>
-        <tx>3.75</tx>
-        <ty>0.</ty>
-        <tz>0.</tz>
+        <x>3.75</x>
+        <y>0.</y>
+        <z>0.</z>
       </translation>
 		</transform>
 		<light type="MeshLight">

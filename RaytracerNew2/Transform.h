@@ -171,7 +171,8 @@ inline Normal3d Transform::transform(const Normal3d & n)
 inline void Transform::transform(const Normal3d& inN, Normal3d& outN)
 {
 #ifdef USE_ALIGN
-	outN = myInvMatrix.transpose() * inN;
+	auto tmp = myInvMatrix.topLeftCorner<3, 3>().transpose() * inN.head<3>();
+	outN = Normal3d(tmp.x(), tmp.y(), tmp.z());
 #else
 	outN = myInvMatrix.topLeftCorner<3, 3>().transpose() * inN;
 #endif

@@ -139,6 +139,23 @@ void JobManager::addJobs(const std::vector<std::shared_ptr<Job> >& jobs)
 ///////////////////////////////////////////////////////////////////////////////
 void JobManager::initJobs()
 {
+	//std::thread render_thread([&] {
+	//	tbb::blocked_range<int> range(0, this->myThreadNumber);
+	//	std::shared_ptr<Job> job = myJobs.back();
+
+	//	auto map = [&](const tbb::blocked_range<int> &range) {
+
+	//		for (int i = range.begin(); i < range.end(); ++i) {
+	//			run(job->myOffsetX, job->myOffsetY, job->myCamera, job->mySizeX, job->mySizeY, job->mySampler, job->myScene);
+	//		}
+	//	};
+
+	//	tbb::parallel_for(range, map);
+	//});
+
+	//render_thread.join();
+	//return;
+
 	myNumberRunning = myThreadNumber;
 	myThreads.resize(myThreadNumber);
 
@@ -157,6 +174,7 @@ void JobManager::initJobs()
 ///////////////////////////////////////////////////////////////////////////////
 void JobManager::join()
 {
+	int nbThreads = myThreads.size();
 	for (int i = 0; i < myThreadNumber; i++)
 	{
 		myThreads[i]->join();
@@ -201,6 +219,7 @@ void JobManager::jobRun()
 			}
 		}
 
+		//run(job->myOffsetX, job->myOffsetY, job->myCamera, job->mySizeX, job->mySizeY, job->mySampler, job->myScene);
 		job->run();
 	}
 
@@ -227,3 +246,63 @@ void JobManager::showProgress()
 		myCoeff++;
 	}
 }
+
+//void JobManager::run(int myOffsetX, int myOffsetY, Camera::ptr myCamera, int mySizeX, int mySizeY, std::shared_ptr<Sampler> mySampler, Scene* myScene)
+//{
+//	int startX = std::max(0, myOffsetX);
+//	int endX = std::min(myCamera->getSizeX(), myOffsetX + mySizeX);
+//	int startY = std::max(0, myOffsetY);
+//	int endY = std::min(myCamera->getSizeY(), myOffsetY + mySizeY);
+//
+//	std::unique_ptr<Screen> subScreen =
+//		myCamera->getScreen().createSubScreen(endX - startX, endY - startY, myOffsetX, myOffsetY);
+//
+//	for (int y = myOffsetY; y < endY; y++)
+//	{
+//		//std::cout << y << std::endl;
+//		for (int x = myOffsetX; x < endX; x++)
+//		{
+//			//std::cout << "x " << x << std::endl;
+//
+//			for (int i = 0; i < mySampler->getSampleNumber(); i++)
+//			{
+//				Point2d sample = mySampler->getNextSample2D();
+//				//472 113
+//				//477 172
+//				double xx = (double)x + sample.x();
+//				double yy = (double)y + sample.y();
+//				//double xx = 768;(double)x + sample.x();
+//				//double yy = 550;(double)y + sample.y();
+//				//				
+//				//double xx = 313;(double)x + sample.x();
+//				//double yy = 416;(double)y + sample.y();
+//
+//				Ray ray = myCamera->getRay(xx, yy, mySampler->getNextSample2D());
+//
+//				Color col = myScene->getIntegrator()->li(*myScene, mySampler, ray);
+//
+//				subScreen->addSample(xx, yy, col);
+//				//myCamera->getScreen().addSample(xx, yy, col);
+//			}
+//		}
+//	}
+//
+//	//Merge the subblock with the full screen
+//	myCamera->getScreen().merge(*subScreen);
+//}
+
+
+
+/*	omp_set_num_threads(myThreadNumber);
+	int nThreads = 0;
+#pragma omp parallel default(none) private(i) shared(myJobs, nThreads)
+	{
+#pragma omp master  
+		nThreads = omp_get_num_threads();
+#pragma omp for
+		for (int i = 0; i < myJobs.size(); i++)
+		{
+			myJobs[i]->run();
+		}
+		}
+*/

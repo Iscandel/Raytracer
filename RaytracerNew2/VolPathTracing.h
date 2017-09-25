@@ -16,6 +16,7 @@ public:
 protected:
 	LightSamplingStrategy myStrategy;
 
+	int myMinDepth;
 	int myMaxDepth;
 
 	int myAOLength;

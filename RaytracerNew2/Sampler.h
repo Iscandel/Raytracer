@@ -23,6 +23,8 @@ public:
 
 	virtual Sampler::ptr clone() = 0;
 
+	virtual void seed(uint64_t s, uint64_t l) = 0;
+
 protected:
 	int myNumber;
 };

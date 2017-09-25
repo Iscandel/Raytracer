@@ -201,7 +201,7 @@ inline double random(double min, double max)
 
 inline std::string getExtension(const std::string& s)
 {
-	int index = s.find_last_of('.');
+	size_t index = s.find_last_of('.');
 	if (index != std::string::npos)
 	{
 		return s.substr(index);

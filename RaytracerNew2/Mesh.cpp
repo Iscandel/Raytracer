@@ -5,7 +5,7 @@
 #include "ObjectFactoryManager.h"
 #include "Triangle.h"
 
-Mesh::Mesh(const std::string& name,
+Mesh::Mesh(const std::string&,
 	const std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& vert,
 	const std::vector<Normal3d, Eigen::aligned_allocator<Normal3d>>& normals,
 	const std::vector<Point2d, Eigen::aligned_allocator<Point2d>>& uvs,

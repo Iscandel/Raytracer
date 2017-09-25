@@ -55,7 +55,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////////
 	virtual void run() = 0;
 
-protected:
+//protected:
 	Scene* myScene;
 	Camera::ptr myCamera;
 	Sampler::ptr mySampler;

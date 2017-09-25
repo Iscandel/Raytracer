@@ -23,16 +23,16 @@ Homogeneous::~Homogeneous()
 {
 }
 
-Color Homogeneous::transmittance(const Ray& ray)
+Color Homogeneous::transmittance(const Ray& ray, Sampler::ptr)
 {
 	double t = ray.myMaxT - ray.myMinT;
 	return Color(std::exp(-mySigmaT.r * t), std::exp(-mySigmaT.g * t), std::exp(-mySigmaT.b * t));
 }
 
-bool Homogeneous::sampleDistance(const Ray &ray, Point2d& sample, double &t, Color &weight)
+bool Homogeneous::sampleDistance(const Ray &ray, Sampler::ptr sampler, double &t, Color &weight)
 {
 	//check inter ?
-	int channel = (int)(sample.y() * 3.);
+	int channel = (int)(sampler->getNextSample1D() * 3.);
 	double extinctionValue;
 	if (channel == 0) extinctionValue = mySigmaT.r; 
 	if (channel == 1) extinctionValue = mySigmaT.g; 
@@ -41,13 +41,13 @@ bool Homogeneous::sampleDistance(const Ray &ray, Point2d& sample, double &t, Col
 	extinctionValue += tools::EPSILON;
 
 	//double max = tools::EPSILON + std::max(mySigmaT.b, std::max(mySigmaT.r, mySigmaT.g));
-	t = -std::log(1. - sample.x()) / extinctionValue;
+	t = -std::log(1. - sampler->getNextSample1D()) / extinctionValue;
 
 	if (t > ray.myMaxT)
 	{
 		t = ray.myMaxT;
 		double pdf = (1 / 3.) * (std::exp(-mySigmaT.r * t) + std::exp(-mySigmaT.g * t) +std::exp(-mySigmaT.b * t));
-		weight = transmittance(ray) / pdf;
+		weight = transmittance(ray, sampler) / pdf;
 		//std::cout << weight << " " << pdf << std::endl;
 		return false;
 	}
@@ -57,7 +57,7 @@ bool Homogeneous::sampleDistance(const Ray &ray, Point2d& sample, double &t, Col
 		Ray tmpRay(ray);
 		t += ray.myMinT;
 		tmpRay.myMaxT = t;
-		weight = mySigmaS * transmittance(tmpRay) / pdf;
+		weight = mySigmaS * transmittance(tmpRay, sampler) / pdf;
 		//std::cout << weight << " " << transmittance(tmpRay) << " " << tmpRay.myMaxT << " " << tmpRay.myMinT << " " << mySigmaS << " " << pdf << " " << mySigmaS / pdf << std::endl;
 
 		return true;
