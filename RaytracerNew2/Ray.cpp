@@ -1,12 +1,12 @@
 #include "Ray.h"
 
-#include "Tools.h"
+#include "Math.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Ray::Ray()
-:myMinT(tools::EPSILON)
-,myMaxT(tools::MAX_DOUBLE)
+:myMinT(math::EPSILON)
+,myMaxT(math::MAX_REAL)
 {
 
 }
@@ -16,15 +16,15 @@ Ray::Ray()
 Ray::Ray(const Point3d& origin, const Vector3d& dir)
 //:myDirection(direction)
 :myOrigin(origin)
-,myMinT(tools::EPSILON)
-,myMaxT(tools::MAX_DOUBLE)
+,myMinT(math::EPSILON)
+,myMaxT(math::MAX_REAL)
 {
 	direction(dir);
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Ray::Ray(const Point3d & origin, const Vector3d & dir, double minT, double maxT)
+Ray::Ray(const Point3d & origin, const Vector3d & dir, real minT, real maxT)
 //:myDirection(direction)
 :myOrigin(origin)
 ,myMinT(minT)

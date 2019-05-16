@@ -1,1 +1,1 @@
-./Scenes/velvet.xml
+./Scenes/teapot.xml

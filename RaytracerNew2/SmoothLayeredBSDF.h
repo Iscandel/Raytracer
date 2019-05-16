@@ -22,18 +22,18 @@ public:
 
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample) override;
 
-	double pdf(const BSDFSamplingInfos& infos) override;
+	real pdf(const BSDFSamplingInfos& infos) override;
 	//=============================================================================
 	///////////////////////////////////////////////////////////////////////////////
-	Color fresnel(double etaExt, double etaInt, double cosThetaI, double& etaI, double& etaT, double& relativeEta, double& cosThetaT);
+	Color fresnel(real etaExt, real etaInt, real cosThetaI, real& etaI, real& etaT, real& relativeEta, real& cosThetaT);
 
 
 
-	inline Vector3d SmoothLayeredBSDF::refractIn(const Vector3d &wi, double &R);
-	inline Vector3d SmoothLayeredBSDF::refractOut(const Vector3d &wi, double &R);
+	//inline Vector3d SmoothLayeredBSDF::refractIn(const Vector3d &wi, real &R);
+	//inline Vector3d SmoothLayeredBSDF::refractOut(const Vector3d &wi, real &R);
 
-	double m_specularSamplingWeight;
-	//Color evalReflection(const BSDFSamplingInfos & infos, const Color& fr, double alpha);
+	//real m_specularSamplingWeight;
+	//Color evalReflection(const BSDFSamplingInfos & infos, const Color& fr, real alpha);
 
 	//Color eval2(const BSDFSamplingInfos & infos);
 
@@ -42,10 +42,10 @@ public:
 
 	//MicrofacetDistribution myDistribution;
 
-	double myEtaExt;
-	double myEtaInt;
-	double myAlpha;
-	double myThickness;
+	real myEtaExt;
+	real myEtaInt;
+	real myAlpha;
+	real myThickness;
 	Color myAbsorbance;
 	Rng myRng;
 

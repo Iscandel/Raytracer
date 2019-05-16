@@ -1,7 +1,57 @@
+#include <regex>
+#include <iostream>
+
+//inline std::vector<std::string> regexSplit(const std::string& s, const std::string& regex)
+//{
+//	std::vector<std::string> res;
+//	std::regex words_regex(regex);//"[^\\s.,:;!?]+");
+//	auto words_begin = std::sregex_iterator(s.begin(), s.end(), words_regex);
+//	auto words_end = std::sregex_iterator();
+//
+//	for (std::sregex_iterator i = words_begin; i != words_end; ++i)
+//		res.push_back((*i).str());
+//	return res;
+//}
+//
+//int main(int argc, char* argv[])
+//{
+//	//auto vec = regexSplit("200.57", "(\\.[0-9]+)");
+//	//auto vec = regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 600 :  8", "([0-9]+\\s*:\\s*[0-9]+)");
+//	auto vec = regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 600 :  8", "([0-9]+\\.?[0-9]*\\s*:\\s*[0-9]+\\.?[0-9]*)|([^\\s,]+)");
+//	for (auto tmp : vec)
+//		std::cout << tmp << std::endl;
+//	std::cout << "New\n" << std::endl;
+//	vec = regexSplit("3 5 7", "([0-9]+\\.?[0-9]*\\s*:\\s*[0-9]+\\.?[0-9]*)|([^\\s,]+)");
+//	for (auto tmp : vec)
+//		std::cout << tmp << std::endl;
+//	std::cout << "New\n" << std::endl;
+//	vec = regexSplit("3, 8, 2 7 9", "([0-9]+\\.?[0-9]*\\s*:\\s*[0-9]+\\.?[0-9]*)|([^\\s,]+)");
+//	//auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "[^\\s,]+");
+//	//auto vec = tools::regexSplit("Hello, everyone! This is: COSC-1436, SP18", "[^\\s.,:;!?]+");
+//	for (auto tmp : vec)
+//		std::cout << tmp << std::endl;
+//	std::cout << "New2\n" << std::endl;
+//	vec = regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 600 :  8", "([^\\s,]+\\.*[^,]+\\s*:\\s*[^,]+\\.*[^\\s,]+)|([^,]+)");
+//	for (auto tmp : vec)
+//		std::cout << tmp << std::endl;
+//	std::cout << "New2\n" << std::endl;
+//	vec = regexSplit("3, 8, 2 7 9", "([^\\s,]+\\s*:\\s*[^\\s,]+)|([^\\s,]+)");
+//	for (auto tmp : vec)
+//		std::cout << tmp << std::endl;
+//	std::cout << "New2\n" << std::endl;
+//	vec = regexSplit("2003, 300.5.1:5,350.5f:4 400:4.9de, 450:7, 500: 6 550 : 7 600 :  8", "([^\\s,]+\\s*:\\s*[^\\s,]+)|([^\\s,]+)");
+//	for (auto tmp : vec)
+//		std::cout << tmp << std::endl;
+//	getchar();
+//	return 0;
+//}
+
 #include <SFML/Graphics.hpp>
 #include "Logger.h"
+#include "Math.h"
 #include "Scene.h"
 #include "Timer.h"
+#include "Tools.h"
 
 //#ifdef _DEBUG 
 //#pragma comment(lib,"sfml-graphics-d.lib")
@@ -72,26 +122,30 @@ void shToneMapper()
 
 	//shader.setParameter("position", positions);
 	shader.setParameter("source", 0);
-	shader.setParameter("gamma", std::pow(2.f, (0.5 - 0.5f) * 20));
+	shader.setParameter("gamma", std::pow(2.f, (0.5f - 0.5f) * 20));
 }
 
-void toneMapper(Screen& film, sf::Image& out, double gamma)
+void toneMapper(Screen& film, sf::Image& out, real gamma)
 {
-	auto toSRGB = [&](double value) {
+	auto toSRGB = [&](real value) {
 		if (value < 0.0031308)
-			return 12.92 * value;
-		return 1.055 * pow(value, 0.41666) - 0.055;
+			return 12.92f * value;
+		return 1.055f * pow(value, 0.41666f) - 0.055f;
 	};
 
-	//double gamma = std::pow(2., (0.5 - 0.5) * 20);
+	//real gamma = std::pow(2., (0.5 - 0.5) * 20);
 
 	for (unsigned int y = 0; y < out.getSize().y; y++)
 	{
 		for (unsigned int x = 0; x < out.getSize().x; x++)
 		{
 			Color col = film(x, y) * gamma;
-			col.r = toSRGB(col.r); col.g = toSRGB(col.g); col.b = toSRGB(col.b);
-			out.setPixel(x, y, sf::Color(tools::thresholding(col.r * 255, 0., 255.), tools::thresholding(col.g * 255, 0., 255.), tools::thresholding(col.b * 255, 0., 255.)));
+			real r, g, b;
+			col.toSRGB(r, g, b);
+			//col.r() = toSRGB(col.r()); col.g() = toSRGB(col.g()); col.b() = toSRGB(col.b());
+			out.setPixel(x, y, sf::Color((sf::Uint8)math::thresholding(r * 255, (real) 0., (real) 255.),
+										 (sf::Uint8)math::thresholding(g * 255, (real) 0., (real) 255.),
+										 (sf::Uint8)math::thresholding(b * 255, (real) 0., (real) 255.)));
 		}
 	}
 }
@@ -103,12 +157,16 @@ void EXRToRGB(Screen& film, sf::Image& out)
 		for (unsigned int x = 0; x < out.getSize().x; x++)
 		{
 			Color col = film(x, y);
-			out.setPixel(x, y, sf::Color(tools::thresholding(col.r * 255, 0., 255.), tools::thresholding(col.g * 255, 0., 255.), tools::thresholding(col.b * 255, 0., 255.)));
+			real r, g, b;
+			col.toRGB(r, g, b);
+			out.setPixel(x, y, sf::Color(math::thresholding(r * 255, (real) 0., (real) 255.),
+										 math::thresholding(g * 255, (real) 0., (real) 255.),
+										 math::thresholding(b * 255, (real) 0., (real) 255.)));
 		}
 	}
 }
 
-void applyProcessing(bool toneMap, Screen& filmOrig, sf::Image& image, double gamma)
+void applyProcessing(bool toneMap, Screen& filmOrig, sf::Image& image, real gamma)
 {
 	if (toneMap)
 	{
@@ -126,12 +184,17 @@ void writeEXR(const std::string& path, const Screen& film) //const Array2D<Pixel
 	int height = film.getSizeY();//array.getHeight();
 	Imf_2_2::Rgba* pixels = new Imf_2_2::Rgba[width * height];
 
-	for (unsigned int y = 0; y < height; y++)
+	if (Color::NB_SAMPLES != 3)
+		ILogger::log() << "Spectral EXR not implemented yet. Switch to RGB\n";
+	for (int y = 0; y < height; y++)
 	{
-		for (unsigned int x = 0; x < width; x++)
+		for (int x = 0; x < width; x++)
 		{
 			Color col = film(x, y);
-			Imf_2_2::Rgba tmp((half)col.r, (half)col.g, (half)col.b);
+			
+			real r, g, b;
+			col.toRGB(r, g, b);
+			Imf_2_2::Rgba tmp((half)r, (half)g, (half)b);
 			*(pixels + x + y * width) = tmp;
 		}
 	}
@@ -189,11 +252,160 @@ protected:
 	bool myIsShown;
 };
 
+class Col2
+{
+	float a; 
+	float b;
+	float c;
+	float d;
+	int e;
+};
+
+template<class T>
+class Col : public Eigen::Array<T, 5, 1>/*public DiscreteSpectrum,*/ //public Eigen::Array<T, DiscreteSpectrum::NB_SAMPLES + 1, 1>//Color3<T>::nbSamples, 1>
+{
+protected:
+	//#ifdef USE_ALIGN
+	//	static constexpr int ALIGNED_SAMPLES = 4;//DiscreteSpectrum::NB_SAMPLES + 1;
+	//#else
+	//	static constexpr int ALIGNED_SAMPLES = 3;//DiscreteSpectrum::NB_SAMPLES;
+	//#endif
+
+//public:
+//	explicit Col(T val = 0.)
+//		:r(coeffRef(0))
+//		, g(coeffRef(1))
+//		, b(coeffRef(2))
+//	{
+//		Eigen::Array<T, 4, 1>::setConstant(val);
+//	}
+//
+//	Color3(T x, T y, T z, T w = (T)0)
+//		: Eigen::Array<T, 4, 1>(x, y, z, w)
+//		, r(coeffRef(0))
+//		, g(coeffRef(1))
+//		, b(coeffRef(2))
+//	{
+//	}
+//
+//	Col(const Color3<T>& c)
+//		:r(coeffRef(0))
+//		, g(coeffRef(1))
+//		, b(coeffRef(2))
+//	{
+//		r = c.r;
+//		g = c.g;
+//		b = c.b;
+//	}
+//
+//	Color3& operator = (const Color3<T>& c) {
+//		coeffRef(0) = c.coeff(0);
+//		coeffRef(1) = c.coeff(1);
+//		coeffRef(2) = c.coeff(2);
+//
+//		return *this;
+//	}
+//
+//	template <typename Derived> Color3(const Eigen::ArrayBase<Derived>& p)
+//		: Eigen::Array<T, 4, 1>(p)
+//		, r(coeffRef(0))
+//		, g(coeffRef(1))
+//		, b(coeffRef(2))
+//	{ }
+//
+//	template <typename Derived> Color3 &operator=(const Eigen::ArrayBase<Derived>& p) {
+//		this->Base::operator=(p);
+//		return *this;
+//	}
+//
+//	void validate()
+//	{
+//		r = r > 1.f ? 1.f : r < 0. ? 0.f : r;
+//		g = g > 1.f ? 1.f : g < 0. ? 0.f : g;
+//		b = b > 1.f ? 1.f : b < 0. ? 0.f : b;
+//	}
+//
+//	T average() const
+//	{
+//		return (r + b + g) / (T)3.;
+//	}
+//
+//	T max()
+//	{
+//		return std::max(r, std::max(g, b));
+//	}
+//
+//	T luminance() const
+//	{
+//		return 0.2126f * r + 0.7152f * g + 0.0722f *b;
+//	}
+//
+//	bool isZero() const
+//	{
+//#ifdef DOUBLE_PRECISION
+//		const priv::real eps = 1e-9;
+//#else
+//		const priv::real eps = 1e-5f;
+//#endif
+//		return r < eps && g < eps && b < eps;
+//	}
+//
+	//bool isNan() const
+	//{
+	//	if (std::isnan(r) || std::isnan(g) || std::isnan(b))
+	//		return true;
+	//	return false;
+	//}
+
+	//T& r;
+	//T& g;
+	//T& b;
+};
+
 
 
 int main(int argc, char* argv[])
 {
 	try {
+		////Point3d p(0.1, 0.2, 0.3);
+		////Point3d resP;
+		////Eigen::Array3f f;
+		////Eigen::Array3f t = f + 3.2;
+
+		//Color c(0.5, 0.2, 0.3);
+		//Color res = Color(1.) / c;
+		//res = c + 0.2;
+		//res = c + 2;
+		//auto prod = c * res;
+		////res -= 2.;
+
+		//Color3f d(0.2, 0.3, 0.4);
+		//Color3f res2 = d + 0.2;
+		//res2 = d + 2;
+		// res2 *= 3.f;
+		// res2 = 3. * d;
+		// //res2 -= 2.;
+		//res2 /= 3.f;
+		//res2 += 0.6;
+		//auto prod2 = d * res2;
+		//Color3f prod3 = d * res2;
+		//std::cout << prod2 << " ||" << prod3 << std::endl;
+		//Color3f tmp;
+		//std::cout << sizeof(int) << " " << sizeof(double) << " " << sizeof(float) << " " << sizeof(char) << std::endl;
+		std::cout << sizeof(Color3f) << " " << std::endl;
+		Color3f c;c.exp();
+		//(?!chat|?!chien)([0-9A-Za-z-]{3,})
+		//auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "([[0-9]+\\s*:\\s*.+]+)([^\\s,]+)");
+		auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "([0-9]+\\.?[0-9]+\\s*:\\s*[0-9]+\.?[0-9]+)");
+		//auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "[^\\s,]+");
+		//auto vec = tools::regexSplit("Hello, everyone! This is: COSC-1436, SP18", "[^\\s.,:;!?]+");
+		for (auto tmp : vec)
+			std::cout << tmp << std::endl;
+		//std::cout << sizeof(Col<real>) <<  std::endl;
+		//Point3d p;
+		//std::cout << sizeof(p) << std::endl;
+		//std::cout << sizeof(Col2) << std::endl;
+
 		ILogger::setLogLevel(ILogger::ALL);
 		ILogger::setLogger(new ConsoleLog(std::cout));
 		//Sampler::ptr sampler(new RandomSampler(Parameters()));
@@ -280,7 +492,7 @@ void run(int argc, char* argv[])
 	filmOrig.postProcessColor();
 
 	bool toneMap = false;
-	double gamma = std::pow(2., (0.5 - 0.5) * 20);
+	real gamma = std::pow(2.f, (0.5f - 0.5f) * 20);
 
 	applyProcessing(toneMap, filmOrig, image, gamma);
 //	for(int y = 0; y < height; y++)
@@ -365,12 +577,12 @@ void run(int argc, char* argv[])
 			{
 				if (ev.text.unicode == '+')
 				{
-					gamma += 0.1;
+					gamma += 0.1f;
 					gammaText.setText("gamma = " + tools::numToString(gamma));
 				}
 				else if (ev.text.unicode == '-')
 				{
-					gamma -= 0.1;
+					gamma -= 0.1f;
 					gammaText.setText("gamma = " + tools::numToString(gamma));
 				}
 			}

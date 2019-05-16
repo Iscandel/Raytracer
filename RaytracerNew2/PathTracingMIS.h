@@ -10,7 +10,7 @@ public:
 	PathTracingMIS(const Parameters& params);
 	~PathTracingMIS();
 
-	Color li(Scene & scene, Sampler::ptr sampler, const Ray & ray) override;
+	Color li(Scene & scene, Sampler::ptr sampler, const Ray & ray, RadianceType::ERadianceType radianceType = RadianceType::ALL_RADIANCE) override;
 
 protected:
 	LightSamplingStrategy myStrategy;

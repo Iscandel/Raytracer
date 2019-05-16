@@ -15,13 +15,13 @@ public:
 
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample) override;
 
-	double pdf(const BSDFSamplingInfos& infos) override;
+	real pdf(const BSDFSamplingInfos& infos) override;
 
 protected:
 	Texture::ptr myReflectanceTexture;
 	Texture::ptr myTransmittedTexture;
 
-	double myEtaI;
+	real myEtaI;
 	Color myEtaT;
 
 	Rng myRng;

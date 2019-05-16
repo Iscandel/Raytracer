@@ -10,7 +10,7 @@ public:
 	IsotropicPhaseFunction(const Parameters&);
 	~IsotropicPhaseFunction();
 
-	double sample(PhaseFunctionSamplingInfos &infos, const Point2d &sample) const override;
+	real sample(PhaseFunctionSamplingInfos &infos, const Point2d &sample) const override;
 
 	/**
 	* \brief Evaluate the phase function for a pair of directions
@@ -21,7 +21,7 @@ public:
 	* \return
 	*     The phase function value, evaluated for each color channel
 	*/
-	double eval(const PhaseFunctionSamplingInfos &infos) const override;
+	real eval(const PhaseFunctionSamplingInfos &infos) const override;
 
 	/**
 	* \brief Compute the probability of sampling \c pRec.wo
@@ -37,6 +37,6 @@ public:
 	*     A probability/density value expressed with respect
 	*     to the solid angle measure
 	*/
-	double pdf(const PhaseFunctionSamplingInfos &infos) const override;
+	real pdf(const PhaseFunctionSamplingInfos &infos) const override;
 };
 

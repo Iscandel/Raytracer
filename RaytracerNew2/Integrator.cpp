@@ -1,5 +1,6 @@
 #include "Integrator.h"
 #include "Intersection.h"
+#include "Math.h"
 #include "Scene.h"
 
 Integrator::Integrator()
@@ -31,12 +32,12 @@ Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::
 	Ray trRay(ray);
 	Intersection intersection;
 	Color tr(1.);
-	double distInterLight = ray.myMaxT;
+	real distInterLight = ray.myMaxT;
 	bool firstPass = true;
 
 	while (true)
 	{
-		bool inter = scene.computeIntersection(trRay, intersection, true);
+		bool inter = scene.computeIntersection(trRay, intersection);
 		//If we had a surface intersection
 		if (inter && intersection.myPrimitive->getBSDF() != nullptr)
 			return Color(0.);
@@ -50,7 +51,7 @@ Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::
 
 		//Update transmittance
 		if(medium)
-			tr *= medium->transmittance(Ray(trRay.myOrigin, trRay.direction(), firstPass ? trRay.myMinT : 0., inter ? intersection.t : distInterLight), sampler);
+			tr *= medium->transmittance(Ray(trRay.myOrigin, trRay.direction(), firstPass ? trRay.myMinT : 0.f, inter ? intersection.t : distInterLight), sampler);
 
 		firstPass = false;
 		//No intersection, leave
@@ -58,7 +59,7 @@ Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::
 			return tr;
 
 		//Update the ray
-		trRay = Ray(trRay.getPointAt(intersection.t), trRay.direction(), tools::EPSILON, distInterLight);
+		trRay = Ray(trRay.getPointAt(intersection.t), trRay.direction(), math::EPSILON, distInterLight);
 
 		if (intersection.isMediumTransition())
 			medium = intersection.getMedium(trRay);
@@ -69,18 +70,24 @@ Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::
 Color Integrator::sampleAttenuatedLightDirect(const Point3d& interPoint, Sampler::ptr sampler, const Scene& scene, LightSamplingInfos& infos, Medium::ptr medium)
 {
 	Color value;
-	double lightWeight;
+	real lightWeight;
 	const Scene::LightVector& lights = scene.getLights();
+	if (lights.size() == 0)
+		return Color();
+
 	Point2d sample = sampler->getNextSample2D();
 
 	int index = myLightWeights.sampleAndReuse(sample.x(), lightWeight);
 	Light::ptr light = lights[index];
 
+	//Light::ptr light = lights[(int)(sample.x() * lights.size())];
+	//lightWeight = 1.f / lights.size();
+
 	//Sample the light
 	infos = light->sample(interPoint, sample);
 	infos.light = light;
 
-	Ray shadowRay(interPoint, infos.interToLight, tools::EPSILON, infos.distance - tools::EPSILON);
+	Ray shadowRay(interPoint, infos.interToLight, math::EPSILON, infos.distance - math::EPSILON);
 	Intersection tmp;
 
 	//If the light point is visible from the the inter point
@@ -99,9 +106,11 @@ Color Integrator::sampleAttenuatedLightDirect(const Point3d& interPoint, Sampler
 
 Color Integrator::sampleLightDirect(const Point3d& interPoint, const Point2d& _sample, const Scene& scene, LightSamplingInfos& infos, LightSamplingStrategy strategy)
 {
-		double lightWeight;
+		real lightWeight;
 		Light::ptr light;
 		const Scene::LightVector& lights = scene.getLights();
+		if (lights.size() == 0)
+			return Color();
 		Point2d sample = _sample;
 
 		if (strategy == LightSamplingStrategy::ONE_LIGHT_WEIGHTED)
@@ -112,7 +121,7 @@ Color Integrator::sampleLightDirect(const Point3d& interPoint, const Point2d& _s
 		else
 		{
 			light = lights[(int)(sample.x() * lights.size())];
-			lightWeight = 1. / lights.size();
+			lightWeight = 1.f / lights.size();
 		}
 
 		Color value = sampleOneLight(light, interPoint, sample, scene, infos);
@@ -145,7 +154,7 @@ Color Integrator::sampleOneLight(Light::ptr light, const Point3d & interPoint, c
 	lightInfos = light->sample(interPoint, sample);
 	lightInfos.light = light;
 
-	Ray shadowRay(interPoint, lightInfos.interToLight, tools::EPSILON, lightInfos.distance - tools::EPSILON);
+	Ray shadowRay(interPoint, lightInfos.interToLight, math::EPSILON, lightInfos.distance - math::EPSILON);
 	Intersection tmp;
 
 	//If the light point is visible from the the inter point

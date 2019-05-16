@@ -10,19 +10,18 @@
 
 SmoothLayeredBSDF::SmoothLayeredBSDF(const Parameters& params)
 	: myBaseBSDF()
-	, myThickness(1.2)
-	, myAbsorbance(0.1, 0.7, 0.7)
+	, myThickness(1.2f)
 {
-	myEtaExt = params.getDouble("etaExt", 1.000277); //incident
-	myEtaInt = params.getDouble("etaInt", 1.5046); //transmitted
-	myThickness = params.getDouble("thickness", 1.2);
-	myAbsorbance = params.getColor("absorbance", Color(0.1, 0.7, 0.7));
+	myEtaExt = params.getReal("etaExt", 1.000277f); //incident
+	myEtaInt = params.getReal("etaInt", 1.5046f); //transmitted
+	myThickness = params.getReal("thickness", 1.2f);
+	myAbsorbance = params.getColor("absorbance", Color(0.f));
 	myBaseBSDF = params.getBSDF("baseBSDF", BSDF::ptr(new Diffuse(Parameters())));
 
-	double avgAbsorption = std::exp(myAbsorbance.r *(-2 * myThickness)) + std::exp(myAbsorbance.g *(-2 * myThickness)) + std::exp(myAbsorbance.b *(-2 * myThickness));
-	avgAbsorption /= 3.;
+	//real avgAbsorption = std::exp(myAbsorbance.r *(-2 * myThickness)) + std::exp(myAbsorbance.g *(-2 * myThickness)) + std::exp(myAbsorbance.b *(-2 * myThickness));
+	//avgAbsorption /= 3.;
 
-	m_specularSamplingWeight = 1.0f / (avgAbsorption + 1.0f);
+	//m_specularSamplingWeight = 1.0f / (avgAbsorption + 1.0f);
 
 }
 
@@ -32,7 +31,7 @@ SmoothLayeredBSDF::~SmoothLayeredBSDF()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Color SmoothLayeredBSDF::fresnel(double etaExt, double etaInt, double cosThetaI, double& etaI, double& etaT, double& relativeEta, double& cosThetaT)
+Color SmoothLayeredBSDF::fresnel(real etaExt, real etaInt, real cosThetaI, real& etaI, real& etaT, real& relativeEta, real& cosThetaT)
 {
 	etaI = etaExt;
 	etaT = etaInt;
@@ -46,8 +45,8 @@ Color SmoothLayeredBSDF::fresnel(double etaExt, double etaInt, double cosThetaI,
 	}
 	relativeEta = etaI / etaT;
 
-	double sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosThetaI * cosThetaI));
-	cosThetaT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
+	real sinThetaT = relativeEta * std::sqrt(std::max((real)0., 1 - cosThetaI * cosThetaI));
+	cosThetaT = std::sqrt(std::max((real)0., 1 - sinThetaT * sinThetaT));
 
 	if (sinThetaT >= 1.)
 	{
@@ -68,15 +67,15 @@ Color SmoothLayeredBSDF::fresnel(double etaExt, double etaInt, double cosThetaI,
 //Color SmoothLayeredBSDF::eval(const BSDFSamplingInfos & infos)
 //{
 //	return Color(0.);
-//	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+//	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 //
-//	double alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlpha;
+//	real alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlpha;
 //
 //	//Normal3d normal = myDistribution.sampleNormal(Point2d(myRng.random(0., 1.), myRng.random(0., 1.)), alpha);
 //	Vector3d wh = (infos.wi + infos.wo).normalized();
-//	double etaI, etaT, relativeEta, cosThetaT;
-//	double fr1 = fresnel(myEtaExt, myEtaInt, infos.wi.dot(wh), etaI, etaT, relativeEta, cosThetaT).r;
-//	double T12 = 1. - fr1;
+//	real etaI, etaT, relativeEta, cosThetaT;
+//	real fr1 = fresnel(myEtaExt, myEtaInt, infos.wi.dot(wh), etaI, etaT, relativeEta, cosThetaT).r;
+//	real T12 = 1. - fr1;
 //
 //
 //	if (fr1 == 1.)
@@ -92,60 +91,61 @@ Color SmoothLayeredBSDF::fresnel(double etaExt, double etaInt, double cosThetaI,
 //	refractedWi = -refractedWi;
 //	refractedWo = -refractedWo;
 //
-//	double T21 = fresnel(myEtaExt, myEtaInt, (-refractedWo).dot(wh), etaI, etaT, relativeEta, cosThetaT).r;
+//	real T21 = fresnel(myEtaExt, myEtaInt, (-refractedWo).dot(wh), etaI, etaT, relativeEta, cosThetaT).r;
 //	Color fr2 = fresnel::fresnelConductor(myEta, myAbsorption, DifferentialGeometry::cosTheta(refractedWi));
 //	BSDFSamplingInfos refractedInfos(refractedWi, refractedWo);
 //	Color f2 = evalReflection(refractedInfos, fr2, alpha);
 //
-//	double wiPDotNormal = refractedWi.z();
-//	double woPDotNormal = refractedWo.z();
+//	real wiPDotNormal = refractedWi.z();
+//	real woPDotNormal = refractedWo.z();
 //
 //	Color a(std::exp(-myAbsorbance.r * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))),
 //		std::exp(-myAbsorbance.g * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))),
 //		std::exp(-myAbsorbance.b * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))));
 //
-//	double G = myDistribution.G(refractedWi, refractedWo, wh, alpha);
+//	real G = myDistribution.G(refractedWi, refractedWo, wh, alpha);
 //
-//	double t = (1. - G) + T21 * G;
+//	real t = (1. - G) + T21 * G;
 //	return f1 + T12 * f2 * a * t;
 //
 //
 //
 //
-//	//double cosI = DifferentialGeometry::cosTheta(infos.wi);
-//	//double cosO = DifferentialGeometry::cosTheta(infos.wo);
-//	//double etaI = myEtaI;
-//	//double etaT = myEtaT;
-//	//double fr = 0.;
+//	//real cosI = DifferentialGeometry::cosTheta(infos.wi);
+//	//real cosO = DifferentialGeometry::cosTheta(infos.wo);
+//	//real etaI = myEtaI;
+//	//real etaT = myEtaT;
+//	//real fr = 0.;
 //
-//	//double relativeEta = etaI / etaT;
+//	//real relativeEta = etaI / etaT;
 //	////Descartes's law
-//	//double sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosI * cosI));
+//	//real sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosI * cosI));
 //	////Trigo law
-//	//double cosT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
-//	//double t12 = 1. - fresnel::fresnelDielectric(myEtaI, myEtaT, cosI, cosT);
+//	//real cosT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
+//	//real t12 = 1. - fresnel::fresnelDielectric(myEtaI, myEtaT, cosI, cosT);
 //
 //	//Color absorbance(0.7, 0.2, 0.3);
 //	//Color a(std::exp(-absorbance.r * myThickness * (1. / std::abs(cosI) + 1. / std::abs(cosO))),
 //	//		std::exp(-absorbance.g * myThickness * (1. / std::abs(cosI) + 1. / std::abs(cosO))),
 //	//		std::exp(-absorbance.b * myThickness * (1. / std::abs(cosI) + 1. / std::abs(cosO))));
 //	//Vector3d wh = (infos.wi + infos.wo).normalized();
-//	//double G = shadowingTerm(infos.wi, infos.wo, wh);
-//	//double t = (1. - G) + t12 * G;
+//	//real G = shadowingTerm(infos.wi, infos.wo, wh);
+//	//real t = (1. - G) + t12 * G;
 //	//return dielectric.eval(infos) + t12 * conductor.eval(infos) * a * t;
 //}
 
 Color SmoothLayeredBSDF::eval(const BSDFSamplingInfos & infos)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
 	//Vector3d wh = (infos.wi + infos.wo).normalized();
-	double etaI, etaT, relativeEta, cosThetaT;
-	double fr1 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
-	double T12 = 1. - fr1;
+	real etaI, etaT, relativeEta, cosThetaT;
+	real fr1 = fresnel::estimateDielectric(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).average();
+	//real fr1 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r();
+	real T12 = 1.f - fr1;
 
 
-	if (fr1 == 1.)
+	if (fr1 == 1.f)
 		return Color();
 	Vector3d refractedWi = refract(infos.wi, cosThetaT, relativeEta);
 	Vector3d refractedWo = refract(infos.wo, cosThetaT, relativeEta);
@@ -159,36 +159,38 @@ Color SmoothLayeredBSDF::eval(const BSDFSamplingInfos & infos)
 	refractedWo = -refractedWo;
 
 	cosThetaI = DifferentialGeometry::cosTheta(-refractedWo);
-	double fr2 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
-	if (fr2 == 1.)
+	real fr2 = fresnel::estimateDielectric(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).average();
+	//real fr2 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r();
+	if (fr2 == 1.f)
 		return Color();
-	double T21 = 1. - fr2;
+	real T21 = 1.f - fr2;
 	//Color fr2 = fresnel::fresnelConductor(myEta, myAbsorption, DifferentialGeometry::cosTheta(refractedWi));
 	BSDFSamplingInfos refractedInfos(refractedWi, refractedWo);
 	Color f2 = myBaseBSDF->eval(refractedInfos);//fr2;
 
-	double wiPDotNormal = refractedWi.z();
-	double woPDotNormal = refractedWo.z();
+	real wiPDotNormal = refractedWi.z();
+	real woPDotNormal = refractedWo.z();
 
-	Color a(std::exp(-myAbsorbance.r * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))),
-		std::exp(-myAbsorbance.g * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))),
-		std::exp(-myAbsorbance.b * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))));
+	//Color a(std::exp(-myAbsorbance.r * myThickness * (1.f / std::abs(wiPDotNormal) + 1.f / std::abs(woPDotNormal))),
+	//	std::exp(-myAbsorbance.g * myThickness * (1.f / std::abs(wiPDotNormal) + 1.f / std::abs(woPDotNormal))),
+	//	std::exp(-myAbsorbance.b * myThickness * (1.f / std::abs(wiPDotNormal) + 1.f / std::abs(woPDotNormal))));
+	Color a(math::fastExp(-myAbsorbance * myThickness * (1.f / std::abs(wiPDotNormal) + 1.f / std::abs(woPDotNormal))));
 
-	double G = 1.;//myDistribution.G(refractedWi, refractedWo, wh, alpha);
+	real G = 1.f;//myDistribution.G(refractedWi, refractedWo, wh, alpha);
 
-	double t = (1. - G) + T21 * G;
-	double m_invEta = myEtaExt / myEtaInt;
+	real t = (1.f - G) + T21 * G;
+	real m_invEta = myEtaExt / myEtaInt;
 	
 	return f1 + T12 * f2 * a * t * m_invEta * m_invEta * DifferentialGeometry::cosTheta(infos.wo) / DifferentialGeometry::cosTheta(refractedWo);
 }
 
-//Color SmoothLayeredBSDF::evalReflection(const BSDFSamplingInfos & infos, const Color& fr, double alpha)
+//Color SmoothLayeredBSDF::evalReflection(const BSDFSamplingInfos & infos, const Color& fr, real alpha)
 //{
-//	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-//	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+//	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+//	real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 //
 //	Vector3d wh = (infos.wi + infos.wo).normalized();
-//	wh = tools::sign(cosThetaI) * wh;
+//	wh = math::sign(cosThetaI) * wh;
 //
 //	Color term = myDistribution.D(wh, alpha) * fr *
 //		myDistribution.G(infos.wi, infos.wo, wh, alpha) / (4 * cosThetaI * cosThetaO);
@@ -199,15 +201,16 @@ Color SmoothLayeredBSDF::eval(const BSDFSamplingInfos & infos)
 
 Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
 	infos.sampledType = BSDF::GLOSSY_REFLECTION;
 	infos.measure = Measure::SOLID_ANGLE;
 
-	double etaI, etaT, relativeEta, cosThetaT;
-	double fr1 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
+	real etaI, etaT, relativeEta, cosThetaT;
+	real fr1 = fresnel::estimateDielectric(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).average();
+	//real fr1 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r();
 
-	if (fr1 == 1.)
+	if (fr1 == 1.f)
 		return Color();	
 
 	if (sample.x() <= fr1)
@@ -216,7 +219,7 @@ Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sampl
 		infos.pdf = fr1;
 		infos.sampledType = BSDF::DELTA_REFLECTION;
 		infos.measure = Measure::DISCRETE;
-		return Color(1.);
+		return Color(1.f);
 	}
 	else
 	{
@@ -228,39 +231,41 @@ Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sampl
 
 		//
 		Color f1 = Color();//Color(1.) * relativeEta * relativeEta;
-		double T12 = 1. - fr1;
+		real T12 = 1.f - fr1;
 
 		BSDFSamplingInfos refractedInfos(refractedWi);
 		Color f2 = myBaseBSDF->sample(refractedInfos, sample);
 		if (f2.isZero())
 			return Color();
 
-		infos.pdf = (1. - fr1);// *refractedInfos.pdf;
+		infos.pdf = (1.f - fr1);// *refractedInfos.pdf;
 
 		if (infos.pdf <= 0.)
 			return Color();
 
 		infos.wo = -refractedInfos.wo;
 
-		double wiPDotNormal = DifferentialGeometry::cosTheta(refractedWi);
-		double woPDotNormal = DifferentialGeometry::cosTheta(-refractedInfos.wo);
+		real wiPDotNormal = DifferentialGeometry::cosTheta(refractedWi);
+		real woPDotNormal = DifferentialGeometry::cosTheta(-refractedInfos.wo);
 
-		Color a(std::exp(-myAbsorbance.r * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))),
-			std::exp(-myAbsorbance.g * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))),
-			std::exp(-myAbsorbance.b * myThickness * (1. / std::abs(wiPDotNormal) + 1. / std::abs(woPDotNormal))));
+		//Color a(std::exp(-myAbsorbance.r * myThickness * (1.f / std::abs(wiPDotNormal) + 1.f / std::abs(woPDotNormal))),
+		//	std::exp(-myAbsorbance.g * myThickness * (1.f / std::abs(wiPDotNormal) + 1.f / std::abs(woPDotNormal))),
+		//	std::exp(-myAbsorbance.b * myThickness * (1.f / std::abs(wiPDotNormal) + 1.f / std::abs(woPDotNormal))));
+		Color a(math::fastExp(-myAbsorbance * myThickness * (1.f / std::abs(wiPDotNormal) + 1.f / std::abs(woPDotNormal))));
 
 		cosThetaI = DifferentialGeometry::cosTheta(infos.wo);
-		double fr2 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
-		if (fr2 == 1.)
+		real fr2 = fresnel::estimateDielectric(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).average();
+		//real fr2 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r();
+		if (fr2 == 1.f)
 			return Color();
-		double T21 = 1. - fr2;
+		real T21 = 1.f - fr2;
 
 		infos.wo = refract(infos.wo, cosThetaT, relativeEta);
 		infos.wo.normalize();
-		double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+		real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 		Color res = (f1 + T12 * f2 * a * T21) *std::abs(cosThetaO) / infos.pdf;
-		double m_invEta = myEtaExt / myEtaInt;
+		real m_invEta = myEtaExt / myEtaInt;
 		infos.pdf *= refractedInfos.pdf * m_invEta * m_invEta * DifferentialGeometry::cosTheta(infos.wo) / woPDotNormal;
 		return res;
 		//
@@ -269,7 +274,7 @@ Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sampl
 
 		//cosThetaI = DifferentialGeometry::cosTheta(infos.wo);
 
-		//double fr1b = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
+		//real fr1b = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
 		//if (fr1b == 1.)
 		//{
 		//	infos.pdf = 0.;
@@ -278,7 +283,7 @@ Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sampl
 
 		//infos.wo = refract(infos.wo, cosThetaT, relativeEta);
 		//infos.wo.normalize();
-		//double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+		//real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 		//infos.pdf = 1. - fr1;//pdf(infos);
 
 		//if (infos.pdf <= 0.)
@@ -290,8 +295,8 @@ Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sampl
 	//Color res = dielectric.sample(infos, sample);
 	//if (res.isZero())
 	//	return Color();
-	//double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	//double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+	//real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	//real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 	//bool reflection = cosThetaI * cosThetaO > 0;
 	//if (reflection)
@@ -305,7 +310,7 @@ Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sampl
 
 	//infos2.wi = infos2.wo;
 	//dielectric.sample(infos2, sample);
-	//double cosO = DifferentialGeometry::cosTheta(infos2.wo);
+	//real cosO = DifferentialGeometry::cosTheta(infos2.wo);
 	//infos = infos2;
 	//infos.pdf = pdf(infos);
 	//if (infos.pdf < 0)
@@ -315,30 +320,31 @@ Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sampl
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-//double LayeredBSDF::pdfReflection(const BSDFSamplingInfos& infos, alpha)
+//real LayeredBSDF::pdfReflection(const BSDFSamplingInfos& infos, alpha)
 //{
-//	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-//	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+//	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+//	real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 //
 //	if (cosThetaI <= 0. || cosThetaO <= 0.)
 //		return 0.;
 //
 //	Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
-//	double cosThetaH = DifferentialGeometry::cosTheta(wh);
+//	real cosThetaH = DifferentialGeometry::cosTheta(wh);
 //
-//	double Jh = 1. / (4 * std::abs(wh.dot(infos.wo)));
-//	double D = myDistribution.D(wh, alpha);
+//	real Jh = 1. / (4 * std::abs(wh.dot(infos.wo)));
+//	real D = myDistribution.D(wh, alpha);
 //	return D * cosThetaH * Jh;
 //}
 
-double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
+real SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
 	//Vector3d wh = (infos.wi + infos.wo).normalized();
 
-	double etaI, etaT, relativeEta, cosThetaT;
-	double fr1 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
+	real etaI, etaT, relativeEta, cosThetaT;
+	real fr1 = fresnel::estimateDielectric(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).average();
+	//real fr1 = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r();
 
 	if (fr1 == 1.)
 		return 0.;
@@ -350,22 +356,22 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 
 	//
 
-	//double cosThetaH = DifferentialGeometry::cosTheta(wh);
+	//real cosThetaH = DifferentialGeometry::cosTheta(wh);
 
-	//double Jh = 1. / (4 * std::abs(wh.dot(infos.wo)));
-	//double D = myDistribution.D(wh, myAlpha);
-	double pdfDielectric = 0.;//std::abs(D * cosThetaH * Jh);
+	//real Jh = 1. / (4 * std::abs(wh.dot(infos.wo)));
+	//real D = myDistribution.D(wh, myAlpha);
+	real pdfDielectric = 0.;//std::abs(D * cosThetaH * Jh);
 
 	refractedWi = -refractedWi;
 	refractedWo = -refractedWo;
 	BSDFSamplingInfos refractedInfos = infos;
 	refractedInfos.wi = refractedWi;
 	refractedInfos.wo = refractedWo;
-	double pdfBase = myBaseBSDF->pdf(refractedInfos);
-	double weight = 0.;
+	real pdfBase = myBaseBSDF->pdf(refractedInfos);
+	real weight = 0.f;
 	//return weight * pdfDielectric + (1. - weight) * pdfBase * (1. - fr1);
-	double m_invEta = myEtaExt / myEtaInt;
-	return pdfDielectric + pdfBase * (1. - fr1) * m_invEta * m_invEta * DifferentialGeometry::cosTheta(infos.wo) / DifferentialGeometry::cosTheta(refractedWo);
+	real m_invEta = myEtaExt / myEtaInt;
+	return pdfDielectric + pdfBase * (1.f - fr1) * m_invEta * m_invEta * DifferentialGeometry::cosTheta(infos.wo) / DifferentialGeometry::cosTheta(refractedWo);
 
 	//
 	//wh = (refractedWi + refractedWo).normalized();
@@ -374,16 +380,16 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 	//Jh = 1. / (4 * std::abs(wh.dot(refractedWo)));
 	//D = myDistribution.D(wh, myAlpha);
 
-	//double pdfConductor = std::abs(D * cosThetaH * Jh);
+	//real pdfConductor = std::abs(D * cosThetaH * Jh);
 
-	//double weight = 0.5;
+	//real weight = 0.5;
 	//return weight * pdfDielectric + (1 - weight) * pdfConductor;
 
 
 
 
 
-	//double weight = 0.5;
+	//real weight = 0.5;
 	//return weight * dielectric.pdf(infos) + (1 - weight) * conductor.pdf(infos);
 }
 
@@ -395,33 +401,33 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 
 
 
-//Vector3d SmoothLayeredBSDF::refractIn(const Vector3d &wi, double &R)  {
-//	double etaI, etaT, relativeEta, cosThetaT;
-//	double cosThetaI = DifferentialGeometry::cosTheta(wi);
+//Vector3d SmoothLayeredBSDF::refractIn(const Vector3d &wi, real &R)  {
+//	real etaI, etaT, relativeEta, cosThetaT;
+//	real cosThetaI = DifferentialGeometry::cosTheta(wi);
 //	R = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
-//	double m_invEta = myEtaExt / myEtaInt;
+//	real m_invEta = myEtaExt / myEtaInt;
 //	//R = fresnelDielectricExt(std::abs(Frame::cosTheta(wi)), cosThetaT, m_eta);
 //
 //	//return refract(wi, cosThetaT, relativeEta);
-//	return Vector3d(m_invEta * wi.x(), m_invEta * wi.y(), -tools::sign(DifferentialGeometry::cosTheta(wi)) * cosThetaT);
+//	return Vector3d(m_invEta * wi.x(), m_invEta * wi.y(), -math::sign(DifferentialGeometry::cosTheta(wi)) * cosThetaT);
 //}
 //
 ///// Refract out of the material, preserve sign of direction
-//Vector3d SmoothLayeredBSDF::refractOut(const Vector3d &wi, double &R) {
-//	double etaI, etaT, relativeEta, cosThetaT;
-//	double m_eta = myEtaInt / myEtaExt;
-//	double cosThetaI = DifferentialGeometry::cosTheta(wi);
+//Vector3d SmoothLayeredBSDF::refractOut(const Vector3d &wi, real &R) {
+//	real etaI, etaT, relativeEta, cosThetaT;
+//	real m_eta = myEtaInt / myEtaExt;
+//	real cosThetaI = DifferentialGeometry::cosTheta(wi);
 //	R = fresnel(myEtaExt, myEtaInt, cosThetaI, etaI, etaT, relativeEta, cosThetaT).r;
 //	//R = fresnelDielectricExt(std::abs(Frame::cosTheta(wi)), cosThetaT, m_invEta);
 //	return refract(wi, cosThetaT, relativeEta);
-//	//return Vector3d(m_eta * wi.x(), m_eta * wi.y(), -tools::sign(DifferentialGeometry::cosTheta(wi)) * cosThetaT);
+//	//return Vector3d(m_eta * wi.x(), m_eta * wi.y(), -math::sign(DifferentialGeometry::cosTheta(wi)) * cosThetaT);
 //}
 //
 //
 //
 //Color SmoothLayeredBSDF::eval(const BSDFSamplingInfos & infos)
 //{
-//	double R12, R21;
+//	real R12, R21;
 //	BSDFSamplingInfos bRecInt(infos);
 //	bRecInt.wi = refractIn(infos.wi, R12);
 //	bRecInt.wo = refractIn(infos.wo, R21);
@@ -440,7 +446,7 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 //	result *= a;
 //	/* Solid angle compression & irradiance conversion factors */
 //	//if (measure == ESolidAngle)
-//	double m_invEta = myEtaExt / myEtaInt;
+//	real m_invEta = myEtaExt / myEtaInt;
 //	result *= m_invEta * m_invEta  /**
 //		DifferentialGeometry::cosTheta(infos.wo) *// DifferentialGeometry::cosTheta(bRecInt.wo);
 //
@@ -448,11 +454,11 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 //}
 //
 //Color SmoothLayeredBSDF::sample(BSDFSamplingInfos &bRec, const Point2d &_sample) {
-//	double R12;
+//	real R12;
 //	Vector3d wiPrime = refractIn(bRec.wi, R12);
 //
 //	/* Reallocate samples */
-//	double probSpecular = (R12*m_specularSamplingWeight) /
+//	real probSpecular = (R12*m_specularSamplingWeight) /
 //		(R12*m_specularSamplingWeight +
 //		(1 - R12) * (1 - m_specularSamplingWeight));
 //
@@ -492,7 +498,7 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 //			std::exp(-myAbsorbance.b * myThickness * (1. / std::abs(DifferentialGeometry::cosTheta(wiPrime)) + 1. / std::abs(DifferentialGeometry::cosTheta(woPrime)))));
 //
 //		result *= a;
-//		double R21;
+//		real R21;
 //		bRec.wo = refractOut(woPrime, R21);
 //		if (R21 == 1.0f) /* Total internal reflection */
 //			return Color(0.0);
@@ -502,7 +508,7 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 //
 //		result *= (1 - R12) * (1 - R21);
 //
-//		double m_invEta = myEtaExt / myEtaInt;
+//		real m_invEta = myEtaExt / myEtaInt;
 //		/* Solid angle compression & irradiance conversion factors */
 //		bRec.pdf *= m_invEta * m_invEta * DifferentialGeometry::cosTheta(bRec.wo) / DifferentialGeometry::cosTheta(woPrime);
 //
@@ -512,16 +518,16 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 //
 //
 //
-//double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos &bRec)  {
-//	double R12;
+//real SmoothLayeredBSDF::pdf(const BSDFSamplingInfos &bRec)  {
+//	real R12;
 //	Vector3d wiPrime = refractIn(bRec.wi, R12);
 //
 //	/* Reallocate samples */
-//	double probSpecular = (R12*m_specularSamplingWeight) /
+//	real probSpecular = (R12*m_specularSamplingWeight) /
 //		(R12*m_specularSamplingWeight +
 //		(1 - R12) * (1 - m_specularSamplingWeight));
 //
-//		double R21;
+//		real R21;
 //		BSDFSamplingInfos bRecInt(bRec);
 //		bRecInt.wi = wiPrime;
 //		bRecInt.wo = refractIn(bRec.wo, R21);
@@ -529,8 +535,8 @@ double SmoothLayeredBSDF::pdf(const BSDFSamplingInfos & infos)
 //		if (R12 == 1 || R21 == 1) /* Total internal reflection */
 //			return 0.0f;
 //
-//		double pdf = myBaseBSDF->pdf(bRecInt);
-//		double m_invEta = myEtaExt / myEtaInt;
+//		real pdf = myBaseBSDF->pdf(bRecInt);
+//		real m_invEta = myEtaExt / myEtaInt;
 //		pdf *= m_invEta * m_invEta * DifferentialGeometry::cosTheta(bRec.wo)
 //			/ DifferentialGeometry::cosTheta(bRecInt.wo);
 //

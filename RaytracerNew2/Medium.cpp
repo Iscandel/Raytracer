@@ -15,17 +15,17 @@ Medium::~Medium()
 {
 }
 
-double Medium::samplePF(PhaseFunctionSamplingInfos & infos, const Point2d & sample) const
+real Medium::samplePF(PhaseFunctionSamplingInfos & infos, const Point2d & sample) const
 {
 	return myPhaseFunction->sample(infos, sample);
 }
 
-double Medium::evalPF(const PhaseFunctionSamplingInfos & infos) const
+real Medium::evalPF(const PhaseFunctionSamplingInfos & infos) const
 {
 	return myPhaseFunction->eval(infos);
 }
 
-double Medium::pdfPF(const PhaseFunctionSamplingInfos & infos) const
+real Medium::pdfPF(const PhaseFunctionSamplingInfos & infos) const
 {
 	return myPhaseFunction->pdf(infos);
 }

@@ -1,10 +1,11 @@
 #include "HGPhaseFunction.h"
 
+#include "Math.h"
 #include "ObjectFactoryManager.h"
 
 HGPhaseFunction::HGPhaseFunction(const Parameters& params)
 {
-	myG = params.getDouble("g", -0.8);
+	myG = params.getReal("g", -0.8f);
 }
 
 
@@ -23,16 +24,16 @@ HGPhaseFunction::~HGPhaseFunction()
 * \return The phase function value divided by the probability density of the sample
 *         sample. A zero value means that sampling failed.
 */
-double HGPhaseFunction::sample(PhaseFunctionSamplingInfos &infos, const Point2d &sample) const
+real HGPhaseFunction::sample(PhaseFunctionSamplingInfos &infos, const Point2d &sample) const
 {
-	double cosTheta;
-	if (myG < tools::EPSILON)
-		cosTheta = 1. - 2. * sample.x();
+	real cosTheta;
+	if (myG < math::EPSILON)
+		cosTheta = 1.f - 2.f * sample.x();
 	else
 		cosTheta = (1 + myG * myG - ((1 - myG * myG) * (1 - myG * myG) / (1 - myG + 2 * myG * sample.x()))) / (2 * myG);
-	double theta = std::acos(cosTheta);
+	real theta = std::acos(cosTheta);
 
-	double phi = 2 * tools::PI * sample.y();
+	real phi = 2 * math::PI * sample.y();
 
 	infos.wo = cartesianFromSpherical(theta, phi);
 	infos.pdf = pdf(infos);
@@ -49,10 +50,10 @@ double HGPhaseFunction::sample(PhaseFunctionSamplingInfos &infos, const Point2d 
 * \return
 *     The phase function value, evaluated for each color channel
 */
-double HGPhaseFunction::eval(const PhaseFunctionSamplingInfos &infos) const
+real HGPhaseFunction::eval(const PhaseFunctionSamplingInfos &infos) const
 {
-	double cosTheta = (-infos.wi).dot(infos.wo);
-	return tools::INV_FOUR_PI * (1 - myG * myG) / std::pow(1 + myG * myG - 2 * myG * cosTheta, 1.5);
+	real cosTheta = (-infos.wi).dot(infos.wo);
+	return math::INV_FOUR_PI * (1 - myG * myG) / std::pow(1 + myG * myG - 2 * myG * cosTheta, 1.5f);
 }
 
 /**
@@ -70,10 +71,10 @@ double HGPhaseFunction::eval(const PhaseFunctionSamplingInfos &infos) const
 *     to the solid angle measure
 */
 
-double HGPhaseFunction::pdf(const PhaseFunctionSamplingInfos &infos) const
+real HGPhaseFunction::pdf(const PhaseFunctionSamplingInfos &infos) const
 {
 	return eval(infos);
-	//double cosTheta = (-infos.wi).dot(infos.wo);
+	//real cosTheta = (-infos.wi).dot(infos.wo);
 	//return (1 - myG * myG) / (2 * std::pow(1 + myG * myG - 2 * myG * cosTheta, 1.5));
 }
 

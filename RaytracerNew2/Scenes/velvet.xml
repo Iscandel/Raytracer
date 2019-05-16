@@ -41,7 +41,7 @@
     <showProgress>1</showProgress>
   </parameters>
 
-  <lights>
+  <!--<lights>
     <light type="EnvironmentLight">
       <string name="path" value="./data/steam/envmap.exr"/>
       <double name="scale" value="1."/>
@@ -53,7 +53,7 @@
         </rotation>
       </transform>
     </light>
-  </lights>
+  </lights>-->
 
   <sampler type="RandomSampler">
     <integer name="sampleNumber" value="32"/>
@@ -84,7 +84,7 @@
           <y>20</y>
         </scale>
         <translation>
-          <z>2</z>
+          <z>0.8</z>
         </translation>
       </transform>
       
@@ -93,10 +93,44 @@
       </bsdf>
     </shape>
 
-    <shape type="Mesh">
-      <string name="path" value="./data/simpleSmoke/bounds.obj"/>
-
+    <shape type="Plane">
       <transform name="toWorld">
+        <scale>
+          <x>5</x>
+          <y>5</y>
+        </scale>
+        <translation>
+          <z>-5</z>
+        </translation>
+      </transform>
+
+      <light type="AreaLight">
+        <color name="radiance" value="1 1 1"/>
+      </light>
+      <bsdf type="Diffuse">
+        <color name="albedo" value=".5 .5 .5"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Cube">
+      <string name="path" value="./data/simpleSmoke/bounds.obj"/>
+      <transform name="toWorld">
+        <scale>
+          <x>0.5</x>
+          <y>0.5</y>
+          <z>0.18</z>
+        </scale>
+        <translation>
+          <x>0.5</x>
+          <y>0.5</y>
+          <z>0.2</z>
+        </translation>
+        <!--<scale>
+          <z>6</z>
+        </scale>-->
+      </transform>
+      <!--Previous-->
+      <!--<transform name="toWorld">
         <translation>
           <x>0.5</x>
           <y>0.5</y>
@@ -107,7 +141,8 @@
           <y>4.</y>
           <z>2.5599868928671085204043755295973</z>
         </scale>
-      </transform>
+      </transform>-->
+      
       <!--<transform name="toWorld">
         <translation>
           <x>-0.5</x>
@@ -126,20 +161,29 @@
           <z>6.5</z>
         </scale>
       </transform>-->
-      <!--<bsdf type="Diffuse">
+    <bsdf type="Diffuse">
         <color name="albedo" value="0.7 0.2 0.3"/>
-      </bsdf>-->
+      </bsdf>
 
       <medium name="interior" type="Heterogeneous">
-        <string name="path" value="./data/velvet/velvet.vol"/>
+        <!--<volume name="volume" type="GridVolume">
+          <string name="path" value="./data/velvet/velvet.vol"/>
+        </volume>-->
+        <volume name="volume" type="OpenVDBVolume">
+          <string name="path" value="./data/smoke.vdb"/>
+        </volume>
+        <bool name="centered" value="1"/>
         <color name="albedo" value="0.8 0.2 0.1"/>
-        <double name="scale" value="25"/>
-        <transform name="toWorld">
-        <scale>
-          <x>4.</x>
-          <y>4.</y>
-        </scale>
-      </transform>
+        <double name="scale" value="125"/>
+        <!--Previous-->
+        <!--<transform name="toWorld">
+          <scale>
+            <x>4.</x>
+            <y>4.</y>
+          </scale>
+        </transform>-->
+        
+        
         <!--<transform name="toWorld">
           <translation>
             <x>-0.5</x>

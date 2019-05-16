@@ -26,17 +26,24 @@ public:
 	MicrofacetDistribution(const std::string& type);
 	~MicrofacetDistribution();
 
-	Normal3d sampleNormal(const Point2d& sample, double alpha);
+	Normal3d sampleNormal(const Point2d& sample, real alpha);
 
-	double D(const Vector3d& halfVector, double alpha);
+	real D(const Vector3d& halfVector, real alpha);
 
-	double G(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh, double alpha);
+	real G(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh, real alpha);
 
-	double shadowingTermG1Beckmann(const Vector3d& v, const Vector3d& m, double alpha);
+	real shadowingTermG1Beckmann(const Vector3d& v, const Vector3d& m, real alpha);
 
-	double shadowingTermG1GGX(const Vector3d& v, const Vector3d& m, double alpha);
+	real shadowingTermG1GGX(const Vector3d& v, const Vector3d& m, real alpha);
 
-	double shadowingTermG1Phong(const Vector3d& v, const Vector3d& m, double alpha);
+	real shadowingTermG1Phong(const Vector3d& v, const Vector3d& m, real alpha);
+
+	real microfacetPdf();
+
+	real getAdjustedAlpha(real alpha, real cosThetaI)
+	{
+		return (1.2f - 0.2f * std::sqrt(std::abs(cosThetaI))) * alpha;
+	}
 
 protected:
 	DistributionType myType;

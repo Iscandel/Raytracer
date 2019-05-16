@@ -1,7 +1,7 @@
 #include "ReconstructionFilter.h"
 
 
-ReconstructionFilter::ReconstructionFilter(double radiusX, double radiusY)
+ReconstructionFilter::ReconstructionFilter(real radiusX, real radiusY)
 :myResolution(32)
 ,myRadiusX(radiusX)
 ,myRadiusY(radiusY)
@@ -12,8 +12,8 @@ ReconstructionFilter::ReconstructionFilter(double radiusX, double radiusY)
 ReconstructionFilter::ReconstructionFilter(const Parameters& params)
 :myResolution(32)
 {
-	myRadiusX = params.getDouble("radiusX", 0.5);
-	myRadiusY = params.getDouble("radiusY", 0.5);
+	myRadiusX = params.getReal("radiusX", 0.5);
+	myRadiusY = params.getReal("radiusY", 0.5);
 
 	//precompute();
 }

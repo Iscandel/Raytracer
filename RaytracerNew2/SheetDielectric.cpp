@@ -9,11 +9,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 SheetDielectric::SheetDielectric(const Parameters& params)
 {
-	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
-	myTransmittedTexture = params.getTexture("transmittedTexture", Texture::ptr(new ConstantTexture(Color(1.))));
+	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.f))));
+	myTransmittedTexture = params.getTexture("transmittedTexture", Texture::ptr(new ConstantTexture(Color(1.f))));
 
-	myEtaI = params.getDouble("etaExt", 1.000277); //incident
-	myEtaT = params.getDouble("etaInt", 1.5046); //transmitted
+	myEtaI = params.getReal("etaExt", 1.000277f); //incident
+	myEtaT = params.getReal("etaInt", 1.5046f); //transmitted
 }
 
 //=============================================================================
@@ -36,22 +36,22 @@ Color SheetDielectric::eval(const BSDFSamplingInfos &)
 ///////////////////////////////////////////////////////////////////////////////
 //Color SheetDielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 //{
-//	double cosThetaI = std::abs(DifferentialGeometry::cosTheta(infos.wi));
+//	real cosThetaI = std::abs(DifferentialGeometry::cosTheta(infos.wi));
 //	
 //	bool wasNeg = DifferentialGeometry::cosTheta(infos.wi) < 0. ? true : false;
 //	infos.wi.z() = std::abs(infos.wi.z());
-//	double etaI = myEtaI;
-//	double etaT = myEtaT;
-//	double fr = 0.;
+//	real etaI = myEtaI;
+//	real etaT = myEtaT;
+//	real fr = 0.;
 //
 //	infos.measure = Measure::DISCRETE;
 //
-//	double relativeEta = etaI / etaT;
+//	real relativeEta = etaI / etaT;
 //
 //	//Descartes's law
-//	double sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosThetaI * cosThetaI));
+//	real sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosThetaI * cosThetaI));
 //	//Trigo law
-//	double cosThetaT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
+//	real cosThetaT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
 //
 //	if (sinThetaT >= 1.)
 //	{
@@ -119,20 +119,20 @@ Color SheetDielectric::eval(const BSDFSamplingInfos &)
 ///////////////////////////////////////////////////////////////////////////////
 Color SheetDielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
-	double etaI = myEtaI;
-	double etaT = myEtaT;
-	double fr = 0.;
+	real etaI = myEtaI;
+	real etaT = myEtaT;
+	real fr = 0.;
 
 	infos.measure = Measure::DISCRETE;
 
-	double relativeEta = etaI / etaT;
+	real relativeEta = etaI / etaT;
 
 	//Descartes's law
-	double sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosThetaI * cosThetaI));
+	real sinThetaT = relativeEta * std::sqrt(std::max((real)0., 1 - cosThetaI * cosThetaI));
 	//Trigo law
-	double cosThetaT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
+	real cosThetaT = std::sqrt(std::max((real)0., 1 - sinThetaT * sinThetaT));
 
 	//if (sinThetaT >= 1.)
 	//{
@@ -142,12 +142,12 @@ Color SheetDielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 	{
 		//We want "aperture" of angle, so put abs()
 		fr = fresnel::fresnelDielectric(etaI, etaT, std::abs(cosThetaI), cosThetaT);
-		double T = 1. - fr;
-		if (fr < 1.)
-			fr += T * T * fr / (1. - fr * fr);
+		real T = 1.f - fr;
+		if (fr < 1.f)
+			fr += T * T * fr / (1.f - fr * fr);
 	}
 
-	infos.relativeEta = 1.;
+	infos.relativeEta = 1.f;
 
 	//Reflection
 	if (sample.x() <= fr)
@@ -177,7 +177,7 @@ Color SheetDielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double SheetDielectric::pdf(const BSDFSamplingInfos &)
+real SheetDielectric::pdf(const BSDFSamplingInfos &)
 {
 	//Check if infos.wo corresponds to infos.wi, given infos.sampledType ? Would be correct
 	//to avoid returning lazy 0. pdf. We could call pdf() everywhere

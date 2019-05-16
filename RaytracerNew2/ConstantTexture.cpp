@@ -13,6 +13,11 @@ ConstantTexture::ConstantTexture(const Color& color)
 	myValue = color;
 }
 
+ConstantTexture::ConstantTexture(real value)
+{
+	myValue = Color(value);
+}
+
 
 ConstantTexture::~ConstantTexture()
 {

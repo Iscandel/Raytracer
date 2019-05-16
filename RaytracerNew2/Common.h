@@ -1,10 +1,10 @@
 #pragma once
-//#include "Color.h"
+#include "Color.h"
 
 #include <map>
 
 class Parameters;
-class Color;
+//class Color;
 
 ///Measure performed on a BSDF or during light sampling :
 ///solid angle or delta distribution
@@ -14,15 +14,16 @@ enum Measure
 	SOLID_ANGLE
 };
 
+int getCoreNumber();
+
 class IORHelper
 {
 public:
 	static void evalConductorIOR(const Parameters& params, Color& eta, Color& k);
+	static void extractAndConvertSpectrumFromFile(const std::string& path, Color& values);
 
 protected:
 	static void initMap();
-
-	static void extractAndConvertSpectrumFromFile(const std::string& path, Color& values);
 
 	static std::map<std::string, std::string> TechNameFromConvenientName;
 };

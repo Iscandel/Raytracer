@@ -3,6 +3,7 @@
 #include "DifferentialGeometry.h"
 #include "Primitive.h"
 #include "Geometry.h"
+#include "Ray.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Data structure that stores intersection informations.
@@ -56,7 +57,7 @@ public:
 	}
 
 	///Parametric intersection distance
-	double t;
+	real t;
 	///True differential geometry (for ex. face normal and not interpolated
 	///normal at the intersection point)
 	DifferentialGeometry myTrueGeometry;
@@ -68,6 +69,8 @@ public:
 	Point2d myUv;
 	///Intersection point
 	Point3d myPoint;
+
+	Ray myRay;
 
 	bool computeIntersect;
 };

@@ -19,7 +19,7 @@ public:
 
 	LightSamplingInfos sample(const Point3d& pFrom, const Point2d& sample) override;
 
-	double pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override;
+	real pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override;
 
 	Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const override;
 
@@ -32,18 +32,19 @@ public:
 
 	Array2D<Color> myArray;
 
-	std::vector<double> myWeight;
+	std::vector<real> myWeight;
 
-	void initialize(const Scene& scene) override;
+	void initialize(Scene& scene) override;
 
 protected:
 	Transform::ptr myLightToWorld;
 	Transform::ptr myWorldToLight;
 
-	double myFactor;
+	real myFactor;
 
 	//Bounding sphere
-	double mySphereRadius;
+	real mySphereRadius;
 	Point3d myCenter;
+	bool myIsProbe;
 };
 

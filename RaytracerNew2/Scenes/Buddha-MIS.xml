@@ -57,7 +57,7 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="64"/>
+    <integer name="sampleNumber" value="256"/>
   </sampler>
 
   <integrator type="PathTracingMIS">
@@ -113,9 +113,10 @@
       </bsdf>-->
       <!--Gold-->
       <bsdf type="Conductor">
-        <color name="albedo" value="1. 1. 1."/>
+        <string name="material" value="gold"/>
+        <!--<color name="albedo" value="1. 1. 1."/>
         <color name="eta" value="0.22273 0.42791 1.2597 "/>
-        <color name="absorption" value="3.0325 2.3345 1.7531"/>
+        <color name="absorption" value="3.0325 2.3345 1.7531"/>-->
       </bsdf>
       <!--<bsdf type="Microfacet">
         <color name="kd" value="0.4 0.8 0.2"/>--><!--0.0175 0.0225 0.0325"/>--><!--

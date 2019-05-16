@@ -16,18 +16,19 @@ public:
 
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample);
 
-	double pdf(const BSDFSamplingInfos& infos);
+	real pdf(const BSDFSamplingInfos& infos);
 
-protected:
-	double distributionBeckmann(const Vector3d& hr);
-
-	double shadowingTerm(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh);
-	double shadowingTermG1(const Vector3d& v, const Vector3d& m);
+//protected:
+//	real distributionBeckmann(const Vector3d& hr);
+//
+//	real shadowingTerm(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh);
+//	real shadowingTermG1(const Vector3d& v, const Vector3d& m);
 
 protected:
 	Texture::ptr myReflectanceTexture;
-	double myAlpha;
-	double myR;
+	//real myAlpha;
+	Texture::ptr myAlphaTexture;
+	//real myR;
 	Color myEta;
 	Color myAbsorption;
 	MicrofacetDistribution myDistribution;

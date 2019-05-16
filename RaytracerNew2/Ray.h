@@ -23,7 +23,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Constructor
 	///////////////////////////////////////////////////////////////////////////
-	Ray(const Point3d& origin, const Vector3d& direction, double minT, double maxT);
+	Ray(const Point3d& origin, const Vector3d& direction, real minT, real maxT);
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Destructor
@@ -52,11 +52,11 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Returns the point on the ray at the given distance
 	///////////////////////////////////////////////////////////////////////////
-	Point3d getPointAt(double distance) const { return myOrigin + distance * myDirection; }
+	Point3d getPointAt(real distance) const { return myOrigin + distance * myDirection; }
 
 	Point3d myOrigin;
-	double myMinT;
-	double myMaxT;
+	real myMinT;
+	real myMaxT;
 
 protected:
 	Vector3d myDirection;	

@@ -23,7 +23,7 @@ DirectLightingIS::~DirectLightingIS()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray)
+Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray, RadianceType::ERadianceType)
 {
 	int depth = 0;
 	Color radiance;
@@ -59,7 +59,7 @@ Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray)
 
 						//Generate a shadow ray from the first inter to the light sampled point
 						Vector3d interToLight = lightInfos.sampledPoint - intersection.myPoint;
-						Ray shadowRay(intersection.myPoint, lightInfos.interToLight, tools::EPSILON, interToLight.norm() - tools::EPSILON);
+						Ray shadowRay(intersection.myPoint, lightInfos.interToLight, math::EPSILON, interToLight.norm() - math::EPSILON);
 						Intersection tmp;
 
 						//If the light point is visible from the the inter point
@@ -67,7 +67,7 @@ Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray)
 						{
 							Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 							Vector3d localWo = intersection.toLocal(-_ray.direction());
-							double cosTheta = DifferentialGeometry::cosTheta(localWi);
+							real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 							BSDFSamplingInfos bsdfInfos(localWi, localWo);
 
@@ -98,7 +98,7 @@ Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray)
 						if (toLightInter.myPrimitive->isLight())
 						{
 							Color radianceLight = toLightInter.myPrimitive->le(-shadowRay.direction(), toLightInter.myShadingGeometry.myN);
-							radiance += radianceLight * bsdfValue / mySampleNumber;
+							radiance += radianceLight * bsdfValue / (real)mySampleNumber;
 						}
 					}
 					else
@@ -108,7 +108,7 @@ Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray)
 						if (envLight != nullptr)
 						{
 							Color lightValue = envLight->le(shadowRay.direction(), Normal3d());
-							radiance += lightValue * bsdfValue / mySampleNumber;
+							radiance += lightValue * bsdfValue / (real)mySampleNumber;
 						}
 					}
 				}

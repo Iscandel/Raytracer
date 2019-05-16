@@ -73,6 +73,15 @@
     <Filter Include="Core">
       <UniqueIdentifier>{0ac40a80-0ca8-439a-a4d7-5878541471bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Volume">
+      <UniqueIdentifier>{11fc37c3-876b-4b69-831a-6a784c90dd77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Factory">
+      <UniqueIdentifier>{f5bcb7f9-08de-4203-bcbb-f862966483cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BSSRDF">
+      <UniqueIdentifier>{95a1c055-84d9-4867-ba7f-7551dd8ba18f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="XMLLoader.cpp">
@@ -360,9 +369,6 @@
     <ClCompile Include="SampleJob.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="HGPhaseFunction.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="IsotropicPhaseFunction.cpp">
       <Filter>Medium</Filter>
     </ClCompile>
@@ -375,26 +381,56 @@
     <ClCompile Include="ISampledShape.cpp">
       <Filter>GeometricShape</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Heterogeneous.cpp">
       <Filter>Medium</Filter>
     </ClCompile>
     <ClCompile Include="SpotLight.cpp">
       <Filter>Lights</Filter>
     </ClCompile>
+    <ClCompile Include="Mandelbulb.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="ImplicitSurface.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="GridVolume.cpp">
+      <Filter>Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenVDBVolume.cpp">
+      <Filter>Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="Volume.cpp">
+      <Filter>Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="HGPhaseFunction.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
     <ClCompile Include="EmptyBSDF.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="RaytracerObject.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BSSRDF.cpp">
+      <Filter>BSSRDF</Filter>
+    </ClCompile>
+    <ClCompile Include="CarPaint.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshFromShape.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshFromShapeFactory.cpp">
+      <Filter>Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="FastDipole.cpp">
+      <Filter>BSSRDF</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ObjectFactory.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectFactoryManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="XMLLoader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -449,9 +485,6 @@
     <ClInclude Include="Intersection.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="GeometricShapeFactory.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="ObjLoader.h">
       <Filter>MeshLoaders</Filter>
     </ClInclude>
@@ -469,9 +502,6 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshFactory.h">
-      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Lights</Filter>
@@ -683,9 +713,6 @@
     <ClInclude Include="Geometry.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="HGPhaseFunction.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="IsotropicPhaseFunction.h">
       <Filter>Medium</Filter>
     </ClInclude>
@@ -698,17 +725,77 @@
     <ClInclude Include="ISampledShape.h">
       <Filter>GeometricShape</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Heterogeneous.h">
       <Filter>Medium</Filter>
     </ClInclude>
     <ClInclude Include="SpotLight.h">
       <Filter>Lights</Filter>
     </ClInclude>
+    <ClInclude Include="Mandelbulb.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="ImplicitSurface.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="GridVolume.h">
+      <Filter>Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenVDBVolume.h">
+      <Filter>Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="Volume.h">
+      <Filter>Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="HGPhaseFunction.h">
+      <Filter>Medium</Filter>
+    </ClInclude>
     <ClInclude Include="EmptyBSDF.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="RaytracerObject.h">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="WithSmartPtr.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="BSSRDF.h">
+      <Filter>BSSRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="CarPaint.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshFromShape.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometricShapeFactory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFactory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFactoryManager.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshFromShapeFactory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshFactory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="FastDipole.h">
+      <Filter>BSSRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicMath.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="FastMath.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -768,5 +855,10 @@
     </Xml>
     <Xml Include="Scenes\steam.xml" />
     <Xml Include="Scenes\velvet.xml" />
+    <Xml Include="Scenes\testCarPaint.xml" />
+    <Xml Include="Scenes\Table-bssrdf.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\dragon-sss.xml" />
   </ItemGroup>
 </Project>

@@ -25,8 +25,10 @@
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BoxFilter.cpp" />
     <ClCompile Include="BSDF.cpp" />
+    <ClCompile Include="BSSRDF.cpp" />
     <ClCompile Include="Bvh.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CarPaint.cpp" />
     <ClCompile Include="CheckerTexture.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="CDF.cpp" />
@@ -45,7 +47,9 @@
     <ClCompile Include="DistantLight.cpp" />
     <ClCompile Include="EmptyBSDF.cpp" />
     <ClCompile Include="EnvironmentLight.cpp" />
+    <ClCompile Include="FastDipole.cpp" />
     <ClCompile Include="Fresnel.cpp" />
+    <ClCompile Include="GridVolume.cpp" />
     <ClCompile Include="HDRLoader.cpp" />
     <ClCompile Include="Heterogeneous.cpp" />
     <ClCompile Include="HGPhaseFunction.cpp" />
@@ -55,6 +59,7 @@
     <ClCompile Include="IMeshLoader.cpp" />
     <ClCompile Include="GaussianFilter.cpp" />
     <ClCompile Include="GeometricShapeFactory.cpp" />
+    <ClCompile Include="ImplicitSurface.cpp" />
     <ClCompile Include="Integrator.cpp" />
     <ClCompile Include="Intersection.cpp" />
     <ClCompile Include="ISampledShape.cpp" />
@@ -65,9 +70,12 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mandelbulb.cpp" />
     <ClCompile Include="Mapping.cpp" />
     <ClCompile Include="Medium.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MeshFromShape.cpp" />
+    <ClCompile Include="MeshFromShapeFactory.cpp" />
     <ClCompile Include="MeshLight.cpp" />
     <ClCompile Include="Microfacet.cpp" />
     <ClCompile Include="MicrofacetDistribution.cpp" />
@@ -80,11 +88,13 @@
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="ObjectFactoryManager.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="OpenVDBVolume.cpp" />
     <ClCompile Include="Orthographic.cpp" />
     <ClCompile Include="Parameters.cpp" />
     <ClCompile Include="PathTracingMIS.cpp" />
     <ClCompile Include="PhaseFunction.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="RaytracerObject.cpp" />
     <ClCompile Include="RecursivePathTracingMIS.cpp" />
     <ClCompile Include="PerlinNoiseTexture.cpp" />
     <ClCompile Include="Perspective.cpp" />
@@ -122,17 +132,21 @@
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="VolPathTracing.cpp" />
+    <ClCompile Include="Volume.cpp" />
     <ClCompile Include="XMLLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmbientLightSystem.h" />
     <ClInclude Include="AmbientOcclusion.h" />
     <ClInclude Include="AreaLight.h" />
+    <ClInclude Include="BasicMath.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BoxFilter.h" />
     <ClInclude Include="BSDF.h" />
+    <ClInclude Include="BSSRDF.h" />
     <ClInclude Include="Bvh.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CarPaint.h" />
     <ClInclude Include="CheckerTexture.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="CDF.h" />
@@ -152,8 +166,10 @@
     <ClInclude Include="DistantLight.h" />
     <ClInclude Include="EmptyBSDF.h" />
     <ClInclude Include="EnvironmentLight.h" />
+    <ClInclude Include="FastDipole.h" />
     <ClInclude Include="Fresnel.h" />
     <ClInclude Include="GeometricShapeFactory.h" />
+    <ClInclude Include="GridVolume.h" />
     <ClInclude Include="HDRLoader.h" />
     <ClInclude Include="Heterogeneous.h" />
     <ClInclude Include="HGPhaseFunction.h" />
@@ -162,6 +178,7 @@
     <ClInclude Include="ImageTexture.h" />
     <ClInclude Include="IMeshLoader.h" />
     <ClInclude Include="GaussianFilter.h" />
+    <ClInclude Include="ImplicitSurface.h" />
     <ClInclude Include="Integrator.h" />
     <ClInclude Include="Intersection.h" />
     <ClInclude Include="ISampledShape.h" />
@@ -171,10 +188,15 @@
     <ClInclude Include="LayeredBSDF.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="Mandelbulb.h" />
     <ClInclude Include="Mapping.h" />
+    <ClInclude Include="FastMath.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Medium.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshFactory.h" />
+    <ClInclude Include="MeshFromShape.h" />
+    <ClInclude Include="MeshFromShapeFactory.h" />
     <ClInclude Include="MeshLight.h" />
     <ClInclude Include="Microfacet.h" />
     <ClInclude Include="MicrofacetDistribution.h" />
@@ -188,11 +210,13 @@
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="ObjectFactoryManager.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="OpenVDBVolume.h" />
     <ClInclude Include="Orthographic.h" />
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="PathTracingMIS.h" />
     <ClInclude Include="PhaseFunction.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="RaytracerObject.h" />
     <ClInclude Include="RecursivePathTracingMIS.h" />
     <ClInclude Include="PerlinNoiseTexture.h" />
     <ClInclude Include="Perspective.h" />
@@ -231,6 +255,8 @@
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="VolPathTracing.h" />
+    <ClInclude Include="Volume.h" />
+    <ClInclude Include="WithSmartPtr.h" />
     <ClInclude Include="XMLLoader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +288,9 @@
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Scenes\DepthOfField.xml" />
+    <Xml Include="Scenes\dragon-sss.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\lamborghiniAventador.xml">
       <SubType>Designer</SubType>
     </Xml>
@@ -277,7 +306,11 @@
     <Xml Include="Scenes\steam.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="Scenes\Table-bssrdf.xml" />
     <Xml Include="Scenes\Table-MIS.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Scenes\testCarPaint.xml">
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Scenes\veach-MIS.xml">
@@ -373,17 +406,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;OPENVDB_3_ABI_COMPATIBLE;USE_ALIGN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;D:\C et CPP\Applications\OpenVDB\openvdb-5.1.0;D:\C et CPP\Applications\tbb\tbb_20170604\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories>D:\C et CPP\Applications\SFML\SFML-2.3.2\lib64;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\C et CPP\Applications\SFML\SFML-2.3.2\lib64;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\libdebug;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\libdebug;D:\C et CPP\Applications\tbb\tbb_20170604\lib\intel64\vc14;D:\C et CPP\Applications\OpenVDB\openvdb-5.1.0\buildShared64\VS2015\openvdb\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;tbb_debug.lib;openvdb.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -420,13 +453,15 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;USE_ALIGN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;TIXML_USE_STL;USE_ALIGN;OPENEXR_DLL;OPENVDB_3_ABI_COMPATIBLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>D:\C et CPP\Applications\tbb_20170604\include;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C et CPP\Applications\tbb\tbb_20170604\include;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;D:\C et CPP\Applications\OpenVDB\openvdb-5.1.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>
       </OmitFramePointers>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -434,9 +469,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalOptions>/NODEFAULTLIB:libcmt.lib %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;tbb.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IlmImf-2_2.lib;IlmThread-2_2.lib;Iex-2_2.lib;IexMath-2_2.lib;Imath-2_2.lib;Half.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-main.lib;tbb.lib;openvdb.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>true</Profile>
-      <AdditionalLibraryDirectories>D:\C et CPP\Applications\tbb_20170604\lib\intel64\vc14;D:\C et CPP\Applications\SFML\SFML-2.3.2\lib64;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\C et CPP\Applications\tbb\tbb_20170604\lib\intel64\vc14;D:\C et CPP\Applications\SFML\SFML-2.3.2\lib64;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\lib;D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\lib;D:\C et CPP\Applications\OpenVDB\openvdb-5.1.0\buildShared64\VS2015\openvdb\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

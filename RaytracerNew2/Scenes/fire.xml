@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <!--<scale>
+        <x>-1</x>
+      </scale>-->
+      <!--<lookAt>
+        <origin>-0.61423 0.154197 -1.43132</origin>
+        <lookAt>-0.166029 0.148984 -0.537402</lookAt>
+        <up>-0.000640925 -0.999985 -0.0055102</up>
+      </lookAt> -->
+
+      <lookAt>
+        <origin>0 0 -5</origin>
+        <lookAt>0 0 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
+    </transform>
+    <focal>0.05</focal>
+    <mPerPixel>0.0002</mPerPixel>
+    <!--0.00005-->
+    <double name="fov" value="45.8402"/>
+
+    <integer name="sizeX" value="576"/>
+    <integer name="sizeY" value="768"/>
+    <!--<double name="apertureRadius" value="3."/>
+    <double name="focalPlane" value="450"/>-->
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>4</threadNumber>
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="16"/>
+  </sampler>
+
+  <integrator type="VolPathTracing">
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+
+  <objects>
+    <shape type="Plane">
+      <string name="path" value ="./data/simpleSmoke/plane.obj"/>
+      <transform name="toWorld">
+		<scale>
+			<x>10</x>
+			<y>10</y>
+		</scale>
+		<rotation>
+			<x>90</x>
+		</rotation>
+		<rotation>
+			<x>180</x>
+		</rotation>
+        <translation>
+          <y>-1.2</y>
+        </translation>
+      </transform>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.2 0.3"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Cube">
+      <string name="path" value="./data/simpleSmoke/bounds.obj"/>
+      <!--<transform name="toWorld">
+        <translation>
+          <x>0.5</x>
+          <y>0.5</y>
+          <z>0.19</z>
+        </translation>
+      </transform>-->
+ <!--<bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.2 0.3"/>
+      </bsdf>-->
+      
+      <!--<medium name="interior" type="Homogeneous">
+        <color name="sigmaA" value="0.2 0.2 0.2"/>
+        <double name="sigmaS" value="0.1 0.1 0.1"/>
+        <real name="temperature" value="2500"/>
+        <real name="scaleEmissivity" value="0.1"/>
+      </medium>-->
+      
+      <medium name="interior" type="Heterogeneous">
+        <!--<volume name="volume" type="GridVolume">
+          <string name="path" value="./data/simpleSmoke/smoke.vol"/>
+        </volume>-->
+        <volume name="volume" type="OpenVDBVolume">
+          <string name="path" value="./data/fire.vdb"/>
+		      <real name="temperatureScale" value="2500"/>
+        </volume>
+        <color name="albedo" value="0.35 0.35 0.35"/>
+        <double name="scale" value="100"/>
+        <double name="scaleEmissivity" value="100"/>
+        <bool name="centered" value="0"/>
+      </medium>
+    </shape>
+	
+	
+
+     <shape type="Sphere"> 
+       <transform name="toWorld"> 
+         <translation> 
+           <y>2</y> 
+           <z>-1</z> 
+         </translation> 
+       </transform> 
+       <bsdf type="Diffuse"> 
+         <color name="albedo" value="0.7 0.2 0.3"/> 
+       </bsdf> 
+       <double name="radius" value=".2"/> 
+       <light type="AreaLight"> 
+         <color name="radiance" value="400 400 400"/> 
+       </light> 
+     </shape>
+
+  </objects>
+</scene>

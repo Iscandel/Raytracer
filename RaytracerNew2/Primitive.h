@@ -1,9 +1,11 @@
 #pragma once
 #include "BSDF.h"
+#include "BSSRDF.h"
 #include "AreaLight.h"
 #include "Ray.h"
 #include "GeometricShape.h"
 #include "Medium.h"
+#include "RaytracerObject.h"
 
 #include <memory>
 
@@ -12,7 +14,7 @@ class Intersection;
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Base class for primitives
 ///////////////////////////////////////////////////////////////////////////////
-class IPrimitive : public std::enable_shared_from_this<IPrimitive>
+class IPrimitive : public std::enable_shared_from_this<IPrimitive>, public RaytracerObject
 {
 public:
 	typedef std::shared_ptr<IPrimitive> ptr;
@@ -65,6 +67,11 @@ public:
 		throw std::runtime_error("This primitive class shouldn't call getBSDF().\n");
 	}
 
+	virtual BSSRDF::ptr getBSSRDF()
+	{
+		throw std::runtime_error("This primitive class shouldn't call getBSSRDF().\n");
+	}
+
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Updates the intersection data and fills the differential geometry
 	/// informations.
@@ -94,6 +101,8 @@ public:
 		throw std::runtime_error("This primitive class shouldn't call getExteriorMedium().\n");
 	}
 
+	//virtual void initialize(const Scene&) {}
+
 protected:
 	Light::ptr myLight;
 
@@ -108,8 +117,15 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Constructor
 	///////////////////////////////////////////////////////////////////////////
-	SimplePrimitive(GeometricShape::ptr object, BSDF::ptr bsdf = BSDF::ptr(), Medium::ptr interior = Medium::ptr(), Medium::ptr exterior = Medium::ptr())
-		:myObject(object), myBSDF(bsdf), myInteriorMedium(interior), myExteriorMedium(exterior) {}
+	SimplePrimitive(GeometricShape::ptr object, BSDF::ptr bsdf = BSDF::ptr(), BSSRDF::ptr bssrdf = BSSRDF::ptr(), 
+		Medium::ptr interior = Medium::ptr(), Medium::ptr exterior = Medium::ptr())
+		:myObject(object), myBSDF(bsdf), myBSSRDF(bssrdf), myInteriorMedium(interior), myExteriorMedium(exterior)
+	{
+		//if(myExteriorMedium)
+		//	myExteriorMedium->setOwnerBBox(getWorldBoundingBox()); //bvh getWorldBoundingBox() should be called....
+		//if (myInteriorMedium)
+		//	myInteriorMedium->setOwnerBBox(getWorldBoundingBox());
+	}
 public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Determines if the given ray intersects the primitive.
@@ -162,17 +178,39 @@ public:
 		return myBSDF;
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Returns the underlying BSDF.
+	///
+	/// \return The BSDF from the primitive.
+	///////////////////////////////////////////////////////////////////////////
+	BSSRDF::ptr getBSSRDF() override
+	{
+		return myBSSRDF;
+	}
+
 	Medium::ptr getInteriorMedium() override {
+		//myInteriorMedium->setOwnerBBox(getWorldBoundingBox());
 		return myInteriorMedium;
 	}
 
 	Medium::ptr getExteriorMedium() override {
+		//if(myExteriorMedium->setOwnerBBox(getWorldBoundingBox());
 		return myExteriorMedium;
+	}
+
+	void initialize(Scene& scene) override
+	{
+		myObject->initialize(scene);
+		if(myBSDF) myBSDF->initialize(scene);
+		if(myBSSRDF) myBSSRDF->initialize(scene);
+		if(myInteriorMedium) myInteriorMedium->initialize(scene);
+		if(myExteriorMedium) myExteriorMedium->initialize(scene);
 	}
 		
 protected:
 	GeometricShape::ptr myObject;
 	BSDF::ptr myBSDF;
+	BSSRDF::ptr myBSSRDF;
 	Medium::ptr myInteriorMedium;
 	Medium::ptr myExteriorMedium;
 };

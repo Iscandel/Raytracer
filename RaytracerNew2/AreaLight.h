@@ -20,7 +20,7 @@ public:
 
 	virtual LightSamplingInfos sample(const Point3d& pFrom, const Point2d& sample) override;
 
-	virtual double pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override;
+	virtual real pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override;
 
 	virtual Color power() const override;
 

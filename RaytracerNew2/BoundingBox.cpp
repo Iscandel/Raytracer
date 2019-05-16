@@ -1,14 +1,13 @@
 #include "BoundingBox.h"
 
 #include "Geometry.h"
-#include "Tools.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 BoundingBox::BoundingBox()
 {
-	myMin = Point3d(tools::MAX_DOUBLE, tools::MAX_DOUBLE, tools::MAX_DOUBLE);
-	myMax = Point3d(-tools::MAX_DOUBLE, -tools::MAX_DOUBLE, -tools::MAX_DOUBLE);
+	myMin = Point3d(math::MAX_REAL, math::MAX_REAL, math::MAX_REAL);
+	myMax = Point3d(-math::MAX_REAL, -math::MAX_REAL, -math::MAX_REAL);
 }
 
 //=============================================================================

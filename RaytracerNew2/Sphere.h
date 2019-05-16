@@ -24,12 +24,12 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Defines the sphere radius.
 	///////////////////////////////////////////////////////////////////////////
-	void setRadius(double r) {myRadius = r;}
+	void setRadius(real r) {myRadius = r;}
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Returns the sphere radius.
 	///////////////////////////////////////////////////////////////////////////
-	double getRadius() const {return myRadius;}
+	real getRadius() const {return myRadius;}
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Returns the local sphere bounding box.
@@ -57,7 +57,7 @@ public:
 	/// \param shadowRay Indicates whether the ray is a shadow ray (faster 
 	/// intersection routines) of not.
 	///////////////////////////////////////////////////////////////////////////
-	virtual bool intersection(const Ray& ray, double& t, Point2d& uv) override; //DifferentialGeometry& trueGeom, DifferentialGeometry& shadingGeom, bool shadowRay = false) override;
+	virtual bool intersection(const Ray& ray, real& t, Point2d& uv) override; //DifferentialGeometry& trueGeom, DifferentialGeometry& shadingGeom, bool shadowRay = false) override;
 
 	void getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 		DifferentialGeometry& shadingGeometry, Intersection& inter) override;
@@ -69,16 +69,16 @@ public:
 	//	\|t/  <- solid angle formed at pFrom, with theta (t)
 	// (sin theta)^2 = r^2 / d^2 (d is the distance from sphere center to "bsdf" inter)
 	//-> cos theta = ...
-	double pdf(const Point3d& pFrom, const Point3d& sampled, const Normal3d& normal);
+	real pdf(const Point3d& pFrom, const Point3d& sampled, const Normal3d& normal);
 
-	double surfaceArea()
+	real surfaceArea()
 	{
 		//Consider scale factor ??????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		return 4. * tools::PI * myRadius * myRadius * myRadius;
+		return 4.f * math::PI * myRadius * myRadius * myRadius;
 	}
 
 protected:
-	double myRadius;
+	real myRadius;
 	Point3d myCenter;
 };
 

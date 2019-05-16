@@ -4,7 +4,7 @@
 #include "Mapping.h"
 #include "ObjectFactoryManager.h"
 #include "ConstantTexture.h"
-#include "Tools.h"
+#include "Math.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ Color Diffuse::eval(const BSDFSamplingInfos& infos)
 		DifferentialGeometry::cosTheta(infos.wo) <= 0.)
 		return Color();
 
-	return myAlbedoTexture->eval(infos.uv) * tools::INV_PI;
+	return myAlbedoTexture->eval(infos.uv) * math::INV_PI;
 }
 
 //inline void sincosf(float theta, float *_sin, float *_cos) {
@@ -66,7 +66,7 @@ Color Diffuse::eval(const BSDFSamplingInfos& infos)
 //}
 //Vector3d squareToCosineHemisphere(const Point2d &sample) {
 //	Point2d p = squareToUniformDiskConcentric(sample);
-//	float z = std::sqrt(std::max((double)0,
+//	float z = std::sqrt(std::max((real)0,
 //		1.0f - p.x()*p.x() - p.y()*p.y()));
 //
 //	return Vector3d(p.x(), p.y(), z);
@@ -92,16 +92,16 @@ Color Diffuse::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double Diffuse::pdf(const BSDFSamplingInfos& infos)
+real Diffuse::pdf(const BSDFSamplingInfos& infos)
 {
 	if (DifferentialGeometry::cosTheta(infos.wi) <= 0. ||
 		DifferentialGeometry::cosTheta(infos.wo) <= 0.)
 		return 0.;
 
-	double cosTheta = DifferentialGeometry::cosTheta(infos.wo);
+	real cosTheta = DifferentialGeometry::cosTheta(infos.wo);
 
 	//Pdf associated to cosine weighted hemisphere sampling is cos theta / pi
-	return tools::INV_PI * cosTheta;
+	return math::INV_PI * cosTheta;
 }
 
 RT_REGISTER_TYPE(Diffuse, BSDF)

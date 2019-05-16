@@ -37,16 +37,29 @@ public:
 	{
 		GeometricShape::ptr shape = std::make_shared<ObjectType>(params);
 		BSDF::ptr bsdf = params.getBSDF("bsdf", BSDF::ptr());
+		BSSRDF::ptr bssrdf = params.getBSSRDF("bssrdf", BSSRDF::ptr());
 		Light::ptr light = params.getLight("light", Light::ptr());
 		Medium::ptr interiorMedium = params.getMedium("interior", Medium::ptr());
 		Medium::ptr exteriorMedium = params.getMedium("exterior", Medium::ptr());
-		typename BaseType::ptr primitive = std::make_shared<SimplePrimitive>(shape, bsdf, interiorMedium, exteriorMedium);
+		typename BaseType::ptr primitive = std::make_shared<SimplePrimitive>(shape, bsdf, bssrdf, interiorMedium, exteriorMedium);
+
+		if (bssrdf)
+			bssrdf->setShape(shape);
 
 		if (light)
 		{
 			((AreaLight*)light.get())->setShape(shape);
 			primitive->addLight(light);
 		}
+		else if (interiorMedium && interiorMedium->isEmissive())
+		{
+			primitive->addLight(interiorMedium);
+		}
+
+		if (interiorMedium)
+			interiorMedium->setOwnerBBox(primitive->getWorldBoundingBox());
+		if (exteriorMedium)
+			exteriorMedium->setOwnerBBox(primitive->getWorldBoundingBox());
 		
 		ILogger::log(ILogger::ALL) << "Bounding box " << primitive->getWorldBoundingBox() << "\n";
 		return primitive;

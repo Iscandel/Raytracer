@@ -10,11 +10,11 @@ Plane::Plane(const Parameters& params)
 {
 	myObjectToWorld = params.getTransform("toWorld", Transform::ptr(new Transform));
 	Point3d v2(-1, 1, 0.);
-	Point3d v3(1., -1., 0.);
+	Point3d v3(1.f, -1., 0.);
 	Vector3d side1 = myObjectToWorld->transform(v2) - myObjectToWorld->transform(myMin);
 	Vector3d side2 = myObjectToWorld->transform(v3) - myObjectToWorld->transform(myMin);
 	mySurface = side1.norm() * side2.norm();
-	myInvSurface = 1. / mySurface;
+	myInvSurface = 1.f / mySurface;
 }
 
 
@@ -60,7 +60,7 @@ Normal3d Plane::normal(const Point3d&) const
 /// \param shadowRay Indicates whether the ray is a shadow ray (faster 
 /// intersection routines) of not.
 ///////////////////////////////////////////////////////////////////////////
-bool Plane::intersection(const Ray& _ray, double& t, Point2d& uv)
+bool Plane::intersection(const Ray& _ray, real& t, Point2d& uv)
 {
 	Ray ray(myObjectToWorld->inv().transform(_ray));
 
@@ -75,8 +75,8 @@ bool Plane::intersection(const Ray& _ray, double& t, Point2d& uv)
 	if (p.x() < myMin.x() || p.x() > myMax.x() || p.y() < myMin.y() || p.y() > myMax.y())
 		return false;
 
-	uv.x() = (p.x() + 1) / 2.;
-	uv.y() = (p.y() + 1) / 2.;
+	uv.x() = (p.x() + 1) / 2.f;
+	uv.y() = (p.y() + 1) / 2.f;
 
 	return true;
 }
@@ -90,7 +90,7 @@ void Plane::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 
 void Plane::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 {
-	sampled = myObjectToWorld->transform(Point3d(1. - 2. * p.x(), 1. - 2. * p.y(), 0.));
+	sampled = myObjectToWorld->transform(Point3d(1 - 2 * p.x(), 1 - 2 * p.y(), 0));
 	n = myObjectToWorld->transform(normal(sampled));
 }
 

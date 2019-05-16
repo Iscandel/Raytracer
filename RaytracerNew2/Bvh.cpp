@@ -1,7 +1,7 @@
 #include "Bvh.h"
 
 #include "Logger.h"
-#include "Tools.h"
+#include "Math.h"
 
 #include <thread>
 #include <ppl.h>
@@ -38,6 +38,14 @@ Bvh::~Bvh()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
+void Bvh::initialize(Scene& scene)
+{
+	for (auto& object : myPrimitives)
+		object->initialize(scene);
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 void Bvh::build()
 {
 	std::vector<BvhData, Eigen::aligned_allocator<BvhData>> myData;
@@ -60,7 +68,7 @@ void Bvh::build()
 	root->myBoundingBox = box;
 	ILogger::log(ILogger::ALL) << "Bounding box " << box << "\n";
 
-	buildBinNode(0, myPrimitives.size(), root, myData, 0);
+	buildBinNode(0, (int)myPrimitives.size(), root, myData, 0);
 
 	myNodes.resize(myNumberOfNodes);
 
@@ -75,7 +83,7 @@ void Bvh::buildNode(int startIndex, int endIndex, BvhNode::ptr currentNode, cons
 	myNumberOfNodes++;
 
 	int number = endIndex - startIndex;
-	std::vector<double> surfaces(number);
+	std::vector<real> surfaces(number);
 
 	int indexSplit = -1;
 
@@ -91,7 +99,7 @@ void Bvh::buildNode(int startIndex, int endIndex, BvhNode::ptr currentNode, cons
 		else
 		{
 			Axis axis = getLargestAxisExtent(currentNode->myBoundingBox);
-			double mid = midPoint(axis, currentNode->myBoundingBox);
+			real mid = midPoint(axis, currentNode->myBoundingBox);
 
 			//predicat
 			sortAxis compare(axis);
@@ -139,7 +147,7 @@ void Bvh::buildNode(int startIndex, int endIndex, BvhNode::ptr currentNode, cons
 	case MEDIAN:
 	{
 		Axis axis = getLargestAxisExtent(currentNode->myBoundingBox);
-		double mid = midPoint(axis, currentNode->myBoundingBox);
+		real mid = midPoint(axis, currentNode->myBoundingBox);
 
 		//predicat
 		sortAxis compare(axis);
@@ -161,7 +169,7 @@ void Bvh::buildNode(int startIndex, int endIndex, BvhNode::ptr currentNode, cons
 	}
 	case SAH:
 	default:
-		double minCost = INTERSECTION_COST * number;
+		real minCost = INTERSECTION_COST * number;
 		int bestIndex = -1;
 		int bestAxis = -1;
 
@@ -181,19 +189,19 @@ void Bvh::buildNode(int startIndex, int endIndex, BvhNode::ptr currentNode, cons
 			if (axis == 0)
 				currentNode->myBoundingBox = box;
 
-			double factor = INTERSECTION_COST / currentNode->myBoundingBox.getSurfaceValue();
+			real factor = INTERSECTION_COST / currentNode->myBoundingBox.getSurfaceValue();
 			BoundingBox rightBox;
 			for (auto j = number - 1; j >= 1; j--)
 			{
 				int index = startIndex + j;
 				rightBox = BoundingBox::unionBox(rightBox, myPrimitives[index]->getWorldBoundingBox());
-				double leftArea = surfaces[j - 1];
-				double rightArea = rightBox.getSurfaceValue();
+				real leftArea = surfaces[j - 1];
+				real rightArea = rightBox.getSurfaceValue();
 
-				double leftNumber = j;
-				double rightNumber = number - j;
+				real leftNumber = (real)j;
+				real rightNumber = (real)(number - j);
 
-				double cost = 2 * TRAVERSAL_COST + factor * (leftNumber * leftArea + rightNumber * rightArea);
+				real cost = 2 * TRAVERSAL_COST + factor * (leftNumber * leftArea + rightNumber * rightArea);
 
 				if (cost < minCost)
 				{
@@ -291,7 +299,7 @@ void Bvh::buildNode(int startIndex, int endIndex, BvhNode::ptr currentNode, cons
 //	else
 //	{
 //		Axis axis = getLargestAxisExtent(currentNode->myBoundingBox);
-//		double mid = midPoint(axis, currentNode->myBoundingBox);
+//		real mid = midPoint(axis, currentNode->myBoundingBox);
 //		int indexSplit = -1;
 //
 //		//predicat
@@ -372,7 +380,7 @@ Bvh::Axis Bvh::getLargestAxisExtent(const BoundingBox& box)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double Bvh::midPoint(Axis axis, const BoundingBox & box)
+real Bvh::midPoint(Axis axis, const BoundingBox & box)
 {
 	return box.getCentroid()((int) axis);
 }
@@ -384,13 +392,13 @@ bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 	bool shouldCompute = inter.computeIntersect;
 	if (!shouldCompute) //Not really useful, but...
 	{
-		//inter.t = tools::MAX_DOUBLE;
+		//inter.t = math::MAX_REAL;
 	}
 
 	inter.computeIntersect = false;
 	
 	int stack[64];
-	//double minT = tools::MAX_DOUBLE;
+	//real minT = math::MAX_REAL;
 	int currentNode = 0;
 	
 	int dirIsNeg[3] = { _ray.invDir().x() < 0,  _ray.invDir().y() < 0,  _ray.invDir().z() < 0 };
@@ -399,7 +407,7 @@ bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 
 	//Adaptative ray epsilon
 	Ray ray(_ray);
-	if (ray.myMinT == tools::EPSILON)
+	if (ray.myMinT == math::EPSILON)
 		ray.myMinT = std::max(ray.myMinT, ray.myMinT * ray.myOrigin.array().abs().maxCoeff());
 
 	if (myNodes.empty() || ray.myMaxT < ray.myMinT)
@@ -411,7 +419,7 @@ bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 	{
 		const LinearBVHNode& node = myNodes[currentNode];
 
-		double nearT, farT;
+		real nearT, farT;
 		if (!node.myBoundingBox.intersection(ray, nearT, farT))
 		{
 			if (stackIndex == 0)
@@ -460,6 +468,7 @@ bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 	{
 		DifferentialGeometry trueGeometry;
 		DifferentialGeometry shadingGeometry;
+		inter.myRay = ray;
 		inter.myPrimitive->getDifferentialGeometry(trueGeometry, shadingGeometry, inter);
 		//inter.myPrimitive->intersection(ray, inter, false);
 		inter.myTrueGeometry = trueGeometry;
@@ -474,14 +483,14 @@ bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 //bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 //{
 //	std::vector<StackIntersection> stack;
-//	double minT = tools::MAX_DOUBLE;
+//	real minT = math::MAX_REAL;
 //	BvhNode::ptr currentNode = root;
 //
-//	double tmp1, tmp2;
+//	real tmp1, tmp2;
 //
 //	//Adaptative ray epsilon
 //	Ray ray(_ray);
-//	if (ray.myMinT == tools::EPSILON)
+//	if (ray.myMinT == math::EPSILON)
 //		ray.myMinT = std::max(ray.myMinT, ray.myMinT * ray.myOrigin.array().abs().maxCoeff());
 //
 //	bool hasHit = false;
@@ -497,7 +506,7 @@ bool Bvh::intersection(const Ray & _ray, Intersection& inter, bool shadowRay)
 //		{
 //			bool interChild1 = false;
 //			bool interChild2 = false;
-//			double tNearC1, tNearC2;
+//			real tNearC1, tNearC2;
 //			if (currentNode->myChildren[0]->myBoundingBox.intersection(ray, tNearC1, tmp2))
 //			{
 //				interChild1 = true;
@@ -605,15 +614,16 @@ void Bvh::buildBinNode(int startIndex, int endIndex, BvhNode::ptr currentNode, c
 
 	if (number < 32) 
 	{
+		myNumberOfNodes--; //Because it's going to incremented again in buildNode()
 		buildNode(startIndex, endIndex, currentNode, data, depth);
 		return;
 	}
 
 	Axis axis = getLargestAxisExtent(currentNode->myBoundingBox);
 
-	double min = currentNode->myBoundingBox.getMin()[axis];
-	double max = currentNode->myBoundingBox.getMax()[axis];
-	double binConstant = Bin::BIN_NUMBER / (max - min);
+	real min = currentNode->myBoundingBox.getMin()[axis];
+	real max = currentNode->myBoundingBox.getMax()[axis];
+	real binConstant = Bin::BIN_NUMBER / (max - min);
 
 	currentNode->myAxis = axis;
 
@@ -667,7 +677,7 @@ void Bvh::buildBinNode(int startIndex, int endIndex, BvhNode::ptr currentNode, c
 	//	}
 	//}
 
-	double minCost = INTERSECTION_COST * number;
+	real minCost = INTERSECTION_COST * number;
 	int bestIndex = -1;
 
 	BoundingBox leftBox[Bin::BIN_NUMBER];
@@ -678,15 +688,15 @@ void Bvh::buildBinNode(int startIndex, int endIndex, BvhNode::ptr currentNode, c
 		leftBox[i] = BoundingBox::unionBox(leftBox[i - 1], bins[i].myBox);
 	}
 
-	double factor = INTERSECTION_COST / currentNode->myBoundingBox.getSurfaceValue();
+	real factor = INTERSECTION_COST / currentNode->myBoundingBox.getSurfaceValue();
 	BoundingBox rightBox = bins[Bin::BIN_NUMBER - 1].myBox;
 	BoundingBox bestRightBBox;
 	for (auto i = Bin::BIN_NUMBER - 2; i >= 0; i--)
 	{
 		//int index = startIndex + j;
-		double leftNumber = bins[i].myNumberPrimitives;
-		double rightNumber = number - bins[i].myNumberPrimitives;
-		double cost = 2 * TRAVERSAL_COST + factor * (leftNumber * leftBox[i].getSurfaceValue() + rightNumber * rightBox.getSurfaceValue());
+		real leftNumber = (real)bins[i].myNumberPrimitives;
+		real rightNumber = (real)(number - bins[i].myNumberPrimitives);
+		real cost = 2 * TRAVERSAL_COST + factor * (leftNumber * leftBox[i].getSurfaceValue() + rightNumber * rightBox.getSurfaceValue());
 
 		if (cost < minCost)
 		{

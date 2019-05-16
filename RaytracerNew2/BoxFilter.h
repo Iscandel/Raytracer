@@ -10,9 +10,9 @@ class BoxFilter :
 public:
 	BoxFilter() {}
 	BoxFilter(const Parameters& params);
-	BoxFilter(double radiusX, double radiusY);
+	BoxFilter(real radiusX, real radiusY);
 	~BoxFilter(void);
 
-	double getValue(double, double) override {return 1.;}
+	real getValue(real, real) override {return 1.;}
 };
 

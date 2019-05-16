@@ -2,9 +2,9 @@
 
 #include "BSDF.h"
 #include "Intersection.h"
+#include "Math.h"
 #include "ObjectFactoryManager.h"
 #include "Scene.h"
-#include "Tools.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ DirectLighting::~DirectLighting()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Color DirectLighting::li(Scene& scene, Sampler::ptr sampler, const Ray& ray)
+Color DirectLighting::li(Scene& scene, Sampler::ptr sampler, const Ray& ray, RadianceType::ERadianceType)
 {
 	int depth = 0;
 	Color radiance;
@@ -40,13 +40,13 @@ Color DirectLighting::li(Scene& scene, Sampler::ptr sampler, const Ray& ray)
 			{
 				LightSamplingInfos lightInfos = lights[i]->sample(intersection.myPoint, sampler->getNextSample2D());
 				Vector3d interToLight = lightInfos.sampledPoint - intersection.myPoint;
-				Ray shadowRay(intersection.myPoint, lightInfos.interToLight, tools::EPSILON, interToLight.norm() - tools::EPSILON);
+				Ray shadowRay(intersection.myPoint, lightInfos.interToLight, math::EPSILON, interToLight.norm() - math::EPSILON);
 				Intersection tmp;
 				if (!scene.computeIntersection(shadowRay, tmp, true))
 				{
 					Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 					Vector3d localWo = intersection.toLocal(-_ray.direction());
-					double cosTheta = DifferentialGeometry::cosTheta(localWi);
+					real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 					BSDFSamplingInfos bsdfInfos(localWi, localWo);
 					

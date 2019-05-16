@@ -10,16 +10,16 @@ class MitchellNetravaliFilter :
 	public ReconstructionFilter
 {
 public:
-	MitchellNetravaliFilter(double radiusX, double radiusY, double B, double C);
+	MitchellNetravaliFilter(real radiusX, real radiusY, real B, real C);
 	MitchellNetravaliFilter(const Parameters& params);
 	~MitchellNetravaliFilter(void);
 
-	double getValue(double x, double y);
+	real getValue(real x, real y);
 
-	double func1D(double val);
+	real func1D(real val);
 
 protected:
-	double myB;
-	double myC;
+	real myB;
+	real myC;
 };
 

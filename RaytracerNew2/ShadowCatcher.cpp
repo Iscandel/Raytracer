@@ -7,8 +7,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 ShadowCatcher::ShadowCatcher(const Parameters& params)
 {
-	myHighThreshold = params.getDouble("highThreshhold", 0.7);
-	myRatio = params.getDouble("ratio", 10);
+	myHighThreshold = params.getReal("highThreshhold", 0.7f);
+	myRatio = params.getReal("ratio", 10);
+	myShadowRatio = params.getReal("shadowRatio", 1.);
 }
 
 //=============================================================================
@@ -45,13 +46,13 @@ Color ShadowCatcher::sample(BSDFSamplingInfos& infos, const Point2d&)
 			infos.ao /= myRatio;
 		infos.wo = -infos.wi;
 		infos.pdf = 1.;
-		return Color(1.);
+		return Color(1.) * myShadowRatio;
 	}
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double ShadowCatcher::pdf(const BSDFSamplingInfos& infos)
+real ShadowCatcher::pdf(const BSDFSamplingInfos& infos)
 {
 	return 0.;
 }

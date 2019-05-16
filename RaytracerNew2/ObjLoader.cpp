@@ -165,7 +165,7 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 				if (it == vertexMap.end())
 				{
 					vertexMap[v] = vertices.size();
-					indices.push_back(vertices.size());
+					indices.push_back((int)vertices.size());
 					vertices.push_back(v);
 				}
 				else

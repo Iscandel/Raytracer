@@ -8,16 +8,16 @@ class GaussianFilter :
 	public ReconstructionFilter
 {
 public:
-	GaussianFilter(double radiusX, double radiusY, double a, double w);
+	GaussianFilter(real radiusX, real radiusY, real a, real w);
 	GaussianFilter(const Parameters& params);
 	~GaussianFilter(void);
 
-	double getValue(double x, double y);
+	real getValue(real x, real y);
 
-	double func1D(double val);
+	real func1D(real val);
 
 protected:
-	double myAlpha;
-	double myOmega;
+	real myAlpha;
+	real myOmega;
 };
 

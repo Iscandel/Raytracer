@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include "Geometry.h"
-#include "Tools.h"
+#include "Math.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
@@ -10,8 +10,8 @@ Camera::Camera(const Parameters& params)
 
 	int sizeX = params.getInt("sizeX", 768);
 	int sizeY = params.getInt("sizeY", 768);
-	myLensRadius = params.getDouble("apertureRadius", 0.);
-	myFocalPlane = params.getDouble("focalPlane", tools::MAX_DOUBLE); //focusPlane
+	myLensRadius = params.getReal("apertureRadius", 0.);
+	myFocalPlane = params.getReal("focalPlane", math::MAX_REAL); //focusPlane
 
 	if (myLensRadius > 0.)
 		myNeedDoFSample = true;
@@ -29,13 +29,13 @@ Camera::~Camera(void)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-//Ray Camera::getRay(double px, double py)
+//Ray Camera::getRay(real px, real py)
 //{
-//	double aspect = this->getSizeX() / (double)this->getSizeY();
-//	double m_farClip = 1e4;
-//	double m_nearClip = 1e-4;
-//	double m_fov = 30.;
-//	double recip = 1.0 / (m_farClip - m_nearClip),
+//	real aspect = this->getSizeX() / (real)this->getSizeY();
+//	real m_farClip = 1e4;
+//	real m_nearClip = 1e-4;
+//	real m_fov = 30.;
+//	real recip = 1.0 / (m_farClip - m_nearClip),
 //	cot = 1.0 / std::tan(tools::toRadian(m_fov / 2.0));
 //	
 //	Eigen::Matrix4d perspective;
@@ -50,8 +50,8 @@ Camera::~Camera(void)
 //	* range from zero to one. Also takes the aspect ratio into account.
 //	*/
 //	Transform m_sampleToCamera = Transform(
-//		Eigen::DiagonalMatrix<double, 3>(Vector3d(0.5, -0.5 * aspect, 1.0)) *
-//		Eigen::Translation<double, 3>(1.0, -1.0 / aspect, 0.0) * perspective).inv();
+//		Eigen::DiagonalMatrix<real, 3>(Vector3d(0.5, -0.5 * aspect, 1.0)) *
+//		Eigen::Translation<real, 3>(1.0, -1.0 / aspect, 0.0) * perspective).inv();
 //	
 //	Vector3d m_invOutputSize = Vector3d(1. / getSizeX(), 1. / getSizeY(), 0.);
 //	
@@ -64,7 +64,7 @@ Camera::~Camera(void)
 //	/* Turn into a normalized ray direction, and
 //	adjust the ray interval accordingly */
 //	Vector3d d = nearP.normalized();
-//	double invZ = 1.0 / d.z();
+//	real invZ = 1.0 / d.z();
 //	
 //	
 //	Ray ray2;
@@ -90,7 +90,7 @@ Camera::~Camera(void)
 //
 //		direction = Vector3d(origin, imagePlane);
 //		direction.normalize();
-//		double invDir = 1. / direction.y();
+//		real invDir = 1. / direction.y();
 //
 //		ray.myOrigin = origin;
 //		ray.direction(direction);
@@ -113,7 +113,7 @@ Camera::~Camera(void)
 //		direction = Vector3d(origin, imagePlane);
 //		direction.normalize();
 //
-//		double invDir = 1. / direction.z();
+//		real invDir = 1. / direction.z();
 //
 //		ray.myOrigin = origin;
 //		ray.direction(direction);
@@ -146,9 +146,9 @@ Camera::~Camera(void)
 
 
 //		Point3d sample(tools::random(0., 1.), tools::random(0., 1.), 0.);
-//		double lensRadius = 0.05;
+//		real lensRadius = 0.05;
 //		if (lensRadius > 0.) {
-//			double focalDistance = 4;
+//			real focalDistance = 4;
 //			// Sample point on lens
 //			//float lensU, lensV;
 //			Point3d lens = squareToDiskConcentric(sample);
@@ -156,7 +156,7 @@ Camera::~Camera(void)
 //			//lensV *= lensRadius;
 //			imagePlane.normalize();
 //			// Compute point on plane of focus
-//			double ft = focalDistance / imagePlane.y;
+//			real ft = focalDistance / imagePlane.y;
 //			Vector3d Pfocus = Vector3d() + ft * imagePlane;
 //
 //			// Update ray for effect of lens
@@ -169,9 +169,9 @@ Camera::~Camera(void)
 //
 //
 //Point3d squareToDiskConcentric(const Point3d &sample) {
-//	double r1 = 2.0f*sample.x - 1.0f;
-//	double r2 = 2.0f*sample.y - 1.0f;
-//	const double M_PI = 3.14159;
+//	real r1 = 2.0f*sample.x - 1.0f;
+//	real r2 = 2.0f*sample.y - 1.0f;
+//	const real M_PI = 3.14159;
 //
 //	Point3d coords;
 //	if (r1 == 0 && r2 == 0) {
@@ -240,11 +240,11 @@ Camera::~Camera(void)
 
 
 
-//double aspect = this->getSizeX() / (double)this->getSizeY();
-//double m_farClip = 1e4;
-//double m_nearClip = 1e-4;
-//double m_fov = 30.;
-//double recip = 1.0 / (m_farClip - m_nearClip),
+//real aspect = this->getSizeX() / (real)this->getSizeY();
+//real m_farClip = 1e4;
+//real m_nearClip = 1e-4;
+//real m_fov = 30.;
+//real recip = 1.0 / (m_farClip - m_nearClip),
 //cot = 1.0 / std::tan(tools::toRadian(m_fov / 2.0));
 //
 //Eigen::Matrix4d perspective;
@@ -259,8 +259,8 @@ Camera::~Camera(void)
 //* range from zero to one. Also takes the aspect ratio into account.
 //*/
 //Transform m_sampleToCamera = Transform(
-//	Eigen::DiagonalMatrix<double, 3>(Vector3d(0.5, -0.5 * aspect, 1.0)) *
-//	Eigen::Translation<double, 3>(1.0, -1.0 / aspect, 0.0) * perspective).inv();
+//	Eigen::DiagonalMatrix<real, 3>(Vector3d(0.5, -0.5 * aspect, 1.0)) *
+//	Eigen::Translation<real, 3>(1.0, -1.0 / aspect, 0.0) * perspective).inv();
 //
 //Vector3d m_invOutputSize = Vector3d(1. / getSizeX(), 1. / getSizeY(), 0.);
 //
@@ -273,7 +273,7 @@ Camera::~Camera(void)
 ///* Turn into a normalized ray direction, and
 //adjust the ray interval accordingly */
 //Vector3d d = nearP.normalized();
-//double invZ = 1.0 / d.z();
+//real invZ = 1.0 / d.z();
 //
 //
 //Ray ray2;

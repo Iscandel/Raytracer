@@ -3,7 +3,7 @@
 #include "ImageLoader.h"
 #include "ObjectFactoryManager.h"
 #include "Parameters.h"
-#include "Tools.h"
+#include "Math.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -12,7 +12,7 @@ ImageTexture::ImageTexture(const Parameters& params)
 	std::string path = params.getString("path", "");
 	myInvertY = params.getBool("invertY", false);
 	myInvertX = params.getBool("invertX", false);
-
+	myScale = std::abs(params.getReal("scale", (real)1.));
 	ImageLoader::load(path, myArray);
 	//sf::Image im;
 	//im.loadFromFile("./busteAjax.png");
@@ -34,21 +34,29 @@ ImageTexture::~ImageTexture()
 
 Color ImageTexture::eval(const Point2d & uv)
 {
-	double x, y;
+	real x, y;
 	if (!myInvertY) {
 		y = uv.y() * myArray.getHeight();
 	}
 	else {
-		y = (1. - uv.y()) * myArray.getHeight();
+		y = (1.f - uv.y()) * myArray.getHeight();
 	}
 
 	if (!myInvertX) {
 		x = uv.x() * myArray.getWidth();
 	} else {
-		x = (1. - uv.x()) * myArray.getWidth();
+		x = (1.f - uv.x()) * myArray.getWidth();
 	}
 
-	return tools::interp2(Point2d(x, y), myArray);
+	x *= myScale;
+	y *= myScale;
+
+	if (x >= myArray.getWidth())
+		x -= myArray.getWidth();
+	if (y >= myArray.getHeight())
+		y -= myArray.getHeight();
+
+	return math::interp2(Point2d(x, y), myArray);
 	//return myArray(x, y);
 }
 

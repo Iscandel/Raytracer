@@ -62,6 +62,8 @@
 #include <cmath>
 #include <cassert>
 
+#include "Geometry.h"
+
 /// PCG32 Pseudorandom number generator
 struct Rng {
 	/// Initialize the pseudorandom number generator with default seed
@@ -125,8 +127,9 @@ struct Rng {
 		}
 	}
 
+#ifndef DOUBLE_PRECISION
 	/// Generate a single precision floating point value on the interval [0, 1)
-	float nextFloat() {
+	real nextReal() {
 		/* Trick from MTGP: generate an uniformly distributed
 		single precision number in [1,2) and subtract 1. */
 		union {
@@ -137,6 +140,8 @@ struct Rng {
 		return x.f - 1.0f;
 	}
 
+#else
+
 	/**
 	* \brief Generate a double precision floating point value on the interval [0, 1)
 	*
@@ -144,7 +149,7 @@ struct Rng {
 	* only the first 32 mantissa bits will be filled (however, the resolution is still
 	* finer than in \ref nextFloat(), which only uses 23 mantissa bits)
 	*/
-	double nextDouble() {
+	real nextReal() {
 		/* Trick from MTGP: generate an uniformly distributed
 		double precision number in [1,2) and subtract 1. */
 		union {
@@ -154,6 +159,7 @@ struct Rng {
 		x.u = ((uint64_t)nextUInt() << 20) | 0x3ff0000000000000ULL;
 		return x.d - 1.0;
 	}
+#endif
 
 	/**
 	* \brief Multi-step advance function (jump-ahead, jump-back)

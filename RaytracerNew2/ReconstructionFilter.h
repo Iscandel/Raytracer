@@ -30,7 +30,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Constructor.
 	///////////////////////////////////////////////////////////////////////////
-	ReconstructionFilter(double myRadiusX, double myRadiusY);
+	ReconstructionFilter(real myRadiusX, real myRadiusY);
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Destructor.
@@ -40,7 +40,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Retrieves the correct filter function value at (x, y).
 	///////////////////////////////////////////////////////////////////////////
-	virtual double getValue(double x, double y) = 0;
+	virtual real getValue(real x, real y) = 0;
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief precomputes the set of values, from -radius to radius
@@ -51,7 +51,7 @@ public:
 	/// \brief Retrieves an approximation of the correct filter function value
 	/// for the given point pair.
 	///////////////////////////////////////////////////////////////////////////
-	inline double operator() (double x, double y)
+	inline real operator() (real x, real y)
 	{
 		//check x and y range validity
 		//int indexX = std::round(myResolution * x);
@@ -65,15 +65,15 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	///
 	///////////////////////////////////////////////////////////////////////////
-	double getRadiusX() {return myRadiusX;}
-	double getRadiusY() {return myRadiusY;}
+	real getRadiusX() {return myRadiusX;}
+	real getRadiusY() {return myRadiusY;}
 
 protected:
-	double myRadiusX;
-	double myRadiusY;
+	real myRadiusX;
+	real myRadiusY;
 
 	int myResolution;
 
-	std::vector<double> myPrecomputedValues;
+	std::vector<real> myPrecomputedValues;
 };
 

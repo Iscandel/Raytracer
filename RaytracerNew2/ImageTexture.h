@@ -17,5 +17,6 @@ protected:
 	Array2D<Color> myArray;
 	bool myInvertY;
 	bool myInvertX;
+	real myScale;
 };
 

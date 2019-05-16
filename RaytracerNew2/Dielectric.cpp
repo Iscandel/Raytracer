@@ -12,8 +12,8 @@ Dielectric::Dielectric(const Parameters& params)
 	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
 	myTransmittedTexture = params.getTexture("transmittedTexture", Texture::ptr(new ConstantTexture(Color(1.))));
 
-	myEtaI = params.getDouble("etaExt", 1.000277); //incident
-	myEtaT = params.getDouble("etaInt", 1.5046); //transmitted
+	myEtaI = params.getReal("etaExt", 1.000277f); //incident
+	myEtaT = params.getReal("etaInt", 1.5046f); //transmitted
 }
 
 //=============================================================================
@@ -36,11 +36,11 @@ Color Dielectric::eval(const BSDFSamplingInfos &)
 ///////////////////////////////////////////////////////////////////////////////
 Color Dielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double etaI = myEtaI;
-	double etaT = myEtaT;
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real etaI = myEtaI;
+	real etaT = myEtaT;
 	bool isEntering = true;
-	double fr = 0.;
+	real fr = 0.;
 	
 	infos.measure = Measure::DISCRETE;
 
@@ -50,12 +50,12 @@ Color Dielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 		std::swap(etaI, etaT);
 	}
 
-	double relativeEta = etaI / etaT;
+	real relativeEta = etaI / etaT;
 
 	//Descartes's law
-	double sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosThetaI * cosThetaI));
+	real sinThetaT = relativeEta * std::sqrt(std::max((real)0., 1 - cosThetaI * cosThetaI));
 	//Trigo law
-	double cosThetaT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
+	real cosThetaT = std::sqrt(std::max((real)0., 1 - sinThetaT * sinThetaT));
 
 	if (sinThetaT >= 1.)
 	{
@@ -100,7 +100,7 @@ Color Dielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double Dielectric::pdf(const BSDFSamplingInfos &)
+real Dielectric::pdf(const BSDFSamplingInfos &)
 {
 	//Check if infos.wo corresponds to infos.wi, given infos.sampledType ? Would be correct
 	//to avoid returning lazy 0. pdf. We could call pdf() everywhere

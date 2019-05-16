@@ -24,7 +24,7 @@ LightSamplingInfos PointLight::sample(const Point3d & pFrom, const Point2d&)
 
 	infos.interToLight = myPosition - pFrom;
 	infos.distance = infos.interToLight.norm();
-	double invDist = 1 / infos.distance;
+	real invDist = 1 / infos.distance;
 	infos.interToLight *= invDist;
 	infos.intensity = myIntensity * invDist * invDist;
 	infos.sampledPoint = myPosition;

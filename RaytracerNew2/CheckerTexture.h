@@ -36,7 +36,7 @@ public:
 	}
 
 protected:
-	double mySquareSize;
+	real mySquareSize;
 	Color myFirstColor;
 	Color mySecondColor;
 };

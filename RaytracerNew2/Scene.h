@@ -11,6 +11,7 @@
 #include "Primitive.h"
 #include "Ray.h"
 #include "Sampler.h"
+#include "WithSmartPtr.h"
 
 #include <Eigen/StdVector>
 #include <vector>
@@ -188,6 +189,7 @@ public:
 	/// \brief Initializes the scene.
 	///////////////////////////////////////////////////////////////////////////////
 	Medium::ptr getCameraMedium() { return myCameraMedium; }
+	Medium::constPtr getCameraMedium() const { return myCameraMedium; }//WithSmartPtr<Medium>::createConstPtr(myCameraMedium); }
 
 	void setCameraMedium(Medium::ptr medium) { myCameraMedium = medium; }
 

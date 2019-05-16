@@ -1,11 +1,11 @@
 #include "Intersection.h"
 
-#include "Tools.h"
+#include "Math.h"
 
 #include "Primitive.h"
 
 Intersection::Intersection()
-:t(tools::MAX_DOUBLE)
+:t(math::MAX_REAL)
 ,computeIntersect(true)
 {
 }

@@ -4,9 +4,9 @@
 #include "DifferentialGeometry.h"
 #include "Fresnel.h"
 #include "Mapping.h"
+#include "Math.h"
 #include "ObjectFactoryManager.h"
 #include "Parameters.h"
-#include "Tools.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
@@ -15,18 +15,18 @@ Microfacet::Microfacet(const Parameters& params)
 	if (params.hasTexture("kd"))
 		myKdTexture = params.getTexture("kd", nullptr);
 	else
-		myKdTexture = Texture::ptr(new ConstantTexture(params.getColor("kd", Color(0.))));
+		myKdTexture = Texture::ptr(new ConstantTexture(params.getColor("kd", Color(0.f))));
 
 	//myKd = params.getColor("kd", Color());
-	myAlpha = params.getDouble("alpha", 0.2);
-	myEtaExt = params.getDouble("etaExt", 1.000277);     /* Interior IOR (default: BK7 borosilicate optical glass) */
-	myEtaInt = params.getDouble("etaInt", 1.5946);
+	myAlpha = params.getReal("alpha", 0.2f);
+	myEtaExt = params.getReal("etaExt", 1.000277f);     /* Interior IOR (default: BK7 borosilicate optical glass) */
+	myEtaInt = params.getReal("etaInt", 1.5946f);
 
 	myDistribution = MicrofacetDistribution(params.getString("distribution", "ggx"));
-	myKs = params.getDouble("probabilitySpecular", 1.);
+	myKs = params.getReal("probabilitySpecular", 1.f);
 
 	//Color kd = myKdTexture->eval(Point2d());
-	//double max = std::max(kd.b, std::max(kd.r, kd.g));
+	//real max = std::max(kd.b, std::max(kd.r, kd.g));
 	//myKs = 1 - max;
 
 }
@@ -37,53 +37,53 @@ Microfacet::~Microfacet()
 {
 }
 
-double Microfacet::distributionBeckmann(const Vector3d& wh)
+real Microfacet::distributionBeckmann(const Vector3d& wh)
 {
 	if (DifferentialGeometry::cosTheta(wh) <= 0.)
 		return 0.;
 
-	double cosThetaH2 = DifferentialGeometry::cosTheta(wh) * DifferentialGeometry::cosTheta(wh);
-	double tanThetaH2 = DifferentialGeometry::sinTheta2(wh) / cosThetaH2;
-	double alpha2 = myAlpha * myAlpha;
-	return (std::exp(-tanThetaH2 / alpha2)) / (tools::PI * alpha2 * cosThetaH2 * cosThetaH2);
+	real cosThetaH2 = DifferentialGeometry::cosTheta(wh) * DifferentialGeometry::cosTheta(wh);
+	real tanThetaH2 = DifferentialGeometry::sinTheta2(wh) / cosThetaH2;
+	real alpha2 = myAlpha * myAlpha;
+	return (math::fastExp(-tanThetaH2 / alpha2)) / (math::PI * alpha2 * cosThetaH2 * cosThetaH2);
 }
 
-double Microfacet::shadowingTerm(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh)
+real Microfacet::shadowingTerm(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh)
 {
 	return shadowingTermG1(wi, wh) * shadowingTermG1(wo, wh);
 }
 
-double Microfacet::shadowingTermG1(const Vector3d& v, const Vector3d& m)
+real Microfacet::shadowingTermG1(const Vector3d& v, const Vector3d& m)
 {
 	if ((v.dot(m)) / (DifferentialGeometry::cosTheta(v)) <= 0)
-		return 0.;
+		return 0.f;
 
-	double tanThetaV = DifferentialGeometry::sinTheta(v) /
+	real tanThetaV = DifferentialGeometry::sinTheta(v) /
 					   DifferentialGeometry::cosTheta(v);
-	double b = 1. / (myAlpha * tanThetaV);
+	real b = 1.f / (myAlpha * tanThetaV);
 	
-	if (b < 1.6)
+	if (b < 1.6f)
 	{
-		return (3.535 * b + 2.181 * b * b) / (1 + 2.276 * b + 2.577 * b * b);
+		return (3.535f * b + 2.181f * b * b) / (1 + 2.276f * b + 2.577f * b * b);
 	}
 	else
 	{
-		return 1.;
+		return 1.f;
 	}
 }
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Color Microfacet::eval(const BSDFSamplingInfos & infos)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 	if (cosThetaI <= 0. || cosThetaO <= 0.)
 		return Color();
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
 
-	Color diffusePart = (1 - myKs) * myKdTexture->eval(infos.uv) * tools::INV_PI; //new : (1-ks)
+	Color diffusePart = (1 - myKs) * myKdTexture->eval(infos.uv) * math::INV_PI; //new : (1-ks)
 	Color specularPart = myKs * myDistribution.D(wh, myAlpha) /*distributionBeckmann(wh)*/ *
 		fresnel(myEtaExt, myEtaInt, infos.wi.dot(wh)) * //cosThetaI) *
 		myDistribution.G(infos.wi, infos.wo, wh, myAlpha) /*shadowingTerm(infos.wi, infos.wo, wh) */ / (4 * cosThetaI * cosThetaO);
@@ -91,10 +91,10 @@ Color Microfacet::eval(const BSDFSamplingInfos & infos)
 	return diffusePart + specularPart;
 }
 
-Color Microfacet::fresnel(double etaExt, double etaInt, double cosThetaI)
+Color Microfacet::fresnel(real etaExt, real etaInt, real cosThetaI)
 {
-	double etaI = etaExt;
-	double etaT = etaInt;
+	real etaI = etaExt;
+	real etaT = etaInt;
 	bool isEntering = true;
 	Color fr(0.);
 
@@ -103,10 +103,10 @@ Color Microfacet::fresnel(double etaExt, double etaInt, double cosThetaI)
 		isEntering = false;
 		std::swap(etaI, etaT);
 	}
-	double relativeEta = etaI / etaT;
+	real relativeEta = etaI / etaT;
 
-	double sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosThetaI * cosThetaI));
-	double cosThetaT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
+	real sinThetaT = relativeEta * std::sqrt(std::max((real)0., 1 - cosThetaI * cosThetaI));
+	real cosThetaT = std::sqrt(std::max((real)0., 1 - sinThetaT * sinThetaT));
 
 	if (sinThetaT >= 1.)
 	{
@@ -125,15 +125,15 @@ Color Microfacet::fresnel(double etaExt, double etaInt, double cosThetaI)
 
 Color Microfacet::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 {
-	if (DifferentialGeometry::cosTheta(infos.wi) <= 0.)
+	if (DifferentialGeometry::cosTheta(infos.wi) <= 0.f)
 		return Color();
 
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlpha;
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real alpha = (1.2f - 0.2f * std::sqrt(std::abs(cosThetaI))) * myAlpha;
 	Normal3d normal = myDistribution.sampleNormal(sample, alpha);
 
-	//double theta = std::atan(std::sqrt(-myAlpha * myAlpha * std::log(1 - sample.x())));
-	//double phi = 2 * tools::PI * sample.y();
+	//real theta = std::atan(std::sqrt(-myAlpha * myAlpha * std::log(1 - sample.x())));
+	//real phi = 2 * math::PI * sample.y();
 
 	//Normal3d normal(std::sin(theta) * std::cos(phi), std::sin(theta) * std::sin(phi), std::cos(theta));
 
@@ -149,7 +149,7 @@ Color Microfacet::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 	}
 	
 
-	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+	real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 	//if cosTheta <= 0, return 0, because pdf = 0...so NaN
 	//if (cosThetaO <= 0.)
@@ -162,21 +162,21 @@ Color Microfacet::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 	return eval(infos) * std::abs(cosThetaO) / infos.pdf;
 }
 
-double Microfacet::pdf(const BSDFSamplingInfos& infos)
+real Microfacet::pdf(const BSDFSamplingInfos& infos)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 	//if (cosThetaI <= 0. || cosThetaO <= 0.)
 	//	return 0.;
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();
-	double cosThetaH = DifferentialGeometry::cosTheta(wh);
+	real cosThetaH = DifferentialGeometry::cosTheta(wh);
 
-	double alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlpha;
+	real alpha = (1.2f - 0.2f * std::sqrt(std::abs(cosThetaI))) * myAlpha;
 
-	double Jh = 1. / (4 * wh.dot(infos.wo));
-	return myKs * myDistribution.D(wh, alpha) /*distributionBeckmann(wh)*/ * cosThetaH * Jh + (1 - myKs) * cosThetaO * tools::INV_PI;
+	real Jh = 1.f / (4 * wh.dot(infos.wo));
+	return myKs * myDistribution.D(wh, alpha) /*distributionBeckmann(wh)*/ * cosThetaH * Jh + (1 - myKs) * cosThetaO * math::INV_PI;
 }
 
 RT_REGISTER_TYPE(Microfacet, BSDF)

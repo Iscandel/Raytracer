@@ -3,7 +3,9 @@
 #include "Color.h"
 #include "Common.h"
 #include "Geometry.h"
+#include "RaytracerObject.h"
 #include "Sampler.h"
+#include "WithSmartPtr.h"
 
 #include <memory>
 
@@ -28,7 +30,7 @@ struct LightSamplingInfos
 	Vector3d interToLight;//wi;
 
 	//Norm of interToLight vector
-	double distance;
+	real distance;
 
 	///Normal at the sampled point
 	Normal3d normal; //useless ?
@@ -37,30 +39,31 @@ struct LightSamplingInfos
 	Measure measure;
 
 	///Probability density associated to the sampled point
-	double pdf;
+	real pdf;
 
+	//typename Light::ptr light;
 	std::shared_ptr<Light> light;
 };
 
-class Light
+class Light : public RaytracerObject, public WithSmartPtr<Light>
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-public:
-	typedef std::shared_ptr<Light> ptr;
+//public:
+//	typedef std::shared_ptr<Light> ptr;
 
 	virtual Color power() const = 0;
 
 	virtual LightSamplingInfos sample(const Point3d& pFrom, const Point2d& sample) = 0;
 
-	virtual double pdf(const Point3d& pFrom, const LightSamplingInfos& infos) = 0;
+	virtual real pdf(const Point3d& pFrom, const LightSamplingInfos& infos) = 0;
 
 	virtual Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const = 0;
 
 	virtual bool isDelta() const = 0;
 
-	virtual void initialize(const Scene&) {}
+	//virtual void initialize(const Scene&) {}
 public:
 	Light() {}
 	//Light(const Point3d& center, const Color& col);

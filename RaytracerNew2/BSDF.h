@@ -4,6 +4,7 @@
 #include "Common.h"
 #include "DifferentialGeometry.h"
 #include "Geometry.h"
+#include "RaytracerObject.h"
 
 #include <memory>
 
@@ -13,7 +14,7 @@ class Intersection;
 
 struct BSDFSamplingInfos;
 
-class BSDF
+class BSDF : public RaytracerObject
 {
 public:
 	typedef std::shared_ptr<BSDF> ptr;
@@ -46,21 +47,21 @@ public:
 
 	Vector3d reflect(const Vector3d& vect, const Normal3d& normal) { return  2 * vect.dot(normal) * Vector3d(normal) - vect;}
 
-	Vector3d refract(const Vector3d& vect, double cosThetaT, double relativeEta) { return Vector3d(relativeEta * -vect.x(), relativeEta * -vect.y(), cosThetaT); }
+	Vector3d refract(const Vector3d& vect, real cosThetaT, real relativeEta) { return Vector3d(relativeEta * -vect.x(), relativeEta * -vect.y(), cosThetaT); }
 
-	Vector3d refract(const Vector3d& vect, const Normal3d& normal, double relativeEta, double cosThetaT)
+	Vector3d refract(const Vector3d& vect, const Normal3d& normal, real relativeEta, real cosThetaT)
 	{
 		return normal * (vect.dot(normal) * relativeEta + cosThetaT) - vect * relativeEta;
 	}
 
-	bool refract(const Vector3d& vect, Vector3d& refracted, double relativeEta, const Normal3d& normal) 
+	bool refract(const Vector3d& vect, Vector3d& refracted, real relativeEta, const Normal3d& normal) 
 	{ 
-		double c = vect.dot(normal);
+		real c = vect.dot(normal);
 		int sign = vect.z() >= 0 ? 1 : -1;
-		double sqrtTerm = 1 + relativeEta * relativeEta * (c * c - 1);
+		real sqrtTerm = 1 + relativeEta * relativeEta * (c * c - 1);
 		if (sqrtTerm < 0)
 			return false;
-		double left = relativeEta * c - sign * std::sqrt(std::max(0., (sqrtTerm)));
+		real left = relativeEta * c - sign * std::sqrt(std::max((real)0., (sqrtTerm)));
 		refracted = left * normal - relativeEta * vect;
 		return true;
 	}
@@ -69,7 +70,7 @@ public:
 
 	virtual Color sample(BSDFSamplingInfos& infos, const Point2d& sample) = 0;
 
-	virtual double pdf(const BSDFSamplingInfos& infos) = 0;
+	virtual real pdf(const BSDFSamplingInfos& infos) = 0;
 
 	virtual bool isShadowCatcher() const { return false; }
 };
@@ -120,10 +121,10 @@ struct BSDFSamplingInfos
 	///Flag indicating the type of measure done when sampling the BSDF
 	Measure measure;
 
-	double relativeEta;
+	real relativeEta;
 
 	///PDF associated to the reflected direction sampled
-	double pdf;
+	real pdf;
 
 	Point2d uv;
 
@@ -131,5 +132,5 @@ struct BSDFSamplingInfos
 
 	bool shadowCaught;
 
-	double ao = 1.;
+	real ao = 1.;
 };

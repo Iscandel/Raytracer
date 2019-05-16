@@ -19,7 +19,7 @@ public:
 
 	virtual Point2d getNextSample2D() = 0;
 
-	virtual double getNextSample1D() = 0;
+	virtual real getNextSample1D() = 0;
 
 	virtual Sampler::ptr clone() = 0;
 

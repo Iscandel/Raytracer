@@ -22,7 +22,7 @@ public:
 
 	virtual LightSamplingInfos sample(const Point3d& pFrom, const Point2d& sample) override;
 
-	virtual double pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override;
+	virtual real pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override;
 
 	virtual Color power() const override;
 
@@ -30,15 +30,15 @@ public:
 
 	bool isDelta() const override { return false; }
 
-	void initialize(const Scene& scene) override;
+	void initialize(Scene& scene) override;
 
 protected:
 	Color myRadiance;
 	Transform::ptr myLightToWorld;
-	double myAngle;
+	real myAngle;
 
 	//Bounding sphere
-	double mySphereRadius;
+	real mySphereRadius;
 	Point3d myCenter;
 };
 

@@ -1,6 +1,7 @@
 #include "AreaLight.h"
 
 #include "ISampledShape.h"
+#include "Math.h"
 #include "ObjectFactoryManager.h"
 #include "Parameters.h"
 
@@ -22,7 +23,7 @@ AreaLight::~AreaLight()
 Color AreaLight::power() const
 {
 	std::shared_ptr<ISampledShape> shape = myShape.lock();
-	return tools::PI * myRadiance * shape->surfaceArea();
+	return math::PI * myRadiance * shape->surfaceArea();
 }
 
 //=============================================================================
@@ -37,7 +38,7 @@ LightSamplingInfos AreaLight::sample(const Point3d & pFrom, const Point2d& sampl
 	infos.interToLight = infos.sampledPoint - pFrom;
 	infos.distance = infos.interToLight.norm();
 	infos.interToLight /= infos.distance;
-	double cosine = infos.normal.dot(-infos.interToLight);
+	real cosine = infos.normal.dot(-infos.interToLight);
 
 	if (cosine < 0)
 	{
@@ -53,7 +54,7 @@ LightSamplingInfos AreaLight::sample(const Point3d & pFrom, const Point2d& sampl
 	return infos;
 }
 
-double AreaLight::pdf(const Point3d& pFrom, const LightSamplingInfos& infos)
+real AreaLight::pdf(const Point3d& pFrom, const LightSamplingInfos& infos)
 {
 	std::shared_ptr<ISampledShape> shape = myShape.lock();
 	return shape->pdf(pFrom, infos.sampledPoint, infos.normal);

@@ -2,7 +2,7 @@
 
 #include "Geometry.h"
 #include "Ray.h"
-#include "Tools.h"
+#include "Math.h"
 
 #include <iostream>
 
@@ -45,17 +45,17 @@ public:
 	///////////////////////////////////////////////////////////////////////////////
 	/// \brief Returns the bounding box's surface area.
 	///////////////////////////////////////////////////////////////////////////////
-	double getSurfaceValue() const
+	real getSurfaceValue() const
 	{
 		Vector3d dist = myMax - myMin;
 		
-		return 2. * (dist.x() * dist.y() + dist.y() * dist.z() + dist.x() * dist.z());
+		return 2.f * (dist.x() * dist.y() + dist.y() * dist.z() + dist.x() * dist.z());
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
 	/// \brief Returns the volume contained in the bounding box.
 	///////////////////////////////////////////////////////////////////////////////
-	double getVolumeValue() const
+	real getVolumeValue() const
 	{
 		Vector3d dist = myMax - myMin;
 
@@ -134,6 +134,12 @@ public:
 		return res;
 	}
 
+	bool contains(const Point3d& p) const 
+	{
+		return ((p.array() >= getMin().array()).all() &&
+				(p.array() <= getMax().array()).all());
+	}
+
 	///////////////////////////////////////////////////////////////////////////////
 	/// \brief Intersection test between a box and a ray
 	/// 
@@ -145,21 +151,21 @@ public:
 	///
 	/// \return True if the ray passes through the box, false otherwise
 	///////////////////////////////////////////////////////////////////////////////
-	bool intersection(const Ray &ray, double &nearT, double &farT) const {
-		nearT = -tools::MAX_DOUBLE;//std::numeric_limits<double>::infinity();
-		farT = tools::MAX_DOUBLE;//std::numeric_limits<double>::infinity();
+	bool intersection(const Ray &ray, real &nearT, real &farT) const {
+		nearT = -math::MAX_REAL;//std::numeric_limits<real>::infinity();
+		farT = math::MAX_REAL;//std::numeric_limits<real>::infinity();
 
 		for (int i = 0; i<3; i++) {
-			double origin = ray.myOrigin[i];
-			double minVal = myMin[i], maxVal = myMax[i];
+			real origin = ray.myOrigin[i];
+			real minVal = myMin[i], maxVal = myMax[i];
 
 			if (ray.direction()[i] == 0) {
 				if (origin < minVal || origin > maxVal)
 					return false;
 			}
 			else {
-				double t1 = (minVal - origin) * ray.invDir()[i];
-				double t2 = (maxVal - origin) * ray.invDir()[i];
+				real t1 = (minVal - origin) * ray.invDir()[i];
+				real t2 = (maxVal - origin) * ray.invDir()[i];
 
 				if (t1 > t2)
 					std::swap(t1, t2);

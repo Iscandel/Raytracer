@@ -12,7 +12,7 @@ public:
 	DirectLightingIS(const Parameters& params);
 	~DirectLightingIS();
 
-	Color li(Scene& scene, Sampler::ptr sampler, const Ray& ray) override;
+	Color li(Scene& scene, Sampler::ptr sampler, const Ray& ray, RadianceType::ERadianceType radianceType = RadianceType::ALL_RADIANCE) override;
 
 protected:
 	int myDepth;

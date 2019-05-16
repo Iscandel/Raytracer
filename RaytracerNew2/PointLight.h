@@ -1,6 +1,7 @@
 #pragma once
 #include "Light.h"
 
+#include "Math.h"
 #include "Parameters.h"
 
 class PointLight : public Light
@@ -11,12 +12,12 @@ public:
 
 	Color power() const override
 	{
-		return 4 * tools::PI * myIntensity;
+		return 4 * math::PI * myIntensity;
 	}
 
 	LightSamplingInfos sample(const Point3d& pFrom, const Point2d& sample) override;
 
-	double pdf(const Point3d&, const LightSamplingInfos&) override
+	real pdf(const Point3d&, const LightSamplingInfos&) override
 	{
 		//Point lights cannot be intersected
 		return 0.;

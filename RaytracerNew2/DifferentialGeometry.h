@@ -35,11 +35,11 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	static void coordinateSystem(const Vector3d &a, Vector3d &b, Vector3d &c) {
 		if (std::abs(a.x()) > std::abs(a.y())) {
-			double invLen = 1.0f / std::sqrt(a.x() * a.x() + a.z() * a.z());
+			real invLen = 1.0f / std::sqrt(a.x() * a.x() + a.z() * a.z());
 			c = Vector3d(a.z() * invLen, 0.0f, -a.x() * invLen);
 		}
 		else {
-			double invLen = 1.0f / std::sqrt(a.y() * a.y() + a.z() * a.z());
+			real invLen = 1.0f / std::sqrt(a.y() * a.y() + a.z() * a.z());
 			c = Vector3d(0.0f, a.z() * invLen, -a.y() * invLen);
 		}
 #ifdef USE_ALIGN
@@ -54,7 +54,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	Vector3d toLocal(const Vector3d& v) const
 	{
-		return Vector3d(v.dot(myS), v.dot(myT), v.dot(myN));
+		return Vector3d(v.dot(myS), v.dot(myT), v.dot(myN)).normalized(); //normalize for rounded errors...
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -62,13 +62,13 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	Vector3d toWorld(const Vector3d& v) const
 	{
-		return myS * v.x() + myT * v.y() + myN * v.z();
+		return (myS * v.x() + myT * v.y() + myN * v.z()).normalized(); //normalize for rounded errors...
 	}
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief 
 	///////////////////////////////////////////////////////////////////////////
-	static double cosTheta(const Vector3d& v)
+	static real cosTheta(const Vector3d& v)
 	{
 		return v.z();
 	}
@@ -76,7 +76,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Default constructor.
 	///////////////////////////////////////////////////////////////////////////
-	static double cosTheta2(const Vector3d& v)
+	static real cosTheta2(const Vector3d& v)
 	{
 		return v.z() * v.z();
 	}
@@ -84,42 +84,42 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Default constructor.
 	///////////////////////////////////////////////////////////////////////////
-	static double sinTheta2(const Vector3d& v)
+	static real sinTheta2(const Vector3d& v)
 	{
-		return 1. - v.z() * v.z();
+		return 1.f - v.z() * v.z();
 	}
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief 
 	///////////////////////////////////////////////////////////////////////////
-	static double sinTheta(const Vector3d& v)
+	static real sinTheta(const Vector3d& v)
 	{
-		double sinT2 = sinTheta2(v);
-		if (sinT2 < 0.)
-			return 0.;
+		real sinT2 = sinTheta2(v);
+		if (sinT2 < 0.f)
+			return 0.f;
 		return std::sqrt(sinT2);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief
 	///////////////////////////////////////////////////////////////////////////
-	static double tanTheta(const Vector3d& v)
+	static real tanTheta(const Vector3d& v)
 	{
 		//sqrt(sin2) / cos
 		//But it is rewritten in in case the compiler wouldn't optimize
-		double sin2 = 1. - v.z() * v.z();
-		if (sin2 <= 0.)
-			return 0.;
+		real sin2 = 1.f - v.z() * v.z();
+		if (sin2 <= 0.f)
+			return 0.f;
 		return std::sqrt(sin2) / v.z();
 	}
 
-	static double tanTheta2(const Vector3d& v)
+	static real tanTheta2(const Vector3d& v)
 	{
 		//sqrt(sin2) / cos2
 		//But it is rewritten in in case the compiler wouldn't optimize
-		double sin2 = 1. - v.z() * v.z();
-		if (sin2 <= 0.)
-			return 0.;
+		real sin2 = 1.f - v.z() * v.z();
+		if (sin2 <= 0.f)
+			return 0.f;
 		return sin2 / (v.z() * v.z());
 	}
 

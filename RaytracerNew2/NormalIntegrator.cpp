@@ -18,13 +18,13 @@ NormalIntegrator::~NormalIntegrator()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Color NormalIntegrator::li(Scene & scene, Sampler::ptr, const Ray & ray)
+Color NormalIntegrator::li(Scene & scene, Sampler::ptr, const Ray & ray, RadianceType::ERadianceType)
 {
 	Intersection intersection;
 	if (scene.computeIntersection(ray, intersection))
 	{
 		Normal3d n = intersection.myShadingGeometry.myN;
-		return Color(n.cwiseAbs().x(), n.cwiseAbs().y(), n.cwiseAbs().z());
+		return Color::fromRGB(n.cwiseAbs().x(), n.cwiseAbs().y(), n.cwiseAbs().z());
 	}
 
 	return Color();

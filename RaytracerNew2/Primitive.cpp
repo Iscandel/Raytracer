@@ -18,7 +18,7 @@ IPrimitive::~IPrimitive()
 ///////////////////////////////////////////////////////////////////////////////
 bool SimplePrimitive::intersection(const Ray & ray, Intersection & inter, bool)
 {
-	double t;
+	real t;
 	//DifferentialGeometry trueGeom;
 	//DifferentialGeometry shadingGeom;
 	Point2d uv;

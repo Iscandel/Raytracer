@@ -1,17 +1,17 @@
 #include "Transform.h"
 
-#include "Tools.h"
+#include "Math.h"
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Transform::Transform(void)
-:Transform(Eigen::Matrix4d::Identity(), Eigen::Matrix4d::Identity())
+:Transform(Matrix4r::Identity(), Matrix4r::Identity())
 {
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Transform::Transform(double values[16])
+Transform::Transform(real values[16])
 {
 	//nb : matrix constructor stacks in a column-wise order, don't use it
 	myMatrix << values[0], values[1], values[2], values[3],
@@ -29,7 +29,7 @@ Transform::Transform(double values[16])
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Transform::Transform(double rotation[3], const Point3d & translation, const Point3d & scale)
+Transform::Transform(real rotation[3], const Point3d & translation, const Point3d & scale)
 {
 	Transform translate = Transform::translate(Point3d(translation[0], translation[1], translation[2]));
 	Transform rotateX = Transform::rotateX(rotation[0]);
@@ -51,7 +51,7 @@ Transform::Transform(double rotation[3], const Point3d & translation, const Poin
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Transform::Transform(const Eigen::Matrix4d& transform)
+Transform::Transform(const Eigen::Matrix<real, 4, 4>& transform)
 :myMatrix(transform)
 ,myInvMatrix(transform.inverse())
 {
@@ -59,7 +59,7 @@ Transform::Transform(const Eigen::Matrix4d& transform)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Transform::Transform(const Eigen::Matrix4d& transform, const Eigen::Matrix4d& invTransform)
+Transform::Transform(const Eigen::Matrix<real, 4, 4>& transform, const Eigen::Matrix<real, 4, 4>& invTransform)
 :myMatrix(transform)
 ,myInvMatrix(invTransform)
 {
@@ -75,13 +75,13 @@ Transform::~Transform(void)
 ///////////////////////////////////////////////////////////////////////////////
 Transform Transform::translate(const Vector3d& t)
 {
-	Eigen::Matrix4d res;
+	Matrix4r res;
 	res << 1, 0, 0, t.x(),
 		   0, 1, 0, t.y(),
 		   0, 0, 1, t.z(),
 		   0, 0, 0, 1;
 
-	Eigen::Matrix4d invRes;
+	Matrix4r invRes;
 	invRes << 1, 0, 0, -t.x(),
 			  0, 1, 0, -t.y(),
 			  0, 0, 1, -t.z(),
@@ -95,17 +95,17 @@ Transform Transform::translate(const Vector3d& t)
 Transform Transform::scale(const Point3d& s)
 {
 
-	Eigen::Matrix4d res;
+	Matrix4r res;
 	res << s.x(), 0,     0,     0,
 		   0,     s.y(), 0,     0,
 		   0,     0,     s.z(), 0,
 		   0,     0,     0,     1;
 
-	Eigen::Matrix4d invRes;
-	invRes << 1./s.x(), 0,        0,        0,
-			  0,        1./s.y(), 0,        0,
-			  0,        0,        1./s.z(), 0,
-			  0,        0,        0,        1;
+	Matrix4r invRes;
+	invRes << 1.f/s.x(), 0,         0,         0,
+			  0,         1.f/s.y(), 0,         0,
+			  0,         0,         1.f/s.z(), 0,
+			  0,         0,         0,         1;
 
 
 	return Transform(res, invRes);
@@ -113,14 +113,14 @@ Transform Transform::scale(const Point3d& s)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Transform Transform::rotateX(double angle)
+Transform Transform::rotateX(real angle)
 {
-	double radAngle = tools::toRadian(angle);
+	real radAngle = math::toRadian(angle);
 
-	double sinVal = std::sin(radAngle);
-	double cosVal = std::cos(radAngle);
+	real sinVal = std::sin(radAngle);
+	real cosVal = std::cos(radAngle);
 
-	Eigen::Matrix4d mat;
+	Matrix4r mat;
 	mat << 1, 0,      0,       0,
 		   0, cosVal, -sinVal, 0,
 		   0, sinVal, cosVal,  0,
@@ -131,13 +131,13 @@ Transform Transform::rotateX(double angle)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Transform Transform::rotateY(double angle) {
-	double radAngle = tools::toRadian(angle);
+Transform Transform::rotateY(real angle) {
+	real radAngle = math::toRadian(angle);
 
-	double sinVal = std::sin(radAngle);
-	double cosVal = std::cos(radAngle);
+	real sinVal = std::sin(radAngle);
+	real cosVal = std::cos(radAngle);
 	
-	Eigen::Matrix4d mat;
+	Matrix4r mat;
 	mat << cosVal,  0, sinVal, 0,
 		   0,       1, 0,      0,
 		   -sinVal, 0, cosVal, 0,
@@ -148,13 +148,13 @@ Transform Transform::rotateY(double angle) {
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Transform Transform::rotateZ(double angle) {
-	double radAngle = tools::toRadian(angle);
+Transform Transform::rotateZ(real angle) {
+	real radAngle = math::toRadian(angle);
 
-	double sinVal = std::sin(radAngle);
-	double cosVal = std::cos(radAngle);
+	real sinVal = std::sin(radAngle);
+	real cosVal = std::cos(radAngle);
 
-	Eigen::Matrix4d mat;
+	Matrix4r mat;
 	mat << cosVal, -sinVal, 0, 0,
 		   sinVal, cosVal,  0, 0,
 		   0,      0,       1, 0,
@@ -204,14 +204,14 @@ Transform Transform::fromLookAt(const Point3d& origin, const Point3d& target, co
 	Vector3d dir = (target - origin).normalized();
 	Vector3d left = (up.normalized().cross3(dir)).normalized();
 	Vector3d newUp = dir.cross3(left).normalized();
-	Eigen::Matrix4d trafo;
+	Matrix4r trafo;
 	trafo << left, newUp, dir, origin;
 	trafo(3, 3) = 1.;
 #else
-	Eigen::Vector3d dir = (target - origin).normalized();
-	Eigen::Vector3d left = (up.normalized().cross(dir)).normalized();
-	Eigen::Vector3d newUp = dir.cross(left).normalized();
-	Eigen::Matrix4d trafo;
+	Vector3d dir = (target - origin).normalized();
+	Vector3d left = (up.normalized().cross(dir)).normalized();
+	Vector3d newUp = dir.cross(left).normalized();
+	Matrix4r trafo;
 	trafo << left, newUp, dir, origin,
 		0, 0, 0, 1;
 #endif
@@ -220,7 +220,8 @@ Transform Transform::fromLookAt(const Point3d& origin, const Point3d& target, co
 	//trafo << left, newUp, dir, origin,
 	//	0, 0, 0, 1;
 
-	Eigen::Affine3d affine(trafo);
+	//Eigen::Affine3d affine(trafo);
+	Eigen::Transform<real, 3, 2> affine(trafo);
 
 	return Transform(affine.matrix());
 }

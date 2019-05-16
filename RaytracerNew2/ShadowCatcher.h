@@ -13,11 +13,12 @@ public:
 
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample);
 
-	double pdf(const BSDFSamplingInfos& infos);
+	real pdf(const BSDFSamplingInfos& infos);
 
 	virtual bool isShadowCatcher() const { return true; }
 
 protected:
-	double myHighThreshold;
-	double myRatio;
+	real myHighThreshold;
+	real myRatio;
+	real myShadowRatio;
 };

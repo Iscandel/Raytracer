@@ -42,17 +42,18 @@ Screen::~Screen(void)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-void Screen::addSample(double xx, double yy, const Color& value)
+void Screen::addSample(real xx, real yy, const Color& value)
 {	
-	if (std::isnan(value.r) || std::isnan(value.g) || std::isnan(value.b))
+	if (value.isNan())
 	{
 		ILogger::log() << "NaN value\n";
+		return;
 	}
 
 	//Define the pixel center in the center and not upper left corner, 
 	//adjust if to chunk coordinates and consider filter radius
-	xx = xx - 0.5 - (myMinX - myOverlapX);
-	yy = yy - 0.5 - (myMinY - myOverlapY);
+	xx = xx - 0.5f - (myMinX - myOverlapX);
+	yy = yy - 0.5f - (myMinY - myOverlapY);
 
 
 	int startX = (int) std::ceil(xx - myFilter->getRadiusX());
@@ -69,7 +70,7 @@ void Screen::addSample(double xx, double yy, const Color& value)
 	{
 		for (int y = startY; y <= endY; y++)
 		{
-			double weight = (*myFilter)(x - xx, y - yy);
+			real weight = (*myFilter)(x - xx, y - yy);
 			Pixel& pixel = myPixels(x, y);
 			pixel.myColor += value * weight;
 			pixel.myWeight += weight;
@@ -88,7 +89,7 @@ void Screen::addSample(double xx, double yy, const Color& value)
 	//{
 	//	for(unsigned int y = startY; y < endY + 1; y++)
 	//	{
-	//		double weight = (*myFilter)(x - xx, y - yy);
+	//		real weight = (*myFilter)(x - xx, y - yy);
 	//		Pixel& pixel = myPixels(x, y);
 	//		pixel.myColor += value * weight;
 	//		pixel.myWeight += weight;
@@ -102,8 +103,8 @@ void Screen::setFilter(ReconstructionFilter::ptr filter)
 {
 	myFilter = filter;
 
-	myOverlapX = (int) std::ceil(myFilter->getRadiusX() - 0.5);
-	myOverlapY = (int) std::ceil(myFilter->getRadiusY() - 0.5);
+	myOverlapX = (int) std::ceil(myFilter->getRadiusX() - 0.5f);
+	myOverlapY = (int) std::ceil(myFilter->getRadiusY() - 0.5f);
 
 	myPixels.setSize(mySizeX + 2 * myOverlapX, mySizeY + 2 * myOverlapY);
 	//Precompute filter values

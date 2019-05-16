@@ -12,8 +12,8 @@ SpectralDielectric::SpectralDielectric(const Parameters& params)
 	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
 	myTransmittedTexture = params.getTexture("transmittedTexture", Texture::ptr(new ConstantTexture(Color(1.))));
 
-	myEtaI = params.getDouble("etaExt", 1.000277); //incident
-	myEtaT = params.getColor("etaInt", Color(2.40, 2.43, 2.46)); //transmitted
+	myEtaI = params.getReal("etaExt", 1.000277f); //incident
+	myEtaT = params.getColor("etaInt", Color::fromRGB(2.40f, 2.43f, 2.46f)); //transmitted
 }
 
 //=============================================================================
@@ -36,21 +36,22 @@ Color SpectralDielectric::eval(const BSDFSamplingInfos &)
 ///////////////////////////////////////////////////////////////////////////////
 Color SpectralDielectric::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double etaI = myEtaI;
-	double etaT;
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real etaI = myEtaI;
+	real etaT;
 
-	int wavelength = 0;//myRng.random(0, 2); to change !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	switch (wavelength)
-	{
-	case 0: etaT = myEtaT.r; break;
-	case 1: etaT = myEtaT.g; break;
-	case 2: etaT = myEtaT.b; break;
-	default: std::cout << "Undefined value SpectralDielectric" << std::endl;
-	}
+	int wavelength = sample.y() * Color::NB_SAMPLES;//myRng.random(0, 2); to change !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	etaT = myEtaT(wavelength);
+	//switch (wavelength)
+	//{
+	//case 0: etaT = myEtaT.r(); break;
+	//case 1: etaT = myEtaT.g(); break;
+	//case 2: etaT = myEtaT.b(); break;
+	//default: std::cout << "Undefined value SpectralDielectric" << std::endl;
+	//}
 
 	bool isEntering = true;
-	double fr = 0.;
+	real fr = 0.;
 
 	infos.measure = Measure::DISCRETE;
 
@@ -60,12 +61,12 @@ Color SpectralDielectric::sample(BSDFSamplingInfos & infos, const Point2d & samp
 		std::swap(etaI, etaT);
 	}
 
-	double relativeEta = etaI / etaT;
+	real relativeEta = etaI / etaT;
 
 	//Descartes's law
-	double sinThetaT = relativeEta * std::sqrt(std::max(0., 1 - cosThetaI * cosThetaI));
+	real sinThetaT = relativeEta * std::sqrt(std::max((real)0., 1 - cosThetaI * cosThetaI));
 	//Trigo law
-	double cosThetaT = std::sqrt(std::max(0., 1 - sinThetaT * sinThetaT));
+	real cosThetaT = std::sqrt(std::max((real)0., 1 - sinThetaT * sinThetaT));
 
 	if (sinThetaT >= 1.)
 	{
@@ -105,20 +106,22 @@ Color SpectralDielectric::sample(BSDFSamplingInfos & infos, const Point2d & samp
 		//For "sheet-large" glass meshes, there is no exit point, so no decompression and the 
 		//glass darkens the area it covers.
 		Color weight = myTransmittedTexture->eval(infos.uv) * relativeEta * relativeEta;
-		if (wavelength == 0)
-			return Color(weight.r, 0., 0.);
-		else if(wavelength == 1)
-			return Color(0., weight.g, 0.);
-		else if (wavelength == 2)
-			return Color(0., 0., weight.b);
-		else return Color(0., 0., 0.);
+		Color res;
+		res(wavelength) = weight(wavelength);
+		//if (wavelength == 0)
+		//	return Color(weight.r(), 0., 0.);
+		//else if(wavelength == 1)
+		//	return Color(0., weight.g(), 0.);
+		//else if (wavelength == 2)
+		//	return Color(0., 0., weight.b());
+		//else return Color(0., 0., 0.);
 		//return myTransmittedTexture->eval(infos.uv) * relativeEta * relativeEta;// * (1. - fr);
 	}
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double SpectralDielectric::pdf(const BSDFSamplingInfos &)
+real SpectralDielectric::pdf(const BSDFSamplingInfos &)
 {
 	//Check if infos.wo corresponds to infos.wi, given infos.sampledType ? Would be correct
 	//to avoid returning lazy 0. pdf. We could call pdf() everywhere

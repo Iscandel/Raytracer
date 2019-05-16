@@ -42,7 +42,7 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="32"/>
+    <integer name="sampleNumber" value="256"/>
   </sampler>
 
   <medium type="Homogeneous">

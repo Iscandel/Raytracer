@@ -14,7 +14,11 @@ RoughConductor::RoughConductor(const Parameters& params)
 {
 	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
 
-	myAlpha = params.getDouble("alpha", 0.2);
+	if (params.hasTexture("alpha"))
+		myAlphaTexture = params.getTexture("alpha", nullptr);
+	else
+		myAlphaTexture = Texture::ptr(new ConstantTexture(params.getReal("alpha", 0.2)));
+	//myAlpha = params.getReal("alpha", 0.2f);
 
 	IORHelper::evalConductorIOR(params, myEta, myAbsorption);
 
@@ -32,55 +36,55 @@ RoughConductor::~RoughConductor()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double RoughConductor::distributionBeckmann(const Vector3d& wh)
-{
-	if (DifferentialGeometry::cosTheta(wh) <= 0.)
-		return 0.;
-
-	double cosThetaH2 = DifferentialGeometry::cosTheta(wh) * DifferentialGeometry::cosTheta(wh);
-	double tanThetaH2 = DifferentialGeometry::sinTheta2(wh) / cosThetaH2;
-	double alpha2 = myAlpha * myAlpha;
-	return (std::exp(-tanThetaH2 / alpha2)) / (tools::PI * alpha2 * cosThetaH2 * cosThetaH2);
-}
-
-double RoughConductor::shadowingTerm(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh)
-{
-	return shadowingTermG1(wi, wh) * shadowingTermG1(wo, wh);
-}
-
-double RoughConductor::shadowingTermG1(const Vector3d& v, const Vector3d& m)
-{
-	if ((v.dot(m)) / (DifferentialGeometry::cosTheta(v)) <= 0)
-		return 0.;
-
-	double tanThetaV = DifferentialGeometry::sinTheta(v) /
-		DifferentialGeometry::cosTheta(v);
-	double b = 1. / (myAlpha * tanThetaV);
-
-	if (b < 1.6)
-	{
-		return (3.535 * b + 2.181 * b * b) / (1 + 2.276 * b + 2.577 * b * b);
-	}
-	else
-	{
-		return 1.;
-	}
-}
+//real RoughConductor::distributionBeckmann(const Vector3d& wh)
+//{
+//	if (DifferentialGeometry::cosTheta(wh) <= 0.)
+//		return 0.;
+//
+//	real cosThetaH2 = DifferentialGeometry::cosTheta(wh) * DifferentialGeometry::cosTheta(wh);
+//	real tanThetaH2 = DifferentialGeometry::sinTheta2(wh) / cosThetaH2;
+//	real alpha2 = myAlpha * myAlpha;
+//	return (std::exp(-tanThetaH2 / alpha2)) / (tools::PI * alpha2 * cosThetaH2 * cosThetaH2);
+//}
+//
+//real RoughConductor::shadowingTerm(const Vector3d& wi, const Vector3d& wo, const Vector3d& wh)
+//{
+//	return shadowingTermG1(wi, wh) * shadowingTermG1(wo, wh);
+//}
+//
+//real RoughConductor::shadowingTermG1(const Vector3d& v, const Vector3d& m)
+//{
+//	if ((v.dot(m)) / (DifferentialGeometry::cosTheta(v)) <= 0)
+//		return 0.f;
+//
+//	real tanThetaV = DifferentialGeometry::sinTheta(v) /
+//		DifferentialGeometry::cosTheta(v);
+//	real b = 1.f / (myAlpha * tanThetaV);
+//
+//	if (b < 1.6f)
+//	{
+//		return (3.535f * b + 2.181f * b * b) / (1 + 2.276f * b + 2.577f * b * b);
+//	}
+//	else
+//	{
+//		return 1.f;
+//	}
+//}
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Color RoughConductor::eval(const BSDFSamplingInfos & infos)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
-	if (cosThetaI <= 0. || cosThetaO <= 0.)
+	if (cosThetaI <= 0.f || cosThetaO <= 0.f)
 		return Color();
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
 
-	double D = myDistribution.D(wh, myAlpha);
-	double G = myDistribution.G(infos.wi, infos.wo, wh, myAlpha);
+	real D = myDistribution.D(wh, myAlphaTexture->eval(infos.uv).average());
+	real G = myDistribution.G(infos.wi, infos.wo, wh, myAlphaTexture->eval(infos.uv).average());
 
 	Color specularPart = myReflectanceTexture->eval(infos.uv) * D * //distributionBeckmann(wh) *
 		fresnel::fresnelConductor(myEta, myAbsorption, cosThetaI) *
@@ -93,25 +97,25 @@ Color RoughConductor::eval(const BSDFSamplingInfos & infos)
 ///////////////////////////////////////////////////////////////////////////////
 Color RoughConductor::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 {
-	if (DifferentialGeometry::cosTheta(infos.wi) <= 0.)
+	if (DifferentialGeometry::cosTheta(infos.wi) <= 0.f)
 		return Color();
 
 	infos.sampledType = BSDF::GLOSSY_REFLECTION;
 
-	//double theta = std::atan(std::sqrt(- myAlpha * myAlpha * std::log(1 - sample.x())));
-	//double phi = 2 * tools::PI * sample.y();
+	//real theta = std::atan(std::sqrt(- myAlpha * myAlpha * std::log(1 - sample.x())));
+	//real phi = 2 * tools::PI * sample.y();
 
 	//Normal3d normal(std::sin(theta) * std::cos(phi), std::sin(theta) * std::sin(phi), std::cos(theta));
-	double alpha = (1.2 - 0.2 * std::sqrt(std::abs(DifferentialGeometry::cosTheta(infos.wi)))) * myAlpha;
+	real alpha = myDistribution.getAdjustedAlpha(myAlphaTexture->eval(infos.uv).average(), DifferentialGeometry::cosTheta(infos.wi));//(1.2f - 0.2f * std::sqrt(std::abs(DifferentialGeometry::cosTheta(infos.wi)))) * myAlphaTexture->eval(infos.uv).average();
 	Normal3d normal = myDistribution.sampleNormal(sample, alpha);
 
 	//infos.sampledType = BSDF::DELTA_REFLECTION; //to change
 	infos.wo = reflect(infos.wi, normal);//2 * infos.wi.dot(normal) * normal - infos.wi;
 
-	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+	real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 	//if cosTheta < 0, return 0, because pdf = 0...so NaN
-	if (cosThetaO <= 0.)
+	if (cosThetaO <= 0.f)
 		return Color();
 
 	infos.pdf = pdf(infos);
@@ -123,19 +127,19 @@ Color RoughConductor::sample(BSDFSamplingInfos& infos, const Point2d& sample)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double RoughConductor::pdf(const BSDFSamplingInfos& infos)
+real RoughConductor::pdf(const BSDFSamplingInfos& infos)
 {
-	double cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
-	double cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
+	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosThetaO = DifferentialGeometry::cosTheta(infos.wo);
 
 	if (cosThetaI <= 0. || cosThetaO <= 0.)
-		return 0.;
+		return 0.f;
 
 	Vector3d wh = (infos.wi + infos.wo).normalized();// / (infos.wi + infos.wo).squaredNorm();
-	double cosThetaH = DifferentialGeometry::cosTheta(wh);
+	real cosThetaH = DifferentialGeometry::cosTheta(wh);
 
-	double Jh = 1. / (4 * std::abs(wh.dot(infos.wo)));
-	double D = myDistribution.D(wh, myAlpha);
+	real Jh = 1.f / (4 * std::abs(wh.dot(infos.wo)));
+	real D = myDistribution.D(wh, myAlphaTexture->eval(infos.uv).average());
 	return D /*distributionBeckmann(wh)*/ * cosThetaH * Jh;
 }
 

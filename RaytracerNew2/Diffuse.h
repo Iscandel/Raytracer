@@ -13,7 +13,7 @@ public:
 
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample);
 
-	double pdf(const BSDFSamplingInfos& infos);
+	real pdf(const BSDFSamplingInfos& infos);
 
 protected:
 	//Color myAlbedo;

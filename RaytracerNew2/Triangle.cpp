@@ -42,8 +42,8 @@ Normal3d Triangle::normal(const Point3d&) const
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-//bool Triangle::intersection(const Ray& ray, double& t, DifferentialGeometry& trueGeom, DifferentialGeometry& shadingGeom, bool shadowRay)
-bool Triangle::intersection(const Ray& ray, double& t, Point2d& uv)
+//bool Triangle::intersection(const Ray& ray, real& t, DifferentialGeometry& trueGeom, DifferentialGeometry& shadingGeom, bool shadowRay)
+bool Triangle::intersection(const Ray& ray, real& t, Point2d& uv)
 {
 	const Point3d& p0 = myMesh->myVertices[myMesh->myIndices[myIndice]];
 	const Point3d& p1 = myMesh->myVertices[myMesh->myIndices[myIndice + 1]];
@@ -60,12 +60,12 @@ bool Triangle::intersection(const Ray& ray, double& t, Point2d& uv)
 	Vector3d s2 = s.cross(e1);
 #endif
 
-	double d = s1.dot(e1);
+	real d = s1.dot(e1);
 	
 	//If det ~ 0, rays is in the plane of triangle
 	if (std::abs(d) < 1e-8)
 		return false;
-	double inv = 1 / d;
+	real inv = 1 / d;
 
 	//Point2d uv;
 
@@ -139,7 +139,11 @@ void Triangle::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 	const Point3d& p2 = myMesh->myVertices[index2];
 
 	Vector3d bary;
+#ifdef USE_ALIGN
+	bary << 1 - inter.myUv.sum(), inter.myUv, 0;
+#else
 	bary << 1 - inter.myUv.sum(), inter.myUv;
+#endif
 
 	/* Compute the intersection positon accurately
 	using barycentric coordinates */
@@ -213,13 +217,37 @@ void Triangle::sample(const Point2d& p, Point3d& sampled, Normal3d& normal)
 	}
 }
 
-//double Triangle::pdf(const Point3d& pFrom, Point3d& sampled, Normal3d& normal)
+void Triangle::sample(const Point2d& p, Point3d& sampled, Normal3d& normal, const Point3d& p0, const Point3d& p1, const Point3d& p2, Normal3d* n0, Normal3d* n1, Normal3d* n2)
+{
+	Point3d baryCoords = Mapping::squareToTriangle(p);
+
+	sampled = p0 * baryCoords.x() + p1 * baryCoords.y() + p2 * baryCoords.z();
+
+	if (n0 != nullptr && n1 != nullptr && n2 != nullptr) {
+		normal = baryCoords.x() * *n0 +
+			baryCoords.y() * *n1 +
+			baryCoords.z() * *n2;
+		normal.normalize();
+	}
+	else
+	{
+#ifdef USE_ALIGN
+		normal = (p1 - p0).cross3(p2 - p0).normalized();
+#else
+		normal = (p1 - p0).cross(p2 - p0).normalized();
+#endif
+
+		normal.normalize();
+	}
+}
+
+//real Triangle::pdf(const Point3d& pFrom, Point3d& sampled, Normal3d& normal)
 //{
 //	Vector3d lightToShape = pFrom - sampled;
-//	double distance = lightToShape.norm();
+//	real distance = lightToShape.norm();
 //	lightToShape.normalize();
 //
-//	double cosine = normal.dot(lightToShape);
+//	real cosine = normal.dot(lightToShape);
 //	if (cosine >= 0)
 //	{
 //		//Convert area pdf to pdf wrt solid angle (solid angle subtented by the surface)
@@ -256,26 +284,26 @@ void Triangle::sample(const Point2d& p, Point3d& sampled, Normal3d& normal)
 //float det = edge1.dot(pvec);
 //
 //if (det > -1e-8f && det < 1e-8f)
-//	return tools::MAX_DOUBLE;
+//	return tools::MAX_REAL;
 //float inv_det = 1.0f / det;
 //
 ///* Calculate distance from v[0] to ray origin */
 //Vector3d tvec = ray.myOrigin - p0;
 //
 ///* Calculate U parameter and test bounds */
-//double u = tvec.dot(pvec) * inv_det;
+//real u = tvec.dot(pvec) * inv_det;
 //if (u < 0.0 || u > 1.0)
-//return tools::MAX_DOUBLE;
+//return tools::MAX_REAL;
 //
 ///* Prepare to test V parameter */
 //Vector3d qvec = tvec.cross(edge1);
 //
 ///* Calculate V parameter and test bounds */
-//double v = ray.myDirection.dot(qvec) * inv_det;
+//real v = ray.myDirection.dot(qvec) * inv_det;
 //if (v < 0.0 || u + v > 1.0)
-//return tools::MAX_DOUBLE;
+//return tools::MAX_REAL;
 //
 ///* Ray intersects triangle -> compute t */
-//double tee = edge2.dot(qvec) * inv_det;
+//real tee = edge2.dot(qvec) * inv_det;
 //
 //return tee;

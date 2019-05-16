@@ -29,11 +29,11 @@ public:
 	///
 	/// \return the pdf value at the considered point.
 	///////////////////////////////////////////////////////////////////////////
-	virtual double pdf(const Point3d& p, const Point3d& sampled, const Normal3d& normal);
+	virtual real pdf(const Point3d& p, const Point3d& sampled, const Normal3d& normal);
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Returns surface area of the shape
 	///////////////////////////////////////////////////////////////////////////
-	virtual double surfaceArea() = 0;
+	virtual real surfaceArea() = 0;
 };
 

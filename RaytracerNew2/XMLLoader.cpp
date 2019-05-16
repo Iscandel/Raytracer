@@ -1,5 +1,6 @@
 #include "XMLLoader.h"
 
+#include "BSSRDF.h"
 #include "ObjectFactoryManager.h"
 #include "Sphere.h"
 #include "Triangle.h"
@@ -121,7 +122,7 @@ void XMLLoader::handleIntegrator(Scene& scene, TiXmlElement* element)
 	element = element->FirstChildElement();
 	for(element; element; element = element->NextSiblingElement())
 	{
-		handleProperty(element, params);
+		handleProperty(scene, element, params);
 	}
 
 	ObjectFactory<Integrator> ::ptr factory = ObjectFactoryManager<Integrator>::getInstance()->getFactory(type);
@@ -138,7 +139,7 @@ void XMLLoader::handleCameraMedium(Scene& scene, TiXmlElement* element)
 	element = element->FirstChildElement();
 	for (element; element; element = element->NextSiblingElement())
 	{
-		handleProperty(element, params);
+		handleProperty(scene, element, params);
 	}
 
 	ObjectFactory<Medium>::ptr factory = ObjectFactoryManager<Medium>::getInstance()->getFactory(type);
@@ -155,7 +156,7 @@ void XMLLoader::handleSampler(Scene& scene, TiXmlElement* element)
 	element = element->FirstChildElement();
 	for (element; element; element = element->NextSiblingElement())
 	{
-		handleProperty(element, params);
+		handleProperty(scene, element, params);
 	}
 
 	ObjectFactory<Sampler> ::ptr factory = ObjectFactoryManager<Sampler>::getInstance()->getFactory(type);
@@ -175,7 +176,7 @@ void XMLLoader::handleLights(Scene& scene, TiXmlElement* element)
 		TiXmlElement* lightElement = element->FirstChildElement();
 		for (lightElement; lightElement; lightElement = lightElement->NextSiblingElement())
 		{
-			handleProperty(lightElement, params);
+			handleProperty(scene, lightElement, params);
 		}
 
 		ObjectFactory<Light> ::ptr factory = ObjectFactoryManager<Light>::getInstance()->getFactory(type);
@@ -245,8 +246,8 @@ void XMLLoader::handleParameters(Scene& scene, TiXmlElement* element)
 ///////////////////////////////////////////////////////////////////////////////
 void XMLLoader::handleCamera(Scene& scene, TiXmlElement* element)
 {
-	//std::vector<double> translation;
-	//std::vector<double> rot;
+	//std::vector<real> translation;
+	//std::vector<real> rot;
 	Parameters params;
 	Transform::ptr transform;
 	std::vector<int> dimensions;
@@ -266,7 +267,7 @@ void XMLLoader::handleCamera(Scene& scene, TiXmlElement* element)
 		}
 		else
 		{
-			handleProperty(element, params);
+			handleProperty(scene, element, params);
 		}
 	}
 
@@ -293,8 +294,9 @@ void XMLLoader::handleCamera(Scene& scene, TiXmlElement* element)
 ///////////////////////////////////////////////////////////////////////////////
 void XMLLoader::handleObject(Scene& scene, TiXmlElement* element)
 {
-	std::vector<double> pos;
+	std::vector<real> pos;
 	BSDF::ptr bsdf;
+	BSSRDF::ptr bssrdf;
 	Light::ptr light;
 
 	Parameters params;
@@ -318,12 +320,34 @@ void XMLLoader::handleObject(Scene& scene, TiXmlElement* element)
 				Parameters bsdfParams;
 				for (bsdfElement; bsdfElement; bsdfElement = bsdfElement->NextSiblingElement())
 				{
-					handleProperty(bsdfElement, bsdfParams);
+					handleProperty(scene, bsdfElement, bsdfParams);
 				}
 				ObjectFactory<BSDF>::ptr factory = ObjectFactoryManager<BSDF>::getInstance()->getFactory(bsdfType);
 				bsdf = factory->create(bsdfParams);
 				//Ou spécialiser bvh.setBSDF() et ne pas passer par params
 				params.addBSDF("bsdf", bsdf);
+			}
+		}
+		else if (element->ValueStr() == "bssrdf")
+		{
+			if (bssrdf)
+			{
+				ILogger::log(ILogger::ERRORS) << "Only 1 BSSRDF allowed for " + type + ".\n";
+			}
+			else
+			{
+				std::string bssrdfType = element->Attribute("type");
+				TiXmlElement* bsdfElement = element->FirstChildElement();
+
+				Parameters bsdfParams;
+				for (bsdfElement; bsdfElement; bsdfElement = bsdfElement->NextSiblingElement())
+				{
+					handleProperty(scene, bsdfElement, bsdfParams);
+				}
+				ObjectFactory<BSSRDF>::ptr factory = ObjectFactoryManager<BSSRDF>::getInstance()->getFactory(bssrdfType);
+				bssrdf = factory->create(bsdfParams);
+				//Ou spécialiser bvh.setBSDF() et ne pas passer par params
+				params.addBSSRDF("bssrdf", bssrdf);
 			}
 		}
 		else if (element->ValueStr() == "light")
@@ -340,7 +364,7 @@ void XMLLoader::handleObject(Scene& scene, TiXmlElement* element)
 				Parameters lightParams;
 				for (lightElement; lightElement; lightElement = lightElement->NextSiblingElement())
 				{
-					handleProperty(lightElement, lightParams);
+					handleProperty(scene, lightElement, lightParams);
 				}
 				ObjectFactory<Light>::ptr factory = ObjectFactoryManager<Light>::getInstance()->getFactory(lightType);
 				light = factory->create(lightParams);
@@ -351,7 +375,7 @@ void XMLLoader::handleObject(Scene& scene, TiXmlElement* element)
 		}
 		else
 		{
-			handleProperty(element, params);
+			handleProperty(scene, element, params);
 		}
 	}
 
@@ -365,7 +389,7 @@ void XMLLoader::handleObject(Scene& scene, TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-ReconstructionFilter::ptr XMLLoader::handleReconstructionFilter(Scene&, TiXmlElement* element)
+ReconstructionFilter::ptr XMLLoader::handleReconstructionFilter(Scene& scene, TiXmlElement* element)
 {
 	Parameters params;
 	std::string type = element->Attribute("type");
@@ -373,7 +397,7 @@ ReconstructionFilter::ptr XMLLoader::handleReconstructionFilter(Scene&, TiXmlEle
 	element = element->FirstChildElement();
 	for (element; element; element = element->NextSiblingElement())
 	{
-		handleProperty(element, params);
+		handleProperty(scene, element, params);
 	}
 
 	auto factory = ObjectFactoryManager<ReconstructionFilter>::getInstance()->getFactory(type);
@@ -386,7 +410,7 @@ ReconstructionFilter::ptr XMLLoader::handleReconstructionFilter(Scene&, TiXmlEle
 ///////////////////////////////////////////////////////////////////////////////
 Transform XMLLoader::handleRotationTransform(TiXmlElement* element)
 {
-	std::vector<double> rot(3, 0.);
+	std::vector<real> rot(3, 0.);
 	
 	element = element->FirstChildElement();
 	for(element; element; element = element->NextSiblingElement())
@@ -394,15 +418,15 @@ Transform XMLLoader::handleRotationTransform(TiXmlElement* element)
 		std::string key = element->ValueStr();
 		if(key == "x")
 		{
-			rot[0] = tools::stringToNum<double>(element->GetText());
+			rot[0] = tools::stringToNum<real>(element->GetText());
 		}
 		else if(key == "y")
 		{
-			rot[1] = tools::stringToNum<double>(element->GetText());
+			rot[1] = tools::stringToNum<real>(element->GetText());
 		}
 		else if(key == "z")
 		{
-			rot[2] = tools::stringToNum<double>(element->GetText());
+			rot[2] = tools::stringToNum<real>(element->GetText());
 		}
 		else
 		{
@@ -420,7 +444,7 @@ Transform XMLLoader::handleRotationTransform(TiXmlElement* element)
 ///////////////////////////////////////////////////////////////////////////////
 Transform XMLLoader::handleScaleTransform(TiXmlElement* element)
 {
-	std::vector<double> res(3, 1.);
+	std::vector<real> res(3, 1.);
 
 	element = element->FirstChildElement();
 	for (element; element; element = element->NextSiblingElement())
@@ -428,15 +452,15 @@ Transform XMLLoader::handleScaleTransform(TiXmlElement* element)
 		std::string key = element->ValueStr();
 		if (key == "x")
 		{
-			res[0] = tools::stringToNum<double>(element->GetText());
+			res[0] = tools::stringToNum<real>(element->GetText());
 		}
 		else if (key == "y")
 		{
-			res[1] = tools::stringToNum<double>(element->GetText());
+			res[1] = tools::stringToNum<real>(element->GetText());
 		}
 		else if (key == "z")
 		{
-			res[2] = tools::stringToNum<double>(element->GetText());
+			res[2] = tools::stringToNum<real>(element->GetText());
 		}
 		else
 		{
@@ -451,7 +475,7 @@ Transform XMLLoader::handleScaleTransform(TiXmlElement* element)
 ///////////////////////////////////////////////////////////////////////////////
 Transform XMLLoader::handleTranslationTransform(TiXmlElement* element)
 {
-	std::vector<double> res(3, 0.);
+	std::vector<real> res(3, 0.);
 	
 	element = element->FirstChildElement();
 	for(element; element; element = element->NextSiblingElement())
@@ -459,15 +483,15 @@ Transform XMLLoader::handleTranslationTransform(TiXmlElement* element)
 		std::string key = element->ValueStr();
 		if(key == "x")
 		{
-			res[0] = tools::stringToNum<double>(element->GetText());
+			res[0] = tools::stringToNum<real>(element->GetText());
 		}
 		else if(key == "y")
 		{
-			res[1] = tools::stringToNum<double>(element->GetText());
+			res[1] = tools::stringToNum<real>(element->GetText());
 		}
 		else if(key == "z")
 		{
-			res[2] = tools::stringToNum<double>(element->GetText());
+			res[2] = tools::stringToNum<real>(element->GetText());
 		}
 		else
 		{
@@ -482,7 +506,7 @@ Transform XMLLoader::handleTranslationTransform(TiXmlElement* element)
 ///////////////////////////////////////////////////////////////////////////////
 Transform XMLLoader::handleMatrixTransform(TiXmlElement* element)
 {
-	std::vector<double> res;
+	std::vector<real> res;
 
 	std::string values = element->Attribute("value");
 
@@ -490,7 +514,7 @@ Transform XMLLoader::handleMatrixTransform(TiXmlElement* element)
 	std::stringstream ss(values);
 	std::string item;
 	while (std::getline(ss, item, delim)) {
-		res.push_back(tools::stringToNum<double>(item));
+		res.push_back(tools::stringToNum<real>(item));
 	}
 
 	return Transform(res.data());
@@ -498,7 +522,7 @@ Transform XMLLoader::handleMatrixTransform(TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Texture::ptr XMLLoader::handleTexture(TiXmlElement* element)
+Texture::ptr XMLLoader::handleTexture(Scene& scene, TiXmlElement* element)
 {
 	Parameters params;
 	std::string type = element->Attribute("type");
@@ -506,7 +530,7 @@ Texture::ptr XMLLoader::handleTexture(TiXmlElement* element)
 	element = element->FirstChildElement();
 	for (element; element; element = element->NextSiblingElement())
 	{
-		handleProperty(element, params);
+		handleProperty(scene, element, params);
 	}
 
 	auto factory = ObjectFactoryManager<Texture>::getInstance()->getFactory(type);
@@ -517,7 +541,7 @@ Texture::ptr XMLLoader::handleTexture(TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-BSDF::ptr XMLLoader::handleBSDF(TiXmlElement* element)
+BSDF::ptr XMLLoader::handleBSDF(Scene& scene, TiXmlElement* element)
 {
 	std::string bsdfType = element->Attribute("type");
 	TiXmlElement* bsdfElement = element->FirstChildElement();
@@ -525,7 +549,7 @@ BSDF::ptr XMLLoader::handleBSDF(TiXmlElement* element)
 	Parameters bsdfParams;
 	for (bsdfElement; bsdfElement; bsdfElement = bsdfElement->NextSiblingElement())
 	{
-		handleProperty(bsdfElement, bsdfParams);
+		handleProperty(scene, bsdfElement, bsdfParams);
 	}
 	ObjectFactory<BSDF>::ptr factory = ObjectFactoryManager<BSDF>::getInstance()->getFactory(bsdfType);
 	BSDF::ptr bsdf = factory->create(bsdfParams);
@@ -535,7 +559,7 @@ BSDF::ptr XMLLoader::handleBSDF(TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Medium::ptr XMLLoader::handleMedium(TiXmlElement* element)
+Medium::ptr XMLLoader::handleMedium(Scene& scene, TiXmlElement* element)
 {
 	std::string mediumType = element->Attribute("type");
 	TiXmlElement* mediumElement = element->FirstChildElement();
@@ -543,17 +567,22 @@ Medium::ptr XMLLoader::handleMedium(TiXmlElement* element)
 	Parameters mediumParams;
 	for (mediumElement; mediumElement; mediumElement = mediumElement->NextSiblingElement())
 	{
-		handleProperty(mediumElement, mediumParams);
+		handleProperty(scene, mediumElement, mediumParams);
 	}
 	ObjectFactory<Medium>::ptr factory = ObjectFactoryManager<Medium>::getInstance()->getFactory(mediumType);
 	Medium::ptr medium = factory->create(mediumParams);
+
+	if (medium->isEmissive())
+	{
+		scene.addLight(medium);
+	}
 
 	return medium;
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-PhaseFunction::ptr XMLLoader::handlePhase(TiXmlElement* element)
+PhaseFunction::ptr XMLLoader::handlePhase(Scene& scene, TiXmlElement* element)
 {
 	Parameters params;
 	std::string type = element->Attribute("type");
@@ -561,13 +590,32 @@ PhaseFunction::ptr XMLLoader::handlePhase(TiXmlElement* element)
 	element = element->FirstChildElement();
 	for (element; element; element = element->NextSiblingElement())
 	{
-		handleProperty(element, params);
+		handleProperty(scene, element, params);
 	}
 
 	auto factory = ObjectFactoryManager<PhaseFunction>::getInstance()->getFactory(type);
 	PhaseFunction::ptr phase = factory->create(params);
 
 	return phase;
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+Volume::ptr XMLLoader::handleVolume(Scene& scene, TiXmlElement* element)
+{
+	Parameters params;
+	std::string type = element->Attribute("type");
+
+	element = element->FirstChildElement();
+	for (element; element; element = element->NextSiblingElement())
+	{
+		handleProperty(scene, element, params);
+	}
+
+	auto factory = ObjectFactoryManager<Volume>::getInstance()->getFactory(type);
+	Volume::ptr volume = factory->create(params);
+
+	return volume;
 }
 
 //=============================================================================
@@ -584,15 +632,15 @@ Transform XMLLoader::handleLookAtTransform(TiXmlElement* element)
 
 		if (element->ValueStr() == "origin")
 		{
-			origin = tools::stringToVector<double>(element->GetText());
+			origin = tools::stringToVector<real>(element->GetText());
 		}
 		else if (element->ValueStr() == "lookAt")
 		{
-			lookAt = tools::stringToVector<double>(element->GetText());
+			lookAt = tools::stringToVector<real>(element->GetText());
 		}
 		else if (element->ValueStr() == "up")
 		{
-			up = tools::stringToVector<double>(element->GetText());
+			up = tools::stringToVector<real>(element->GetText());
 		}
 		else
 		{
@@ -605,7 +653,7 @@ Transform XMLLoader::handleLookAtTransform(TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-void XMLLoader::handleProperty(TiXmlElement* element, Parameters& params)
+void XMLLoader::handleProperty(Scene& scene, TiXmlElement* element, Parameters& params)
 {
 	//TiXmlAttribute* att = element->FirstAttribute();
 	const std::string* attName = element->Attribute(std::string("name"));
@@ -625,9 +673,9 @@ void XMLLoader::handleProperty(TiXmlElement* element, Parameters& params)
 	{
 		params.addInt(*attName, tools::stringToNum<int>(*attValue));
 	}
-	else if (element->ValueStr() == "double")
+	else if (element->ValueStr() == "double" || element->ValueStr() == "real") //compatibility purpose
 	{
-		params.addDouble(*attName, tools::stringToNum<double>(*attValue));
+		params.addReal(*attName, tools::stringToNum<real>(*attValue));
 	}
 	else if (element->ValueStr() == "string")
 	{
@@ -635,15 +683,31 @@ void XMLLoader::handleProperty(TiXmlElement* element, Parameters& params)
 	}
 	else if (element->ValueStr() == "point")
 	{
-		params.addPoint(*attName, tools::stringToPoint<double>(*attValue));
+		params.addPoint(*attName, tools::stringToPoint<real>(*attValue));
 	}
 	else if (element->ValueStr() == "color")
 	{
-		params.addColor(*attName, tools::stringToColor<double>(*attValue));
+		params.addColor(*attName, tools::stringToColor<real>(*attValue, 1));
+	}
+	else if (element->ValueStr() == "spectrum")
+	{
+		bool isPath = false;
+		//bug with long path on VS, so try-catch
+		try {
+			isPath = std::experimental::filesystem::exists(*attValue);
+		}
+		catch (const std::exception&) {
+		}
+
+		if(isPath)
+			params.addColor(*attName, tools::stringToColor<real>(*attValue, 2));
+		else
+			params.addColor(*attName, tools::stringToColor<real>(*attValue, 0));
+		
 	}
 	else if (element->ValueStr() == "vector")
 	{
-		params.addVector(*attName, tools::stringToVector<double>(*attValue));
+		params.addVector(*attName, tools::stringToVector<real>(*attValue));
 	}
 	else if (element->ValueStr() == "transform")
 	{
@@ -652,23 +716,32 @@ void XMLLoader::handleProperty(TiXmlElement* element, Parameters& params)
 	}
 	else if (element->ValueStr() == "texture")
 	{
-		Texture::ptr texture = handleTexture(element);
+		Texture::ptr texture = handleTexture(scene, element);
 		params.addTexture(*attName, texture);
 	}
 	else if (element->ValueStr() == "bsdf")
 	{
-		BSDF::ptr bsdf = handleBSDF(element);
+		BSDF::ptr bsdf = handleBSDF(scene, element);
 		params.addBSDF(*attName, bsdf);
 	}
 	else if (element->ValueStr() == "medium")
 	{
-		Medium::ptr medium = handleMedium(element);
+		Medium::ptr medium = handleMedium(scene, element);
 		params.addMedium(*attName, medium);
+		if (medium->isEmissive())
+		{
+			scene.addLight(medium);
+		}
 	}
 	else if (element->ValueStr() == "phase")
 	{
-		PhaseFunction::ptr phase = handlePhase(element);
+		PhaseFunction::ptr phase = handlePhase(scene, element);
 		params.addPhaseFunction(*attName, phase);
+	}
+	else if (element->ValueStr() == "volume")
+	{
+		Volume::ptr volume = handleVolume(scene, element);
+		params.addVolume(*attName, volume);
 	}
 	else
 	{
@@ -708,9 +781,9 @@ std::vector<int> XMLLoader::handleCameraDimensions(TiXmlElement* element)
 Transform::ptr XMLLoader::handleTransform(TiXmlElement* element)
 {
 	Transform::ptr transform(new Transform);
-	std::vector<double> translateVect(3, 0.);
-	std::vector<double> rot(3, 0.);
-	std::vector<double> scaleVect(3, 1.);
+	std::vector<real> translateVect(3, 0.);
+	std::vector<real> rot(3, 0.);
+	std::vector<real> scaleVect(3, 1.);
 
 	element = element->FirstChildElement();
 

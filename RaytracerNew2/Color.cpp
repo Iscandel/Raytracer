@@ -1,272 +1,355 @@
 #include "Color.h"
 
-#include "Tools.h"
+#include "Math.h"
 
-Color::Color(double r, double g, double b)
-	:r(r)
-	,g(g)
-	,b(b)
-{
-	//validate();
-}
+const real CIEConstants::CIE_Y_INTEGRAL = 106.856895f;
 
-Color::Color(double val)
-:r(val)
-, g(val)
-, b(val)
-{
-	//validate();
-}
-
-
-//Color::Color(int r, int g, int b)
-//	:r(r / 255.)
-//	,g(g / 255.)
-//	,b(b / 255.)
+//Color::Color(real r, real g, real b)
+//	:r(r)
+//	,g(g)
+//	,b(b)
 //{
 //	//validate();
 //}
-
-
-//=============================================================================
-///////////////////////////////////////////////////////////////////////////////
-
-bool operator == (const Color& c1, const Color& c2)
-{
-	return (c1.r == c2.r && c1.g == c2.g && c1.b == c2.b);
-}
-
-bool operator != (const Color& c1, const Color& c2)
-{
-	return !(c1 == c2);
-}
-
-Color operator + (const Color& c1, const Color& c2)
-{
-	Color res;
-	res.r = c1.r + c2.r;
-	res.g = c1.g + c2.g;
-	res.b = c1.b + c2.b;
-
-	//res.validate();
-
-	return res;
-}
-
-Color& operator += (Color& c1, const Color& c2)
-{
-	return c1 = c1 + c2;
-}
-
-Color operator - (const Color& c1, const Color& c2)
-{
-	Color res;
-	res.r = c1.r - c2.r;
-	res.g = c1.g - c2.g;
-	res.b = c1.b - c2.b;
-
-	//res.validate();
-
-	return res;
-}
-
-Color& operator -= (Color& c1, const Color& c2)
-{
-	return c1 = c1 - c2;
-}
-
-Color operator * (const Color& c1, const Color& c2)
-{
-	Color res;
-	res.r = c1.r * c2.r;
-	res.g = c1.g * c2.g;
-	res.b = c1.b * c2.b;
-
-	return res;
-}
-
-Color& operator *= (Color& c1, const Color& c2)
-{
-	return c1 = c1 * c2;
-}
-
-Color& operator *= (Color& c1, double val)
-{
-	return c1 = c1 * val;
-}
-
-Color operator *(double value, const Color& other)
-{
-	Color col;
-	col.r = other.r * value;
-	col.g = other.g * value;
-	col.b = other.b * value;
-
-	//col.validate();
-
-	return col;
-}
-
-Color operator *(const Color& other, double value)
-{
-	//return other * value;
-
-	Color col;
-	col.r = other.r * value;
-	col.g = other.g * value;
-	col.b = other.b * value;
-
-	//col.validate();
-
-	return col;
-}
-
-Color operator /(double value, const Color& other)
-{
-	Color col;
-	col.r = other.r / value;
-	col.g = other.g / value;
-	col.b = other.b / value;
-
-	//col.validate();
-
-	return col;
-}
-
-Color operator /(const Color& other, double value)
-{
-	Color col;
-	col.r = other.r / value;
-	col.g = other.g / value;
-	col.b = other.b / value;
-
-	//col.validate();
-
-	return col;
-}
-
-Color& operator /= (Color& c1, double value)
-{
-	return c1 = c1 / value;
-}
-
-//Color operator *(Color& col, double value)
+//
+//Color::Color(real val)
+//:r(val)
+//, g(val)
+//, b(val)
 //{
-//	return value * col;
+//	//validate();
+//}
+//
+//Color Color::fromBlackbody(real temperature)
+//{
+//	/* Convert inputs to meters and kelvins */
+//	const double c = 299792458;      /* Speed of light */
+//	const double k = 1.3806488e-23;  /* Boltzmann constant */
+//	const double h = 6.62606957e-34; /* Planck constant */
+//	
+//	const int SAMPLE_NUMBER = ColorSpaceConversion::SAMPLE_NUMBER;
+//	const int LAMBDA_START = ColorSpaceConversion::LAMBDA_START;
+//	const int LAMBDA_END = ColorSpaceConversion::LAMBDA_END;
+//
+//	std::vector<real> lambdaVect;
+//	std::vector<real> spectrum;
+//
+//	for (int i = 0; i < SAMPLE_NUMBER; i++)
+//	{
+//		real l = math::interp1(real(i) / real(SAMPLE_NUMBER),
+//			LAMBDA_START, LAMBDA_END);
+//		const double lambda = l * 1e-9;  /* Wavelength in meters */
+//									 /* Watts per unit surface area (m^-2) per unit wavelength (nm^-1) per
+//									 steradian (sr^-1) */
+//
+//		const double I = (2 * h*c*c) * std::pow(lambda, -5.0)
+//			/ ((math::fastExp((h / k)*c / (lambda*temperature)) - 1.0) * 1e9);
+//		lambdaVect.push_back(l);
+//		spectrum.push_back(I);
+//	}
+//
+//
+//
+//
+//
+//	//double hc = 1.98644581218006e-25; //planck * c
+//	//double c = 299792458;
+//	//double k = 1.38064852e-23; //Boltzmann constant
+//	////(2 * h * c * c) / lambda ^ 5 * (1. / (exp(hc / (lambda.k.T) - 1.), ;
+//
+//	//const int SAMPLE_NUMBER = ColorSpaceConversion::SAMPLE_NUMBER;
+//	//const int LAMBDA_START = ColorSpaceConversion::LAMBDA_START;
+//	//const int LAMBDA_END = ColorSpaceConversion::LAMBDA_END;
+//
+//	//std::vector<real> lambdaVect;
+//	//std::vector<real> spectrum;
+//
+//	//for (int i = 0; i < SAMPLE_NUMBER; i++)
+//	//{
+//	//	real lambda = math::interp1(real(i) / real(SAMPLE_NUMBER),
+//	//		LAMBDA_START, LAMBDA_END);
+//
+//	//	double firstPart = (2 * hc * c) / std::pow(lambda * 1e-9, 5);
+//	//	double secondPart = 1. / (math::fastExp(hc / (lambda * 1e-9 * k * temperature)) - 1.);
+//	//	real val = (real)(firstPart * secondPart);// *1e9;
+//	//	lambdaVect.push_back(lambda);
+//	//	spectrum.push_back(val);
+//	//}
+//
+//	ColorSpaceConversion convert(lambdaVect, spectrum);
+//	real rgb[3];
+//	convert.toRGB(rgb);
+//	return Color(rgb[0], rgb[1], rgb[2]);
+//	//r = rgb[0]; g = rgb[1]; b = rgb[2];
+//}
+//
+//
+////Color::Color(int r, int g, int b)
+////	:r(r / 255.)
+////	,g(g / 255.)
+////	,b(b / 255.)
+////{
+////	//validate();
+////}
+//
+//
+////=============================================================================
+/////////////////////////////////////////////////////////////////////////////////
+//
+//bool operator == (const Color& c1, const Color& c2)
+//{
+//	return (c1.r == c2.r && c1.g == c2.g && c1.b == c2.b);
+//}
+//
+//bool operator != (const Color& c1, const Color& c2)
+//{
+//	return !(c1 == c2);
+//}
+//
+//Color operator + (const Color& c1, const Color& c2)
+//{
+//	Color res;
+//	res.r = c1.r + c2.r;
+//	res.g = c1.g + c2.g;
+//	res.b = c1.b + c2.b;
+//
+//	//res.validate();
+//
+//	return res;
+//}
+//
+//Color& operator += (Color& c1, const Color& c2)
+//{
+//	return c1 = c1 + c2;
+//}
+//
+//Color operator - (const Color& c)
+//{
+//	return Color(-c.r, -c.g, -c.b);
+//}
+//
+//Color operator - (const Color& c1, const Color& c2)
+//{
+//	Color res;
+//	res.r = c1.r - c2.r;
+//	res.g = c1.g - c2.g;
+//	res.b = c1.b - c2.b;
+//
+//	//res.validate();
+//
+//	return res;
+//}
+//
+//Color& operator -= (Color& c1, const Color& c2)
+//{
+//	return c1 = c1 - c2;
+//}
+//
+//Color operator * (const Color& c1, const Color& c2)
+//{
+//	Color res;
+//	res.r = c1.r * c2.r;
+//	res.g = c1.g * c2.g;
+//	res.b = c1.b * c2.b;
+//
+//	return res;
+//}
+//
+//Color& operator *= (Color& c1, const Color& c2)
+//{
+//	return c1 = c1 * c2;
+//}
+//
+//Color& operator *= (Color& c1, real val)
+//{
+//	return c1 = c1 * val;
+//}
+//
+//Color operator *(real value, const Color& other)
+//{
+//	Color col;
+//	col.r = other.r * value;
+//	col.g = other.g * value;
+//	col.b = other.b * value;
+//
+//	//col.validate();
+//
+//	return col;
+//}
+//
+//Color operator *(const Color& other, real value)
+//{
+//	//return other * value;
+//
+//	Color col;
+//	col.r = other.r * value;
+//	col.g = other.g * value;
+//	col.b = other.b * value;
+//
+//	//col.validate();
+//
+//	return col;
+//}
+//
+////Color operator /(real value, const Color& other)
+////{
+////	Color col;
+////	col.r = other.r / value;
+////	col.g = other.g / value;
+////	col.b = other.b / value;
+////
+////	//col.validate();
+////
+////	return col;
+////}
+//
+//Color operator /(const Color& other, real value)
+//{
+//	Color col;
+//	col.r = other.r / value;
+//	col.g = other.g / value;
+//	col.b = other.b / value;
+//
+//	//col.validate();
+//
+//	return col;
+//}
+//
+//Color& operator /= (Color& c1, real value)
+//{
+//	return c1 = c1 / value;
+//}
+//
+////Color operator *(Color& col, real value)
+////{
+////	return value * col;
+////}
+//
+//Color operator + (const Color& c1, real value)
+//{
+//	Color col;
+//	col.r = c1.r + value;
+//	col.g = c1.g + value;
+//	col.b = c1.b + value;
+//
+//	return col;
+//}
+//
+//Color operator + (real value, const Color& c1)
+//{
+//	Color col;
+//	col.r = c1.r + value;
+//	col.g = c1.g + value;
+//	col.b = c1.b + value;
+//
+//	return col;
+//}
+//
+//Color& operator += (Color& c1, real value)
+//{
+//	return c1 = c1 + value;
+//}
+//
+//Color operator / (const Color& col, const Color& other)
+//{
+//	Color res;
+//	res.r = col.r / other.r;
+//	res.g = col.g / other.g;
+//	res.b = col.b / other.b;
+//
+//	return res;
+//}
+//
+//Color operator /= (Color& col, const Color& other)
+//{
+//	return col = col / other;
 //}
 
-Color operator + (const Color& c1, double value)
-{
-	Color col;
-	col.r = c1.r + value;
-	col.g = c1.g + value;
-	col.b = c1.b + value;
-
-	return col;
-}
-
-Color& operator += (Color& c1, double value)
-{
-	return c1 = c1 + value;
-}
-
-Color operator / (const Color& col, const Color& other)
-{
-	Color res;
-	res.r = col.r / other.r;
-	res.g = col.g / other.g;
-	res.b = col.b / other.b;
-
-	return res;
-}
-
-Color operator /= (Color& col, const Color& other)
-{
-	return col = col / other;
-}
-
-void ColorSpaceConversion::precompute()
+void CIEConstants::precompute()
 {
 	X.clear(); Y.clear(); Z.clear();
-	X.resize(30); Y.resize(30); Z.resize(30);
+	X.resize(SAMPLE_NUMBER); Y.resize(SAMPLE_NUMBER); Z.resize(SAMPLE_NUMBER);
 
 	for (int i = 0; i < SAMPLE_NUMBER; i++)
 	{
-		double wl0 = tools::interp1((double)i / SAMPLE_NUMBER, LAMBDA_START, LAMBDA_END);
-		double wl1 = tools::interp1((double)(i + 1) / SAMPLE_NUMBER, LAMBDA_START, LAMBDA_END);
+		real wl0 = math::interp1((real)i / SAMPLE_NUMBER, LAMBDA_START, LAMBDA_END);
+		real wl1 = math::interp1((real)(i + 1) / SAMPLE_NUMBER, LAMBDA_START, LAMBDA_END);
 
-		X[i] = AverageSpectrumSamples(CIE_lambda, CIE_X, CIE_SAMPLE_NUMBER,
+		X[i] = averageSpectrumSamples(CIE_lambda, CIE_X, CIE_SAMPLE_NUMBER,
 			wl0, wl1);
-		Y[i] = AverageSpectrumSamples(CIE_lambda, CIE_Y, CIE_SAMPLE_NUMBER,
+		Y[i] = averageSpectrumSamples(CIE_lambda, CIE_Y, CIE_SAMPLE_NUMBER,
 			wl0, wl1);
-		Z[i] = AverageSpectrumSamples(CIE_lambda, CIE_Z, CIE_SAMPLE_NUMBER,
+		Z[i] = averageSpectrumSamples(CIE_lambda, CIE_Z, CIE_SAMPLE_NUMBER,
 			wl0, wl1);
 	}
 
 	toXYZ(xyz);
 }
 
-ColorSpaceConversion::ColorSpaceConversion(const std::vector<double>& lambda, const std::vector<double>& spectrum)
+CIEConstants::CIEConstants(const std::vector<real>& lambda, const std::vector<real>& spectrum)
 {
 	if (lambda.size() != spectrum.size())
 		ILogger::log() << "Spectrum samples and lambda are not of the same size !\n";
 
 	// Sort samples if unordered, use sorted for returned spectrum
 	//if (!SpectrumSamplesSorted(lambda, v, n)) {
-	//	std::vector<double> slambda(&lambda[0], &lambda[n]);
-	//	std::vector<double> sv(&v[0], &v[n]);
+	//	std::vector<real> slambda(&lambda[0], &lambda[n]);
+	//	std::vector<real> sv(&v[0], &v[n]);
 	//	SortSpectrumSamples(&slambda[0], &sv[0], n);
 	//	return FromSampled(&slambda[0], &sv[0], n);
 	//}
 
 	for (int i = 0; i < SAMPLE_NUMBER; ++i) {
 		// Compute average value of given SPD over $i$th sample's range
-		double lambda0 = tools::interp1(double(i) / double(SAMPLE_NUMBER),
+		real lambda0 = math::interp1(real(i) / real(SAMPLE_NUMBER),
 			LAMBDA_START, LAMBDA_END);
-		double lambda1 = tools::interp1(double(i + 1) / double(SAMPLE_NUMBER),
+		real lambda1 = math::interp1(real(i + 1) / real(SAMPLE_NUMBER),
 			LAMBDA_START, LAMBDA_END);
-		c[i] = AverageSpectrumSamples(lambda.data(), spectrum.data(), spectrum.size(), lambda0, lambda1);
+		c[i] = averageSpectrumSamples(lambda.data(), spectrum.data(), (int)spectrum.size(), lambda0, lambda1);
 	}
 
 	precompute();
 }
 
-void ColorSpaceConversion::toRGB(double rgb[3]) const {
-	//double xyz[3];
+void CIEConstants::toRGB(real rgb[3]) const {
+	//real xyz[3];
 	//toXYZ(xyz);
 	XYZToRGB(xyz, rgb);
+	rgb[0] = math::thresholding(rgb[0], (real)0, rgb[0]);
+	rgb[1] = math::thresholding(rgb[1], (real)0, rgb[1]);
+	rgb[2] = math::thresholding(rgb[2], (real)0, rgb[2]);
 }
 
-void ColorSpaceConversion::toXYZ(double _xyz[3]) const {
+void CIEConstants::toXYZ(real _xyz[3]) const {
 	_xyz[0] = _xyz[1] = _xyz[2] = 0.f;
 	for (int i = 0; i < SAMPLE_NUMBER; ++i) {
 		_xyz[0] += X[i] * c[i];
 		_xyz[1] += Y[i] * c[i];
 		_xyz[2] += Z[i] * c[i];
 	}
-	double scale = double(LAMBDA_END - LAMBDA_START) /
-		double(CIE_Y_INTEGRAL * SAMPLE_NUMBER);
+	real scale = real(LAMBDA_END - LAMBDA_START) /
+		real(CIE_Y_INTEGRAL * SAMPLE_NUMBER);
 	_xyz[0] *= scale;
 	_xyz[1] *= scale;
 	_xyz[2] *= scale;
 }
 
-inline void ColorSpaceConversion::XYZToRGB(const double _xyz[3], double rgb[3]) const {
+inline void CIEConstants::XYZToRGB(const real _xyz[3], real rgb[3]) const {
 
-	rgb[0] = 3.240479 * _xyz[0] - 1.537150 * _xyz[1] - 0.498535 * _xyz[2];
-	rgb[1] = -0.969256 * _xyz[0] + 1.875991 * _xyz[1] + 0.041556 * _xyz[2];
-	rgb[2] = 0.055648 * _xyz[0] - 0.204043 * _xyz[1] + 1.057311 * _xyz[2];
+	rgb[0] = 3.240479f * _xyz[0] - 1.537150f * _xyz[1] - 0.498535f * _xyz[2];
+	rgb[1] = -0.969256f * _xyz[0] + 1.875991f * _xyz[1] + 0.041556f * _xyz[2];
+	rgb[2] = 0.055648f * _xyz[0] - 0.204043f * _xyz[1] + 1.057311f * _xyz[2];
 }
 
-double ColorSpaceConversion::AverageSpectrumSamples(const double *lambda, const double *vals,
-	int n, double lambdaStart, double lambdaEnd) {
+real CIEConstants::averageSpectrumSamples(const real *lambda, const real *vals,
+	int n, real lambdaStart, real lambdaEnd) {
 	//for (int i = 0; i < n - 1; ++i) assert(lambda[i + 1] > lambda[i]);
 	//assert(lambdaStart < lambdaEnd);
 	// Handle cases with out-of-bounds range or single sample only
 	if (lambdaEnd <= lambda[0])   return vals[0];
 	if (lambdaStart >= lambda[n - 1]) return vals[n - 1];
 	if (n == 1) return vals[0];
-	double sum = 0.f;
+	real sum = 0.f;
 	// Add contributions of constant segments before/after samples
 	if (lambdaStart < lambda[0])
 		sum += vals[0] * (lambda[0] - lambdaStart);
@@ -280,12 +363,12 @@ double ColorSpaceConversion::AverageSpectrumSamples(const double *lambda, const 
 
 	// Loop over wavelength sample segments and add contributions
 #define INTERP(w, i) \
-        tools::interp1(((w) - lambda[i]) / (lambda[(i)+1] - lambda[i]), \
+        math::interp1(((w) - lambda[i]) / (lambda[(i)+1] - lambda[i]), \
              vals[i], vals[(i)+1])
 #define SEG_AVG(wl0, wl1, i) (0.5f * (INTERP(wl0, i) + INTERP(wl1, i)))
 	for (; i + 1 < n && lambdaEnd >= lambda[i]; ++i) {
-		double segStart = std::max(lambdaStart, lambda[i]);
-		double segEnd = std::min(lambdaEnd, lambda[i + 1]);
+		real segStart = std::max(lambdaStart, lambda[i]);
+		real segEnd = std::min(lambdaEnd, lambda[i + 1]);
 		sum += SEG_AVG(segStart, segEnd, i) * (segEnd - segStart);
 	}
 #undef INTERP
@@ -293,7 +376,7 @@ double ColorSpaceConversion::AverageSpectrumSamples(const double *lambda, const 
 	return sum / (lambdaEnd - lambdaStart);
 }
 
-const double ColorSpaceConversion::CIE_X[ColorSpaceConversion::CIE_SAMPLE_NUMBER] = {
+const real CIEConstants::CIE_X[CIEConstants::CIE_SAMPLE_NUMBER] = {
 	// CIE X function values
 	0.0001299000f, 0.0001458470f, 0.0001638021f, 0.0001840037f,
 	0.0002066902f,  0.0002321000f,  0.0002607280f,  0.0002930750f,
@@ -416,7 +499,7 @@ const double ColorSpaceConversion::CIE_X[ColorSpaceConversion::CIE_SAMPLE_NUMBER
 };
 
 
-const double ColorSpaceConversion::CIE_Y[ColorSpaceConversion::CIE_SAMPLE_NUMBER] = {
+const real CIEConstants::CIE_Y[CIEConstants::CIE_SAMPLE_NUMBER] = {
 	// CIE Y function values
 	0.000003917000f,  0.000004393581f,  0.000004929604f,  0.000005532136f,
 	0.000006208245f,  0.000006965000f,  0.000007813219f,  0.000008767336f,
@@ -539,7 +622,7 @@ const double ColorSpaceConversion::CIE_Y[ColorSpaceConversion::CIE_SAMPLE_NUMBER
 };
 
 
-const double ColorSpaceConversion::CIE_Z[ColorSpaceConversion::CIE_SAMPLE_NUMBER] = {
+const real CIEConstants::CIE_Z[CIEConstants::CIE_SAMPLE_NUMBER] = {
 	// CIE Z function values
 	0.0006061000f,  0.0006808792f,  0.0007651456f,  0.0008600124f,
 	0.0009665928f,  0.001086000f,  0.001220586f,  0.001372729f,
@@ -662,7 +745,7 @@ const double ColorSpaceConversion::CIE_Z[ColorSpaceConversion::CIE_SAMPLE_NUMBER
 };
 
 
-const double ColorSpaceConversion::CIE_lambda[ColorSpaceConversion::CIE_SAMPLE_NUMBER] = {
+const real CIEConstants::CIE_lambda[CIEConstants::CIE_SAMPLE_NUMBER] = {
 	360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373,
 	374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387,
 	388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401,
@@ -697,5 +780,9 @@ const double ColorSpaceConversion::CIE_lambda[ColorSpaceConversion::CIE_SAMPLE_N
 	794, 795, 796, 797, 798, 799, 800, 801, 802, 803, 804, 805, 806, 807,
 	808, 809, 810, 811, 812, 813, 814, 815, 816, 817, 818, 819, 820, 821,
 	822, 823, 824, 825, 826, 827, 828, 829, 830 };
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 
 

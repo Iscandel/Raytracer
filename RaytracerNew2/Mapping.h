@@ -2,7 +2,7 @@
 
 #include "Geometry.h"
 #include "Sampler.h"
-#include "Tools.h"
+#include "Math.h"
 
 class Mapping
 {
@@ -38,10 +38,10 @@ public:
 	{
 		Vector3d res;
 
-		double tmp = std::sqrt(1 - sample.y() * sample.y());
+		real tmp = math::fastSqrt(1 - sample.y() * sample.y());
 
-		res.x() = std::cos(2 * tools::PI * sample.x()) * tmp;
-		res.y() = std::sin(2 * tools::PI * sample.x()) * tmp;
+		res.x() = std::cos(2 * math::PI * sample.x()) * tmp;
+		res.y() = std::sin(2 * math::PI * sample.x()) * tmp;
 		res.z() = sample.y();
 		res.normalize();
 
@@ -51,9 +51,9 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	///
 	///////////////////////////////////////////////////////////////////////////
-	static double squareToUniformHemispherePdf()
+	static real squareToUniformHemispherePdf()
 	{
-		return 1. / (2 * tools::PI);
+		return 1.f / (2 * math::PI);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -61,24 +61,30 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	static Vector3d squareToCosineWeightedHemisphere(const Point2d& sample)
 	{
-		Vector3d res;
+		Point2d tmp = squareToConcentricDisk(sample);
+		real z = std::sqrt(std::max((real)0., 1.f - tmp.x() * tmp.x() - tmp.y() * tmp.y()));
 
-		double tmp = std::sqrt(1 - sample.y());
+		return Vector3d(tmp.x(), tmp.y(), z);
 
-		res.x() = std::cos(2 * tools::PI * sample.x()) * tmp;
-		res.y() = std::sin(2 * tools::PI * sample.x()) * tmp;
-		res.z() = std::sqrt(sample.y());
-		res.normalize();
+		//The following implementation does not take into account degenerated cases (sample x/y = 0)
+		//Vector3d res;
 
-		return res;
+		//real tmp = std::sqrt(1 - sample.y());
+
+		//res.x() = std::cos(2 * tools::PI * sample.x()) * tmp;
+		//res.y() = std::sin(2 * tools::PI * sample.x()) * tmp;
+		//res.z() = std::sqrt(sample.y());
+		//res.normalize();
+
+		//return res;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
 	///
 	///////////////////////////////////////////////////////////////////////////
-	static double squareToCosineWeightedHemisphere(double cosTheta)
+	static real squareToCosineWeightedHemisphere(real cosTheta)
 	{
-		return cosTheta * tools::INV_PI;
+		return cosTheta * math::INV_PI;
 	}
 
 
@@ -87,13 +93,13 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	static Point3d squareToTriangle(const Point2d& sample)
 	{
-		double r1 = sample.x();
-		double r2 = sample.y();
+		real r1 = sample.x();
+		real r2 = sample.y();
 		
-		double sqrtR1 = std::sqrt(r1);
-		double alpha = 1 - sqrtR1;
-		double beta = (1 - r2) * sqrtR1;
-		double gamma = r2 * sqrtR1;
+		real sqrtR1 = std::sqrt(r1);
+		real alpha = 1 - sqrtR1;
+		real beta = (1 - r2) * sqrtR1;
+		real gamma = r2 * sqrtR1;
 
 		return Point3d(alpha, beta, gamma);
 	}
@@ -101,10 +107,10 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	///
 	///////////////////////////////////////////////////////////////////////////
-	static Point2d squareToUniformDisk(const Point2d& sample)
+	static Point2d squareToConcentricDisk(const Point2d& sample)
 	{
-		const double r1 = sample.x();
-		const double r2 = sample.y();
+		const real r1 = 2 * sample.x() - 1.f;
+		const real r2 = 2 * sample.y() - 1.f;
 
 		Point2d res;
 
@@ -112,25 +118,25 @@ public:
 		if (r1 > -r2 && r1 > r2)
 		{
 			res.x() = r1;
-			res.y() = (tools::PI * r2) / (4 * r1);
+			res.y() = (math::PI * r2) / (4 * r1);
 		}
 		else if (r1 < r2 && r1 > -r2)
 		{
 			res.x() = r2;
-			res.y() = (tools::PI / 4.) * (2 - r1 / r2);
+			res.y() = (math::PI / 4.f) * (2 - r1 / r2);
 		}
 		else if (r1 < -r2 && r1 < r2)
 		{
 			res.x() = -r1;
-			res.y() = (tools::PI / 4.) * (4 + r2 / r1);
+			res.y() = (math::PI / 4.f) * (4 + r2 / r1);
 		}
 		else //if (r1 > r2 && r1 < -r2)
 		{
 			res.x() = -r2;
-			res.y() = (tools::PI / 4.) * (6 - r1 / r2);
+			res.y() = (math::PI / 4.f) * (6 - r1 / r2);
 		}
 
-		return res;
+		return Point2d(res.x() * std::cos(res.y()), res.x() * std::sin(res.y()));
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -141,13 +147,13 @@ public:
 		Vector3d res;
 
 		//Physical conventions : phi € [0, 2pi[
-		double phi = 2. * tools::PI * sample.x();
-		//double theta = std::acos(2 * sample.y() - 1.);
+		real phi = 2.f * math::PI * sample.x();
+		//real theta = std::acos(2 * sample.y() - 1.);
 
-		//double u = std::cos(theta);
+		//real u = std::cos(theta);
 		//u = cos(arcos(2 * p2 * - 1))
-		double u = 2 * sample.y() - 1.;
-		double sinTheta = std::sqrt(1. - u * u);
+		real u = 2 * sample.y() - 1.f;
+		real sinTheta = std::sqrt(1.f - u * u);
 		res.x() = sinTheta * std::cos(phi);
 		res.y() = sinTheta * std::sin(phi);
 		res.z() = u;
@@ -160,24 +166,24 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// 
 	///////////////////////////////////////////////////////////////////////////
-	static double squareToUniformSpherePdf()
+	static real squareToUniformSpherePdf()
 	{
-		return 1. / (4 * tools::PI);
+		return 1.f / (4 * math::PI);
 	}
 
 	///////////////////////////////////////////////////////////////////////////
 	/// //Similar to sampling sphere, except for z value
 	///////////////////////////////////////////////////////////////////////////
-	static Vector3d squareToSphericalCap(const Point2d& sample, double cosThetaMax)
+	static Vector3d squareToSphericalCap(const Point2d& sample, real cosThetaMax)
 	{
 		Vector3d res;
 
 		//Physical conventions : phi € [0, 2pi[
-		double phi = 2. * tools::PI * sample.x();
+		real phi = 2.f * math::PI * sample.x();
 		//Linear interpolation between cosThetaMax and 1
-		double cosTheta = (1 - sample.y()) + sample.y() * cosThetaMax;//cosThetaMax + sample.y() * (1 - cosThetaMax);
+		real cosTheta = (1 - sample.y()) + sample.y() * cosThetaMax;//cosThetaMax + sample.y() * (1 - cosThetaMax);
 
-		double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
+		real sinTheta = std::sqrt(1.f - cosTheta * cosTheta);
 		res.x() = sinTheta * std::cos(phi);
 		res.y() = sinTheta * std::sin(phi);
 		res.z() = cosTheta;
@@ -190,9 +196,9 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	///
 	///////////////////////////////////////////////////////////////////////////
-	static double uniformConePdf(double cosTheta)
+	static real uniformConePdf(real cosTheta)
 	{
-		return 1. / (2 * tools::PI * (1. - cosTheta));
+		return 1.f / (2 * math::PI * (1.f - cosTheta));
 	}
 };
 

@@ -43,7 +43,7 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="128"/>
+    <integer name="sampleNumber" value="16"/>
   </sampler>
 
   <integrator type="VolPathTracing">
@@ -55,7 +55,7 @@
       <string name="path" value ="./data/simpleSmoke/plane.obj"/>
       <transform name="toWorld">
         <translation>
-          <y>1.48</y>
+          <y>0.7</y>
         </translation>
       </transform>
       <bsdf type="Diffuse">
@@ -82,9 +82,15 @@
       </medium>-->
       
       <medium name="interior" type="Heterogeneous">
-        <string name="path" value="./data/simpleSmoke/smoke.vol"/>
+        <!--<volume name="volume" type="GridVolume">
+          <string name="path" value="./data/simpleSmoke/smoke.vol"/>
+        </volume>-->
+        <volume name="volume" type="OpenVDBVolume">
+          <string name="path" value="./data/fire.vdb"/>
+        </volume>
         <color name="albedo" value="0.9 0.9 0.9"/>
         <double name="scale" value="100"/>
+        <bool name="centered" value="0"/>
       </medium>
     </shape>
 

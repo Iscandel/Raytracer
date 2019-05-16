@@ -27,6 +27,20 @@ class Integrator
 public:
 	typedef std::shared_ptr<Integrator> ptr;
 public:
+	struct RadianceType
+	{
+		enum ERadianceType
+		{
+			EMISSION = 1,
+			DIRECT_RADIANCE = 2,
+			INDIRECT_RADIANCE = 4,
+			SUBSURFACE_RADIANCE = 8,
+			VOLUME_RADIANCE = 16,
+			NO_EMISSION = DIRECT_RADIANCE | INDIRECT_RADIANCE | SUBSURFACE_RADIANCE | VOLUME_RADIANCE,
+			ALL_RADIANCE = EMISSION | NO_EMISSION
+		};
+	};
+public:
 	enum LightSamplingStrategy
 	{
 		MYLIST(USE_FIRST_ELEMENT)
@@ -44,22 +58,22 @@ public:
 	Color sampleAttenuatedLightDirect(const Point3d& interPoint, Sampler::ptr sampler,
 		const Scene& scene, LightSamplingInfos& infos, Medium::ptr medium);
 
-	Color evalTransmittance(const Scene& scene, const Ray& ray, Medium::ptr medium, Sampler::ptr sampler);
+	static Color evalTransmittance(const Scene& scene, const Ray& ray, Medium::ptr medium, Sampler::ptr sampler);
 
-	virtual Color li(Scene& scene, Sampler::ptr sampler, const Ray& ray) = 0;
+	virtual Color li(Scene& scene, Sampler::ptr sampler, const Ray& ray, RadianceType::ERadianceType radianceType = RadianceType::ALL_RADIANCE) = 0;
 
 	Color sampleOneLight(Light::ptr light, const Point3d& interPoint, const Point2d& sample,
 		const Scene& scene, LightSamplingInfos& infos);
 
-	double balanceHeuristic(double pdfFirst, double pdfSec)
+	real balanceHeuristic(real pdfFirst, real pdfSec)
 	{
 		return pdfFirst / (pdfFirst + pdfSec);
 	}
 
-	double powerHeuristic(double pdfFirst, double pdfSec)
+	real powerHeuristic(real pdfFirst, real pdfSec)
 	{
-		double left = pdfFirst * pdfFirst;
-		double right = pdfSec * pdfSec;
+		real left = pdfFirst * pdfFirst;
+		real right = pdfSec * pdfSec;
 		return left / (left + right);
 	}
 

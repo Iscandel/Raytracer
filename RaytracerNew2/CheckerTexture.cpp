@@ -5,7 +5,7 @@
 
 CheckerTexture::CheckerTexture(const Parameters& params)
 {
-	mySquareSize = params.getDouble("squareSize", 0.2);
+	mySquareSize = params.getReal("squareSize", 0.2f);
 	myFirstColor = params.getColor("firstColor", Color(1.));
 	mySecondColor = params.getColor("secondColor", Color(0.));
 }

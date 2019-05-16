@@ -114,6 +114,10 @@
     <shape type="Mesh">
       <string name="path" value="./data/table/meshes/mesh_0.obj"/>
 
+      <!--<bsdf type="RoughDielectric">
+        <string name="material" value="gold"/>
+        <double name="alpha" value="0.2"/>
+      </bsdf>-->
       <bsdf type="Microfacet">
         <color name="kd" value="0 0 0"/>
       </bsdf>

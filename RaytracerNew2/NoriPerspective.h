@@ -14,12 +14,12 @@ public:
 
 	~NoriPerspective();
 
-	Ray getRay(double px, double py, const Point2d& apertureSample) override;
+	Ray getRay(real px, real py, const Point2d& apertureSample) override;
 
 protected:
-	double myFarClip;
-	double myNearClip;
-	double myFov;
+	real myFarClip;
+	real myNearClip;
+	real myFov;
 	Vector3d myInvOutputSize;
 	Transform mySampleToCamera;
 };

@@ -1,9 +1,9 @@
 #include "EnvironmentLight.h"
 
 #include "ImageLoader.h"
+#include "Math.h"
 #include "ObjectFactoryManager.h"
 #include "Scene.h"
-#include "Tools.h"
 
 #include <SFML\Graphics.hpp>
 
@@ -12,7 +12,8 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 	std::string path = params.getString("path", "");
 	myLightToWorld = params.getTransform("toWorld", Transform::ptr(new Transform));
 	myWorldToLight = Transform::ptr(new Transform(myLightToWorld->inv()));
-	myFactor = params.getDouble("scale", 1.);
+	myFactor = params.getReal("scale", 1.);
+	myIsProbe = params.getBool("isProbe", false);
 
 	ImageLoader::load(path, myArray);
 
@@ -41,7 +42,7 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 
 	for (unsigned int i = 0; i < myArray.getHeight(); i++)
 	{
-		double weight = std::sin(tools::PI * (i + 0.5) / myArray.getHeight());//.getSize().y);
+		real weight = std::sin(math::PI * (i + 0.5f) / myArray.getHeight());//.getSize().y);
 		myRowCDFs.push_back(CDF());
 		for (unsigned int j = 0; j < myArray.getWidth(); j++)
 		{
@@ -63,23 +64,37 @@ EnvironmentLight::~EnvironmentLight()
 
 Color EnvironmentLight::power() const
 {
-	return 4 * tools::PI * mySphereRadius * mySphereRadius * Color(1.);
+	return 4 * math::PI * mySphereRadius * mySphereRadius * Color(1.);
 }
 
 LightSamplingInfos EnvironmentLight::sample(const Point3d & pFrom, const Point2d& sample)
 {
 	LightSamplingInfos infos;
 
-	double pdfRow, pdfCol;
+	real pdfRow, pdfCol;
 	int row = myMarginalCDF.sample(sample.x(), pdfRow);
 	int col = myRowCDFs[row].sample(sample.y(), pdfCol);
 
-	double theta = tools::PI * row / (double) myArray.getHeight();
-	double phi = 2 * tools::PI * col / (double)myArray.getWidth();
-	double cosTheta = std::cos(theta);
-	double cosPhi = std::cos(phi);
-	double sinTheta = std::sin(theta);
-	double sinPhi = std::sin(phi);
+	real theta;
+	real phi;
+	if (myIsProbe)
+	{
+		//u and v in [-1,1]
+		real v = (row / (real)myArray.getHeight()) * 2.f - 1;
+		real u = (col / (real)myArray.getWidth()) * 2.f - 1;
+		theta = std::atan2(v, u);
+		phi = math::PI * math::fastSqrt(u*u + v*v);
+	}
+	else
+	{
+		theta = math::PI * row / (real) myArray.getHeight();
+		phi = 2 * math::PI * col / (real)myArray.getWidth();
+	}
+
+	real cosTheta = std::cos(theta);
+	real cosPhi = std::cos(phi);
+	real sinTheta = std::sin(theta);
+	real sinPhi = std::sin(phi);
 	infos.interToLight = Vector3d(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
 	infos.interToLight = myLightToWorld->transform(infos.interToLight);
 	infos.distance = mySphereRadius;
@@ -93,40 +108,76 @@ LightSamplingInfos EnvironmentLight::sample(const Point3d & pFrom, const Point2d
 	//}
 	//else
 	{		
-		infos.intensity = myArray(tools::thresholding((int)col, 0, (int)myArray.getWidth() - 1), tools::thresholding((int)row, 0, (int)myArray.getHeight() - 1));
-		infos.pdf = infos.intensity.luminance() * myWeight[row] / (myMarginalCDF.getSum() * (2 * tools::PI / myArray.getWidth()) * (tools::PI / myArray.getHeight()));//(pdfRow * pdfCol) / (2 * tools::PI * tools::PI * std::max(std::abs(sinTheta), tools::EPSILON); //To change ?
-		infos.pdf /= std::max(std::abs(sinTheta), tools::EPSILON);
+		infos.intensity = myArray(math::thresholding((int)col, 0, (int)myArray.getWidth() - 1), math::thresholding((int)row, 0, (int)myArray.getHeight() - 1));
+		infos.pdf = infos.intensity.luminance() * myWeight[row] / (myMarginalCDF.getSum() * (2 * math::PI / myArray.getWidth()) * (math::PI / myArray.getHeight()));//(pdfRow * pdfCol) / (2 * math::PI * math::PI * std::max(std::abs(sinTheta), math::EPSILON); //To change ?
+		infos.pdf /= std::max(std::abs(sinTheta), math::EPSILON);
 	}
 
 	return infos;
 }
 
-double EnvironmentLight::pdf(const Point3d &, const LightSamplingInfos & infos)
+real EnvironmentLight::pdf(const Point3d &, const LightSamplingInfos & infos)
 {
+	
 	Vector3d dir = myWorldToLight->transform(infos.interToLight);
+	dir.normalize();
+	//if(isnan(dir.hasNaN()))
+	//	std::cout << infos.interToLight << std::endl;
 	//transform world to light
-	double phi = (sphericalPhiFromCartesian(dir) / (2 * tools::PI)) * myArray.getWidth();
-	double theta = (sphericalThetaFromCartesian(dir) / tools::PI) * myArray.getHeight();
-	double sinTheta = std::sin(theta);
-	double normalizationFactor = myWeight[(int)theta] / (myMarginalCDF.getSum() * (2 * tools::PI / myArray.getWidth()) * (tools::PI / myArray.getHeight()));
-	double luminance = tools::interp2(Point2d(phi, theta), myArray).luminance();
-	double pdf = luminance * normalizationFactor;
-	//double pdf = myArray((int)phi, (int)theta).luminance() / normalizationFactor;
-	pdf /= std::max(std::abs(sinTheta), tools::EPSILON);
-	//myWeight[(int)theta] / (myMarginalCDF.getSum() * (2 * tools::PI / myArray.getWidth()) * (tools::PI / myArray.getHeight()));//(pdfRow * pdfCol) / (2 * tools::PI * tools::PI * sinTheta); //To change ?
+	real fromPhi;
+	real fromTheta;
+	if (myIsProbe)
+	{
+		//See Paul debevec website
+		real r = (1 / math::PI) * std::acos(dir.z()) / std::sqrt(dir.x() * dir.x() + dir.y() * dir.y());
+		//get u, v and rescale in [0,1]
+		fromPhi = ((dir.x() * r + (real)1.) / (real)2) * myArray.getWidth();
+		fromTheta = ((dir.y() * r + (real)1.) / (real)2) * myArray.getHeight();
+	}
+	else
+	{
+		fromPhi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray.getWidth();
+		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray.getHeight();
+	}
+	//real phi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray.getWidth();
+	//real theta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray.getHeight();
+	//if(isnan((float)theta))
+	//	std::cout << infos.interToLight << " " << dir << std::endl;
+	real sinTheta = std::sin(fromTheta);
+	real normalizationFactor = myWeight[(int)fromTheta] / (myMarginalCDF.getSum() * (2 * math::PI / myArray.getWidth()) * (math::PI / myArray.getHeight()));
+	real luminance = math::interp2(Point2d(fromPhi, fromTheta), myArray).luminance();
+	real pdf = luminance * normalizationFactor;
+	//real pdf = myArray((int)phi, (int)theta).luminance() / normalizationFactor;
+	pdf /= std::max(std::abs(sinTheta), math::EPSILON);
+	//myWeight[(int)theta] / (myMarginalCDF.getSum() * (2 * math::PI / myArray.getWidth()) * (math::PI / myArray.getHeight()));//(pdfRow * pdfCol) / (2 * math::PI * math::PI * sinTheta); //To change ?
 	return pdf;
 }
 
 Color EnvironmentLight::le(const Vector3d & direction, const Normal3d &) const
 {
 	Vector3d dir = myWorldToLight->transform(direction);
+	dir.normalize();
 	//transform world to light
-	double phi = (sphericalPhiFromCartesian(dir) / (2 * tools::PI)) * myArray.getWidth();
-	double theta = (sphericalThetaFromCartesian(dir) / tools::PI) * myArray.getHeight();
+	real fromPhi;
+	real fromTheta;
+	if (myIsProbe)
+	{
+		//See Paul debevec website
+		real r = (1 / math::PI) * std::acos(dir.z()) / math::fastSqrt(dir.x() * dir.x() + dir.y() * dir.y());
+		//get u, v and rescale in [0,1]
+		fromPhi = ((dir.x() * r + (real)1.) / (real)2) * myArray.getWidth();
+		fromTheta = ((dir.y() * r + (real)1.) / (real)2) * myArray.getHeight();
+	}
+	else
+	{
+		fromPhi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray.getWidth();
+		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray.getHeight();
+	}
 	
-	return tools::interp2(Point2d(phi, theta), myArray);
-	//double advanceX = phi - (int)phi;
-	//double advanceY = theta - (int)theta;
+	
+	return math::interp2(Point2d(fromPhi, fromTheta), myArray);
+	//real advanceX = phi - (int)phi;
+	//real advanceY = theta - (int)theta;
 	//int xMin = (int)phi;
 	//int yMin = (int)theta;
 	//int xMax = xMin + 1 < myArray.getWidth() ? xMin + 1 : xMin;
@@ -140,14 +191,14 @@ Color EnvironmentLight::le(const Vector3d & direction, const Normal3d &) const
 
 //Color EnvironmentLight::interp2(const Point2d& xy) const
 //{
-//	double advanceX = xy.x() - (int)xy.x();
-//	double advanceY = xy.y() - (int)xy.y();
-//	int xMin = tools::thresholding((int)xy.x(), 0, (int)myArray.getWidth());
-//	int yMin = tools::thresholding((int)xy.y(), 0, (int)myArray.getHeight());
+//	real advanceX = xy.x() - (int)xy.x();
+//	real advanceY = xy.y() - (int)xy.y();
+//	int xMin = math::thresholding((int)xy.x(), 0, (int)myArray.getWidth());
+//	int yMin = math::thresholding((int)xy.y(), 0, (int)myArray.getHeight());
 //	int xMax = xMin + 1 < myArray.getWidth() ? xMin + 1 : xMin;
-//	xMax = tools::thresholding(xMax, 0, (int)myArray.getWidth() - 1);
+//	xMax = math::thresholding(xMax, 0, (int)myArray.getWidth() - 1);
 //	int yMax = yMin + 1 < myArray.getHeight() ? yMin + 1 : yMin;
-//	yMax = tools::thresholding(yMax, 0, (int)myArray.getHeight() - 1);
+//	yMax = math::thresholding(yMax, 0, (int)myArray.getHeight() - 1);
 //
 //	return (1 - advanceX) * (1 - advanceY) * myArray(xMin, yMin) +
 //		(1 - advanceX) * advanceY * myArray(xMin, yMax) +
@@ -155,7 +206,7 @@ Color EnvironmentLight::le(const Vector3d & direction, const Normal3d &) const
 //		advanceX * advanceY * myArray(xMax, yMax);
 //}
 
-void EnvironmentLight::initialize(const Scene & scene)
+void EnvironmentLight::initialize(Scene & scene)
 {
 	BoundingBox box = scene.getBoundingBox();
 	myCenter = box.getCentroid();

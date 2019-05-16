@@ -7,8 +7,8 @@
 Mirror::Mirror(const Parameters&)
 {
 	//myAlbedo = params.getColor("albedo", Color(0.));
-	////myEta = params.getDouble("eta", 0.);
-	////myAbsorption = params.getDouble("absorption", 0.);
+	////myEta = params.getReal("eta", 0.);
+	////myAbsorption = params.getReal("absorption", 0.);
 	//myEta = params.getColor("eta", Color(0.));
 	//myAbsorption = params.getColor("absorption", Color(0.));
 }
@@ -38,10 +38,10 @@ Color Mirror::sample(BSDFSamplingInfos& infos, const Point2d&)
 	//No Monte Carlo sampling, there is only one possible direction
 	infos.pdf = 1.;
 
-	return Color(1., 1., 1.);
+	return Color(1.);
 }
 
-double Mirror::pdf(const BSDFSamplingInfos&)
+real Mirror::pdf(const BSDFSamplingInfos&)
 {
 	//Discrete BRDF return 0. pdf() is called with light sampling and there 
 	//is almost no chance to have generated the direction of shadow ray with 

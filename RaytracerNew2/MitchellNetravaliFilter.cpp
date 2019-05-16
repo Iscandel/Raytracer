@@ -2,7 +2,7 @@
 
 #include "ObjectFactoryManager.h"
 
-MitchellNetravaliFilter::MitchellNetravaliFilter(double radiusX, double radiusY, double B, double C)
+MitchellNetravaliFilter::MitchellNetravaliFilter(real radiusX, real radiusY, real B, real C)
 :ReconstructionFilter(radiusX, radiusY)
 ,myB(B)
 ,myC(C)
@@ -15,8 +15,8 @@ MitchellNetravaliFilter::MitchellNetravaliFilter(double radiusX, double radiusY,
 MitchellNetravaliFilter::MitchellNetravaliFilter(const Parameters& params)
 : ReconstructionFilter(params)
 {
-	myB = params.getDouble("B", 1. / 3);
-	myC = params.getDouble("C", 1. / 3);
+	myB = params.getReal("B", 1.f / 3);
+	myC = params.getReal("C", 1.f / 3);
 
 	precompute();
 }
@@ -30,29 +30,29 @@ MitchellNetravaliFilter::~MitchellNetravaliFilter(void)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double MitchellNetravaliFilter::getValue(double x, double y)
+real MitchellNetravaliFilter::getValue(real x, real y)
 {
 	return func1D(x / myRadiusX) * func1D(y / myRadiusY);
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double MitchellNetravaliFilter::func1D(double val)
+real MitchellNetravaliFilter::func1D(real val)
 {
-	val = std::abs(2. * val);
+	val = std::abs(2.f * val);
 
-	if(val > 1.)
+	if(val > 1.f)
 	{
 		return ((-myB - 6 * myC) * val * val * val 
 			+ (6 * myB + 30 * myC) * val * val 
 			+ (-12 * myB - 48 * myC) * val
-			+ 8 * myB + 24 * myC) * (1. / 6.);
+			+ 8 * myB + 24 * myC) * (1.f / 6.f);
 	}
 	else
 	{
 		return ((12 - 9 * myB - 6 * myC) * val * val * val 
 			+ (-18 + 12 * myB + 6 * myC) * val * val
-			+ (6 - 2 * myB)) * (1. / 6.);
+			+ (6 - 2 * myB)) * (1.f / 6.f);
 	}
 }
 

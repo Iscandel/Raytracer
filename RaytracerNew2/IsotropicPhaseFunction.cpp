@@ -2,7 +2,7 @@
 
 #include "Mapping.h"
 #include "ObjectFactoryManager.h"
-#include "Tools.h"
+#include "Math.h"
 
 IsotropicPhaseFunction::IsotropicPhaseFunction(const Parameters&)
 {
@@ -13,7 +13,7 @@ IsotropicPhaseFunction::~IsotropicPhaseFunction()
 {
 }
 
-double IsotropicPhaseFunction::sample(PhaseFunctionSamplingInfos &infos, const Point2d &sample) const
+real IsotropicPhaseFunction::sample(PhaseFunctionSamplingInfos &infos, const Point2d &sample) const
 {
 	infos.wo = Mapping::squareToUniformSphere(sample);
 	infos.pdf = pdf(infos);
@@ -22,14 +22,14 @@ double IsotropicPhaseFunction::sample(PhaseFunctionSamplingInfos &infos, const P
 	return 1.;
 }
 
-double IsotropicPhaseFunction::eval(const PhaseFunctionSamplingInfos &) const
+real IsotropicPhaseFunction::eval(const PhaseFunctionSamplingInfos &) const
 {
-	return tools::INV_FOUR_PI;
+	return math::INV_FOUR_PI;
 }
 
-double IsotropicPhaseFunction::pdf(const PhaseFunctionSamplingInfos &) const
+real IsotropicPhaseFunction::pdf(const PhaseFunctionSamplingInfos &) const
 {
-	return tools::INV_FOUR_PI;
+	return math::INV_FOUR_PI;
 }
 
 RT_REGISTER_TYPE(IsotropicPhaseFunction, PhaseFunction)

@@ -10,16 +10,24 @@
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-//typedef double real;
+
+namespace priv {
+#ifdef DOUBLE_PRECISION
+	typedef double real;
+#else
+	typedef float real;
+#endif
+}
+using priv::real;
 
 ///Forward declarations
 template<class T, int DIM> struct Point;
 template<class T, int DIM> struct Vect;
 
-typedef Vect<double, 2> Vector2d;
+typedef Vect<real, 2> Vector2d;
 typedef Vect<int, 2> Vector2i;
 
-typedef Point<double, 2> Point2d;
+typedef Point<real, 2> Point2d;
 typedef Point<int, 2> Point2i;
 
 
@@ -47,9 +55,9 @@ struct Point : public Eigen::Matrix<T, DIM, 1>
 		return *this;
 	}
 
-	//operator Vect<double, 3>()
+	//operator Vect<real, 3>()
 	//{
-	//	return Vect<double, 3>(x(), y(), z());
+	//	return Vect<real, 3>(x(), y(), z());
 	//}
 };
 
@@ -85,9 +93,9 @@ struct Vect : public Eigen::Matrix<T, DIM, 1>
         return *this;
     }
 
-	//inline operator Point<double, 3> ()
+	//inline operator Point<real, 3> ()
 	//{
-	//	return Point<double, 3>(x(), y(), z());
+	//	return Point<real, 3>(x(), y(), z());
 	//}
 };
 
@@ -123,59 +131,59 @@ struct Normal : public Eigen::Matrix<T, DIM, 1>
 
 ///typedef for the real data structures used in the program
 #ifdef USE_ALIGN
-typedef Vect<double, 4> Vector3d;
+typedef Vect<real, 4> Vector3d;
 typedef Vect<int, 4> Vector3i;
 template <typename Type>
 using Vect3 = Vect<Type, 4>;
 
-typedef Point<double, 4> Point3d;
+typedef Point<real, 4> Point3d;
 typedef Point<int, 4> Point3i;
 template <typename Type>
 using Point3 = Point<Type, 4>;
 
-typedef Normal<double, 4> Normal3d;
+typedef Normal<real, 4> Normal3d;
 template <typename Type>
 using Normal3 = Normal<Type, 4>;
 #else
-typedef Vect<double, 3> Vector3d;
+typedef Vect<real, 3> Vector3d;
 typedef Vect<int, 3> Vector3i;
 template <typename Type>
 using Vect3 = Vect<Type, 3>;
 
-typedef Point<double, 3> Point3d;
+typedef Point<real, 3> Point3d;
 typedef Point<int, 3> Point3i;
 template <typename Type>
 using Point3 = Point<Type, 3>;
 
-typedef Normal<double, 3> Normal3d;
+typedef Normal<real, 3> Normal3d;
 template <typename Type>
 using Normal3 = Normal<Type, 3>;
 #endif
 
-inline double sphericalPhiFromCartesian(const Vector3d& v)
+inline real sphericalPhiFromCartesian(const Vector3d& v)
 {
-	double res =  std::atan2(v.y(), v.x());
-	//double res = std::atan2(v.x(), -v.z());
-	return res < 0. ? res + 2 * M_PI : res;	
+	real res =  std::atan2(v.y(), v.x());
+	//real res = std::atan2(v.x(), -v.z());
+	return res < 0.f ? res + 2 * (real) M_PI : res;	
 }
 
-inline double sphericalThetaFromCartesian(const Vector3d& v)
+inline real sphericalThetaFromCartesian(const Vector3d& v)
 {
-	if (std::abs(v.z()) > 1.)
+	if (std::abs(v.z()) > 1.f)
 		ILogger::log() << "sphericalThetaFromCartesian: Acos() is in range [-1; 1]\n";
 
-	//double val = v.z();
+	//real val = v.z();
 	//val = val < -1. ? -1. : val  > 1. ? 1. : val;
 	return std::acos(v.z());
 	//return std::acos(v.y());
 }
 
-inline Vector3d cartesianFromSpherical(double theta, double phi)
+inline Vector3d cartesianFromSpherical(real theta, real phi)
 {
-	double sinTheta = std::sin(theta);
-	double cosTheta = std::cos(theta);
-	double cosPhi = std::cos(phi);
-	double sinPhi = std::sin(phi);
+	real sinTheta = std::sin(theta);
+	real cosTheta = std::cos(theta);
+	real cosPhi = std::cos(phi);
+	real sinPhi = std::sin(phi);
 
 	return Vector3d(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
 }

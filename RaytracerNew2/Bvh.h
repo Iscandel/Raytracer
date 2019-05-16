@@ -82,7 +82,7 @@ struct Bin
 ///////////////////////////////////////////////////////////////////////////////
 struct CmpBin
 {
-	CmpBin(double binC, double minP, int bestInd, int ax)
+	CmpBin(real binC, real minP, int bestInd, int ax)
 	{
 		bestIndex = bestInd;
 		binConstant = binC;
@@ -91,9 +91,9 @@ struct CmpBin
 	}
 
 	int bestIndex;
-	double binConstant;
+	real binConstant;
 	int axis;
-	double minPos;
+	real minPos;
 	bool operator() (IPrimitive::ptr p)
 	{
 		int index = std::min(std::max((int)((p->getCentroid()[axis] - minPos) * binConstant), 0), Bin::BIN_NUMBER - 1);
@@ -155,7 +155,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Compute the centroid of the box.
 	///////////////////////////////////////////////////////////////////////////
-	double midPoint(Axis axis, const BoundingBox& box);
+	real midPoint(Axis axis, const BoundingBox& box);
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Specialized intersection routine.
@@ -188,6 +188,8 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	void buildBinNode(int startIndex, int endIndex, BvhNode::ptr currentNode, const std::vector<BvhData, Eigen::aligned_allocator<BvhData>>& data, int numberNode);
 
+	void initialize(Scene& scene) override;
+
 protected:
 	int myPrimitivesPerNode;
 
@@ -200,9 +202,9 @@ protected:
 
 	int myNumberOfNodes;
 
-	const double INTERSECTION_COST;
+	const real INTERSECTION_COST;
 
-	const double TRAVERSAL_COST;
+	const real TRAVERSAL_COST;
 
 	//Bin myBins[Bin::BIN_NUMBER];
 };
@@ -212,9 +214,9 @@ protected:
 ///////////////////////////////////////////////////////////////////////////////
 struct StackIntersection
 {
-	StackIntersection(BvhNode::ptr _node, double _t) :node(_node), t(_t) {}
+	StackIntersection(BvhNode::ptr _node, real _t) :node(_node), t(_t) {}
 	BvhNode::ptr node;
-	double t;
+	real t;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

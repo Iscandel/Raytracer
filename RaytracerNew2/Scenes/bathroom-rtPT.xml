@@ -3,7 +3,7 @@
 	<integrator type="PathTracingMIS"/>
   
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="256"/>
+    <integer name="sampleNumber" value="32"/>
   </sampler>
   
   <parameters>

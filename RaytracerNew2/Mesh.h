@@ -5,6 +5,7 @@
 #include "Tools.h"
 
 #include <Eigen/StdVector>
+#include <memory>
 #include <vector>
 
 class GeometricShape;
@@ -15,7 +16,7 @@ class GeometricShape;
 /// \brief Data structure storing geometric informations about triangles that
 /// compound the mesh
 ///////////////////////////////////////////////////////////////////////////////
-class Mesh : public ISampledShape
+class Mesh : public ISampledShape, public std::enable_shared_from_this<Mesh>
 {
 public:
 	typedef std::shared_ptr<Mesh> ptr;
@@ -29,9 +30,9 @@ public:
 
 	void sample(const Point2d& p, Point3d& sampled, Normal3d& normal) override;
 
-	double pdf(const Point3d& p, const Point3d& sampled, const Normal3d& normal) override;
+	real pdf(const Point3d& p, const Point3d& sampled, const Normal3d& normal) override;
 
-	double surfaceArea() override {
+	real surfaceArea() override {
 		return mySurfaceArea;
 	}
 
@@ -53,7 +54,7 @@ protected:
 	//CDF
 	CDF myCDF;
 
-	double mySurfaceArea;
+	real mySurfaceArea;
 };
 
 

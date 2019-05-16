@@ -1,6 +1,7 @@
 #pragma once
 #include "ObjectFactory.h"
 
+#include "BSSRDF.h"
 #include "Bvh.h"
 #include "ObjLoader.h"
 #include "Logger.h"
@@ -58,9 +59,13 @@ public:
 		Mesh::ptr mesh = std::shared_ptr<Mesh>(new Mesh("", vertices, normals, UVs, indices));
 		
 		BSDF::ptr bsdf = params.getBSDF("bsdf", BSDF::ptr());
+		BSSRDF::ptr bssrdf = params.getBSSRDF("bssrdf", BSSRDF::ptr());
 		Light::ptr light = params.getLight("light", Light::ptr());
 		Medium::ptr interiorMedium = params.getMedium("interior", Medium::ptr());
 		Medium::ptr exteriorMedium = params.getMedium("exterior", Medium::ptr());
+
+		if (bssrdf)
+			bssrdf->setShape(mesh);
 
 		if(light)
 			((AreaLight*) light.get())->setShape(mesh);
@@ -70,11 +75,16 @@ public:
 		{
 			GeometricShape::ptr shape = std::shared_ptr<Triangle>(new Triangle(params, mesh, i));
 			
-			IPrimitive::ptr triPrimitive(std::make_shared<SimplePrimitive>(shape, bsdf, interiorMedium, exteriorMedium));
+			IPrimitive::ptr triPrimitive(std::make_shared<SimplePrimitive>(shape, bsdf, bssrdf, interiorMedium, exteriorMedium));
 			if (light)
 			{
 				mesh->addLightTriangle(shape);
 				triPrimitive->addLight(light);
+			}
+			else if (interiorMedium && interiorMedium->isEmissive())
+			{
+				mesh->addLightTriangle(shape);
+				triPrimitive->addLight(interiorMedium);
 			}
 			triangles.push_back(triPrimitive);
 		}
@@ -91,6 +101,15 @@ public:
 		{
 			primitive->addLight(light);
 		}
+		else if(interiorMedium && interiorMedium->isEmissive())
+		{
+			primitive->addLight(interiorMedium);
+		}
+
+		if (interiorMedium)
+			interiorMedium->setOwnerBBox(primitive->getWorldBoundingBox());
+		if (exteriorMedium)
+			exteriorMedium->setOwnerBBox(primitive->getWorldBoundingBox());
 
 		return primitive;
 	}

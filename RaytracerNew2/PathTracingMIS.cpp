@@ -23,13 +23,13 @@ PathTracingMIS::~PathTracingMIS()
 {
 }
 
-Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
+Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, RadianceType::ERadianceType radianceType)
 {
 	//std::cout << "START" << std::endl;
 	Color radiance;
-	const double proba = 0.8;
-	Color throughput(1.);
-	double eta = 1.;
+	const real proba = 0.8f;
+	Color throughput(1.f);
+	real eta = 1.f;
 	int depth = 0;
 	Ray ray(_ray);
 	bool shadowCaught = false;
@@ -66,8 +66,11 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			return radiance;
 
 		//If we have intersected a light, add the radiance
-		if (depth == 0 && intersection.myPrimitive->isLight())
+		if (/*depth == 0*/(radianceType & RadianceType::EMISSION) && intersection.myPrimitive->isLight())
 			radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
+
+		if (intersection.myPrimitive->getBSSRDF() && (radianceType & RadianceType::SUBSURFACE_RADIANCE))
+			radiance += throughput * intersection.myPrimitive->getBSSRDF()->eval(intersection.myPoint, intersection, -ray.direction());
 
 		//Light sampling strategy
 		if (myStrategy == LightSamplingStrategy::ALL_LIGHT)
@@ -82,7 +85,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 					Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 					Vector3d localWo = intersection.toLocal(-ray.direction());
-					double cosTheta = DifferentialGeometry::cosTheta(localWi);
+					real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 					BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 					bsdfInfos.uv = intersection.myUv; //
@@ -91,14 +94,14 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 					//Same as specular BSDF : delta lights cannot be intersected during 
 					//BSDF sampling. Then, MIS is not applyable and the "weight" is 1
-					double bsdfPDF = lights[i]->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
+					real bsdfPDF = lights[i]->isDelta() ? 0.f : bsdf->pdf(bsdfInfos);
 					//Add the MIS heuristic
-					double weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
+					real weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
 
 					radiance += throughput * value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 
 					if (DifferentialGeometry::cosTheta(localWi) <= 0.)
-						shadowCaught = true;
+						shadowCaught = false; //true
 					else
 						shadowCaught = false;
 				}
@@ -116,7 +119,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			{
 				Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 				Vector3d localWo = intersection.toLocal(-ray.direction());
-				double cosTheta = DifferentialGeometry::cosTheta(localWi);
+				real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 				BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 				bsdfInfos.uv = intersection.myUv;
@@ -125,16 +128,16 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 				//Same as specular BSDF : delta lights cannot be intersected during 
 				//BSDF sampling. Then, MIS is not applyable and the "weight" is 1
-				double bsdfPDF = lightInfos.light->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
+				real bsdfPDF = lightInfos.light->isDelta() ? 0.f : bsdf->pdf(bsdfInfos);
 				//Add the MIS heuristic
-				double weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
+				real weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
 
 				radiance += throughput * value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 				if (radiance.isNan())
 					std::cout << "nan 1 " << std::endl;
 
 				if (DifferentialGeometry::cosTheta(localWi) <= 0.)
-					shadowCaught = true;
+					shadowCaught = false; //true
 				else
 					shadowCaught = false;
 			}
@@ -149,7 +152,8 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 		BSDFSamplingInfos bsdfInfos(intersection, localWi);
 		bsdfInfos.uv = intersection.myUv; //
 		bsdfInfos.shadowCaught = shadowCaught;
-		Color bsdfValue = bsdf->sample(bsdfInfos, sampler->getNextSample2D());
+		Point2d s = sampler->getNextSample2D();
+		Color bsdfValue = bsdf->sample(bsdfInfos, s);
 		
 		if (bsdfValue.isZero())
 			break;
@@ -193,14 +197,17 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			//sampling with MIS is not valid for specular (delta) mats. The only valid technique is
 			//to sample the BRDF. Since there is only one valid technique, MIS cannot be applied 
 			//(ie light pdf = 0)
-			double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : lightCaught->pdf(intersection.myPoint, lightInfos);
-			double weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
+			real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : lightCaught->pdf(intersection.myPoint, lightInfos);
+			real weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 
 			//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
 			radiance += throughput * radianceLight * bsdfValue * weight;
 			//std::cout << depth << " " << radiance << " " << throughput << " " << radianceLight << " " << bsdfValue << " " << weight << std::endl;
-			if (radiance.isNan())
+			if (radiance.isNan()) {
 				std::cout << "nan 2 " << throughput << " " << radianceLight << " " << bsdfValue << " " << weight << std::endl;
+				lightCaught->pdf(intersection.myPoint, lightInfos);
+				scene.computeIntersection(reflected, toLightInter);
+			}
 
 			if (lightCaught == scene.getEnvironmentLight())
 				//noIntersection = true;
@@ -213,7 +220,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 		if (depth >= myMinDepth)
 		{
 			
-			double stopVal = std::min(0.95, throughput.luminance() * eta * eta);
+			real stopVal = std::min((real)0.95, throughput.luminance() * eta * eta);
 			if (sampler->getNextSample1D() < stopVal)
 			{
 				throughput /= stopVal;
@@ -241,6 +248,8 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 		}
 		intersection = toLightInter;
 		ray = reflected;
+
+		radianceType = RadianceType::NO_EMISSION;
 
 		depth++;
 	}
@@ -287,13 +296,13 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 {
 	//std::cout << "START" << std::endl;
 	Color radiance;
-	const double proba = 0.8;
+	const real proba = 0.8;
 	Color throughput(1.);
-	double eta = 1.;
+	real eta = 1.;
 	int depth = 0;
 	Ray ray(_ray);
 	bool shadowCaught = false;
-	double ao = 1.;
+	real ao = 1.;
 
 	Intersection intersection;
 	if (!scene.computeIntersection(ray, intersection))
@@ -343,7 +352,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 					Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 					Vector3d localWo = intersection.toLocal(-ray.direction());
-					double cosTheta = DifferentialGeometry::cosTheta(localWi);
+					real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 					BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 					bsdfInfos.uv = intersection.myUv; //
@@ -352,9 +361,9 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 					//Same as specular BSDF : delta lights cannot be intersected during
 					//BSDF sampling. Then, MIS is not applyable and the "weight" is 1
-					double bsdfPDF = lights[i]->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
+					real bsdfPDF = lights[i]->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
 					//Add the MIS heuristic
-					double weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
+					real weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
 
 					radiance += throughput * value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 
@@ -393,7 +402,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 				{
 					Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 					Vector3d localWo = intersection.toLocal(-ray.direction());
-					double cosTheta = DifferentialGeometry::cosTheta(localWi);
+					real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 					BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 					bsdfInfos.uv = intersection.myUv;
@@ -402,9 +411,9 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 
 					//Same as specular BSDF : delta lights cannot be intersected during
 					//BSDF sampling. Then, MIS is not applyable and the "weight" is 1
-					double bsdfPDF = lightInfos.light->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
+					real bsdfPDF = lightInfos.light->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
 					//Add the MIS heuristic
-					double weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
+					real weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
 
 					radiance += throughput * value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 					if (radiance.isNan())
@@ -472,8 +481,8 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			//sampling with MIS is not valid for specular (delta) mats. The only valid technique is
 			//to sample the BRDF. Since there is only one valid technique, MIS cannot be applied
 			//(ie light pdf = 0)
-			double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : lightCaught->pdf(intersection.myPoint, lightInfos);
-			double weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
+			real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : lightCaught->pdf(intersection.myPoint, lightInfos);
+			real weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 
 			//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
 			radiance += throughput * radianceLight * bsdfValue * weight;
@@ -492,7 +501,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 		if (depth >= 0)
 		{
 
-			double stopVal = 0.9;//std::min(0.9, throughput.luminance() * eta * eta);
+			real stopVal = 0.9;//std::min(0.9, throughput.luminance() * eta * eta);
 			if (sampler->getNextSample1D() < stopVal)
 			{
 				throughput /= stopVal;

@@ -1,0 +1,1130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <scale>
+        <x>-1</x>
+        <y>1</y>
+        <z>1.</z>
+      </scale>
+      <lookAt>
+        <origin>2 2 -3</origin>
+        <lookAt>0 0.5 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
+
+      <!--front-->
+      <!--<lookAt>
+        <origin>-3.5 1.5 -1</origin>
+        <lookAt>0 0.5 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>-->
+
+      <!--back-->
+      <!--<lookAt>
+        <origin>3.5 1.5 -1</origin>
+        <lookAt>0 0.5 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>-->
+
+
+      <!--inside-->
+      <!--<lookAt>
+        <origin>-1.1 1.1 -0.7</origin>
+        <lookAt>0 0.5 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>-->
+
+      <!--<lookAt>
+        <origin>4 2 -1.7</origin>
+        <lookAt>0 0.5 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>-->
+    </transform>
+    <double name="fov" value="80"/>
+    <focal>0.05</focal>
+    <mPerPixel>0.0002</mPerPixel>
+    <!--0.00005-->
+    <double name="focal" value="0.05"/>
+    <double name="meterPixelSize" value="0.0002"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="550"/>
+    <!--<double name="apertureRadius" value="3."/>
+    <double name="focalPlane" value="450"/>-->
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>4</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="128"/>
+  </sampler>
+
+  <integrator type="PathTracingMIS">
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+
+  <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/hdrmaps_com_free_068_Ref.exr"/>
+      <!--uffizi_probe.hdr-->
+      <!--20060807_wells6_hd.jpg"/>-->
+      <double name="scale" value="1."/>
+      <bool name="isProbe" value="true"/>
+      <transform name="toWorld">
+        <rotation>
+          <x>90.</x>
+          <y>280.</y>
+          <z>-110.</z>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+
+  <objects>
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/orig/avent2.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.9 0.2 0.9"/>
+      </bsdf>
+    </shape>-->
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/carrosserie.obj"/>
+      <bsdf type="CarPaint">
+<string name="preset" value="white"/>
+</bsdf>
+     <!-- <bsdf type="SmoothLayeredBSDF">
+        <double name="alphaTop" value="0.01"/>
+        <color name="absorbance" value="0.001 0.5 0.85"/>
+        <color name="absorbance" value="0.001 0.37 0.81"/>
+        <double name="thickness" value="2.5"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.07"/>
+          <string name="material" value="aluminium"/>
+        </bsdf>
+      </bsdf>-->
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/carrosseriePlancher.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.1"/>
+        <color name="absorbance" value="0.3 0.3 0.3"/>
+        <double name="thickness" value="2.5"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.2"/>
+          <string name="material" value="aluminium"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/couvreMoteurArriere.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/enjoliveurs.obj"/>
+      <bsdf name="baseBSDF" type="RoughConductor">
+        <double name="alpha" value="0.08"/>
+        <string name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/essuieGlace.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurBasPortieresCentre.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.05"/>
+        <color name="absorbance" value="0.01 0.01 0.01"/>
+        <double name="thickness" value="0.5"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <texture name="albedo" type="ImageTexture">
+            <string name="path" value="./data/lamborghini Aventador/textures/ebene.jpg"/>
+          </texture>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurBoitiersCentraux.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.1"/>
+        <color name="absorbance" value="0.3 0.3 0.3"/>
+        <double name="thickness" value="2.5"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.7 0.7 0.7"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurBoutons1.obj"/>
+      <bsdf type="Diffuse">
+        <!--<color name="albedo" value="0.5 0.5 0.5"/>-->
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/lamborghini Aventador/textures/interior_lod0.tga"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurBoutons2.obj"/>
+      <bsdf type="Diffuse">
+        <!--<color name="albedo" value="0.5 0.5 0.5"/>-->
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/lamborghini Aventador/textures/interior_lod0.tga"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurCeintureAttacheMetal.obj"/>
+      <bsdf type="Conductor">
+        <string name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurCeintureBande.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.2 0.2"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurCeintureFixationNoireRouge.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.4 0.4 0.4"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurCouvreMoteur.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.4 0.4 0.4"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurEncadrementPortieres.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.4 0.4 0.4"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurGrosMoteur.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.25"/>
+        <string name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurPetitMoteur.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.25"/>
+        <string name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurPetitMoteurBarreBrillante.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.09"/>
+        <string name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurPlancher.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurPlatBord.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurPortieresPlatBord.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.5 0.5 0.5"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurPortieresPoignees.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.85 0.85 0.85"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurToit.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.90 0.84 0.79"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurVolantCentre.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.5 0.5 0.5"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurVolantCercle.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.6 0.6 0.6"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurVolantLogo.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.4 0.4 0.4"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/interieurVolantRenforcement.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.3 0.3 0.3"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/logo.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value ="./data/lamborghini Aventador/orig/Lamborghinilogo.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/logoArriere.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.02"/>
+        <string name="material" value="chromium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/miniPharesAvant.obj"/>
+      <bsdf type="SheetDielectric">
+        <double name="etaInt" value="1.8"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/parechocAvant.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/parechocArriere.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pharesAvantAmpoules.obj"/>
+      <bsdf type="SheetDielectric">
+        <double name="etaInt" value="1.8"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pharesAvantBoitier.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.08"/>
+        <double name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pharesAvantCerclageAmpoules.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.08"/>
+        <double name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pharesAvantDerriereLeds.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.08"/>
+        <double name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pharesAvantInterieur.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.08"/>
+        <double name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pharesAvantLeds.obj"/>
+      <bsdf type="SheetDielectric">
+        <double name="etaInt" value="1.8"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pharesAvantVerre.obj"/>
+      <bsdf type="SheetDielectric">
+        <double name="etaInt" value="1.8"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/plastiqueAutourVitres.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/platBord.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.4 0.4 0.4"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/platBord2.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.4 0.4 0.4"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/platBord3.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.4 0.4 0.4"/>
+      </bsdf>
+    </shape>-->
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pneus.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/pneusExt.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/potEchappement.obj"/>
+      <bsdf name="baseBSDF" type="RoughConductor">
+        <double name="alpha" value="0.01"/>
+        <string name="material" value="chromium"/>
+      </bsdf>
+
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/retroCentralMiroir.obj"/>
+      <bsdf type="Mirror">
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/retroviseurs.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.01"/>
+        <!--<color name="absorbance" value="0.001 0.001 0.001"/>
+        <double name="thickness" value="1.2"/>-->
+        <color name="absorbance" value="0.001 0.5 0.85"/>
+        <double name="thickness" value="2.5"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.07"/>
+          <string name="material" value="aluminium"/>
+        </bsdf>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/retroviseursMiroir.obj"/>
+      <bsdf type="Mirror">
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/rouesEnjoliveursFixations.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.12"/>
+        <double name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/rouesPlaquesDerriereEnjol.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.07"/>
+        <double name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/rouesPlaquettesFreins.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.2 0.2"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/rouesTubesDerriereEnjol.obj"/>
+      <bsdf type="RoughConductor">
+        <double name="alpha" value="0.11"/>
+        <double name="material" value="aluminium"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/siegesCuir.obj"/>
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/cuir.jpg"/>
+        </texture>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/vitres.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+    </shape>
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/volant.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.1"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/lamborghini Aventador/volantCentre.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.3 0.3 0.3"/>
+      </bsdf>
+    </shape>-->
+
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/aerations.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Alu-->
+    <!--
+        <string name="material" value="aluminium"/>
+        -->
+    <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/brakeNuts.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Alu-->
+    <!--
+        <string name="material" value="aluminium"/>
+        -->
+    <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cacheImat2.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cacheRouesAcier.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Alu-->
+    <!--
+        <string name="material" value="aluminium"/>
+        -->
+    <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    -->
+    <!--Vitre devant les phares-->
+    <!--
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cachesPhares.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cachesRoues.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cadreImat.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/carrosserie.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.001"/>
+        <color name="absorbance" value="0.1 0.7 0.7"/>
+        <double name="thickness" value="1.2"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.1"/>
+          <string name="material" value="aluminium"/>
+        </bsdf>
+        -->
+    <!--<color name="albedo" value="1. 1. 1."/>
+
+        -->
+    <!--
+        -->
+    <!--611 549 464 nm-->
+    <!--
+        -->
+    <!--
+        <color name="eta" value="0.36892 0.68384 1.27 "/>
+        <color name="absorption" value="3.2112 2.6165 2.2880"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    -->
+    <!--Cache autour et derrière les phares-->
+    <!--
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/derrierePhares_headlights.obj"/>
+      <bsdf type="RoughConductor">
+        -->
+    <!--Alu-->
+    <!--
+        <string name="material" value="aluminium"/>
+        <double name="alpha" value="0.08"/>
+        <string name="distribution" value="ggx"/>
+        -->
+    <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/derriereRouesV2.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/disquesFreinageV2.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Alu-->
+    <!--
+        <string name="material" value="aluminium"/>
+        -->
+    <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/encadrementVitres.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Alu-->
+    <!--
+        <string name="material" value="aluminium"/>
+        -->
+    <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/enjoliveursV2.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Alu-->
+    <!--
+        <string name="material" value="aluminium"/>
+        -->
+    <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/essuieGlaceG_box15-16_box1.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/essuieGlaceD_box15-16_box1.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/intEnjoliveurs_box8xV2.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Alu-->
+    <!--
+        <string name="material" value="aluminium"/>
+        -->
+    <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/interieur.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.90 0.84 0.79"/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    -->
+    <!--Boitier des lampes-->
+    <!--
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/lampesPhares.obj"/>
+      <bsdf type="Conductor">
+        <string name="material" value="silver"/>
+        -->
+    <!--<color name="albedo" value="0.2 0.2 0.2"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/logo.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Chrome-->
+    <!--
+        <string name="material" value="chromium"/>
+        -->
+    <!--<color name="eta" value="3.20 2.78 2.13"/>
+        <color name="absorption" value="4.26 4.19 3.92"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/lowerLampesPhares.obj"/>
+      <bsdf type="Diffuse">
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/lumiereDroite.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pharesArriereCentre.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pharesArrieresLateraux.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/pneus_tubeV2.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.08 0.08 0.08"/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/potEchappement.obj"/>
+      <bsdf type="Conductor">
+        -->
+    <!--Chrome-->
+    <!--
+        <string name="material" value="chromium"/>
+        -->
+    <!--<color name="eta" value="3.20 2.78 2.13"/>
+        <color name="absorption" value="4.26 4.19 3.92"/>-->
+    <!--
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    -->
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/sol_Box1.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.1 0.1 0.8"/>
+      </bsdf>
+    </shape>-->
+    <!--
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/tableauBord.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/texteLogo.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <x>460.4<x>
+          <y>-67.8</y>
+          <z>-124.8</z>
+        </translation>
+        <scale>
+          <x>1.3</x>
+          <y>1.3</y>
+          <z>1.3</z>
+        </scale>
+        <rotation>
+          <x>0.</x>
+          <y>200.<y>
+          <z>0.<z>
+        </rotation>
+        <translation>
+          <x>-470<x>
+          <y>67.8</y>
+          <z>124.8</z>
+        </translation>
+        <translation>
+          <x>0.<x>
+          <y>-48.</y>
+          <z>52</z>
+        </translation>
+      </transform>
+      <bsdf type="RoughConductor">
+        <string name="material" value="chromium"/>
+        <double name="alpha" value="0.2"/>
+        -->
+    <!--<color name="eta" value="0.22273 0.42791 1.2597 "/>
+        <color name="absorption" value="3.0325 2.3345 1.7531"/>-->
+    <!--
+      </bsdf>
+    </shape>
+
+    -->
+    <!--Ampoules-->
+    <!--
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/verreDevantLampesPhares.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+      -->
+    <!--<light type="MeshLight">
+        <color name="radiance" value="5. 5. 1."/>
+      </light>-->
+    <!--
+      -->
+    <!--<bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+      </bsdf>-->
+    <!--
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/vitres.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.<x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    -->
+    <shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+
+        <scale>
+          <x>5</x>
+          <y>5</y>
+          <z>5</z>
+        </scale>
+      </transform>
+
+      <bsdf type="ShadowCatcher">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+        <double name="highTreshold" value="0.7"/>
+        <double name="ratio" value="20"/>
+      </bsdf>
+    </shape>
+
+
+
+
+  </objects>
+</scene>

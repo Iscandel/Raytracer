@@ -2,6 +2,7 @@
 
 #include "BSDF.h"
 #include "Intersection.h"
+#include "Math.h"
 #include "ObjectFactoryManager.h"
 #include "Scene.h"
 #include "Tools.h"
@@ -17,7 +18,7 @@ DirectLightingMIS::~DirectLightingMIS()
 {
 }
 
-Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray)
+Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, RadianceType::ERadianceType)
 {
 	int depth = 0;
 	Color radiance;
@@ -53,7 +54,7 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 
 						//Generate a shadow ray from the first inter to the light sampled point
 						//Vector3d interToLight = lightInfos.sampledPoint - intersection.myPoint;
-						Ray shadowRay(intersection.myPoint, lightInfos.interToLight, tools::EPSILON, lightInfos.distance/*interToLight.norm()*/ - tools::EPSILON);
+						Ray shadowRay(intersection.myPoint, lightInfos.interToLight, math::EPSILON, lightInfos.distance/*interToLight.norm()*/ - math::EPSILON);
 						Intersection tmp;
 
 						//If the light point is visible from the the inter point
@@ -61,18 +62,18 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 						{
 							Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 							Vector3d localWo = intersection.toLocal(-_ray.direction());
-							double cosTheta = DifferentialGeometry::cosTheta(localWi);
+							real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 							BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 							bsdfInfos.uv = intersection.myUv; //
 
 							//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
 							//Add the MIS heuristic
-							double bsdfPDF = lights[i]->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
-							double weight = (1. / mySampleNumber) * powerHeuristic(0.5, lightInfos.pdf, 0.5, bsdfPDF);//0.5, bsdf->pdf(bsdfInfos));
+							real bsdfPDF = lights[i]->isDelta() ? 0.f : bsdf->pdf(bsdfInfos);
+							real weight = (1.f / mySampleNumber) * powerHeuristic(0.5f, lightInfos.pdf, 0.5f, bsdfPDF);//0.5, bsdf->pdf(bsdfInfos));
 							if (std::isnan(weight))
 							{
-								weight = 0.5;
+								weight = 0.5f;
 								std::cout << "nan value " << lightInfos.pdf << " " << bsdf->pdf(bsdfInfos) << std::endl;
 							}
 								
@@ -108,8 +109,8 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 							lightInfos.normal = toLightInter.myShadingGeometry.myN;
 							lightInfos.sampledPoint = toLightInter.myPoint; //and wi ??????????
 							Light::ptr light = toLightInter.myPrimitive->getLight();
-							double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : light->pdf(intersection.myPoint, lightInfos);
-							double weight = (1. / mySampleNumber)  * powerHeuristic(0.5, bsdfInfos.pdf, 0.5, pdfLight);
+							real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : light->pdf(intersection.myPoint, lightInfos);
+							real weight = (1.f / mySampleNumber)  * powerHeuristic(0.5f, bsdfInfos.pdf, 0.5f, pdfLight);
 
 							Color radianceLight = toLightInter.myPrimitive->le(-shadowRay.direction(), toLightInter.myShadingGeometry.myN);
 							radiance += radianceLight * bsdfValue * weight;
@@ -123,8 +124,8 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 						if (envLight != nullptr)
 						{
 							Color lightValue = envLight->le(shadowRay.direction());
-							double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : envLight->pdf(intersection.myPoint, lightInfos);
-							double weight = (1. / mySampleNumber)  * powerHeuristic(0.5, bsdfInfos.pdf, 0.5, pdfLight);
+							real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : envLight->pdf(intersection.myPoint, lightInfos);
+							real weight = (1.f / mySampleNumber)  * powerHeuristic(0.5f, bsdfInfos.pdf, 0.5f, pdfLight);
 							radiance += lightValue * bsdfValue * weight;
 						}		
 					}

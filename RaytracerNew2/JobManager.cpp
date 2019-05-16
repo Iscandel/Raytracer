@@ -13,7 +13,7 @@ JobManager::JobManager()
 ,myIsShowProgress(false)
 ,myJobsDone(0)
 ,myCoeff(0)
-,myShowValue(0.1)
+,myShowValue(0.1f)
 {
 #ifdef VS_2010
 	myMutex = new sf::Mutex;
@@ -110,7 +110,7 @@ void JobManager::addJobs(const std::vector<std::shared_ptr<Job> >& jobs)
 		myJobs.push_back(jobs[i]);
 	}
 
-	myTotalJobs = myJobs.size();
+	myTotalJobs =(int) myJobs.size();
 
 	//Single threaded processing
 	if(myThreadNumber == 1)
@@ -174,7 +174,7 @@ void JobManager::initJobs()
 ///////////////////////////////////////////////////////////////////////////////
 void JobManager::join()
 {
-	int nbThreads = myThreads.size();
+	int nbThreads = (int)myThreads.size();
 	for (int i = 0; i < myThreadNumber; i++)
 	{
 		myThreads[i]->join();
@@ -240,7 +240,7 @@ void JobManager::showProgress()
 #endif
 	myJobsDone++;
 
-	if ((double)myJobsDone / myTotalJobs > myShowValue * myCoeff)
+	if ((real)myJobsDone / myTotalJobs > myShowValue * myCoeff)
 	{
 		ILogger::log() << myShowValue * myCoeff * 100 << "%\n";
 		myCoeff++;
@@ -269,13 +269,13 @@ void JobManager::showProgress()
 //				Point2d sample = mySampler->getNextSample2D();
 //				//472 113
 //				//477 172
-//				double xx = (double)x + sample.x();
-//				double yy = (double)y + sample.y();
-//				//double xx = 768;(double)x + sample.x();
-//				//double yy = 550;(double)y + sample.y();
+//				real xx = (real)x + sample.x();
+//				real yy = (real)y + sample.y();
+//				//real xx = 768;(real)x + sample.x();
+//				//real yy = 550;(real)y + sample.y();
 //				//				
-//				//double xx = 313;(double)x + sample.x();
-//				//double yy = 416;(double)y + sample.y();
+//				//real xx = 313;(real)x + sample.x();
+//				//real yy = 416;(real)y + sample.y();
 //
 //				Ray ray = myCamera->getRay(xx, yy, mySampler->getNextSample2D());
 //

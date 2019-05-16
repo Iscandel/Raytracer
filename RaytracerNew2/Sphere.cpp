@@ -1,5 +1,5 @@
 #include "Sphere.h"
-#include "Tools.h"
+#include "Math.h"
 #include "Intersection.h"
 #include "GeometricShapeFactory.h"
 #include "Mapping.h"
@@ -11,7 +11,7 @@ Sphere::Sphere(const Parameters& params)
 :myCenter(Point3d(0., 0., 0.))
 , myRadius(0.)
 {
-	myRadius = params.getDouble("radius", 1.);
+	myRadius = params.getReal("radius", 1.);
 	myObjectToWorld = params.getTransform("toWorld", Transform::ptr(new Transform));
 	//myCenter = myObjectToWorld->
 }
@@ -35,17 +35,17 @@ Normal3d Sphere::normal(const Point3d& intersection) const
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-bool Sphere::intersection(const Ray& ray, double& t, Point2d& uv) //DifferentialGeometry& trueGeom,	DifferentialGeometry& shadingGeom, bool shadowRay)
+bool Sphere::intersection(const Ray& ray, real& t, Point2d& uv) //DifferentialGeometry& trueGeom,	DifferentialGeometry& shadingGeom, bool shadowRay)
 {
 	//Transform the ray to an object space ray
 	Ray localRay = myObjectToWorld->inv().transform(ray);
 	//localRay = ray;
 	Vector3d sphereToOrig(myCenter, localRay.myOrigin);
-	double a = 1;//dx * dx + dy * dy + dz * dz;
-	double b = 2 * localRay.direction().dot(sphereToOrig);
-	double c = sphereToOrig.dot(sphereToOrig) - myRadius * myRadius;
+	real a = 1;//dx * dx + dy * dy + dz * dz;
+	real b = 2 * localRay.direction().dot(sphereToOrig);
+	real c = sphereToOrig.dot(sphereToOrig) - myRadius * myRadius;
 
-	double delta = b * b - 4 * a * c;
+	real delta = b * b - 4 * a * c;
 
 	//// screen plane in world space coordinates
 	//m_WX1 = -4, m_WX2 = 4, m_WY1 = m_SY = 3, m_WY2 = -3;
@@ -59,8 +59,8 @@ bool Sphere::intersection(const Ray& ray, double& t, Point2d& uv) //Differential
 	}
 	else
 	{
-		double t1 = (-b + sqrt(delta)) / (2 * a);
-		double t2 = (-b - sqrt(delta)) / (2 * a);
+		real t1 = (-b + sqrt(delta)) / (2 * a);
+		real t2 = (-b - sqrt(delta)) / (2 * a);
 	
 		//if (t1 <= 0) t = t2;
 		//if (t2 <= 0) t = t1;
@@ -68,8 +68,8 @@ bool Sphere::intersection(const Ray& ray, double& t, Point2d& uv) //Differential
 		//	t = std::min(t1, t2);
 		//bool intersect = t >= ray.myMinT && t <= ray.myMaxT;
 
-		double tNear = t1;
-		double tFar = t2;
+		real tNear = t1;
+		real tFar = t2;
 		if (tNear > tFar)
 			std::swap(tNear, tFar);
 
@@ -99,8 +99,8 @@ bool Sphere::intersection(const Ray& ray, double& t, Point2d& uv) //Differential
 		{
 			//UV mapping from spherical coords
 			Vector3d normalizedInterPoint = ray.getPointAt(t).normalized();
-			uv.x() = sphericalPhiFromCartesian(normalizedInterPoint) / (2 * tools::PI);
-			uv.y() = sphericalThetaFromCartesian(normalizedInterPoint) / tools::PI;
+			uv.x() = sphericalPhiFromCartesian(normalizedInterPoint) / (2 * math::PI);
+			uv.y() = sphericalThetaFromCartesian(normalizedInterPoint) / math::PI;
 			return true;
 		}
 		return false;
@@ -128,7 +128,7 @@ void Sphere::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 	////Point3d center = myObjectToWorld->transform(Point3d(0., 0., 0.));
 	//Point3d center = myCenter; //always 0, 0, 0
 
-	//double right = std::sqrt(p.y() * (1 - p.y()));
+	//real right = std::sqrt(p.y() * (1 - p.y()));
 	//sampled.x() = center.x() + 2 * myRadius * std::cos(2 * tools::PI * p.x()) * right;
 	//sampled.y() = center.y() + 2 * myRadius * std::sin(2 * tools::PI * p.x()) * right;
 	//sampled.z() = center.z() + myRadius * (1 - 2 * p.y());
@@ -136,17 +136,18 @@ void Sphere::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 	//sampled = myObjectToWorld->transform(sampled);
 	//n = normal(sampled);
 
-	double theta = 2. * tools::PI * p.x();
-	double phi = std::acos(2 * p.y() - 1.);
+	real theta = 2.f * math::PI * p.x();
+	real phi = std::acos(2 * p.y() - 1.f);
 
-	double u = std::cos(phi);
-	double sqrtVal = std::sqrt(1 - u * u);
+	real u = std::cos(phi);
+	real sqrtVal = std::sqrt(1 - u * u);
 	sampled.x() = sqrtVal * std::cos(theta);
 	sampled.y() = sqrtVal * std::sin(theta);
 	sampled.z() = u;
 
 	sampled *= myRadius;
 	n = myObjectToWorld->transform(normal(sampled));
+	n.normalize(); //new
 	sampled = myObjectToWorld->transform(sampled);
 	
 }
@@ -159,22 +160,22 @@ void Sphere::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 //	\|t/  <- solid angle formed at pFrom, with theta (t)
 // (sin theta)^2 = r^2 / d^2 (d is the distance from sphere center to "bsdf" inter)
 //-> cos theta = ...
-double Sphere::pdf(const Point3d& pFrom, const Point3d& sampled, const Normal3d& n)
+real Sphere::pdf(const Point3d& pFrom, const Point3d& sampled, const Normal3d& n)
 {
 	//return 1. / (4 * tools::PI);
-	Point3d center = myObjectToWorld->transform(Point3d(0., 0., 0.));
+	Point3d center = myObjectToWorld->transform(Point3d(0.f, 0.f, 0.f));
 	Vector3d interToCenter = pFrom - center;
-	double squaredDistance = interToCenter.squaredNorm();//interToCenter.x() * interToCenter.x() + interToCenter.y() * interToCenter.y() + interToCenter.z() * interToCenter.z();
+	real squaredDistance = interToCenter.squaredNorm();//interToCenter.x() * interToCenter.x() + interToCenter.y() * interToCenter.y() + interToCenter.z() * interToCenter.z();
 
 	if (n.dot(interToCenter) < 0.)
 		return 0.;
 
 	//If sampled point is inside the sphere, use a uniform weight
-	if (squaredDistance - myRadius * myRadius < tools::EPSILON)
+	if (squaredDistance - myRadius * myRadius < math::EPSILON)
 		return GeometricShape::pdf(pFrom, sampled, n);
 
-	double sinTheta2 = myRadius * myRadius / squaredDistance;
-	double cosTheta = std::sqrt(std::max(0., 1 - sinTheta2));
+	real sinTheta2 = myRadius * myRadius / squaredDistance;
+	real cosTheta = std::sqrt(std::max((real)0., 1 - sinTheta2));
 
 	return Mapping::uniformConePdf(cosTheta);
 

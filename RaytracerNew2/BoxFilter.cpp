@@ -3,7 +3,7 @@
 #include "ObjectFactoryManager.h"
 
 
-BoxFilter::BoxFilter(double radiusX, double radiusY)
+BoxFilter::BoxFilter(real radiusX, real radiusY)
 :ReconstructionFilter(radiusX, radiusY)
 {
 	precompute();

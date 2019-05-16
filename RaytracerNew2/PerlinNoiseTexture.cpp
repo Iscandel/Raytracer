@@ -23,11 +23,11 @@ PerlinNoiseTexture::PerlinNoiseTexture(const Parameters& params)
 		p[256 + i] = p[i] = permutation[i];
 	}
 
-	myColor1 = Color(0.4, 0.2, 0.8);
-	myColor2 = Color(0.1, 0.7, 0.3);
+	myColor1 = Color::fromRGB(0.4f, 0.2f, 0.8f);
+	myColor2 = Color::fromRGB(0.1f, 0.7f, 0.3f);
 
 
-	persistence = 0.5;
+	persistence = 0.5f;
 	NumberOfOctaves = 4;
 }
 
@@ -38,8 +38,8 @@ PerlinNoiseTexture::~PerlinNoiseTexture()
 
 Color PerlinNoiseTexture::eval(const Point2d & uv)
 {
-	//double noiseCoef = 0;
-	//double fac = 0.05;
+	//real noiseCoef = 0;
+	//real fac = 0.05;
 	//for (int level = 1; level < 10; level++)
 	//{
 	//	noiseCoef += (1.0f / level)
@@ -50,53 +50,53 @@ Color PerlinNoiseTexture::eval(const Point2d & uv)
 	//	
 	//return noiseCoef * myColor1 + (1. - noiseCoef) * myColor2;
 
-	double coeff = PerlinNoise_2D(uv.x() * 100., uv.y()* 100.);
-	return coeff * myColor1 + (1. - coeff) * myColor2;
+	real coeff = PerlinNoise_2D(uv.x() * 100.f, uv.y() * 100.f);
+	return coeff * myColor1 + (1.f - coeff) * myColor2;
 }
 
-double PerlinNoiseTexture::Noise1(int x, int y)
+real PerlinNoiseTexture::Noise1(int x, int y) //int
 {
 	int n = x + y * 57;
 	n = (n << 13) ^ n;
-	return (1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
+	return (1.0f - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0f);
 }
 
-double PerlinNoiseTexture::SmoothedNoise_1(double x, double y) {
-	double corners = (Noise1(x - 1, y - 1) + Noise1(x + 1, y - 1) + Noise1(x - 1, y + 1) + Noise1(x + 1, y + 1)) / 16;
-	double sides = (Noise1(x - 1, y) + Noise1(x + 1, y) + Noise1(x, y - 1) + Noise1(x, y + 1)) / 8;
-	double center = Noise1(x, y) / 4;
+real PerlinNoiseTexture::SmoothedNoise_1(int x, int y) {
+	real corners = (Noise1(x - 1, y - 1) + Noise1(x + 1, y - 1) + Noise1(x - 1, y + 1) + Noise1(x + 1, y + 1)) / 16;
+	real sides = (Noise1(x - 1, y) + Noise1(x + 1, y) + Noise1(x, y - 1) + Noise1(x, y + 1)) / 8;
+	real center = Noise1(x, y) / 4;
 	return corners + sides + center;
 }
 
-double PerlinNoiseTexture::InterpolatedNoise_1(double x, double y)
+real PerlinNoiseTexture::InterpolatedNoise_1(real x, real y)
 {
 	int integer_X = int(x);
-	double fractional_X = x - integer_X;
+	real fractional_X = x - integer_X;
 
 	int integer_Y = int(y);
-	double fractional_Y = y - integer_Y;
+	real fractional_Y = y - integer_Y;
 
-	double v1 = SmoothedNoise_1(integer_X, integer_Y);
-	double v2 = SmoothedNoise_1(integer_X + 1, integer_Y);
-	double v3 = SmoothedNoise_1(integer_X, integer_Y + 1);
-	double v4 = SmoothedNoise_1(integer_X + 1, integer_Y + 1);
+	real v1 = SmoothedNoise_1(integer_X, integer_Y);
+	real v2 = SmoothedNoise_1(integer_X + 1, integer_Y);
+	real v3 = SmoothedNoise_1(integer_X, integer_Y + 1);
+	real v4 = SmoothedNoise_1(integer_X + 1, integer_Y + 1);
 
-	double i1 = lerp(fractional_X, v1, v2);
-	double i2 = lerp(fractional_X, v3, v4);
+	real i1 = lerp(fractional_X, v1, v2);
+	real i2 = lerp(fractional_X, v3, v4);
 
 	return lerp(fractional_Y, i1, i2);
 }
 
 
-double PerlinNoiseTexture::PerlinNoise_2D(double x, double y)
+real PerlinNoiseTexture::PerlinNoise_2D(real x, real y)
 {
-	double total = 0;
+	real total = 0;
 	int n = NumberOfOctaves - 1;
 
-	for (unsigned int i = 0; i < n; i++)
+	for (unsigned int i = 0; i < (unsigned int) n; i++)
 	{
-		double frequency = std::pow(2, i);
-		double amplitude = std::pow(persistence, i);
+		real frequency = (real)std::pow(2, i);
+		real amplitude = (real)std::pow(persistence, i);
 
 		total = total + InterpolatedNoise_1(x * frequency, y * frequency) * amplitude;
 	}
@@ -109,14 +109,14 @@ RT_REGISTER_TYPE(PerlinNoiseTexture, Texture)
 
 
 //public final class ImprovedNoise {
-//	static public double noise(double x, double y, double z) {
+//	static public real noise(real x, real y, real z) {
 //		int X = (int)Math.floor(x) & 255,                  // FIND UNIT CUBE THAT
 //			Y = (int)Math.floor(y) & 255,                  // CONTAINS POINT.
 //			Z = (int)Math.floor(z) & 255;
 //		x -= Math.floor(x);                                // FIND RELATIVE X,Y,Z
 //		y -= Math.floor(y);                                // OF POINT IN CUBE.
 //		z -= Math.floor(z);
-//		double u = fade(x),                                // COMPUTE FADE CURVES
+//		real u = fade(x),                                // COMPUTE FADE CURVES
 //			v = fade(y),                                // FOR EACH OF X,Y,Z.
 //			w = fade(z);
 //		int A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z,      // HASH COORDINATES OF
@@ -131,11 +131,11 @@ RT_REGISTER_TYPE(PerlinNoiseTexture, Texture)
 //				lerp(u, grad(p[AB + 1], x, y - 1, z - 1),
 //					grad(p[BB + 1], x - 1, y - 1, z - 1))));
 //	}
-//	static double fade(double t) { return t * t * t * (t * (t * 6 - 15) + 10); }
-//	static double lerp(double t, double a, double b) { return a + t * (b - a); }
-//	static double grad(int hash, double x, double y, double z) {
+//	static real fade(real t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+//	static real lerp(real t, real a, real b) { return a + t * (b - a); }
+//	static real grad(int hash, real x, real y, real z) {
 //		int h = hash & 15;                      // CONVERT LO 4 BITS OF HASH CODE
-//		double u = h<8 ? x : y,                 // INTO 12 GRADIENT DIRECTIONS.
+//		real u = h<8 ? x : y,                 // INTO 12 GRADIENT DIRECTIONS.
 //			v = h<4 ? y : h == 12 || h == 14 ? x : z;
 //		return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 //	}

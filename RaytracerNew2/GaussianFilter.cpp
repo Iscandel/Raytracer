@@ -1,8 +1,9 @@
 #include "GaussianFilter.h"
 
+#include "Math.h"
 #include "ObjectFactoryManager.h"
 
-GaussianFilter::GaussianFilter(double radiusX, double radiusY, double a, double w)
+GaussianFilter::GaussianFilter(real radiusX, real radiusY, real a, real w)
 :ReconstructionFilter(radiusX, radiusY)
 ,myAlpha(a)
 ,myOmega(w)
@@ -15,8 +16,8 @@ GaussianFilter::GaussianFilter(double radiusX, double radiusY, double a, double 
 GaussianFilter::GaussianFilter(const Parameters& params)
 : ReconstructionFilter(params)
 {
-	myAlpha = params.getDouble("alpha", 1 / (2. * 0.5 * 0.5));
-	myOmega = params.getDouble("omega", myRadiusX);
+	myAlpha = params.getReal("alpha", 1 / (2. * 0.5 * 0.5));
+	myOmega = params.getReal("omega", myRadiusX);
 
 	precompute();
 }
@@ -29,16 +30,16 @@ GaussianFilter::~GaussianFilter(void)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double GaussianFilter::getValue(double x, double y)
+real GaussianFilter::getValue(real x, real y)
 {
 	return func1D(x) * func1D(y);
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double GaussianFilter::func1D(double val)
+real GaussianFilter::func1D(real val)
 {
-	return std::max(0., std::exp(-myAlpha * val * val) - std::exp(-myAlpha * myOmega * myOmega));
+	return std::max((real)0., math::fastExp(-myAlpha * val * val) - math::fastExp(-myAlpha * myOmega * myOmega));
 }
 
 RT_REGISTER_TYPE(GaussianFilter, ReconstructionFilter)

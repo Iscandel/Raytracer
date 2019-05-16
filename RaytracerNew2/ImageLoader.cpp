@@ -52,7 +52,7 @@ void ImageLoader::load(const std::string & path, Array2D<Color>& array)
 			for (int j = 0; j < height; j++)
 			{
 				Imf_2_2::Rgba& rgba = pixels[j][i];
-				array(i, j) = Color(rgba.r, rgba.g, rgba.b);	
+				array(i, j) = Color::fromRGB(rgba.r, rgba.g, rgba.b);//Color(rgba.r, rgba.g, rgba.b);
 			}
 		}
 
@@ -71,7 +71,7 @@ void ImageLoader::load(const std::string & path, Array2D<Color>& array)
 			for (unsigned int x = 0; x < im.getSize().x; x++)
 			{
 				sf::Color col = im.getPixel(x, y);
-				array(x, y) = Color(col.r / 255., col.g / 255., col.b / 255.);
+				array(x, y) = Color::fromRGB(col.r / 255.f, col.g / 255.f, col.b / 255.f);//Color(col.r / 255.f, col.g / 255.f, col.b / 255.f);
 			}
 		}
 

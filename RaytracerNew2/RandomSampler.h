@@ -13,7 +13,7 @@ public:
 
 	Point2d getNextSample2D();
 
-	double getNextSample1D();
+	real getNextSample1D();
 
 	//Override
 	Sampler::ptr clone() override;

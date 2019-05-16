@@ -86,7 +86,7 @@ protected:
 	int myJobsDone;
 	int myTotalJobs;
 	int myCoeff;
-	double myShowValue;
+	real myShowValue;
 };
 
 

@@ -1,6 +1,7 @@
 #include "PLYLoader.h"
 
 #include "Logger.h"
+#include "Tools.h"
 
 #include <fstream>
 
@@ -104,8 +105,8 @@ bool PLYLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& ve
 		std::string line;
 		std::getline(file, line);
 		std::istringstream stream(line);
-		double no;
-		double tmp[3];
+		real no;
+		real tmp[3];
 		stream >> no >> tmp[0] >> tmp[1] >> tmp[2];
 		Point3d verticeTriangle[3];
 		verticeTriangle[0] = vertices[tmp[0]];

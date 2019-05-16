@@ -8,6 +8,7 @@ class ConstantTexture :
 {
 public:
 	ConstantTexture(const Parameters&);
+	ConstantTexture(real value);
 	ConstantTexture(const Color& color);
 	~ConstantTexture();
 

@@ -17,14 +17,17 @@ class Transform
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
 public:
 	typedef std::shared_ptr<Transform> ptr;
+	typedef Eigen::Matrix<real, 4, 4> Matrix4r;
+
 public:
 	Transform(void);
-	Transform(double values[16]);
-	Transform(double rotation[3], const Point3d& translation, const Point3d& scale = Point3d(1., 1., 1.));
-	Transform(const Eigen::Matrix4d& transform);
-	Transform(const Eigen::Matrix4d& transform, const Eigen::Matrix4d& invTransform);
+	Transform(real values[16]);
+	Transform(real rotation[3], const Point3d& translation, const Point3d& scale = Point3d(1., 1., 1.));
+	Transform(const Matrix4r& transform);
+	Transform(const Matrix4r& transform, const Matrix4r& invTransform);
 	~Transform(void);
 
 	inline Point3d transform(const Point3d &point);
@@ -47,7 +50,7 @@ public:
 	inline Transform operator * (const Transform& t);
 	inline Transform& operator *= (const Transform& t);
 
-	static Transform identity() { return Transform(Eigen::Matrix4d::Identity(), Eigen::Matrix4d::Identity()); }
+	static Transform identity() { return Transform(Matrix4r::Identity(), Matrix4r::Identity()); }
 
 	///////////////////////////////////////////////////////////////////////////////
 	/// \brief Create a translation matrix
@@ -58,17 +61,19 @@ public:
 	/// \brief Create a scale matrix
 	///////////////////////////////////////////////////////////////////////////////
 	static Transform scale(const Point3d& s);
-	static Transform rotateX(double angle);
-	static Transform rotateY(double angle);
-	static Transform rotateZ(double angle);
+	static Transform rotateX(real angle);
+	static Transform rotateY(real angle);
+	static Transform rotateZ(real angle);
 
 	static Transform fromLookAt(const Point3d& origin, const Point3d& lookAt, const Vector3d& up);
 
 	friend std::ostream& operator << (std::ostream& o, const Transform& t);
 
 protected:
-	Eigen::Matrix4d myMatrix;
-	Eigen::Matrix4d myInvMatrix;
+	Matrix4r myMatrix;
+	Matrix4r myInvMatrix;
+	//Eigen::Matrix4d myMatrix;
+	//Eigen::Matrix4d myInvMatrix;
 };
 
 //=============================================================================
@@ -87,7 +92,7 @@ inline void Transform::transform(const Point3d & inPoint, Point3d & outPoint)
 	outPoint.x() = myMatrix(0, 0) * inPoint.x() + myMatrix(0, 1) * inPoint.y() + myMatrix(0, 2) * inPoint.z() + myMatrix(0, 3);
 	outPoint.y() = myMatrix(1, 0) * inPoint.x() + myMatrix(1, 1) * inPoint.y() + myMatrix(1, 2) * inPoint.z() + myMatrix(1, 3);
 	outPoint.z() = myMatrix(2, 0) * inPoint.x() + myMatrix(2, 1) * inPoint.y() + myMatrix(2, 2) * inPoint.z() + myMatrix(2, 3);
-	double w	 = myMatrix(3, 0) * inPoint.x() + myMatrix(3, 1) * inPoint.y() + myMatrix(3, 2) * inPoint.z() + myMatrix(3, 3);
+	real w	 = myMatrix(3, 0) * inPoint.x() + myMatrix(3, 1) * inPoint.y() + myMatrix(3, 2) * inPoint.z() + myMatrix(3, 3);
 
 	if (w != 1. && w != 0.)
 		outPoint /= w;

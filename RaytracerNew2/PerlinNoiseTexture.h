@@ -13,14 +13,14 @@ public:
 
 	Color eval(const Point2d& uv) override;
 
-	double noise(double x, double y, double z) {
+	real noise(real x, real y, real z) {
 		int X = (int)floor(x) & 255,                  // FIND UNIT CUBE THAT
 			Y = (int)floor(y) & 255,                  // CONTAINS POINT.
 			Z = (int)floor(z) & 255;
 		x -= floor(x);                                // FIND RELATIVE X,Y,Z
 		y -= floor(y);                                // OF POINT IN CUBE.
 		z -= floor(z);
-		double u = fade(x),                                // COMPUTE FADE CURVES
+		real u = fade(x),                                // COMPUTE FADE CURVES
 			v = fade(y),                                // FOR EACH OF X,Y,Z.
 			w = fade(z);
 		int A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z,      // HASH COORDINATES OF
@@ -35,11 +35,11 @@ public:
 				lerp(u, grad(p[AB + 1], x, y - 1, z - 1),
 					grad(p[BB + 1], x - 1, y - 1, z - 1))));
 	}
-	double fade(double t) { return t * t * t * (t * (t * 6 - 15) + 10); }
-	double lerp(double t, double a, double b) { return a + t * (b - a); }
-	double grad(int hash, double x, double y, double z) {
+	real fade(real t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+	real lerp(real t, real a, real b) { return a + t * (b - a); }
+	real grad(int hash, real x, real y, real z) {
 		int h = hash & 15;                      // CONVERT LO 4 BITS OF HASH CODE
-		double u = h<8 ? x : y,                 // INTO 12 GRADIENT DIRECTIONS.
+		real u = h<8 ? x : y,                 // INTO 12 GRADIENT DIRECTIONS.
 			v = h<4 ? y : h == 12 || h == 14 ? x : z;
 		return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 	}
@@ -47,16 +47,16 @@ public:
 
 
 
-	double PerlinNoiseTexture::PerlinNoise_2D(double x, double y);
-	double PerlinNoiseTexture::InterpolatedNoise_1(double x, double y);
-	double PerlinNoiseTexture::SmoothedNoise_1(double x, double y);
-	double PerlinNoiseTexture::Noise1(int x, int y);
+	real PerlinNoiseTexture::PerlinNoise_2D(real x, real y);
+	real PerlinNoiseTexture::InterpolatedNoise_1(real x, real y);
+	real PerlinNoiseTexture::SmoothedNoise_1(int x, int y);
+	real PerlinNoiseTexture::Noise1(int x, int y);
 
-	double p[512];
+	int p[512];
 	Color myColor1;
 	Color myColor2;
 
-	double persistence;
+	real persistence;
 	int NumberOfOctaves;
 };
 

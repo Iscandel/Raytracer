@@ -18,24 +18,24 @@ public:
 
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample) override;
 
-	double pdf(const BSDFSamplingInfos& infos) override;
+	real pdf(const BSDFSamplingInfos& infos) override;
 
 	//=============================================================================
 	///////////////////////////////////////////////////////////////////////////////
-	Color fresnel(double etaExt, double etaInt, double cosThetaI, double& etaI, double& etaT, double& relativeEta, double& cosThetaT);
+	Color fresnel(real etaExt, real etaInt, real cosThetaI, real& etaI, real& etaT, real& relativeEta, real& cosThetaT);
 
-	Color evalReflection(const BSDFSamplingInfos & infos, const Color& fr, double alpha);
+	Color evalReflection(const BSDFSamplingInfos & infos, const Color& fr, real alpha);
 
 	BSDF::ptr myTopBSDF;
 	BSDF::ptr myBaseBSDF;
 
 	MicrofacetDistribution myDistribution;
 
-	double myEtaExt;
-	double myEtaInt;
-	double myAlphaTop;
-	double myAlphaBase;
-	double myThickness;
+	real myEtaExt;
+	real myEtaInt;
+	real myAlphaTop;
+	real myAlphaBase;
+	real myThickness;
 	Color myAbsorbance;
 	Rng myRng;
 

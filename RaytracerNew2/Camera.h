@@ -33,14 +33,14 @@ public:
 	///
 	/// \param f The focal length.
 	///////////////////////////////////////////////////////////////////////////
-	//void setFocal(double f) {myFocal = f;}
+	//void setFocal(real f) {myFocal = f;}
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Affects the pixel size.
 	///
 	/// \param meter the pixel length (assuming square pixels).
 	///////////////////////////////////////////////////////////////////////////
-	//void setMeterPerPixel(double meter) {myMPerPixel = meter;}
+	//void setMeterPerPixel(real meter) {myMPerPixel = meter;}
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Affects the screen size.
@@ -68,7 +68,7 @@ public:
 	///		|/____ x
 	///
 	///////////////////////////////////////////////////////////////////////////
-	virtual Ray getRay(double px, double py, const Point2d& apertureSample) = 0;
+	virtual Ray getRay(real px, real py, const Point2d& apertureSample) = 0;
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Affects the camera world transform.
@@ -115,8 +115,8 @@ protected:
 
 	bool myNeedDoFSample;
 
-	double myLensRadius;
-	double myFocalPlane;
+	real myLensRadius;
+	real myFocalPlane;
 };
 
 

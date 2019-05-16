@@ -13,21 +13,21 @@ public:
 	DirectLightingMIS(const Parameters& params);
 	~DirectLightingMIS();
 
-	Color li(Scene& scene, Sampler::ptr, const Ray& ray) override;
+	Color li(Scene& scene, Sampler::ptr, const Ray& ray, RadianceType::ERadianceType radianceType = RadianceType::ALL_RADIANCE) override;
 
-	double balanceHeuristic(double nSampleFirst, double pdfFirst, double nSampleSec, double pdfSec)
+	real balanceHeuristic(real nSampleFirst, real pdfFirst, real nSampleSec, real pdfSec)
 	{
 		return (nSampleFirst * pdfFirst) / (nSampleFirst * pdfFirst + nSampleSec * pdfSec);
 	}
 
-	double powerHeuristic(double nSampleFirst, double pdfFirst, double nSampleSec, double pdfSec)
+	real powerHeuristic(real nSampleFirst, real pdfFirst, real nSampleSec, real pdfSec)
 	{
-		double left = (nSampleFirst * pdfFirst) * (nSampleFirst * pdfFirst);
-		double right = (nSampleSec * pdfSec) * (nSampleSec * pdfSec);
+		real left = (nSampleFirst * pdfFirst) * (nSampleFirst * pdfFirst);
+		real right = (nSampleSec * pdfSec) * (nSampleSec * pdfSec);
 		return left / (left + right);
 	}
 
-	double powerHeuristic(int nSampleFirst, double pdfFirst, int nSampleSec, double pdfSec, double beta)
+	real powerHeuristic(int nSampleFirst, real pdfFirst, int nSampleSec, real pdfSec, real beta)
 	{
 		return std::pow(nSampleFirst * pdfFirst, beta) / std::pow(nSampleFirst * pdfFirst + nSampleSec * pdfSec, beta);
 	}

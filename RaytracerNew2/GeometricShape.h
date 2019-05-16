@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "Parameters.h"
 #include "ISampledShape.h"
+#include "RaytracerObject.h"
 
 class Intersection;
 
@@ -18,7 +19,7 @@ class Intersection;
 /// \brief Superclass of shape. Provides abstract functions to compute geometric
 /// quantities related to the shape.
 ///////////////////////////////////////////////////////////////////////////////
-class GeometricShape : public ISampledShape
+class GeometricShape : public ISampledShape, public RaytracerObject
 {
 public:
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -70,9 +71,9 @@ public:
 	/// \param shadowRay Indicates whether the ray is a shadow ray (faster 
 	/// intersection routines) of not.
 	///////////////////////////////////////////////////////////////////////////
-	//virtual bool intersection(const Ray& ray, double& t, DifferentialGeometry& trueGeom, DifferentialGeometry& shadingGeom, bool shadowRay = false) = 0;
+	//virtual bool intersection(const Ray& ray, real& t, DifferentialGeometry& trueGeom, DifferentialGeometry& shadingGeom, bool shadowRay = false) = 0;
 	virtual bool intersection(const Ray& ray,
-		double& t,
+		real& t,
 		Point2d& uv) = 0;
 
 	///////////////////////////////////////////////////////////////////////////

@@ -16,18 +16,19 @@ RecursivePathTracingMIS::~RecursivePathTracingMIS()
 {
 }
 
-Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray)
+Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, RadianceType::ERadianceType radianceType)
 {
 	Intersection intersection;
 	Color throughput(1.);
-	double eta = 1.;
+	real eta = 1.;
 	return li(scene, sampler, ray, 0, intersection, throughput, eta);
 }
 
-Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, int depth, const Intersection& inter, Color& throughput, double& eta)
+//Radiance type is not used and should be used !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray, int depth, const Intersection& inter, Color& throughput, real& eta)
 {
 	Color radiance;
-	const double proba = 0.8;
+	const real proba = 0.8f;
 
 	Intersection intersection = inter;
 	if (depth == 0 && !scene.computeIntersection(ray, intersection))
@@ -63,7 +64,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 			{
 				Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 				Vector3d localWo = intersection.toLocal(-ray.direction());
-				double cosTheta = DifferentialGeometry::cosTheta(localWi);
+				real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 				BSDFSamplingInfos bsdfInfos(localWi, localWo);
 				bsdfInfos.uv = intersection.myUv; //
@@ -72,8 +73,8 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 				//Add the MIS heuristic
 				//Same as specular BSDF : delta lights cannot be intersected during 
 				//BSDF sampling. Then, MIS is not applyable and the "weight" is 1
-				double bsdfPDF = lights[i]->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
-				double weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
+				real bsdfPDF = lights[i]->isDelta() ? 0.f : bsdf->pdf(bsdfInfos);
+				real weight = powerHeuristic(lightInfos.pdf, bsdfPDF);
 
 				radiance += value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 			}
@@ -87,7 +88,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 		{
 			Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 			Vector3d localWo = intersection.toLocal(-ray.direction());
-			double cosTheta = DifferentialGeometry::cosTheta(localWi);
+			real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 			BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 			bsdfInfos.uv = intersection.myUv;
@@ -96,9 +97,9 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 			
 			//Same as specular BSDF : delta lights cannot be intersected during 
 			//BSDF sampling. Then, MIS is not applyable and the "weight" is 1
-			double bsdfPDF = lightInfos.light->isDelta() ? 0. : bsdf->pdf(bsdfInfos);
+			real bsdfPDF = lightInfos.light->isDelta() ? 0.f : bsdf->pdf(bsdfInfos);
 			//Add the MIS heuristic
-			double weight = powerHeuristic(lightInfos.pdf, bsdfPDF);//bsdf->pdf(bsdfInfos));
+			real weight = powerHeuristic(lightInfos.pdf, bsdfPDF);//bsdf->pdf(bsdfInfos));
 
 			radiance += value * bsdf->eval(bsdfInfos) * cosTheta * weight;
 			if (radiance.isNan())
@@ -130,13 +131,13 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 	//	{
 	//		Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 	//		Vector3d localWo = intersection.toLocal(-ray.direction());
-	//		double cosTheta = DifferentialGeometry::cosTheta(localWi);
+	//		real cosTheta = DifferentialGeometry::cosTheta(localWi);
 
 	//		BSDFSamplingInfos bsdfInfos(localWi, localWo);
 
 	//		//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
 	//		//Add the MIS heuristic
-	//		double weight = powerHeuristic(lightInfos.pdf, bsdf->pdf(bsdfInfos));
+	//		real weight = powerHeuristic(lightInfos.pdf, bsdf->pdf(bsdfInfos));
 
 	//		if (bsdf && lightInfos.pdf > 0) {
 	//			radiance += lights.size() * (lightInfos.intensity * bsdf->eval(bsdfInfos) * cosTheta * weight) / (lightInfos.pdf);
@@ -175,8 +176,8 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 			//sampling with MIS is not valid for specular (delta) mats. The only valid technique is
 			//to sample the BRDF. Since there is only one valid technique, MIS cannot be applied 
 			//(ie light pdf = 0)
-			double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : light->pdf(intersection.myPoint, lightInfos);
-			double weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
+			real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : light->pdf(intersection.myPoint, lightInfos);
+			real weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 
 			Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
 			radiance += radianceLight * bsdfValue * weight;
@@ -192,8 +193,8 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 		if (envLight != nullptr)
 		{
 			Color lightValue = envLight->le(reflected.direction(), Normal3d());
-			double pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : envLight->pdf(intersection.myPoint, lightInfos);
-			double weight = powerHeuristic(bsdfInfos.pdf, pdfLight); //check pdf envlight = 0
+			real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : envLight->pdf(intersection.myPoint, lightInfos);
+			real weight = powerHeuristic(bsdfInfos.pdf, pdfLight); //check pdf envlight = 0
 			if (!std::isnan(weight))
 				radiance += lightValue * bsdfValue * weight;
 		}
@@ -207,7 +208,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 	if (depth > 3 && depth < myMaxDepth)
 	{
 		depth++;
-		double stopVal = 0.8;//std::min(0.9, throughput.luminance() * eta * eta);
+		real stopVal = 0.8f;//std::min(0.9, throughput.luminance() * eta * eta);
 		if (sampler->getNextSample1D() < stopVal)//proba)
 		{
 			throughput /= stopVal;
@@ -255,7 +256,7 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 //{
 //	Color radiance;
-//	const double proba = 0.8;
+//	const real proba = 0.8;
 //	Color throughput(1.);
 //	Intersection intersection;
 //	Ray ray = _ray;
@@ -304,13 +305,13 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //			{
 //				Vector3d localWi = intersection.toLocal(lightInfos.wi);
 //				Vector3d localWo = intersection.toLocal(-ray.direction());
-//				double cosTheta = DifferentialGeometry::cosTheta(localWi);
+//				real cosTheta = DifferentialGeometry::cosTheta(localWi);
 //
 //				BSDFSamplingInfos bsdfInfos(localWi, localWo);
 //
 //				//Compute the radiance using a MC estimator : (1/N) * (bsdf * (light * cosT) / pdf))
 //				//Add the MIS heuristic
-//				double weight = powerHeuristic(0.5, lightInfos.pdf, 0.5, bsdf->pdf(bsdfInfos));
+//				real weight = powerHeuristic(0.5, lightInfos.pdf, 0.5, bsdf->pdf(bsdfInfos));
 //
 //				if (bsdf && lightInfos.pdf > 0) {
 //					radiance += throughput * (lightInfos.intensity * bsdf->eval(bsdfInfos) * cosTheta * weight) / (lightInfos.pdf);
@@ -343,7 +344,7 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //				lightInfos.normal = toLightInter.myShadingGeometry.myN;
 //				lightInfos.samplingPoint = toLightInter.myPoint; //and wi ??????????
 //				Light::ptr light = toLightInter.myPrimitive->getLight();
-//				double weight = powerHeuristic(0.5, bsdfInfos.pdf, 0.5, light->pdf(intersection.myPoint, lightInfos));
+//				real weight = powerHeuristic(0.5, bsdfInfos.pdf, 0.5, light->pdf(intersection.myPoint, lightInfos));
 //
 //				Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
 //				radiance += throughput * radianceLight * bsdfValue * weight;
@@ -359,7 +360,7 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //			if (envLight != nullptr)
 //			{
 //				Color lightValue = envLight->le(reflected.direction(), Normal3d());
-//				double weight = powerHeuristic(0.5, bsdfInfos.pdf, 0.5, envLight->pdf(intersection.myPoint, lightInfos)); //check pdf envlight = 0
+//				real weight = powerHeuristic(0.5, bsdfInfos.pdf, 0.5, envLight->pdf(intersection.myPoint, lightInfos)); //check pdf envlight = 0
 //				if (!std::isnan(weight))
 //					radiance += throughput * lightValue * bsdfValue * weight;
 //			}
@@ -372,7 +373,7 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //		if (depth > 3)
 //		{
 //
-//			double stopVal = std::min(0.8, throughput.luminance());
+//			real stopVal = std::min(0.8, throughput.luminance());
 //			if (sampler->getNextSample1D() < stopVal)//proba)
 //			{
 //				throughput /= stopVal;

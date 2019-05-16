@@ -11,7 +11,7 @@ struct PhaseFunctionSamplingInfos
 
 	Vector3d wi;
 	Vector3d wo;
-	double pdf;
+	real pdf;
 };
 
 class PhaseFunction
@@ -34,7 +34,7 @@ public:
 	* \return The phase function value divided by the probability density of the sample
 	*         sample. A zero value means that sampling failed.
 	*/
-	virtual double sample(PhaseFunctionSamplingInfos &pRec, const Point2d &sample) const = 0;
+	virtual real sample(PhaseFunctionSamplingInfos &pRec, const Point2d &sample) const = 0;
 
 	/**
 	* \brief Evaluate the phase function for a pair of directions
@@ -45,7 +45,7 @@ public:
 	* \return
 	*     The phase function value, evaluated for each color channel
 	*/
-	virtual double eval(const PhaseFunctionSamplingInfos &infos) const = 0;
+	virtual real eval(const PhaseFunctionSamplingInfos &infos) const = 0;
 
 	/**
 	* \brief Compute the probability of sampling \c pRec.wo
@@ -62,6 +62,6 @@ public:
 	*     to the solid angle measure
 	*/
 
-	virtual double pdf(const PhaseFunctionSamplingInfos &infos) const = 0;
+	virtual real pdf(const PhaseFunctionSamplingInfos &infos) const = 0;
 };
 

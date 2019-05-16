@@ -28,15 +28,18 @@ Color NormalMapping::eval(const BSDFSamplingInfos & infos)
 	DifferentialGeometry perturbedShading = getFrame(infos);
 	BSDFSamplingInfos perturbedInfos = getPerturbedInfos(perturbedShading, infos);
 
+	if (DifferentialGeometry::cosTheta(infos.wo) * DifferentialGeometry::cosTheta(perturbedInfos.wo) <= 0.f)
+		return Color(0.f);
+
 	return myBSDF->eval(perturbedInfos);
 }
 
 DifferentialGeometry NormalMapping::getFrame(const BSDFSamplingInfos & infos)
 {
 	Color tmp = myNormalMap->eval(infos.uv);
-	Normal3d normal(tmp.r, tmp.g, tmp.b);
+	Normal3d normal(tmp(0), tmp(1), tmp(2));
 	for (int i = 0; i < 3; i++)
-		normal[i] = 2 * normal[i] - 1.;
+		normal[i] = 2 * normal[i] - 1.f;
 
 	DifferentialGeometry perturbedShading = DifferentialGeometry(infos.shadingFrame.toWorld(normal));
 
@@ -63,6 +66,10 @@ Color NormalMapping::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 
 	Color weight = myBSDF->sample(perturbedInfos, sample);
 	infos.wo = infos.shadingFrame.toLocal(perturbedInfos.shadingFrame.toWorld(perturbedInfos.wo));
+
+	if (DifferentialGeometry::cosTheta(infos.wo) * DifferentialGeometry::cosTheta(perturbedInfos.wo) <= 0.f)
+		return Color(0.f);
+
 	infos.measure = perturbedInfos.measure;
 	infos.pdf = perturbedInfos.pdf;
 	infos.relativeEta = perturbedInfos.relativeEta;
@@ -71,10 +78,14 @@ Color NormalMapping::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 	return weight;
 }
 
-double NormalMapping::pdf(const BSDFSamplingInfos & infos)
+real NormalMapping::pdf(const BSDFSamplingInfos & infos)
 {
 	DifferentialGeometry perturbedShading = getFrame(infos);
 	BSDFSamplingInfos perturbedInfos = getPerturbedInfos(perturbedShading, infos);
+
+	if (DifferentialGeometry::cosTheta(infos.wo) * DifferentialGeometry::cosTheta(perturbedInfos.wo) <= 0.f)
+		return (real)0;
+
 	return myBSDF->pdf(perturbedInfos);
 }
 

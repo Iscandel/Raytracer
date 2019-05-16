@@ -14,7 +14,7 @@ public:
 
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample) override;
 
-	double pdf(const BSDFSamplingInfos& infos) override;
+	real pdf(const BSDFSamplingInfos& infos) override;
 
 protected:
 	DifferentialGeometry getFrame(const BSDFSamplingInfos & infos);

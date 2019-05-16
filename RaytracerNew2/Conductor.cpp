@@ -36,7 +36,7 @@ Color Conductor::eval(const BSDFSamplingInfos& infos)
 		infos.measure != Measure::DISCRETE)
 		return Color();
 
-	double cosI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosI = DifferentialGeometry::cosTheta(infos.wi);
 
 	return myReflectanceTexture->eval(infos.uv) * fresnel::fresnelConductor(myEta, myAbsorption, cosI);
 }
@@ -53,7 +53,7 @@ Color Conductor::sample(BSDFSamplingInfos& infos, const Point2d&)
 	infos.wo = reflect(infos.wi);
 	infos.pdf = 1.;
 
-	double cosI = DifferentialGeometry::cosTheta(infos.wi);
+	real cosI = DifferentialGeometry::cosTheta(infos.wi);
 
 	//pdf = 1, no need to divide
 	//no need to multiply by cos thetaWo : brdf is fresnel / cos theta
@@ -64,7 +64,7 @@ Color Conductor::sample(BSDFSamplingInfos& infos, const Point2d&)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-double Conductor::pdf(const BSDFSamplingInfos& infos) //To add discrete test
+real Conductor::pdf(const BSDFSamplingInfos& infos) //To add discrete test
 {
 	if (DifferentialGeometry::cosTheta(infos.wi) <= 0. ||
 		DifferentialGeometry::cosTheta(infos.wo) <= 0.)

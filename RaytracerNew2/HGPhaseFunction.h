@@ -20,7 +20,7 @@ public:
 	* \return The phase function value divided by the probability density of the sample
 	*         sample. A zero value means that sampling failed.
 	*/
-	virtual double sample(PhaseFunctionSamplingInfos &pRec, const Point2d &sample) const;
+	virtual real sample(PhaseFunctionSamplingInfos &pRec, const Point2d &sample) const;
 
 	/**
 	* \brief Evaluate the phase function for a pair of directions
@@ -31,7 +31,7 @@ public:
 	* \return
 	*     The phase function value, evaluated for each color channel
 	*/
-	virtual double eval(const PhaseFunctionSamplingInfos &infos) const;
+	virtual real eval(const PhaseFunctionSamplingInfos &infos) const;
 
 	/**
 	* \brief Compute the probability of sampling \c pRec.wo
@@ -48,9 +48,9 @@ public:
 	*     to the solid angle measure
 	*/
 
-	virtual double pdf(const PhaseFunctionSamplingInfos &infos) const;
+	virtual real pdf(const PhaseFunctionSamplingInfos &infos) const;
 
 protected:
-	double myG;
+	real myG;
 };
 

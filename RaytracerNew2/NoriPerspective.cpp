@@ -1,6 +1,7 @@
 #include "NoriPerspective.h"
 
 #include "Mapping.h"
+#include "Math.h"
 #include "ObjectFactoryManager.h"
 #include "Parameters.h"
 
@@ -10,29 +11,29 @@ NoriPerspective::NoriPerspective(const Parameters& params)
 :Camera(params)
 {
 
-	double aspect = getSizeX() / (double) getSizeY();
-	myFarClip = params.getDouble("farClip", 1e4);
-	myNearClip = params.getDouble("nearClip", 1e-4);
-	myFov = params.getDouble("fov", 30.);
-	double recip = 1.0 / (myFarClip - myNearClip),
-		cot = 1.0 / std::tan(tools::toRadian(myFov / 2.0));
+	real aspect = getSizeX() / (real) getSizeY();
+	myFarClip = params.getReal("farClip", 1e4f);
+	myNearClip = params.getReal("nearClip", 1e-4f);
+	myFov = params.getReal("fov", 30.);
+	real recip = 1.0f / (myFarClip - myNearClip),
+		cot = 1.0f / std::tan(math::toRadian(myFov / 2.0f));
 
-	Eigen::Matrix4d perspective;
+	Transform::Matrix4r perspective;
 	perspective <<
 		cot, 0, 0, 0,
 		0, cot, 0, 0,
 		0, 0, myFarClip * recip, -myNearClip * myFarClip * recip,
-		0, 0, 1., 0;
+		0, 0, 1.f, 0;
 
 	/**
 	* Translation and scaling to shift the clip coordinates into the
 	* range from zero to one. Also takes the aspect ratio into account.
 	*/
 	mySampleToCamera = Transform(
-		Eigen::DiagonalMatrix<double, 3>(Eigen::Vector3d(0.5, -0.5 * aspect, 1.0)) *
-		Eigen::Translation<double, 3>(1.0, -1.0 / aspect, 0.0) * perspective).inv();
+		Eigen::DiagonalMatrix<real, 3>(Eigen::Matrix<real, 3, 1>(0.5f, -0.5f * aspect, 1.0f)) *
+		Eigen::Translation<real, 3>(1.0f, -1.0f / aspect, 0.0f) * perspective).inv();
 
-	myInvOutputSize = Vector3d(1. / getSizeX(), 1. / getSizeY(), 0.);
+	myInvOutputSize = Vector3d(1.f / getSizeX(), 1.f / getSizeY(), 0.);
 }
 
 //=============================================================================
@@ -41,7 +42,7 @@ NoriPerspective::~NoriPerspective()
 {
 }
 
-//inline void sincosd(double theta, double* _sin, double* _cos) {
+//inline void sincosd(real theta, real* _sin, real* _cos) {
 //	*_sin = sinf(theta);
 //	*_cos = cosf(theta);
 //}
@@ -76,7 +77,7 @@ NoriPerspective::~NoriPerspective()
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Ray NoriPerspective::getRay(double px, double py, const Point2d& apertureSample)
+Ray NoriPerspective::getRay(real px, real py, const Point2d& apertureSample)
 {
 	/* Compute the corresponding position on the
 	near plane (in local camera space) */
@@ -87,17 +88,17 @@ Ray NoriPerspective::getRay(double px, double py, const Point2d& apertureSample)
 	/* Turn into a normalized ray direction, and
 	adjust the ray interval accordingly */
 	Vector3d d = nearP.normalized();
-	double invZ = 1.0 / d.z();
+	real invZ = 1.0f / d.z();
 
-	Ray ray(Point3d(0., 0., 0.), d);
+	Ray ray(Point3d(0.f, 0.f, 0.f), d);
 
 	if (myLensRadius > 0.)
 	{
-		Point2d sample = Mapping::squareToUniformDisk(apertureSample);//squareToUniformDiskConcentric(apertureSample);
+		Point2d sample = Mapping::squareToConcentricDisk(apertureSample);//squareToUniformDiskConcentric(apertureSample);
 		sample *= myLensRadius;
-		ray.myOrigin = Point3d(sample.x(), sample.y(), 0.);
+		ray.myOrigin = Point3d(sample.x(), sample.y(), 0.f);
 
-		double tDist = myFocalPlane * invZ;
+		real tDist = myFocalPlane * invZ;
 		Point3d focalPlanePoint = tDist *  d;
 
 		//Point3d focalPlanePoint = nearP * (myFocalPlane / nearP.z());

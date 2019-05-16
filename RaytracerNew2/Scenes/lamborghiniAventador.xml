@@ -80,6 +80,7 @@
   <lights>
     <light type="EnvironmentLight">
       <string name="path" value="./data/hdrmaps_com_free_068_Ref.exr"/>
+      <!--uffizi_probe.hdr-->
       <!--20060807_wells6_hd.jpg"/>-->
       <double name="scale" value="1."/>
       <transform name="toWorld">
@@ -102,16 +103,19 @@
 
     <shape type="Mesh">
       <string name="path" value ="./data/lamborghini Aventador/carrosserie.obj"/>
-      <bsdf type="SmoothLayeredBSDF">
+<bsdf type="CarPaint">
+<string name="preset" value="ford f8"/>
+</bsdf>
+      <!--<bsdf type="SmoothLayeredBSDF">
         <double name="alphaTop" value="0.01"/>
         <color name="absorbance" value="0.001 0.5 0.85"/>
-        <!--<color name="absorbance" value="0.001 0.37 0.81"/>-->
+        <color name="absorbance" value="0.001 0.37 0.81"/>
         <double name="thickness" value="2.5"/>
         <bsdf name="baseBSDF" type="RoughConductor">
           <double name="alpha" value="0.07"/>
           <string name="material" value="aluminium"/>
         </bsdf>
-      </bsdf>
+      </bsdf>-->
     </shape>
 
     <shape type="Mesh">
@@ -1100,7 +1104,7 @@
     </shape>
 
     -->
-    <!--<shape type="Mesh">
+    <shape type="Mesh">
       <string name="path" value ="./data/plane.obj"/>
       <transform name="toWorld">
 
@@ -1111,10 +1115,12 @@
         </scale>
       </transform>
 
-      <bsdf type="Diffuse">
+      <bsdf type="ShadowCatcher">
         <color name="albedo" value="0.7 0.7 0.3"/>
+        <double name="highTreshold" value="0.7"/>
+      <double name="ratio" value="20"/>
       </bsdf>
-    </shape>-->
+    </shape>
 
   
   </objects>

@@ -63,6 +63,11 @@
     <shape type="Mesh">
       <string name="path" value="./data/steam/mesh_1.obj"/>
 
+      <transform name="toWorld">
+        <translation>
+          <z>-3.24</z>
+        </translation>
+      </transform>
       <bsdf type="Microfacet">
         <color name="kd" value=".0,.0,.0"/>
       </bsdf>
@@ -101,7 +106,7 @@
         <string name="path" value="./data/steam/steam.vol"/>
         <color name="albedo" value=".7 .7 .7"/>
         <double name="scale" value="15.0"/>
-        <transform name="toWorld">
+        <!--<transform name="toWorld">
           <translation>
             <x>0.5</x>
             <y>0.5</y>
@@ -122,7 +127,7 @@
             <x>-8</x>
             <z>17</z>
           </translation>
-        </transform>
+        </transform>-->
       </medium>
     </shape>
 

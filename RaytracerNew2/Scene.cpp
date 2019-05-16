@@ -20,6 +20,7 @@
 Scene::Scene(void)
 {
 	//myCameraMedium = Medium::ptr(new Homogeneous(Parameters()));
+	Color::init();
 }
 
 //=============================================================================
@@ -129,6 +130,9 @@ void Scene::initialize()
 	}
 
 	myIntegrator->initialize(*this);
+
+	for (auto object : myObjects)
+		object->initialize(*this);
 }
 
 void Scene::setShowProgress(bool show)

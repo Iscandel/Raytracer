@@ -7,10 +7,10 @@ public:
 	Orthographic(const Parameters& params);
 	~Orthographic();
 
-	Ray getRay(double px, double py, const Point2d& apertureSample) override;
+	Ray getRay(real px, real py, const Point2d& apertureSample) override;
 
 protected:
-	double myFocal;
-	double myMPerPixel;
+	real myFocal;
+	real myMPerPixel;
 };
 
