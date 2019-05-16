@@ -84,718 +84,670 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="XMLLoader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="AmbientLightSystem.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="DiffuseSystem.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="SpecularSystem.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="System.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="ReflectionSystem.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="tinystr.cpp">
-      <Filter>tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml.cpp">
-      <Filter>tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxmlerror.cpp">
-      <Filter>tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxmlparser.cpp">
-      <Filter>tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="ReconstructionFilter.cpp">
-      <Filter>Filters</Filter>
-    </ClCompile>
-    <ClCompile Include="GaussianFilter.cpp">
-      <Filter>Filters</Filter>
-    </ClCompile>
-    <ClCompile Include="BoxFilter.cpp">
-      <Filter>Filters</Filter>
-    </ClCompile>
-    <ClCompile Include="MitchellNetravaliFilter.cpp">
-      <Filter>Filters</Filter>
-    </ClCompile>
-    <ClCompile Include="Sampler.cpp">
-      <Filter>Samplers</Filter>
-    </ClCompile>
-    <ClCompile Include="RandomSampler.cpp">
-      <Filter>Samplers</Filter>
-    </ClCompile>
-    <ClCompile Include="BoundingBox.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitive.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Intersection.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjLoader.cpp">
-      <Filter>MeshLoaders</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="PointLight.cpp">
-      <Filter>Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="BSDF.cpp">
-      <Filter>BSDF</Filter>
-    </ClCompile>
-    <ClCompile Include="Integrator.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="Rng.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
-      <Filter>Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="DifferentialGeometry.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Phong.cpp">
-      <Filter>BSDF</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>GeometricShape</Filter>
-    </ClCompile>
-    <ClCompile Include="Sphere.cpp">
-      <Filter>GeometricShape</Filter>
-    </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>GeometricShape</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectLighting.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="NormalIntegrator.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="GeometricShape.cpp">
-      <Filter>GeometricShape</Filter>
-    </ClCompile>
-    <ClCompile Include="Diffuse.cpp">
-      <Filter>BSDF</Filter>
-    </ClCompile>
-    <ClCompile Include="IMeshLoader.cpp">
-      <Filter>MeshLoaders</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectFactory.cpp">
-      <Filter>Bin</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectFactoryManager.cpp">
-      <Filter>Bin</Filter>
-    </ClCompile>
-    <ClCompile Include="PLYLoader.cpp">
-      <Filter>MeshLoaders</Filter>
-    </ClCompile>
-    <ClCompile Include="GeometricShapeFactory.cpp">
-      <Filter>Bin</Filter>
-    </ClCompile>
-    <ClCompile Include="Geometry.cpp">
-      <Filter>Bin</Filter>
-    </ClCompile>
-    <ClCompile Include="Mapping.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="AmbientOcclusion.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="AreaLight.cpp">
-      <Filter>Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="NoriPerspective.cpp">
-      <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Orthographic.cpp">
-      <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Perspective.cpp">
-      <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="CDF.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshLight.cpp">
-      <Filter>Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="Fresnel.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Microfacet.cpp">
-      <Filter>BSDF</Filter>
-    </ClCompile>
-    <ClCompile Include="Mirror.cpp">
-      <Filter>BSDF</Filter>
-    </ClCompile>
-    <ClCompile Include="Conductor.cpp">
-      <Filter>BSDF</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectLightingIS.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="RoughConductor.cpp">
-      <Filter>BSDF</Filter>
-    </ClCompile>
     <ClCompile Include="TestBvh.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="HDRLoader.cpp">
-      <Filter>IO</Filter>
-    </ClCompile>
-    <ClCompile Include="EnvironmentLight.cpp">
-      <Filter>Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectLightingMIS.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="Dielectric.cpp">
+    <ClCompile Include="src\bsdf\BSDF.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="RoughDielectric.cpp">
+    <ClCompile Include="src\bsdf\CarPaint.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="DistantLight.cpp">
-      <Filter>Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="CheckerTexture.cpp">
-      <Filter>Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="RecursivePathTracingMIS.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="PathTracingMIS.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="ConstantTexture.cpp">
-      <Filter>Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageTexture.cpp">
-      <Filter>Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="PerlinNoiseTexture.cpp">
-      <Filter>Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="LayeredBSDF.cpp">
+    <ClCompile Include="src\bsdf\Conductor.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="ImageLoader.cpp">
-      <Filter>IO</Filter>
-    </ClCompile>
-    <ClCompile Include="NormalMapping.cpp">
+    <ClCompile Include="src\bsdf\Dielectric.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="SmoothLayeredBSDF.cpp">
+    <ClCompile Include="src\bsdf\Diffuse.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="SheetDielectric.cpp">
+    <ClCompile Include="src\bsdf\EmptyBSDF.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="SpectralDielectric.cpp">
+    <ClCompile Include="src\bsdf\LayeredBSDF.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="Common.cpp">
-      <Filter>Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Medium.cpp">
-      <Filter>Medium</Filter>
-    </ClCompile>
-    <ClCompile Include="Homogeneous.cpp">
-      <Filter>Medium</Filter>
-    </ClCompile>
-    <ClCompile Include="PhaseFunction.cpp">
-      <Filter>Medium</Filter>
-    </ClCompile>
-    <ClCompile Include="MicrofacetDistribution.cpp">
+    <ClCompile Include="src\bsdf\Microfacet.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="ShadowCatcher.cpp">
+    <ClCompile Include="src\bsdf\MicrofacetDistribution.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="Bvh.cpp">
-      <Filter>AccelStruct</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Job.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="JobManager.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Ray.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Screen.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Parameters.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="SampleJob.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="IsotropicPhaseFunction.cpp">
-      <Filter>Medium</Filter>
-    </ClCompile>
-    <ClCompile Include="VolPathTracing.cpp">
-      <Filter>Integrators</Filter>
-    </ClCompile>
-    <ClCompile Include="Plane.cpp">
-      <Filter>GeometricShape</Filter>
-    </ClCompile>
-    <ClCompile Include="ISampledShape.cpp">
-      <Filter>GeometricShape</Filter>
-    </ClCompile>
-    <ClCompile Include="Heterogeneous.cpp">
-      <Filter>Medium</Filter>
-    </ClCompile>
-    <ClCompile Include="SpotLight.cpp">
-      <Filter>Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="Mandelbulb.cpp">
-      <Filter>GeometricShape</Filter>
-    </ClCompile>
-    <ClCompile Include="ImplicitSurface.cpp">
-      <Filter>GeometricShape</Filter>
-    </ClCompile>
-    <ClCompile Include="GridVolume.cpp">
-      <Filter>Volume</Filter>
-    </ClCompile>
-    <ClCompile Include="OpenVDBVolume.cpp">
-      <Filter>Volume</Filter>
-    </ClCompile>
-    <ClCompile Include="Volume.cpp">
-      <Filter>Volume</Filter>
-    </ClCompile>
-    <ClCompile Include="HGPhaseFunction.cpp">
-      <Filter>Medium</Filter>
-    </ClCompile>
-    <ClCompile Include="EmptyBSDF.cpp">
+    <ClCompile Include="src\bsdf\Mirror.cpp">
       <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="RaytracerObject.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\bsdf\NormalMapping.cpp">
+      <Filter>BSDF</Filter>
     </ClCompile>
-    <ClCompile Include="BSSRDF.cpp">
+    <ClCompile Include="src\bsdf\Phong.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdf\RoughConductor.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdf\RoughDielectric.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdf\ShadowCatcher.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdf\SheetDielectric.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdf\SmoothLayeredBSDF.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdf\SpectralDielectric.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bssrdf\BSSRDF.cpp">
       <Filter>BSSRDF</Filter>
     </ClCompile>
-    <ClCompile Include="CarPaint.cpp">
-      <Filter>BSDF</Filter>
+    <ClCompile Include="src\bssrdf\FastDipole.cpp">
+      <Filter>BSSRDF</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>GeometricShape</Filter>
+    <ClCompile Include="src\camera\Camera.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="MeshFromShape.cpp">
-      <Filter>GeometricShape</Filter>
+    <ClCompile Include="src\camera\NoriPerspective.cpp">
+      <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="MeshFromShapeFactory.cpp">
+    <ClCompile Include="src\camera\Orthographic.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera\Perspective.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\factory\ObjectFactoryManager.cpp">
       <Filter>Factory</Filter>
     </ClCompile>
-    <ClCompile Include="FastDipole.cpp">
-      <Filter>BSSRDF</Filter>
+    <ClCompile Include="src\accelStruct\Bvh.cpp">
+      <Filter>AccelStruct</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filter\BoxFilter.cpp">
+      <Filter>Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filter\GaussianFilter.cpp">
+      <Filter>Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filter\MitchellNetravaliFilter.cpp">
+      <Filter>Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filter\ReconstructionFilter.cpp">
+      <Filter>Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\Cube.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\GeometricShape.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\ImplicitSurface.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\ISampledShape.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\Mandelbulb.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\Mesh.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\MeshFromShape.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\Plane.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\Sphere.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometricShape\Triangle.cpp">
+      <Filter>GeometricShape</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\AmbientOcclusion.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\DirectLighting.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\DirectLightingIS.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\DirectLightingMIS.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\Integrator.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\NormalIntegrator.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\PathTracingMIS.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\RecursivePathTracingMIS.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\integrator\VolPathTracing.cpp">
+      <Filter>Integrators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\HDRLoader.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\ImageLoader.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light\AreaLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light\DistantLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light\EnvironmentLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light\Light.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light\MeshLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light\PointLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\light\SpotLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="src\medium\Heterogeneous.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="src\medium\HGPhaseFunction.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="src\medium\Homogeneous.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="src\medium\IsotropicPhaseFunction.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="src\medium\Medium.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="src\medium\PhaseFunction.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\IMeshLoader.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\ObjLoader.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\PLYLoader.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sampler\RandomSampler.cpp">
+      <Filter>Samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sampler\Sampler.cpp">
+      <Filter>Samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture\CheckerTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture\ConstantTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture\ImageTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture\PerlinNoiseTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture\Texture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\Common.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\Logger.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\Rng.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tools\Timer.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\volume\GridVolume.cpp">
+      <Filter>Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="src\volume\OpenVDBVolume.cpp">
+      <Filter>Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="src\volume\Volume.cpp">
+      <Filter>Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\BoundingBox.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\CDF.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Color.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\DifferentialGeometry.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Fresnel.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Intersection.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Job.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\JobManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Mapping.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Parameters.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Primitive.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Ray.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\RaytracerObject.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\SampleJob.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Scene.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Screen.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Transform.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\XMLLoader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ext\tinyxml\tinystr.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ext\tinyxml\tinyxml.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ext\tinyxml\tinyxmlerror.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ext\tinyxml\tinyxmlparser.cpp">
+      <Filter>tinyxml</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="XMLLoader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="AmbientLightSystem.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="DiffuseSystem.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="SpecularSystem.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="ReflectionSystem.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="tinystr.h">
-      <Filter>tinyxml</Filter>
-    </ClInclude>
-    <ClInclude Include="tinyxml.h">
-      <Filter>tinyxml</Filter>
-    </ClInclude>
-    <ClInclude Include="Array2D.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="BoxFilter.h">
-      <Filter>Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="GaussianFilter.h">
-      <Filter>Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="ReconstructionFilter.h">
-      <Filter>Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="MitchellNetravaliFilter.h">
-      <Filter>Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="Sampler.h">
-      <Filter>Samplers</Filter>
-    </ClInclude>
-    <ClInclude Include="RandomSampler.h">
-      <Filter>Samplers</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundingBox.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Intersection.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjLoader.h">
-      <Filter>MeshLoaders</Filter>
-    </ClInclude>
-    <ClInclude Include="IMeshLoader.h">
-      <Filter>MeshLoaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Tools.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="NonCopyable.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLight.h">
-      <Filter>Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="BSDF.h">
-      <Filter>BSDF</Filter>
-    </ClInclude>
-    <ClInclude Include="Integrator.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="Rng.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="System.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="DifferentialGeometry.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Phong.h">
-      <Filter>BSDF</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>GeometricShape</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>GeometricShape</Filter>
-    </ClInclude>
-    <ClInclude Include="Triangle.h">
-      <Filter>GeometricShape</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectLighting.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="NormalIntegrator.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="GeometricShape.h">
-      <Filter>GeometricShape</Filter>
-    </ClInclude>
-    <ClInclude Include="Diffuse.h">
-      <Filter>BSDF</Filter>
-    </ClInclude>
-    <ClInclude Include="PLYLoader.h">
-      <Filter>MeshLoaders</Filter>
-    </ClInclude>
-    <ClInclude Include="Mapping.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="AmbientOcclusion.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="AreaLight.h">
-      <Filter>Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="NoriPerspective.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Orthographic.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Perspective.h">
-      <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="CDF.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshLight.h">
-      <Filter>Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="Fresnel.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Microfacet.h">
-      <Filter>BSDF</Filter>
-    </ClInclude>
-    <ClInclude Include="Mirror.h">
-      <Filter>BSDF</Filter>
-    </ClInclude>
-    <ClInclude Include="Conductor.h">
-      <Filter>BSDF</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectLightingIS.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="RoughConductor.h">
-      <Filter>BSDF</Filter>
     </ClInclude>
     <ClInclude Include="TestBvh.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="HDRLoader.h">
-      <Filter>IO</Filter>
-    </ClInclude>
-    <ClInclude Include="EnvironmentLight.h">
-      <Filter>Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectLightingMIS.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="Dielectric.h">
+    <ClInclude Include="src\bsdf\BSDF.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="RoughDielectric.h">
+    <ClInclude Include="src\bsdf\CarPaint.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="DistantLight.h">
-      <Filter>Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="CheckerTexture.h">
-      <Filter>Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="RecursivePathTracingMIS.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="PathTracingMIS.h">
-      <Filter>Integrators</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantTexture.h">
-      <Filter>Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageTexture.h">
-      <Filter>Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="PerlinNoiseTexture.h">
-      <Filter>Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="LayeredBSDF.h">
+    <ClInclude Include="src\bsdf\Conductor.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="ImageLoader.h">
-      <Filter>IO</Filter>
-    </ClInclude>
-    <ClInclude Include="NormalMapping.h">
+    <ClInclude Include="src\bsdf\Dielectric.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="SmoothLayeredBSDF.h">
+    <ClInclude Include="src\bsdf\Diffuse.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="SheetDielectric.h">
+    <ClInclude Include="src\bsdf\EmptyBSDF.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="SpectralDielectric.h">
+    <ClInclude Include="src\bsdf\LayeredBSDF.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="Medium.h">
-      <Filter>Medium</Filter>
-    </ClInclude>
-    <ClInclude Include="Homogeneous.h">
-      <Filter>Medium</Filter>
-    </ClInclude>
-    <ClInclude Include="PhaseFunction.h">
-      <Filter>Medium</Filter>
-    </ClInclude>
-    <ClInclude Include="MicrofacetDistribution.h">
+    <ClInclude Include="src\bsdf\Microfacet.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="ShadowCatcher.h">
+    <ClInclude Include="src\bsdf\MicrofacetDistribution.h">
       <Filter>BSDF</Filter>
     </ClInclude>
-    <ClInclude Include="Bvh.h">
+    <ClInclude Include="src\bsdf\Mirror.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\NormalMapping.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\Phong.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\RoughConductor.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\RoughDielectric.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\ShadowCatcher.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\SheetDielectric.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\SmoothLayeredBSDF.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\SpectralDielectric.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bssrdf\BSSRDF.h">
+      <Filter>BSSRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bssrdf\FastDipole.h">
+      <Filter>BSSRDF</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\NoriPerspective.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\Orthographic.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\Perspective.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\factory\GeometricShapeFactory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\factory\MeshFactory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\factory\MeshFromShapeFactory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\factory\ObjectFactory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\factory\ObjectFactoryManager.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\accelStruct\Bvh.h">
       <Filter>AccelStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\filter\BoxFilter.h">
+      <Filter>Filters</Filter>
     </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\filter\GaussianFilter.h">
+      <Filter>Filters</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\filter\MitchellNetravaliFilter.h">
+      <Filter>Filters</Filter>
     </ClInclude>
-    <ClInclude Include="SampleJob.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\filter\ReconstructionFilter.h">
+      <Filter>Filters</Filter>
     </ClInclude>
-    <ClInclude Include="Ray.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\geometricShape\Cube.h">
+      <Filter>GeometricShape</Filter>
     </ClInclude>
-    <ClInclude Include="Parameters.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\geometricShape\GeometricShape.h">
+      <Filter>GeometricShape</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\geometricShape\ImplicitSurface.h">
+      <Filter>GeometricShape</Filter>
     </ClInclude>
-    <ClInclude Include="Job.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\geometricShape\ISampledShape.h">
+      <Filter>GeometricShape</Filter>
     </ClInclude>
-    <ClInclude Include="JobManager.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\geometricShape\Mandelbulb.h">
+      <Filter>GeometricShape</Filter>
     </ClInclude>
-    <ClInclude Include="Geometry.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="src\geometricShape\Mesh.h">
+      <Filter>GeometricShape</Filter>
     </ClInclude>
-    <ClInclude Include="IsotropicPhaseFunction.h">
-      <Filter>Medium</Filter>
+    <ClInclude Include="src\geometricShape\MeshFromShape.h">
+      <Filter>GeometricShape</Filter>
     </ClInclude>
-    <ClInclude Include="VolPathTracing.h">
+    <ClInclude Include="src\geometricShape\Plane.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometricShape\Sphere.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometricShape\Triangle.h">
+      <Filter>GeometricShape</Filter>
+    </ClInclude>
+    <ClInclude Include="src\integrator\AmbientOcclusion.h">
       <Filter>Integrators</Filter>
     </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>GeometricShape</Filter>
+    <ClInclude Include="src\integrator\DirectLighting.h">
+      <Filter>Integrators</Filter>
     </ClInclude>
-    <ClInclude Include="ISampledShape.h">
-      <Filter>GeometricShape</Filter>
+    <ClInclude Include="src\integrator\DirectLightingIS.h">
+      <Filter>Integrators</Filter>
     </ClInclude>
-    <ClInclude Include="Heterogeneous.h">
-      <Filter>Medium</Filter>
+    <ClInclude Include="src\integrator\DirectLightingMIS.h">
+      <Filter>Integrators</Filter>
     </ClInclude>
-    <ClInclude Include="SpotLight.h">
+    <ClInclude Include="src\integrator\Integrator.h">
+      <Filter>Integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\integrator\NormalIntegrator.h">
+      <Filter>Integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\integrator\PathTracingMIS.h">
+      <Filter>Integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\integrator\RecursivePathTracingMIS.h">
+      <Filter>Integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\integrator\VolPathTracing.h">
+      <Filter>Integrators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\HDRLoader.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\ImageLoader.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\light\AreaLight.h">
       <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="Mandelbulb.h">
-      <Filter>GeometricShape</Filter>
+    <ClInclude Include="src\light\DistantLight.h">
+      <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="ImplicitSurface.h">
-      <Filter>GeometricShape</Filter>
+    <ClInclude Include="src\light\EnvironmentLight.h">
+      <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="GridVolume.h">
-      <Filter>Volume</Filter>
+    <ClInclude Include="src\light\Light.h">
+      <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="OpenVDBVolume.h">
-      <Filter>Volume</Filter>
+    <ClInclude Include="src\light\MeshLight.h">
+      <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="Volume.h">
-      <Filter>Volume</Filter>
+    <ClInclude Include="src\light\PointLight.h">
+      <Filter>Lights</Filter>
     </ClInclude>
-    <ClInclude Include="HGPhaseFunction.h">
+    <ClInclude Include="src\light\SpotLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\medium\Heterogeneous.h">
       <Filter>Medium</Filter>
     </ClInclude>
-    <ClInclude Include="EmptyBSDF.h">
-      <Filter>BSDF</Filter>
+    <ClInclude Include="src\medium\HGPhaseFunction.h">
+      <Filter>Medium</Filter>
     </ClInclude>
-    <ClInclude Include="RaytracerObject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\medium\Homogeneous.h">
+      <Filter>Medium</Filter>
     </ClInclude>
-    <ClInclude Include="WithSmartPtr.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\medium\IsotropicPhaseFunction.h">
+      <Filter>Medium</Filter>
     </ClInclude>
-    <ClInclude Include="BSSRDF.h">
-      <Filter>BSSRDF</Filter>
+    <ClInclude Include="src\medium\Medium.h">
+      <Filter>Medium</Filter>
     </ClInclude>
-    <ClInclude Include="CarPaint.h">
-      <Filter>BSDF</Filter>
+    <ClInclude Include="src\medium\PhaseFunction.h">
+      <Filter>Medium</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>GeometricShape</Filter>
+    <ClInclude Include="src\io\IMeshLoader.h">
+      <Filter>IO</Filter>
     </ClInclude>
-    <ClInclude Include="MeshFromShape.h">
-      <Filter>GeometricShape</Filter>
+    <ClInclude Include="src\io\ObjLoader.h">
+      <Filter>IO</Filter>
     </ClInclude>
-    <ClInclude Include="GeometricShapeFactory.h">
-      <Filter>Factory</Filter>
+    <ClInclude Include="src\io\PLYLoader.h">
+      <Filter>IO</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectFactory.h">
-      <Filter>Factory</Filter>
+    <ClInclude Include="src\sampler\RandomSampler.h">
+      <Filter>Samplers</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectFactoryManager.h">
-      <Filter>Factory</Filter>
+    <ClInclude Include="src\sampler\Sampler.h">
+      <Filter>Samplers</Filter>
     </ClInclude>
-    <ClInclude Include="MeshFromShapeFactory.h">
-      <Filter>Factory</Filter>
+    <ClInclude Include="src\texture\CheckerTexture.h">
+      <Filter>Textures</Filter>
     </ClInclude>
-    <ClInclude Include="MeshFactory.h">
-      <Filter>Factory</Filter>
+    <ClInclude Include="src\texture\ConstantTexture.h">
+      <Filter>Textures</Filter>
     </ClInclude>
-    <ClInclude Include="FastDipole.h">
-      <Filter>BSSRDF</Filter>
+    <ClInclude Include="src\texture\ImageTexture.h">
+      <Filter>Textures</Filter>
     </ClInclude>
-    <ClInclude Include="BasicMath.h">
+    <ClInclude Include="src\texture\PerlinNoiseTexture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture\Texture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\Array2D.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\Common.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\Logger.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\NonCopyable.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\Rng.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\Singleton.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\Timer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\Tools.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tools\WithSmartPtr.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\volume\GridVolume.h">
+      <Filter>Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="src\volume\OpenVDBVolume.h">
+      <Filter>Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="src\volume\Volume.h">
+      <Filter>Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\BasicMath.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="FastMath.h">
+    <ClInclude Include="src\core\BoundingBox.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Math.h">
+    <ClInclude Include="src\core\CDF.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Color.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\DifferentialGeometry.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\FastMath.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Fresnel.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Geometry.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Intersection.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Job.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\JobManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Mapping.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Math.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Parameters.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Primitive.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Ray.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\RaytracerObject.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\SampleJob.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Scene.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Screen.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Transform.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\XMLLoader.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ext\tinyxml\tinystr.h">
+      <Filter>tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ext\tinyxml\tinyxml.h">
+      <Filter>tinyxml</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -54,61 +54,61 @@
 
 	
 	<objects>
-		<!-- <shape type="Mesh"> -->
-			<!-- <string name="path" value ="./data/teapot/models/Mesh003.obj"/> -->
-			<!-- <transform name="toWorld" > -->
-				<!-- <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/> -->
-			<!-- </transform> -->
-			<!-- <bsdf type="SmoothLayeredBSDF"> -->
-				<!-- <color name="absorbance" value="0.001 0.001 0.001"/> -->
-				<!-- <double name="thickness" value="0.001"/> -->
-				<!-- <bsdf name="baseBSDF" type="Diffuse"> -->
-					<!-- <color name="albedo" value="0.95 0.95 0.95"/> -->
-				<!-- </bsdf> -->
-			<!-- </bsdf> -->
-		<!-- </shape> -->
+		<shape type="Mesh">
+			<string name="path" value ="./data/teapot/models/Mesh003.obj"/>
+			<transform name="toWorld" >
+				<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+			</transform>
+			<bsdf type="SmoothLayeredBSDF">
+				<color name="absorbance" value="0.001 0.001 0.001"/>
+				<double name="thickness" value="0.001"/>
+				<bsdf name="baseBSDF" type="Diffuse">
+					<color name="albedo" value="0.95 0.95 0.95"/>
+				</bsdf>
+			</bsdf>
+		</shape>
 	
-		<!-- <shape type="Mesh" > -->
-			<!-- <string name="path" value="./data/teapot/models/Mesh001.obj" /> -->
-			<!-- <transform name="toWorld" > -->
-				<!-- <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/> -->
-			<!-- </transform> -->
-			<!-- <bsdf type="SmoothLayeredBSDF"> -->
-				<!-- <color name="absorbance" value="0.001 0.001 0.001"/> -->
-				<!-- <double name="thickness" value="0.001"/> -->
-				<!-- <bsdf name="baseBSDF" type="Diffuse"> -->
-					<!-- <color name="albedo" value="0.95 0.95 0.95"/> -->
-				<!-- </bsdf> -->
-			<!-- </bsdf> -->
-		<!-- </shape> -->
+		<shape type="Mesh" >
+			<string name="path" value="./data/teapot/models/Mesh001.obj" />
+			<transform name="toWorld" >
+				<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+			</transform>
+			<bsdf type="SmoothLayeredBSDF">
+				<color name="absorbance" value="0.001 0.001 0.001"/>
+				<double name="thickness" value="0.001"/>
+				<bsdf name="baseBSDF" type="Diffuse">
+					<color name="albedo" value="0.95 0.95 0.95"/>
+				</bsdf>
+			</bsdf>
+		</shape>
 	
-		<!-- <shape type="Mesh" > -->
-			<!-- <string name="path" value="./data/teapot/models/Mesh002.obj" /> -->
-			<!-- <transform name="toWorld" > -->
-				<!-- <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/> -->
-			<!-- </transform> -->
-			<!-- <bsdf type="SmoothLayeredBSDF"> -->
-				<!-- <color name="absorbance" value="0.001 0.001 0.001"/> -->
-				<!-- <double name="thickness" value="0.001"/> -->
-				<!-- <bsdf name="baseBSDF" type="Diffuse"> -->
-					<!-- <color name="albedo" value="0.95 0.95 0.95"/> -->
-				<!-- </bsdf> -->
-			<!-- </bsdf> -->
-		<!-- </shape> -->
+		<shape type="Mesh" >
+			<string name="path" value="./data/teapot/models/Mesh002.obj" />
+			<transform name="toWorld" >
+				<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+			</transform>
+			<bsdf type="SmoothLayeredBSDF">
+				<color name="absorbance" value="0.001 0.001 0.001"/>
+				<double name="thickness" value="0.001"/>
+				<bsdf name="baseBSDF" type="Diffuse">
+					<color name="albedo" value="0.95 0.95 0.95"/>
+				</bsdf>
+			</bsdf>
+		</shape>
 		
-		<!-- <shape type="Mesh" > -->
-			<!-- <string name="path" value="./data/teapot/models/Mesh000.obj" /> -->
-			<!-- <transform name="toWorld" > -->
-				<!-- <matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/> -->
-			<!-- </transform> -->
-			<!-- <bsdf type="SmoothLayeredBSDF"> -->
-				<!-- <color name="absorbance" value="0.001 0.001 0.001"/> -->
-				<!-- <double name="thickness" value="0.001"/> -->
-				<!-- <bsdf name="baseBSDF" type="Diffuse"> -->
-					<!-- <color name="albedo" value="0.95 0.95 0.95"/> -->
-				<!-- </bsdf> -->
-			<!-- </bsdf> -->
-		<!-- </shape> -->
+		<shape type="Mesh" >
+			<string name="path" value="./data/teapot/models/Mesh000.obj" />
+			<transform name="toWorld" >
+				<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+			</transform>
+			<bsdf type="SmoothLayeredBSDF">
+				<color name="absorbance" value="0.001 0.001 0.001"/>
+				<double name="thickness" value="0.001"/>
+				<bsdf name="baseBSDF" type="Diffuse">
+					<color name="albedo" value="0.95 0.95 0.95"/>
+				</bsdf>
+			</bsdf>
+		</shape>
 		
 		<shape type="Plane" >
 			<transform name="toWorld" >

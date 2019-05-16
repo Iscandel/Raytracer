@@ -1,1 +1,1 @@
-./Scenes/teapot.xml
+./Scenes/cbox_fog.xml
