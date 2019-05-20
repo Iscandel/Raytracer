@@ -3,6 +3,7 @@
 #include "ObjectFactory.h"
 #include "tools/Singleton.h"
 
+#include <cctype>
 #include <map>
 #include <memory>
 #include <iostream>
@@ -41,6 +42,16 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	typename ObjectFactory<ReturnType>::ptr getFactory(const std::string& type);
 
+//protected:
+	///////////////////////////////////////////////////////////////////////////
+	/// \brief Formats the string for use in the manager
+	///
+	/// \param type: String to format
+	///
+	/// \return A formatted string
+	///////////////////////////////////////////////////////////////////////////
+	std::string formatType(const std::string& s);
+
 protected:
 	FactoryMap myFactories;
 };
@@ -50,7 +61,7 @@ protected:
 template<class ReturnType>
 void ObjectFactoryManager<ReturnType>::addFactory(typename ObjectFactory<ReturnType>::ptr factory)
 {
-	FactoryMap::iterator it = myFactories.find(factory->getObjectType());
+	FactoryMap::iterator it = myFactories.find(formatType(factory->getObjectType()));
 
 	if (factory->getObjectType() == "")
 	{
@@ -59,10 +70,22 @@ void ObjectFactoryManager<ReturnType>::addFactory(typename ObjectFactory<ReturnT
 
 	if (it != myFactories.end())
 	{
-		throw std::runtime_error("Object " + factory->getObjectType() + " has already been registered");
+		throw std::runtime_error("Object " + formatType(factory->getObjectType()) + " has already been registered");
 	}
 
-	myFactories.insert(std::make_pair(factory->getObjectType(), factory));
+	myFactories.insert(std::make_pair(formatType(factory->getObjectType()), factory));
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+template<class ReturnType>
+std::string ObjectFactoryManager<ReturnType>::formatType(const std::string& s)
+{
+	std::string res = s;
+	std::transform(s.begin(), s.end(), res.begin(),
+		[](unsigned char c) { return std::tolower(c); }
+	);
+	return res;
 }
 
 //=============================================================================
@@ -82,7 +105,7 @@ void ObjectFactoryManager<ReturnType>::removeFactory(const std::string& type)
 template<class ReturnType>
 typename ObjectFactory< ReturnType>::ptr ObjectFactoryManager<ReturnType>::getFactory(const std::string& type)
 {
-	FactoryMap::iterator it = myFactories.find(type);
+	FactoryMap::iterator it = myFactories.find(formatType(type));
 	if (it != myFactories.end())
 	{
 		return it->second;

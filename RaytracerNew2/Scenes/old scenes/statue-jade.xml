@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene>
+  <camera type="NoriPerspective">
+    <!--<transform name="toWorld">
+      <lookAt>
+        <origin>3.69558 -3.46243 3.25463</origin>
+        <lookAt>3.04072 -2.85176 2.80939</lookAt>
+        <up>-0.317366 0.312466 0.895346</up>
+      </lookAt>
+    </transform>-->
+     <transform name="toWorld">
+		<scale>
+		<x>-1</x>
+		</scale>
+      <lookAt>
+        <origin>0 -600 20</origin>
+        <lookAt>0 20 130</lookAt>
+        <up>0 0 1</up>
+      </lookAt>
+    </transform>
+
+    <!--<double name="focal" value="0.15"/>
+    <double name="meterPixelSize" value="0.0001"/>-->
+    <double name="fov" value="37.8664"/>
+    <integer name="sizeX" value="800"/>
+    <integer name="sizeY" value="600"/>
+
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>4</threadNumber>
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="128"/>
+  </sampler>
+
+  <!-- Use the path tracer with multiple importance sampling -->
+  <integrator type="PathTracingMIS">
+    <integer name="depth" value="20"/>
+    <integer name="sampleNumber" value="4"/>
+  </integrator>
+
+  <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/envmap.exr"/>
+     <transform name="toWorld">
+         <rotation>
+          <x>90.</x>
+          <y>180.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+
+  <objects>
+	  <!--<shape type="Plane">
+      <light type="AreaLight">
+        <color name="radiance" value="3 3 3"/>
+      </light>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0 0 0"/>
+      </bsdf>
+
+      <transform name="toWorld">
+        <scale>
+          <x>400</x>
+          <y>400</y>
+        </scale>
+		<rotation>
+			<x>180</x>
+		</rotation>
+        <translation>
+          <x>0</x>
+          <y>0.</y>
+          <z>-500</z>
+        </translation>
+      </transform>
+    </shape>-->
+	
+	<!-- <shape type="Plane"> -->
+      <!-- <light type="AreaLight"> -->
+        <!-- <color name="radiance" value="3 3 3"/> -->
+      <!-- </light> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0 0 0"/> -->
+      <!-- </bsdf> -->
+
+      <!-- <transform name="toWorld"> -->
+        <!-- <scale> -->
+          <!-- <x>400</x> -->
+          <!-- <y>400</y> -->
+        <!-- </scale> -->
+		<!-- <rotation> -->
+			<!-- <x>-90</x> -->
+		<!-- </rotation> -->
+		<!-- <rotation> -->
+			<!-- <y>180</y> -->
+		<!-- </rotation> -->
+        <!-- <translation> -->
+          <!-- <y>-800</y> -->
+        <!-- </translation> -->
+      <!-- </transform> -->
+    <!-- </shape> -->
+	
+	<!--floor-->
+	<shape type="Plane">
+      <!-- <bsdf type="LayeredBSDF"> -->
+		<!-- <real name="alphaTop" value="0.1"/> -->
+        <!-- <color name="absorbance" value="0.000001 0.000001 0.000001"/> -->
+        <!-- <double name="thickness" value="0.00002"/> -->
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0.5 0.5 0.5"/>
+        </bsdf>
+		<!-- </bsdf> -->
+
+      <transform name="toWorld">
+        <scale>
+          <x>400</x>
+          <y>400</y>
+        </scale>
+        <translation>
+          <x>0</x>
+          <y>0.</y>
+          <z>-2.5</z>
+        </translation>
+      </transform>
+    </shape>
+	
+	<!--wall-->
+	<shape type="Plane">
+		<bsdf type="NormalMapping">
+			<texture name="normalMap" type="ImageTexture">
+				<string name="path" value="./data/Stone_Wall_009_NORM.jpg"/>
+			</texture>
+			<bsdf name="bsdf" type="Diffuse">
+				<texture name="albedo" type="ImageTexture">
+					<string name="path" value="./data/Stone_Wall_009_COLOR.jpg"/>
+				</texture>
+			</bsdf>
+		</bsdf>
+				
+
+      <transform name="toWorld">
+        <scale>
+          <x>400</x>
+          <y>400</y>
+        </scale>
+		<rotation>
+			<x>90</x>
+		</rotation>
+		<rotation>
+			<y>180</y>
+		</rotation>
+        <translation>
+          <y>200</y>
+        </translation>
+      </transform>
+    </shape>
+	
+    <!--<shape type="Mesh">
+      <string name="path" value="./data/Lu Yu-obj.obj"/>
+
+      <transform name="toWorld">
+		--><!-- <scale> --><!--
+			--><!-- <x>0.2</x> --><!--
+			--><!-- <y>0.2</y> --><!--
+			--><!-- <z>0.2</z> --><!--
+		--><!-- </scale> --><!--
+        <rotation>
+          <z>90</z>
+        </rotation>
+      </transform>
+       
+	   --><!-- Jade 0.657 0.786 0.9  0.00053, 0.00123, 0.00213 1.3  --><!--
+      <bssrdf type="FastDipole">
+        <integer name="numberPoints" value="2000000"/>
+        --><!-- <color name="sigmaPrimeS" value="0.657 0.786 0.9"/> --><!--
+        --><!-- <color name="sigmaA" value="0.00053 0.00123 0.00213"/>--><!--
+		--><!-- <color name="sigmaA" value="0.003 0.00025 0.024"/> --><!--
+		--><!-- <color name="sigmaA" value="0.0045 0.00025 0.03"/>  --><!--
+		
+		--><!-- <color name="sigmaPrimeS" value="0.16 0.195 0.225"/> --><!--
+		--><!-- <color name="sigmaA" value="0.032 0.00012 0.004"/> --><!--
+		
+		<color name="sigmaPrimeS" value="0.16 0.195 0.225"/>
+		<color name="sigmaA" value="0.64 0.00096 0.032"/>
+		
+        <real name="scale" value="1"/>
+        <real name="eta" value="1.62"/>
+        <real name="error" value="0.2"/>
+      </bssrdf>
+	  <bsdf type="SmoothLayeredBSDF">
+		<real name="alphaTop" value="0.01"/>
+		<double name="etaExt" value="1."/>
+        <double name="etaInt" value="1.62"/>
+        <color name="absorbance" value="0.000001 0.000001 0.000001"/>
+        <double name="thickness" value="0.00002"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0. 0. 0."/>
+        </bsdf>
+		</bsdf>
+      --><!-- <bsdf type="Diffuse"> --><!--
+        --><!-- <color name="albedo" value="0.5 0.5 0.5"/> --><!--
+      --><!-- </bsdf> --><!--
+
+      --><!--<transform name="toWorld">
+        <scale>
+          <x>0.02</x>
+          <y>0.02</y>
+          <z>0.02</z>
+        </scale>
+        <rotation>
+          <y>-90</y>
+        </rotation>
+        <rotation>
+          <x>90</x>
+        </rotation>
+        <translation>
+          <x>078</x>
+          <y>0.20</y>
+          <z>0.3</z>
+        </translation>
+      </transform>--><!--
+    </shape>-->
+    
+  <!--<shape type="Plane">
+    <transform name="toWorld">
+        <scale>
+          <x>70</x>
+          <y>70</y>
+        </scale>
+        <rotation>
+          <x>90.</x>
+        </rotation>
+      <translation>
+        <y>150</y>
+      </translation>
+      </transform>
+  
+    <light type="AreaLight">
+        <color name="radiance" value="5 5 5"/>
+      </light>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0 0 0"/>
+      </bsdf>
+  </shape>-->
+
+  </objects> 
+</scene>

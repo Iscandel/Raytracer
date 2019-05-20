@@ -393,7 +393,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TIXML_USE_STL;OPENEXR_DLL;OPENVDB_3_ABI_COMPATIBLE;USE_ALIGN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;D:\C et CPP\Applications\OpenVDB\openvdb-5.1.0;D:\C et CPP\Applications\tbb\tbb_20170604\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C et CPP\Applications\ilmbase-2.2.0\buildShared64\lib\include;D:\C et CPP\Applications\openexr-2.2.0\buildShared64\lib\include\OpenEXR;D:\C et CPP\Applications\SFML\SFML-2.3.2\include;D:\C et CPP\Applications\OpenVDB\openvdb-5.1.0;D:\C et CPP\Applications\tbb\tbb_20170604\include;C:\Users\Jean-Philip\Documents\Visual Studio 2010\Projects\Raytracer\RaytracerNew2\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

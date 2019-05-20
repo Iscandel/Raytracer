@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <lookAt>
+        <origin>20 20 50</origin>
+      <lookAt>0 4 0</lookAt>
+      <up>0 1 0</up>
+      </lookAt>
+    </transform>
+    <double name="fov" value="39.3077"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="432"/>
+    
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>8</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="64"/>
+  </sampler>
+
+  <integrator type="DirectLightingMIS">
+    <integer name="depth" value="1"/>
+    <integer name="sampleNumber" value="1"/>
+  </integrator>
+
+  <objects>
+    <!-- monolith -->
+    <shape type="Mesh">
+      <string name="path" value="./data/cube.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>0.5</y>
+          <z>0.</z>
+        </translation>
+        <scale>
+          <x>1</x>
+          <y>9</y>
+          <z>4</z>
+        </scale>
+      </transform>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.2 0.2"/>
+      </bsdf>
+    </shape>
+
+
+    <!-- floor -->
+    <shape type="Mesh">
+      <string name="path" value="./data/cube.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-0.5</y>
+          <z>0.</z>
+        </translation>
+        <scale>
+          <x>25</x>
+          <y>1</y>
+          <z>18</z>
+        </scale>
+      </transform>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.85 0.85 0.85"/>
+      </bsdf>
+
+    </shape>
+
+    <!-- glowing wall -->
+    <shape type="Mesh">
+      <string name="path" value="./data/cube.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>0.5</y>
+          <z>0.</z>
+        </translation>
+        <scale>
+          <x>1</x>
+          <y>10</y>
+          <z>18</z>
+        </scale>
+        <translation>
+          <x>-12</x>
+          <y>0.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.0 0.0 0.0"/>
+      </bsdf>
+      <light type="MeshLight">
+        <color name="radiance" value="1. 1. 1."/>
+      </light>
+    </shape>
+  </objects>
+</scene>

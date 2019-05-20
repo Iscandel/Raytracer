@@ -1,7 +1,7 @@
 #include "ImplicitSurface.h"
 
 #include "factory/GeometricShapeFactory.h"
-#include "Intersection.h"
+#include "core/Intersection.h"
 
 #include <cmath>
 

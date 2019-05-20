@@ -89,11 +89,11 @@ LightSamplingInfos EnvironmentLight::sample(const Point3d & pFrom, const Point2d
 		phi = 2 * math::PI * col / (real)myArray.getWidth();
 	}
 
-	real cosTheta = std::cos(theta);
-	real cosPhi = std::cos(phi);
+	//real cosTheta = std::cos(theta);
+	//real cosPhi = std::cos(phi);
 	real sinTheta = std::sin(theta);
-	real sinPhi = std::sin(phi);
-	infos.interToLight = Vector3d(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
+	//real sinPhi = std::sin(phi);
+	infos.interToLight = cartesianFromSpherical(theta, phi);//Vector3d(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
 	infos.interToLight = myLightToWorld->transform(infos.interToLight);
 	infos.distance = mySphereRadius;
 	infos.interToLight.normalize();
@@ -106,7 +106,12 @@ LightSamplingInfos EnvironmentLight::sample(const Point3d & pFrom, const Point2d
 	//}
 	//else
 	{		
+#if NB_SPECTRUM_SAMPLES == 3
 		infos.intensity = myArray(math::thresholding((int)col, 0, (int)myArray.getWidth() - 1), math::thresholding((int)row, 0, (int)myArray.getHeight() - 1));
+#else
+		Color3 res = myArray(math::thresholding((int)col, 0, (int)myArray.getWidth() - 1), math::thresholding((int)row, 0, (int)myArray.getHeight() - 1));
+		infos.intensity = Color::fromRGB(res(0), res(1), res(2));
+#endif
 		infos.pdf = infos.intensity.luminance() * myWeight[row] / (myMarginalCDF.getSum() * (2 * math::PI / myArray.getWidth()) * (math::PI / myArray.getHeight()));//(pdfRow * pdfCol) / (2 * math::PI * math::PI * std::max(std::abs(sinTheta), math::EPSILON); //To change ?
 		infos.pdf /= std::max(std::abs(sinTheta), math::EPSILON);
 	}
@@ -172,8 +177,12 @@ Color EnvironmentLight::le(const Vector3d & direction, const Normal3d &) const
 		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray.getHeight();
 	}
 	
-	
-	return math::interp2(Point2d(fromPhi, fromTheta), myArray);
+#if NB_SPECTRUM_SAMPLES == 3
+		return math::interp2(Point2d(fromPhi, fromTheta), myArray);
+#else
+		Color3 res = math::interp2(Point2d(fromPhi, fromTheta), myArray);
+		return Color::fromRGB(res(0), res(1), res(2));
+#endif
 	//real advanceX = phi - (int)phi;
 	//real advanceY = theta - (int)theta;
 	//int xMin = (int)phi;

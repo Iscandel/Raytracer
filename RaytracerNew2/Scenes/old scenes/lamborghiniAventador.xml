@@ -2,11 +2,11 @@
 <scene>
   <camera type="NoriPerspective">
     <transform name="toWorld">
-      <!--<scale>
+      <scale>
         <x>-1</x>
         <y>1</y>
         <z>1.</z>
-      </scale>-->
+      </scale>
       <lookAt>
         <origin>2 2 -3</origin>
         <lookAt>0 0.5 0</lookAt>
@@ -84,13 +84,10 @@
       <!--20060807_wells6_hd.jpg"/>-->
       <double name="scale" value="1."/>
       <transform name="toWorld">
-        <scale>
-        <x>-1</x>
-      </scale>
         <rotation>
-          <x>0</x>
-          <y>10.</y>
-          <z>0.</z>
+          <x>90.</x>
+          <y>180.</y>
+          <z>-80.</z>
         </rotation>
       </transform>
     </light>

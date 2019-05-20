@@ -1,0 +1,251 @@
+<!-- Table scene, Copyright (c) 2012 by Olesya Jakob -->
+
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <lookAt>
+        <origin>32.1259 -68.0505 36.597</origin>
+        <lookAt>31.6866 -67.2776 36.1392</lookAt>
+        <up>-0.22886 0.39656 0.889024</up>
+      </lookAt>
+    </transform>
+  
+    <double name="fov" value="35"/>
+    <integer name="sizeX" value="800"/>
+    <integer name="sizeY" value="600"/>
+
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>4</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="16"/>
+  </sampler>
+
+	<!-- Use the path tracer with multiple importance sampling -->
+  <integrator type="PathTracingMIS">
+    <integer name="depth" value="20"/>
+    <integer name="sampleNumber" value="4"/>
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+  
+<!--     <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/Audi RS6/jardinVilla.exr"/>
+     <transform name="toWorld">
+         <rotation>
+          <x>90.</x>
+          <y>180.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+    </light>
+  </lights> -->
+
+  <objects>
+    <!-- Two light sources  -->
+    <shape type="Mesh">
+      <string name="path" value="./data/table/meshes/mesh_1.obj"/>
+
+      <light type="MeshLight">
+        <color name="radiance" value="3 3 2.5"/>
+      </light>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0 0 0"/>
+      </bsdf>
+
+      <transform name="toWorld">
+        <scale>
+          <x>0.06</x>
+          <y>0.06</y>
+          <z>-1.</z>
+        </scale>
+        <translation>
+          <x>10.</x>
+          <y>0.</y>
+          <z>25</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/table/meshes/mesh_1.obj"/>
+
+      <light type="MeshLight">
+        <color name="radiance" value="1 1 1.6"/>
+      </light>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0 0 0"/>
+      </bsdf>
+
+      <transform name="toWorld">
+        <scale>
+          <x>0.3</x>
+          <y>0.3</y>
+          <z>-1.</z>
+        </scale>
+        <translation>
+          <x>0.</x>
+          <y>0.</y>
+          <z>60.</z>
+        </translation>
+      </transform>
+    </shape>
+
+
+    <shape type="Mesh">
+      <string name="path" value="./data/table/meshes/mesh_0.obj"/>
+
+      <bsdf type="Microfacet">
+        <color name="kd" value="0 0 0"/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>3.</x>
+          <y>0.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <!-- Diffuse floor -->
+    <shape type="Mesh">
+      <string name="path" value="./data/table/meshes/mesh_1.obj"/>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.5 0.5 0.5"/>
+      </bsdf>
+
+      <transform name="toWorld">
+        <scale>
+          <x>0.2</x>
+          <y>0.35</y>
+          <z>0.5</z>
+        </scale>
+        <translation>
+          <x>-35</x>
+          <y>25.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <!-- Water<->Air interface -->
+    <shape type="Mesh">
+      <string name="path" value="./data/table/meshes/mesh_2.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <x>-1.</x>
+          <y>0.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+	 <bssrdf type="FastDipole">
+        <integer name="numberPoints" value="500000"/>
+        <color name="sigmaPrimeS" value="0.70 1.22 1.90"/>
+        <color name="sigmaA" value="0.0014 0.0025 0.0142"/>
+        <real name="scale" value="30"/>
+        <real name="eta" value="1.3"/>
+        <real name="error" value="0.2"/>
+      </bssrdf>
+     <bsdf type="Diffuse">
+		<color name="albedo" value="0 0 0"/>
+		<real name="alphaTop" value="0.2"/>
+		<double name="etaExt" value="1."/>
+        <double name="etaInt" value="1.3"/>
+        <color name="absorbance" value="0.0001 0.0001 0.0001"/>
+        <double name="thickness" value="0.002"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0. 0. 0."/>
+        </bsdf>
+		</bsdf>
+    </shape>
+
+    
+      <!-- Glass<->Air interface -->
+        
+    <shape type="Mesh">
+      <string name="path" value="./data/table/meshes/mesh_3.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <x>-1.</x>
+          <y>0.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+
+	  <!-- <bssrdf type="FastDipole"> -->
+        <!-- <integer name="numberPoints" value="50000"/> -->
+        <!-- <color name="sigmaPrimeS" value="0.70f 1.22f 1.90f"/> -->
+        <!-- <color name="sigmaA" value="0.0014f 0.0025f 0.0142f"/> -->
+        <!-- <real name="scale" value="100000"/> -->
+        <!-- <real name="eta" value="1.3"/> -->
+        <!-- <real name="error" value="0.2"/> -->
+      <!-- </bssrdf> -->
+		<!-- <bsdf type="Diffuse"> -->
+		<!-- <real name="alphaTop" value="0.2"/> -->
+		<!-- <double name="etaExt" value="1."/> -->
+        <!-- <double name="etaInt" value="1.3"/> -->
+        <!-- <color name="absorbance" value="0.0001 0.0001 0.0001"/> -->
+		<!-- <color name="albedo" value="0 0 0"/> -->
+        <!-- <double name="thickness" value="0.002"/> -->
+        <!-- <bsdf name="baseBSDF" type="Diffuse"> -->
+          <!-- <color name="albedo" value="0. 0. 0."/> -->
+        <!-- </bsdf> -->
+		<!-- </bsdf> -->
+      <bsdf type="Dielectric">
+        <double name="etaExt" value="1"/>
+        <double name="etaInt" value="1.5"/>
+      </bsdf>
+    </shape>
+
+    
+        <!-- Glass<->Water interface -->
+        
+    <shape type="Mesh">
+      <string name="path" value="./data/table/meshes/mesh_4.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <x>-1.</x>
+          <y>0.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+		<bssrdf type="FastDipole">
+        <integer name="numberPoints" value="500000"/>
+        <color name="sigmaPrimeS" value="0.70 1.22 1.90"/>
+        <color name="sigmaA" value="0.0014 0.0025 0.0142"/>
+        <real name="scale" value="30"/>
+        <real name="eta" value="0.88"/>
+        <real name="error" value="0.2"/>
+      </bssrdf>
+		<bsdf type="Diffuse">
+		<real name="alphaTop" value="0.2"/>
+		<double name="etaExt" value="1.5"/>
+        <double name="etaInt" value="1.3"/>
+		<color name="albedo" value="0 0 0"/>
+        <color name="absorbance" value="0.0001 0.0001 0.0001"/>
+        <double name="thickness" value="0.002"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0. 0. 0."/>
+        </bsdf>
+		</bsdf>
+    </shape>
+  </objects>
+</scene>

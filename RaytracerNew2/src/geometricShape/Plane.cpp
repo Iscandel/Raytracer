@@ -1,6 +1,6 @@
 #include "Plane.h"
 
-#include "Intersection.h"
+#include "core/Intersection.h"
 #include "factory/GeometricShapeFactory.h"
 #include "factory/ObjectFactoryManager.h"
 

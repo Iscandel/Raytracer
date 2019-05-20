@@ -1,8 +1,8 @@
 #include "Sphere.h"
 #include "Math.h"
-#include "Intersection.h"
+#include "core/Intersection.h"
 #include "factory/GeometricShapeFactory.h"
-#include "Mapping.h"
+#include "core/Mapping.h"
 #include "factory/ObjectFactoryManager.h"
 
 //=============================================================================

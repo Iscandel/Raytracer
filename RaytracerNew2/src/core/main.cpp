@@ -392,15 +392,15 @@ int main(int argc, char* argv[])
 		//std::cout << prod2 << " ||" << prod3 << std::endl;
 		//Color3f tmp;
 		//std::cout << sizeof(int) << " " << sizeof(double) << " " << sizeof(float) << " " << sizeof(char) << std::endl;
-		std::cout << sizeof(Color3f) << " " << std::endl;
-		Color3f c;c.exp();
+		//std::cout << sizeof(Color3f) << " " << std::endl;
+		//Color3f c;c.exp();
 		//(?!chat|?!chien)([0-9A-Za-z-]{3,})
 		//auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "([[0-9]+\\s*:\\s*.+]+)([^\\s,]+)");
-		auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "([0-9]+\\.?[0-9]+\\s*:\\s*[0-9]+\.?[0-9]+)");
-		//auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "[^\\s,]+");
-		//auto vec = tools::regexSplit("Hello, everyone! This is: COSC-1436, SP18", "[^\\s.,:;!?]+");
-		for (auto tmp : vec)
-			std::cout << tmp << std::endl;
+		//auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "([0-9]+\\.?[0-9]+\\s*:\\s*[0-9]+\.?[0-9]+)");
+		////auto vec = tools::regexSplit("200:3, 300:5,350:4 400:4, 450:7, 500: 6 550 : 7 ", "[^\\s,]+");
+		////auto vec = tools::regexSplit("Hello, everyone! This is: COSC-1436, SP18", "[^\\s.,:;!?]+");
+		//for (auto tmp : vec)
+		//	std::cout << tmp << std::endl;
 		//std::cout << sizeof(Col<real>) <<  std::endl;
 		//Point3d p;
 		//std::cout << sizeof(p) << std::endl;

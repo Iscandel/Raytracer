@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <!--<scale>
+        <x>-1</x>
+      </scale>-->
+      <lookAt>
+        <origin>28.773 -51.1128 28.40</origin>
+        <lookAt>28.425 -50.3226 28.07</lookAt>
+        <up>-0.204606 0.3544 0.912435</up>
+      </lookAt>
+    </transform>
+    <focal>0.05</focal>
+    <mPerPixel>0.0002</mPerPixel>
+    <!--0.00005-->
+    <double name="fov" value="22"/>
+
+    <integer name="sizeX" value="1024"/>
+    <integer name="sizeY" value="768"/>
+    <!--<double name="apertureRadius" value="3."/>
+    <double name="focalPlane" value="450"/>-->
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>5</threadNumber>
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/steam/envmap.exr"/>
+      <double name="scale" value="1."/>
+      <transform name="toWorld">
+        <rotation>
+          <x>90.</x>
+          <y>180.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="32"/>
+  </sampler>
+
+  <integrator type="VolPathTracing">
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+
+  <objects>
+    <!-- Diffuse floor -->
+    <shape type="Mesh">
+      <string name="path" value="./data/steam/mesh_1.obj"/>
+
+      <transform name="toWorld">
+        <translation>
+          <z>-3.24</z>
+        </translation>
+      </transform>
+      <bsdf type="Microfacet">
+        <color name="kd" value=".0,.0,.0"/>
+      </bsdf>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value="./data/simpleSmoke/bounds.obj"/>
+
+      <transform name="toWorld">
+        <translation>
+          <x>0.5</x>
+          <y>0.5</y>
+          <z>0.195313</z>
+        </translation>
+        <scale>
+          <x>20</x>
+          <y>20</y>
+          <z>8</z>
+        </scale>
+        <rotation>
+          <x>-100</x>
+        </rotation>
+        <rotation>
+          <z>50</z>
+        </rotation>
+        <translation>
+          <x>-8</x>
+          <z>17</z>
+        </translation>
+      </transform>
+      <!--<bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.2 0.3"/>
+      </bsdf>-->
+
+      <medium name="interior" type="Heterogeneous">
+        <string name="path" value="./data/steam/steam.vol"/>
+        <color name="albedo" value=".7 .7 .7"/>
+        <double name="scale" value="15.0"/>
+        <!--<transform name="toWorld">
+          <translation>
+            <x>0.5</x>
+            <y>0.5</y>
+            <z>0.195313</z>
+          </translation>
+          <scale>
+            <x>20</x>
+            <y>20</y>
+            <z>8</z>
+          </scale>
+          <rotation>
+            <x>-100</x>
+          </rotation>
+          <rotation>
+            <z>50</z>
+          </rotation>
+          <translation>
+            <x>-8</x>
+            <z>17</z>
+          </translation>
+        </transform>-->
+      </medium>
+    </shape>
+
+  </objects>
+</scene>

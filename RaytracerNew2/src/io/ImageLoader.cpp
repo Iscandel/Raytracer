@@ -26,7 +26,7 @@ ImageLoader::~ImageLoader()
 {
 }
 
-void ImageLoader::load(const std::string & path, Array2D<Color>& array)
+void ImageLoader::load(const std::string & path, Array2D<Color3>& array)
 {
 	CacheMap::iterator it = myCache.find(path);
 	if (it != myCache.end())
@@ -52,7 +52,7 @@ void ImageLoader::load(const std::string & path, Array2D<Color>& array)
 			for (int j = 0; j < height; j++)
 			{
 				Imf_2_2::Rgba& rgba = pixels[j][i];
-				array(i, j) = Color::fromRGB(rgba.r, rgba.g, rgba.b);//Color(rgba.r, rgba.g, rgba.b);
+				array(i, j) = Color3::fromRGB(rgba.r, rgba.g, rgba.b);//Color(rgba.r, rgba.g, rgba.b);
 			}
 		}
 
@@ -71,7 +71,7 @@ void ImageLoader::load(const std::string & path, Array2D<Color>& array)
 			for (unsigned int x = 0; x < im.getSize().x; x++)
 			{
 				sf::Color col = im.getPixel(x, y);
-				array(x, y) = Color::fromRGB(col.r / 255.f, col.g / 255.f, col.b / 255.f);//Color(col.r / 255.f, col.g / 255.f, col.b / 255.f);
+				array(x, y) = Color3::fromRGB(col.r / 255.f, col.g / 255.f, col.b / 255.f);//Color(col.r / 255.f, col.g / 255.f, col.b / 255.f);
 			}
 		}
 

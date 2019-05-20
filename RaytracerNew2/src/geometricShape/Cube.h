@@ -1,6 +1,6 @@
 #pragma once
-#include "MeshFromShape.h"
-#include "Parameters.h"
+#include "geometricShape/MeshFromShape.h"
+#include "core/Parameters.h"
 
 class Cube :
 	public MeshFromShape

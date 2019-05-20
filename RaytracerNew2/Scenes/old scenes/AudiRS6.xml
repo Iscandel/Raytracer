@@ -1,0 +1,661 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <lookAt>
+        <origin>-930 80 290</origin>
+        <lookAt>200 -10 60</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
+
+      <!--<lookAt>
+        <origin>850 60 -640</origin>
+        <lookAt>200 150 -120</lookAt>
+        <up>0 1 0</up>
+      </lookAt>-->
+    </transform>
+    <focal>0.05</focal>
+    <mPerPixel>0.0002</mPerPixel>
+    <!--0.00005-->
+    <double name="focal" value="0.05"/>
+    <double name="meterPixelSize" value="0.0002"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="550"/>
+    <!--<double name="apertureRadius" value="3."/>
+    <double name="focalPlane" value="450"/>-->
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>5</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="32"/>
+  </sampler>
+
+  <integrator type="PathTracingMIS">
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+
+  <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/Audi RS6/jardinVilla.exr"/>
+      <!--20060807_wells6_hd.jpg"/>-->
+      <double name="scale" value="1."/>
+      <transform name="toWorld">
+        <rotation>
+          <x>90.</x>
+          <y>180.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+
+  <objects>
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/audi_rs6V2.obj"/>
+      -->
+    <!--<bsdf type="Diffuse">
+        <color name="albedo" value="0.9 0.2 0.9"/>
+        <double name="alpha" value="150"/>
+      </bsdf>-->
+    <!--
+      -->
+    <!--<bsdf type="Mirror">
+      </bsdf>-->
+    <!--
+      <transform name="toWorld">
+        <rotation>
+          <x>0.</x>
+          <y>180.<y>
+          <z>0.<z>
+        </rotation>
+      </transform>
+      -->
+    <!--Gold-->
+    <!--
+      -->
+    <!--<bsdf type="Conductor">
+        <color name="albedo" value="1. 1. 1."/>
+        <color name="eta" value="0.22273 0.42791 1.2597 "/>
+        <color name="absorption" value="3.0325 2.3345 1.7531"/>
+      </bsdf>-->
+    <!--
+      -->
+    <!--<bsdf type="Microfacet">
+        <color name="kd" value="0.4 0.8 0.2"/>-->
+    <!--
+      -->
+    <!--0.0175 0.0225 0.0325"/>-->
+    <!--
+
+      -->
+    <!--<double name="alpha" value="0.001"/>
+      </bsdf>-->
+    <!--
+      -->
+    <!--Copper-->
+    <!--
+      <bsdf type="LayeredBSDF">
+        <color name="albedo" value="1. 1. 1."/>
+
+        -->
+    <!--611 549 464 nm -->
+    <!--
+
+        <color name="eta" value="0.36892 0.68384 1.27 "/>
+        <color name="absorption" value="3.2112 2.6165 2.2880"/>
+      </bsdf>
+      -->
+    <!--Copper 2-->
+    <!--
+      -->
+    <!--<bsdf type="Conductor">
+        <color name="albedo" value="1. 1. 1."/>
+        -->
+    <!--
+      -->
+    <!--700 546.1 435 nm -->
+    <!--
+
+      -->
+    <!--<color name="eta" value="0.21 0.70 1.3376 "/>
+        <color name="absorption" value="4.1 2.59 2.2979"/>
+      </bsdf>-->
+    <!--
+    </shape>-->
+
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/aerations.obj"/>
+      <bsdf type="Conductor">
+        <!--Alu-->
+        <string name="material" value="aluminium"/>
+        <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/brakeNuts.obj"/>
+      <bsdf type="Conductor">
+        <!--Alu-->
+        <string name="material" value="aluminium"/>
+        <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cacheImat2.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cacheRouesAcier.obj"/>
+      <bsdf type="Conductor">
+        <!--Alu-->
+        <string name="material" value="aluminium"/>
+        <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <!--Vitre devant les phares-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cachesPhares.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cachesRoues.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/cadreImat.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/carrosserie.obj"/>
+      <bsdf type="LayeredBSDF">
+        <double name="alphaTop" value="0.001"/>
+        <color name="absorbance" value="0.1 0.7 0.7"/>
+        <double name="thickness" value="1.2"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.1"/>
+          <string name="material" value="aluminium"/>
+        </bsdf>
+        <!--<color name="albedo" value="1. 1. 1."/>
+
+        --><!--611 549 464 nm--><!--
+        <color name="eta" value="0.36892 0.68384 1.27 "/>
+        <color name="absorption" value="3.2112 2.6165 2.2880"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <!--Cache autour et derrière les phares-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/derrierePhares_headlights.obj"/>
+      <bsdf type="RoughConductor">
+        <!--Alu-->
+        <string name="material" value="aluminium"/>
+        <double name="alpha" value="0.08"/>
+        <string name="distribution" value="ggx"/>
+        <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/derriereRouesV2.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/disquesFreinageV2.obj"/>
+      <bsdf type="Conductor">
+        <!--Alu-->
+        <string name="material" value="aluminium"/>
+        <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/encadrementVitres.obj"/>
+      <bsdf type="Conductor">
+        <!--Alu-->
+        <string name="material" value="aluminium"/>
+        <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/enjoliveursV2.obj"/>
+      <bsdf type="Conductor">
+        <!--Alu-->
+        <string name="material" value="aluminium"/>
+        <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/essuieGlaceG_box15-16_box1.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/essuieGlaceD_box15-16_box1.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0. 0. 0."/>
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/intEnjoliveurs_box8xV2.obj"/>
+      <bsdf type="Conductor">
+        <!--Alu-->
+        <string name="material" value="aluminium"/>
+        <!--<color name="eta" value="1.18 0.96 0.66"/>
+        <color name="absorption" value="7.04 6.38 5.46"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/interieur.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.90 0.84 0.79"/>
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <!--Boitier des lampes-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/lampesPhares.obj"/>
+      <bsdf type="Conductor">
+        <string name="material" value="silver"/>
+        <!--<color name="albedo" value="0.2 0.2 0.2"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/logo.obj"/>
+      <bsdf type="Conductor">
+        <!--Chrome-->
+        <string name="material" value="chromium"/>
+        <!--<color name="eta" value="3.20 2.78 2.13"/>
+        <color name="absorption" value="4.26 4.19 3.92"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/lowerLampesPhares.obj"/>
+      <bsdf type="Diffuse">
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/lumiereDroite.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pharesArriereCentre.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pharesArrieresLateraux.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/pneusTournes/pneus_tubeV2.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.08 0.08 0.08"/>
+      </bsdf>
+      <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/potEchappement.obj"/>
+      <bsdf type="Conductor">
+        <!--Chrome-->
+        <string name="material" value="chromium"/>
+        <!--<color name="eta" value="3.20 2.78 2.13"/>
+        <color name="absorption" value="4.26 4.19 3.92"/>-->
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/sol_Box2.obj"/>
+      <bsdf type="ShadowCatcher">
+      </bsdf>
+     <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/tableauBord.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.7"/>
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/texteLogo.obj"/>
+      <transform name="toWorld">
+        <translation>
+          <x>460.4</x>
+          <y>-67.8</y>
+          <z>-124.8</z>
+        </translation>
+        <scale>
+          <x>1.3</x>
+          <y>1.3</y>
+          <z>1.3</z>
+        </scale>
+        <rotation>
+          <x>0.</x>
+          <y>200.</y>
+          <z>0.</z>
+        </rotation>
+        <translation>
+          <x>-470</x>
+          <y>67.8</y>
+          <z>124.8</z>
+        </translation>
+        <translation>
+          <x>0.</x>
+          <y>-48.</y>
+          <z>52</z>
+        </translation>
+      </transform>
+      <bsdf type="RoughConductor">
+        <string name="material" value="chromium"/>
+        <double name="alpha" value="0.2"/>
+         <!--<color name="eta" value="0.22273 0.42791 1.2597 "/>
+        <color name="absorption" value="3.0325 2.3345 1.7531"/>-->
+      </bsdf>
+    </shape>
+
+    <!--Ampoules-->
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/verreDevantLampesPhares.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+      <!--<light type="MeshLight">
+        <color name="radiance" value="5. 5. 1."/>
+      </light>-->
+      <!--<bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+      </bsdf>-->
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/Audi RS6/vitres.obj"/>
+      <bsdf type="SheetDielectric">
+      </bsdf>
+    <transform name="toWorld">
+        <translation>
+          <x>0.</x>
+          <y>-50.</y>
+          <z>0.</z>
+        </translation>
+      </transform>
+    </shape>
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+        <rotation>
+          <x>180.</x>
+          <y>0.<y>
+          <z>0.<z>
+        </rotation>
+        <translation>
+          <x>0.<x>
+          <y>3.5</y>
+          <z>0.</z>
+        </translation>
+        <scale>
+          <x>2</x>
+          <y>1</y>
+          <z>1</z>
+        </scale>
+      </transform>
+      <light type="MeshLight">
+        <color name="radiance" value="5. 5. 5."/>
+      </light>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+      </bsdf>
+    </shape>
+
+  -->
+  </objects>
+</scene>

@@ -30,7 +30,7 @@ public:
 	std::vector<CDF> myRowCDFs;
 	CDF myMarginalCDF; //to choose a row (sum of the columns on a row)
 
-	Array2D<Color> myArray;
+	Array2D<Color3> myArray;
 
 	std::vector<real> myWeight;
 

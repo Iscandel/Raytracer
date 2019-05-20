@@ -1,13 +1,13 @@
 #pragma once
-#include "ObjectFactory.h"
+#include "factory/ObjectFactory.h"
 
 #include "accelStruct/Bvh.h"
-#include "ObjLoader.h"
-#include "Logger.h"
-#include "Timer.h"
-#include "Triangle.h"
+#include "io/ObjLoader.h"
+#include "tools/Logger.h"
+#include "tools/Timer.h"
+#include "geometricShape/Triangle.h"
 
-#include "AreaLight.h"
+#include "light/AreaLight.h"
 
 #include <Eigen/StdVector>
 

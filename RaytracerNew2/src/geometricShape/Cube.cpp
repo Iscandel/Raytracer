@@ -2,7 +2,7 @@
 
 #include "factory/ObjectFactoryManager.h"
 
-#include "Primitive.h"
+#include "core/Primitive.h"
 #include "factory/MeshFromShapeFactory.h"
 
 Cube::Cube(const Parameters& params)

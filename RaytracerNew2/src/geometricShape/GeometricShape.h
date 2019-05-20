@@ -1,14 +1,14 @@
 #ifndef H__OBJECT_170520151951__H
 #define H__OBJECT_170520151951__H
 
-#include "DifferentialGeometry.h"
-#include "Geometry.h"
-#include "Ray.h"
-#include "BoundingBox.h"
-#include "Transform.h"
-#include "Parameters.h"
-#include "ISampledShape.h"
-#include "RaytracerObject.h"
+#include "core/DifferentialGeometry.h"
+#include "core/Geometry.h"
+#include "core/Ray.h"
+#include "core/BoundingBox.h"
+#include "core/Transform.h"
+#include "core/Parameters.h"
+#include "geometricShape/ISampledShape.h"
+#include "core/RaytracerObject.h"
 
 class Intersection;
 

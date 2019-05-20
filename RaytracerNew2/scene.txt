@@ -1,1 +1,1 @@
-./Scenes/cbox_fog.xml
+./Scenes/bedroom.xml

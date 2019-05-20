@@ -56,7 +56,12 @@ Color ImageTexture::eval(const Point2d & uv)
 	if (y >= myArray.getHeight())
 		y -= myArray.getHeight();
 
-	return math::interp2(Point2d(x, y), myArray);
+#if NB_SPECTRUM_SAMPLES == 3
+		return math::interp2(Point2d(x, y), myArray);
+#else
+		Color3 res = math::interp2(Point2d(x, y), myArray);
+		return Color::fromRGB(res(0), res(1), res(2));
+#endif
 	//return myArray(x, y);
 }
 

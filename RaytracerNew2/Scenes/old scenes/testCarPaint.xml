@@ -1,12 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <scene>
   <camera type="NoriPerspective">
     <transform name="toWorld">
-      <!--<scale>
+      <scale>
         <x>-1</x>
         <y>1</y>
         <z>1.</z>
-      </scale>-->
+      </scale>
       <lookAt>
         <origin>2 2 -3</origin>
         <lookAt>0 0.5 0</lookAt>
@@ -70,7 +70,7 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="32"/>
+    <integer name="sampleNumber" value="128"/>
   </sampler>
 
   <integrator type="PathTracingMIS">
@@ -83,14 +83,12 @@
       <!--uffizi_probe.hdr-->
       <!--20060807_wells6_hd.jpg"/>-->
       <double name="scale" value="1."/>
+      <bool name="isProbe" value="true"/>
       <transform name="toWorld">
-        <scale>
-        <x>-1</x>
-      </scale>
         <rotation>
-          <x>0</x>
-          <y>10.</y>
-          <z>0.</z>
+          <x>90.</x>
+          <y>280.</y>
+          <z>-110.</z>
         </rotation>
       </transform>
     </light>
@@ -106,10 +104,10 @@
 
     <shape type="Mesh">
       <string name="path" value ="./data/lamborghini Aventador/carrosserie.obj"/>
-<!--<bsdf type="CarPaint">
-<string name="preset" value="ford f8"/>
-</bsdf>-->
-      <bsdf type="SmoothLayeredBSDF">
+      <bsdf type="CarPaint">
+<string name="preset" value="white"/>
+</bsdf>
+     <!-- <bsdf type="SmoothLayeredBSDF">
         <double name="alphaTop" value="0.01"/>
         <color name="absorbance" value="0.001 0.5 0.85"/>
         <color name="absorbance" value="0.001 0.37 0.81"/>
@@ -118,7 +116,7 @@
           <double name="alpha" value="0.07"/>
           <string name="material" value="aluminium"/>
         </bsdf>
-      </bsdf>
+      </bsdf>-->
     </shape>
 
     <shape type="Mesh">
@@ -1121,10 +1119,12 @@
       <bsdf type="ShadowCatcher">
         <color name="albedo" value="0.7 0.7 0.3"/>
         <double name="highTreshold" value="0.7"/>
-      <double name="ratio" value="20"/>
+        <double name="ratio" value="20"/>
       </bsdf>
     </shape>
 
-  
+
+
+
   </objects>
 </scene>

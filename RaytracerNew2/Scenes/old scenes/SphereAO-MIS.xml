@@ -1,0 +1,134 @@
+﻿<?xml version="1.0"?>
+ <scene>
+  <parameters>
+    <threadNumber>8</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="128"/>
+  </sampler>
+
+  <!-- Use a direct illumination integrator -->
+  <integrator type="DirectLightingMIS">
+    <integer name="depth" value="1"/>
+    <integer name="sampleNumber" value="1"/>
+  </integrator>
+
+  <!-- Render the scene as viewed by a perspective camera -->
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <lookAt>
+        <origin>5 5 1</origin>
+        <lookAt>0 0 0</lookAt>
+        <up>0 0 1</up>
+      </lookAt> 
+    </transform>
+
+    <double name="fov" value="40" />
+
+    <!-- 512 x 512 pixels -->
+    <integer value="512" name="sizeX"/>
+    <integer value="512" name="sizeY"/>
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+   
+<!-- Setup a distant disk emitter -->
+  <lights>
+    <light type="DistantLight">
+      <!--<color name="radiance" value="0.6 0.6 0.6"/>-->
+       <!--accept everything (i.e. constant environment map)-->
+      <!--<double name="theta" value="180"/>
+      <transform name="toWorld">
+        <rotation>
+          <x>0.</x>
+          <y>0.<y>
+          <z>0.<z>
+        </rotation>
+      </transform>-->
+      
+      <color name="radiance" value="30 30 30"/>
+      <double name="theta" value="10"/>
+
+      <transform name="toWorld">
+        <rotation>
+          <x>45.</x>
+          <y>0.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+  <!-- Load a triangulated sphere -->
+  <objects>
+    <shape type="Mesh">
+      <string name="path" value="./data/sphere2.obj" />
+      <bsdf type="Diffuse">
+        <color name="albedo" value="1 1 1" />
+      </bsdf>
+    </shape>
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+        <rotation>
+          <x>180.</x>
+          <y>0.<y>
+          <z>0.<z>
+        </rotation>
+        <translation>
+          <x>0.<x>
+          <y>6.5</y>
+          <z>0.</z>
+        </translation>
+        <scale>
+          <x>2</x>
+          <y>1</y>
+          <z>1</z>
+        </scale>
+      </transform>
+      <light type="MeshLight">
+        <color name="radiance" value="30. 30. 30."/>
+      </light>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+      </bsdf>
+    </shape>-->
+
+
+    <!-- Ground plane -->
+    <shape type="Mesh">
+      <string  name="path" value="./data/plane.obj"/>
+      <bsdf type="Diffuse">
+        <color  name="albedo" value="1 1 1"/>
+      </bsdf>
+      <transform name="toWorld">
+        <scale>
+          <x>10</x>
+          <y>1</y>
+          <z>10</z>
+        </scale>
+        <rotation>
+          <x>90.</x>
+          <y>0.</y>
+          <z>0.</z>
+        </rotation>
+        <translation>
+          <x>0.</x>
+          <y>0.</y>
+          <z>-1.</z>
+        </translation>
+      </transform>
+    </shape>
+  </objects>
+
+</scene>

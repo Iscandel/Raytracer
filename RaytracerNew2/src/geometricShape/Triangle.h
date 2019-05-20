@@ -1,8 +1,8 @@
 #pragma once
-#include "GeometricShape.h"
-#include "Geometry.h"
+#include "geometricShape/GeometricShape.h"
+#include "core/Geometry.h"
 
-#include "Mesh.h"
+#include "geometricShape/Mesh.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Triangle geometric shape.

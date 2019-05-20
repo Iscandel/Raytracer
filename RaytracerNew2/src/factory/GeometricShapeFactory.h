@@ -1,9 +1,9 @@
 #pragma once
 
-#include "AreaLight.h"
-#include "Logger.h"
-#include "ObjectFactory.h"
-#include "Primitive.h"
+#include "light/AreaLight.h"
+#include "tools/Logger.h"
+#include "factory/ObjectFactory.h"
+#include "core/Primitive.h"
 
 ///////////////////////////////////////////////////////////////////////////
 /// \brief Creates a given shape (excepted mesh)

@@ -9,12 +9,12 @@
 class ImageLoader
 {
 public:
-	typedef std::map<std::string, Array2D<Color>> CacheMap;
+	typedef std::map<std::string, Array2D<Color3>> CacheMap;
 public:
 	ImageLoader();
 	~ImageLoader();
 
-	static void load(const std::string& path, Array2D<Color>& array);
+	static void load(const std::string& path, Array2D<Color3>& array);
 	static bool isHDRFile(const std::string& path);
 
 protected:

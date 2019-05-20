@@ -1,0 +1,137 @@
+<scene version="0.5.0" >
+	
+	<camera type="NoriPerspective">
+    <transform name="toWorld">
+      <matrix value="0.00560664 -0.488405 -0.872599 23.1701 0 0.872613 -0.488413 15.7142 0.999984 0.00274286 0.00490048 -0.172476 0 0 0 1"/>
+    </transform>
+    <focal>0.05</focal>
+    <mPerPixel>0.0002</mPerPixel>
+    <!--0.00005-->
+	<double name="fov" value="35"/>
+    <double name="focal" value="0.05"/>
+    <double name="meterPixelSize" value="0.0002"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="768"/>
+	<double name="apertureRadius" value="1."/>
+    <double name="focalPlane" value="26"/>
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>4</threadNumber>
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="32"/>
+  </sampler>
+
+  <integrator type="PathTracingMIS">
+    <integer name="depth" value="10"/>
+  </integrator>
+
+	<lights>
+		<light type="EnvironmentLight">
+			<string name="path" value="./data/envmap.exr"/>
+			<double name="factor" value="2."/>
+			<transform name="toWorld">
+				<rotation>
+					<x>90.</x>
+					<y>180.</y>
+					<z>0.</z>
+				</rotation>
+			</transform>
+		</light>
+	</lights>
+
+	
+	<objects>
+		<shape type="Mesh">
+			<string name="path" value ="./data/teapot/models/Mesh003.obj"/>
+			<transform name="toWorld" >
+				<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+			</transform>
+			<bsdf type="SmoothLayeredBSDF">
+				<color name="absorbance" value="0.001 0.001 0.001"/>
+				<double name="thickness" value="0.001"/>
+				<bsdf name="baseBSDF" type="Diffuse">
+					<color name="albedo" value="0.95 0.95 0.95"/>
+				</bsdf>
+			</bsdf>
+		</shape>
+	
+		<shape type="Mesh" >
+			<string name="path" value="./data/teapot/models/Mesh001.obj" />
+			<transform name="toWorld" >
+				<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+			</transform>
+			<bsdf type="SmoothLayeredBSDF">
+				<color name="absorbance" value="0.001 0.001 0.001"/>
+				<double name="thickness" value="0.001"/>
+				<bsdf name="baseBSDF" type="Diffuse">
+					<color name="albedo" value="0.95 0.95 0.95"/>
+				</bsdf>
+			</bsdf>
+		</shape>
+	
+		<shape type="Mesh" >
+			<string name="path" value="./data/teapot/models/Mesh002.obj" />
+			<transform name="toWorld" >
+				<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+			</transform>
+			<bsdf type="SmoothLayeredBSDF">
+				<color name="absorbance" value="0.001 0.001 0.001"/>
+				<double name="thickness" value="0.001"/>
+				<bsdf name="baseBSDF" type="Diffuse">
+					<color name="albedo" value="0.95 0.95 0.95"/>
+				</bsdf>
+			</bsdf>
+		</shape>
+		
+		<shape type="Mesh" >
+			<string name="path" value="./data/teapot/models/Mesh000.obj" />
+			<transform name="toWorld" >
+				<matrix value="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1"/>
+			</transform>
+			<bsdf type="SmoothLayeredBSDF">
+				<color name="absorbance" value="0.001 0.001 0.001"/>
+				<double name="thickness" value="0.001"/>
+				<bsdf name="baseBSDF" type="Diffuse">
+					<color name="albedo" value="0.95 0.95 0.95"/>
+				</bsdf>
+			</bsdf>
+		</shape>
+		
+		<shape type="Plane" >
+			<transform name="toWorld" >
+				<scale>
+					<x>10</x>
+					<y>15</y>
+					<z>1</z>
+				</scale>
+				<rotation>
+					<x>-90</x>
+					<y>20</y>
+					<z>0</z>
+				</rotation>
+			</transform>
+			<bsdf type="Diffuse">
+				<!-- <color name="albedo" value="0.9 0 0"/> -->
+				<texture name="albedo" type="ImageTexture">
+					<string name="path" value="./data/teapot/nappe.jpg"/>
+				</texture>
+				
+			</bsdf>
+		</shape>
+		
+	</objects>
+	
+</scene>

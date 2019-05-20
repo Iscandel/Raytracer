@@ -162,20 +162,20 @@ using Normal3 = Normal<Type, 3>;
 
 inline real sphericalPhiFromCartesian(const Vector3d& v)
 {
-	real res =  std::atan2(v.y(), v.x());
-	//real res = std::atan2(v.x(), -v.z());
+	//real res =  std::atan2(v.y(), v.x());
+	real res = std::atan2(v.x(), -v.z());
 	return res < 0.f ? res + 2 * (real) M_PI : res;	
 }
 
 inline real sphericalThetaFromCartesian(const Vector3d& v)
 {
-	if (std::abs(v.z()) > 1.f)
+	if (std::abs(v.y()) > 1.f)
 		ILogger::log() << "sphericalThetaFromCartesian: Acos() is in range [-1; 1]\n";
 
 	//real val = v.z();
 	//val = val < -1. ? -1. : val  > 1. ? 1. : val;
-	return std::acos(v.z());
-	//return std::acos(v.y());
+	//return std::acos(v.z());
+	return std::acos(v.y());
 }
 
 inline Vector3d cartesianFromSpherical(real theta, real phi)
@@ -185,7 +185,8 @@ inline Vector3d cartesianFromSpherical(real theta, real phi)
 	real cosPhi = std::cos(phi);
 	real sinPhi = std::sin(phi);
 
-	return Vector3d(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
+	return Vector3d(sinPhi * sinTheta, cosTheta, -cosPhi * sinTheta);
+	//return Vector3d(sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
 }
 
 #endif

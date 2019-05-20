@@ -1,9 +1,9 @@
 #include "Mesh.h"
 
 #include "factory/MeshFactory.h"
-#include "Primitive.h"
+#include "core/Primitive.h"
 #include "factory/ObjectFactoryManager.h"
-#include "Triangle.h"
+#include "geometricShape/Triangle.h"
 
 Mesh::Mesh(const std::string&,
 	const std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& vert,

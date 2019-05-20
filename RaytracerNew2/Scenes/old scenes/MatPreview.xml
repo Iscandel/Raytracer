@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <lookAt>
+        <origin>0 3.5 -10</origin>
+        <lookAt>0 1.2 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
+    </transform>
+    <focal>0.05</focal>
+    <mPerPixel>0.0002</mPerPixel>
+    <!--0.00005-->
+    <double name="focal" value="0.05"/>
+    <double name="meterPixelSize" value="0.0002"/>
+    <integer name="sizeX" value="768"/>
+    <integer name="sizeY" value="768"/>
+
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>8</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="32"/>
+  </sampler>
+
+  <integrator type="PathTracingMIS">
+    <integer name="depth" value="10"/>
+    <integer name="sampleNumber" value="4"/>
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+
+  <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/envmap.exr"/>
+      <double name="scale" value="0.7"/>
+      <transform name="toWorld">
+        <rotation>
+          <x>90.</x>
+          <y>180.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+
+  <objects>
+    <shape type="Mesh">
+      <string name="path" value ="./data/mitsuba2.obj"/>
+      <!--<bsdf type="Diffuse">
+        <color name="albedo" value="0.9 0.2 0.9"/>
+        <double name="alpha" value="150"/>
+      </bsdf>-->
+      <!--<bsdf type="Mirror">
+      </bsdf>-->
+      <transform name="toWorld">
+        <rotation>
+          <x>0.</x>
+          <y>180.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+      <!--Gold-->
+      <!--<bsdf type="Conductor">
+        <color name="albedo" value="1. 1. 1."/>
+        <color name="eta" value="0.22273 0.42791 1.2597 "/>
+        <color name="absorption" value="3.0325 2.3345 1.7531"/>
+      </bsdf>-->
+      <!--<bsdf type="Microfacet">
+        <color name="kd" value="0.4 0.8 0.2"/>-->
+      <!--0.0175 0.0225 0.0325"/>-->
+ 
+        <!--<double name="alpha" value="0.001"/>
+      </bsdf>-->
+      <!--Copper-->
+      <bsdf type="LayeredBSDF">
+        <double name="alpha" value="0.001"/>
+        <bsdf name="baseBSDF" type="RoughConductor">
+          <double name="alpha" value="0.001"/>
+          <string name="material" value="silver"/>
+          <!--<color name="albedo" value="0.7 0.1 0.1"/>-->
+        </bsdf>
+      <!--611 549 464 nm -->
+      
+        <color name="eta" value="0.36892 0.68384 1.27 "/>
+        <color name="absorption" value="3.2112 2.6165 2.2880"/>
+      </bsdf>
+      <!--Copper 2-->
+      <!--<bsdf type="Conductor">
+        <color name="albedo" value="1. 1. 1."/>
+        -->
+        <!--700 546.1 435 nm -->
+
+        <!--<color name="eta" value="0.21 0.70 1.3376 "/>
+        <color name="absorption" value="4.1 2.59 2.2979"/>
+      </bsdf>-->
+    </shape>
+    <shape type="Mesh">
+      <string name="path" value ="./data/mitsubaInterior.obj"/>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.2 0.8 0.8"/>
+      </bsdf>
+      <transform name="toWorld">
+        <rotation>
+          <x>0.</x>
+          <y>180.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+    </shape>
+
+    <shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+        <scale>
+          <x>2</x>
+          <y>1</y>
+          <z>2</z>
+        </scale>
+      </transform>
+       <!--<bsdf type="NormalMapping">
+        <texture name="normalMap" type="ImageTexture">
+          <string name="path" value ="./data/Well Preserved Chesterfield - (Normal Map_2).png"/>
+        </texture>-->
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="ImageTexture">
+          <string name="path" value="./data/parquet-acacia.jpg"/>
+        </texture>
+        <!--<color name="albedo" value="0.8 0.2 0.3"/>-->
+      </bsdf>
+    </shape>
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+        <rotation>
+          <x>180.</x>
+          <y>0.<y>
+          <z>0.<z>
+        </rotation>
+        <translation>
+          <x>0.<x>
+          <y>2.5</y>
+          <z>0.</z>
+        </translation>
+        <scale>
+          <x>2</x>
+          <y>1</y>
+          <z>1</z>
+        </scale>
+      </transform>
+      <light type="MeshLight">
+        <color name="radiance" value="1.5 1.5 1.5"/>
+      </light>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+      </bsdf>
+    </shape>-->
+
+    <!--<shape type="Mesh">
+      <string name="path" value ="./data/plane.obj"/>
+      <transform name="toWorld">
+        <rotation>
+          <x>90.</x>
+          <y>0.<y>
+          <z>0.<z>
+        </rotation>
+        <translation>
+          <x>0.<x>
+          <y>0.5</y>
+          <z>-11.</z>
+        </translation>
+        <scale>
+          <x>2</x>
+          <y>1</y>
+          <z>1</z>
+        </scale>
+      </transform>
+      <light type="MeshLight">
+        <color name="radiance" value="15. 15. 15."/>
+      </light>
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.7 0.7 0.3"/>
+      </bsdf>
+    </shape>-->
+  </objects>
+</scene>

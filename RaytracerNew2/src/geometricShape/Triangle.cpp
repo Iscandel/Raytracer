@@ -1,8 +1,8 @@
 #include "Triangle.h"
 
-#include "Intersection.h"
-#include "Mapping.h"
-#include "Tools.h"
+#include "core/Intersection.h"
+#include "core/Mapping.h"
+#include "tools/Tools.h"
 
 #include <Eigen/Dense>
 

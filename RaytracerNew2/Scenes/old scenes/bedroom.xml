@@ -2,6 +2,11 @@
 <scene>
   <camera type="NoriPerspective">
     <transform name="toWorld">
+      <scale>
+        <x>-1</x>
+        <y>1</y>
+        <z>1.</z>
+      </scale>
       <lookAt>
         <origin>120 80 -60</origin>
         <lookAt>-50 60 110</lookAt>
@@ -38,7 +43,7 @@
   </camera>
 
   <parameters>
-    <threadNumber>4</threadNumber>
+    <threadNumber>8</threadNumber>
     <!--<samplesPerPixel>1</samplesPerPixel>-->
     <!--<recursionLevel>10</recursionLevel>-->
     <blockSizeX>32</blockSizeX>
@@ -61,12 +66,9 @@
       <!--20060807_wells6_hd.jpg"/>-->
       <double name="scale" value="2.4"/>
       <transform name="toWorld">
-        <scale>
-          <x>-1</x>
-        </scale>
         <rotation>
-          <x>0</x>
-          <y>90</y>
+          <x>90.</x>
+          <y>180.</y>
           <z>0.</z>
         </rotation>
       </transform>

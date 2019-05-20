@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CDF.h"
+#include "core/CDF.h"
 #include "GeometricShape.h"
-#include "Tools.h"
+#include "tools/Tools.h"
 
 #include <Eigen/StdVector>
 #include <memory>
@@ -10,7 +10,7 @@
 
 class GeometricShape;
 
-#include "Rng.h"
+#include "tools/Rng.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Data structure storing geometric informations about triangles that

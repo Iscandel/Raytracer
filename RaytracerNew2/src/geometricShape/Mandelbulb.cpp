@@ -1,7 +1,7 @@
 #include "Mandelbulb.h"
 
 #include "factory/GeometricShapeFactory.h"
-#include "Intersection.h"
+#include "core/Intersection.h"
 #include "factory/ObjectFactoryManager.h"
 
 #include <cmath>

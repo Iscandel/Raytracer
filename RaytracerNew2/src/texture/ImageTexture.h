@@ -14,7 +14,7 @@ public:
 	Color eval(const Point2d & uv);
 
 protected:
-	Array2D<Color> myArray;
+	Array2D<Color3> myArray;
 	bool myInvertY;
 	bool myInvertX;
 	real myScale;
