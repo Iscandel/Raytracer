@@ -18,7 +18,7 @@ public:
 
 	Color power() const override;
 
-	Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const override
+	Color le(const Vector3d& direction, const Point3d& hitPoint = Point3d(), const Normal3d& normal = Normal3d()) const override
 	{
 		if (direction.dot(normal) > 0.)
 			return myRadiance;

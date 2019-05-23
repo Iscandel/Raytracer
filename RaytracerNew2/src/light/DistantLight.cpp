@@ -17,7 +17,7 @@ DistantLight::~DistantLight()
 {
 }
 
-Color DistantLight::le(const Vector3d& direction, const Normal3d&) const
+Color DistantLight::le(const Vector3d& direction, const Point3d&, const Normal3d&) const
 {
 	Vector3d localDir = myLightToWorld->inv().transform(direction);
 	localDir.normalize();

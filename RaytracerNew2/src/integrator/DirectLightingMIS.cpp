@@ -34,7 +34,7 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 
 			//If we have intersected a light, add the radiance
 			if (intersection.myPrimitive->isLight())
-				radiance += intersection.myPrimitive->le(-_ray.direction(), intersection.myShadingGeometry.myN);
+				radiance += intersection.myPrimitive->le(-_ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 
 			for (int k = 0; k < mySampleNumber; k++)
 			{
@@ -112,7 +112,7 @@ Color DirectLightingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & ray
 							real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : light->pdf(intersection.myPoint, lightInfos);
 							real weight = (1.f / mySampleNumber)  * powerHeuristic(0.5f, bsdfInfos.pdf, 0.5f, pdfLight);
 
-							Color radianceLight = toLightInter.myPrimitive->le(-shadowRay.direction(), toLightInter.myShadingGeometry.myN);
+							Color radianceLight = toLightInter.myPrimitive->le(-shadowRay.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 							radiance += radianceLight * bsdfValue * weight;
 						}
 					}

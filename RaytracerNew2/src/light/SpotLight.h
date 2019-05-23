@@ -26,7 +26,7 @@ public:
 	real pdf(const Point3d&, const LightSamplingInfos&) override;
 
 	//Shouldn't be called I think
-	Color le(const Vector3d&, const Normal3d&) const override { return Color(); }
+	Color le(const Vector3d&, const Point3d& hitPoint = Point3d(), const Normal3d& = Normal3d()) const override { return Color(); }
 
 	bool isDelta() const override { return true; }
 

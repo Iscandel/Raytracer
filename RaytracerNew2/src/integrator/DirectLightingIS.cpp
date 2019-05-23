@@ -39,7 +39,7 @@ Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray, R
 
 			//If we have intersected a light, add the radiance
 			if (intersection.myPrimitive->isLight())
-				radiance += intersection.myPrimitive->le(-_ray.direction(), intersection.myShadingGeometry.myN);
+				radiance += intersection.myPrimitive->le(-_ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 		
 			for (int k = 0; k < mySampleNumber; k++)
 			{
@@ -97,7 +97,7 @@ Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray, R
 						//If we caught a light
 						if (toLightInter.myPrimitive->isLight())
 						{
-							Color radianceLight = toLightInter.myPrimitive->le(-shadowRay.direction(), toLightInter.myShadingGeometry.myN);
+							Color radianceLight = toLightInter.myPrimitive->le(-shadowRay.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 							radiance += radianceLight * bsdfValue / (real)mySampleNumber;
 						}
 					}
@@ -107,7 +107,7 @@ Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray, R
 						Light::ptr envLight = scene.getEnvironmentLight();
 						if (envLight != nullptr)
 						{
-							Color lightValue = envLight->le(shadowRay.direction(), Normal3d());
+							Color lightValue = envLight->le(shadowRay.direction(), Point3d(), Normal3d());
 							radiance += lightValue * bsdfValue / (real)mySampleNumber;
 						}
 					}
@@ -144,7 +144,7 @@ Color DirectLightingIS::li(Scene& scene, Sampler::ptr sampler, const Ray& ray, R
 			Light::ptr envLight = scene.getEnvironmentLight();
 			if (envLight != nullptr)
 			{
-				radiance += envLight->le(_ray.direction(), Normal3d());
+				radiance += envLight->le(_ray.direction(), Point3d(), Normal3d());
 			}
 			break;
 		}

@@ -39,7 +39,7 @@ public:
 		return 1. / myWorldBoundingBox.getVolumeValue();
 	}
 
-	virtual Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const { return Color(1.); } //to change
+	virtual Color le(const Vector3d& direction, const Point3d& hitPoint = Point3d(), const Normal3d& normal = Normal3d()) const;
 
 	bool isDelta() const { return false; }
 

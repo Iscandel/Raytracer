@@ -1,0 +1,194 @@
+<!-- Table scene, Copyright (c) 2012 by Olesya Jakob -->
+
+<scene>
+  <camera type="NoriPerspective">
+    <transform name="toWorld">
+      <lookAt>
+        <origin>0 15 -30</origin>
+        <lookAt>0 4.5 -0.7</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
+    </transform>
+  
+    <double name="fov" value="35"/>
+    <integer name="sizeX" value="800"/>
+    <integer name="sizeY" value="600"/>
+
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+      <!--<double name = "B" value = "0.3333333333333"/>
+      <double name = "C" value = "0.3333333333333"/>-->
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>16</threadNumber>
+    <!--<samplesPerPixel>1</samplesPerPixel>-->
+    <!--<recursionLevel>10</recursionLevel>-->
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="RandomSampler">
+    <integer name="sampleNumber" value="16"/>
+  </sampler>
+
+	<!-- Use the path tracer with multiple importance sampling -->
+  <integrator type="PathTracingMIS">
+    <integer name="depth" value="20"/>
+    <integer name="sampleNumber" value="4"/>
+    <!--<bool name="bsdfSampling" value="true"/>-->
+  </integrator>
+  
+     <lights>
+    <light type="EnvironmentLight">
+      <string name="path" value="./data/envmap.exr"/>
+     <transform name="toWorld">
+         <rotation>
+          <x>90.</x>
+          <y>180.</y>
+          <z>0.</z>
+        </rotation>
+      </transform>
+    </light>
+  </lights>
+
+  <objects>
+
+    <!-- <shape type="Mesh"> -->
+      <!-- <string name="path" value="./data/table/meshes/mesh_0.obj"/> -->
+
+      <!-- <bsdf type="Microfacet"> -->
+        <!-- <color name="kd" value="0 0 0"/> -->
+      <!-- </bsdf> -->
+      <!-- <transform name="toWorld"> -->
+        <!-- <translation> -->
+          <!-- <x>3.</x> -->
+          <!-- <y>0.</y> -->
+          <!-- <z>0.</z> -->
+        <!-- </translation> -->
+      <!-- </transform> -->
+    <!-- </shape> -->
+
+    <!-- Diffuse floor -->
+    <!-- <shape type="Mesh"> -->
+      <!-- <string name="path" value="./data/table/meshes/mesh_1.obj"/> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0.5 0.5 0.5"/> -->
+      <!-- </bsdf> -->
+
+      <!-- <transform name="toWorld"> -->
+        <!-- <scale> -->
+          <!-- <x>0.2</x> -->
+          <!-- <y>0.35</y> -->
+          <!-- <z>0.5</z> -->
+        <!-- </scale> -->
+        <!-- <translation> -->
+          <!-- <x>-35</x> -->
+          <!-- <y>25.</y> -->
+          <!-- <z>0.</z> -->
+        <!-- </translation> -->
+      <!-- </transform> -->
+    <!-- </shape> -->
+
+    <!-- Water<->Air interface -->
+    <shape type="Mesh">
+      <string name="path" value="./data/glassBlenderSSS/glassBlender.obj"/>
+	  <!-- <bssrdf type="FastDipole"> -->
+			<!-- <integer name="numberPoints" value="500000"/> -->
+			<!-- <color name="sigmaPrimeS" value="0.70 1.22 1.90"/> -->
+			<!-- <color name="sigmaA" value="0.0014 0.0025 0.0142"/> -->
+			<!-- <real name="scale" value="10"/> -->
+			<!-- <real name="eta" value="1.33"/> -->
+			<!-- <real name="error" value="0.2"/> -->
+      <!-- </bssrdf> -->
+		<!-- <bsdf type="LayeredBSDF"> -->
+		<!-- <real name="alphaTop" value="0.2"/> -->
+		<!-- <double name="etaExt" value="1."/> -->
+        <!-- <double name="etaInt" value="1.3"/> -->
+		<!-- <color name="albedo" value="0 0 0"/> -->
+        <!-- <color name="absorbance" value="0.0001 0.0001 0.0001"/> -->
+        <!-- <double name="thickness" value="0.002"/> -->
+        <!-- <bsdf name="baseBSDF" type="Diffuse"> -->
+          <!-- <color name="albedo" value="0. 0. 0."/> -->
+        <!-- </bsdf> -->
+		<!-- </bsdf> -->
+      <bsdf type="Dielectric"> 
+        <double name="etaExt" value="1"/> 
+        <double name="etaInt" value="1.5"/>
+      </bsdf> 
+    </shape>
+   
+   <!-- Air<->Water interface -->
+    <!-- <shape type="Mesh"> -->
+      <!-- <string name="path" value="./data/glassBlenderSSS/topLiquide.obj"/> -->
+		<!-- <bssrdf type="FastDipole"> -->
+			<!-- <integer name="numberPoints" value="500000"/> -->
+			 
+			<!-- <color name="sigmaPrimeS" value="2.55 3.21 3.77"/> -->
+			<!-- <color name="sigmaA" value="0.0011 0.0024 0.014"/> -->
+			<!-- <real name="scale" value="0.1"/> -->
+			<!-- <!-- <color name="sigmaPrimeS" value="0.70 1.22 1.90"/> --> -->
+			<!-- <!-- <color name="sigmaA" value="0.0014 0.0025 0.0142"/> --> -->
+			<!-- <!-- <real name="scale" value="5"/> --> -->
+			<!-- <bool name="indirectIrradiance" value="true"/> -->
+			<!-- <bool name="multithreadedInit" value="true"/> -->
+			<!-- <real name="eta" value="1.3"/> -->
+			<!-- <real name="error" value="0.2"/> -->
+      <!-- </bssrdf> -->
+	  <!-- <bsdf type="Diffuse"> -->
+		<!-- <color name="albedo" value="0 0 0"/> -->
+	  <!-- </bsdf> -->
+		<!-- <!-- <bsdf type="LayeredBSDF"> --> -->
+		<!-- <!-- <real name="alphaTop" value="0.2"/> --> -->
+		<!-- <!-- <double name="etaExt" value="1."/> --> -->
+        <!-- <!-- <double name="etaInt" value="1.3"/> --> -->
+		<!-- <!-- <color name="albedo" value="0 0 0"/> --> -->
+        <!-- <!-- <color name="absorbance" value="0.0001 0.0001 0.0001"/> --> -->
+        <!-- <!-- <double name="thickness" value="0.002"/> --> -->
+        <!-- <!-- <bsdf name="baseBSDF" type="Diffuse"> --> -->
+          <!-- <!-- <color name="albedo" value="0. 0. 0."/> --> -->
+        <!-- <!-- </bsdf> --> -->
+		<!-- <!-- </bsdf> --> -->
+	<!-- </shape> -->
+		
+        <!-- Glass<->Water interface -->
+        
+    <shape type="Mesh">
+      <string name="path" value="./data/glassBlenderSSS/liquide2.obj"/>
+		<bssrdf type="FastDipole">
+			<integer name="numberPoints" value="500000"/>
+			<color name="sigmaPrimeS" value="2.55 3.21 3.77"/>
+			<color name="sigmaA" value="0.0011 0.0024 0.014"/>
+			<real name="scale" value="0.1"/>
+			<!-- <color name="sigmaPrimeS" value="2.55, 3.21, 3.77"/> -->
+			<!-- <color name="sigmaA" value="0.0011, 0.0024, 0.014"/> -->
+			<!-- <real name="scale" value="0.1"/ -->
+			<color name="sigmaPrimeS" value="0.70 1.22 1.90"/>
+			<color name="sigmaA" value="0.0014 0.0025 0.0142"/>
+			<bool name="multithreadedInit" value="true"/>
+			<real name="scale" value="5"/>
+			<real name="eta" value="0.88"/>
+			<real name="error" value="0.2"/>
+      </bssrdf>
+	  <bsdf type="Diffuse">
+		<color name="albedo" value="0 0 0"/>
+	  </bsdf>
+		<!-- <bsdf type="LayeredBSDF"> -->
+		<!-- <real name="alphaTop" value="0.2"/> -->
+		<!-- <double name="etaExt" value="1.5"/> -->
+        <!-- <double name="etaInt" value="1.3"/> -->
+		<!-- <color name="albedo" value="0 0 0"/> -->
+        <!-- <color name="absorbance" value="0.0001 0.0001 0.0001"/> -->
+        <!-- <double name="thickness" value="0.002"/> -->
+        <!-- <bsdf name="baseBSDF" type="Diffuse"> -->
+          <!-- <color name="albedo" value="0. 0. 0."/> -->
+        <!-- </bsdf> -->
+		<!-- </bsdf> -->
+    </shape>
+  </objects>
+</scene>

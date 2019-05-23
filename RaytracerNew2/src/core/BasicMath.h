@@ -10,12 +10,15 @@ namespace math
 	const real INV_FOUR_PI = 0.07957747154594766788450883936693;
 	const real MAX_REAL = 10e9;
 	const real EPSILON = 1e-4;
+	const real ONE_MINUS_EPS = 0.99999999999999989;
+	
 #else
 	const real PI = 3.14159265358979323846f;
 	const real INV_PI = 0.3183098861837906715377f;
 	const real INV_FOUR_PI = 0.07957747154594766788450883936693f;
 	const real MAX_REAL = 10e7f;
 	const real EPSILON = 1e-4f;
+	const real ONE_MINUS_EPS = 0.99999994;
 #endif
 
 	inline real toRadian(real degres)

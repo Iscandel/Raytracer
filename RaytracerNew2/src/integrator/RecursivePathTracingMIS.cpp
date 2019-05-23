@@ -36,7 +36,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 		Light::ptr envLight = scene.getEnvironmentLight();
 		if (envLight != nullptr)
 		{
-			radiance += envLight->le(ray.direction(), Normal3d());
+			radiance += envLight->le(ray.direction(), Point3d(), Normal3d());
 		}
 
 		return radiance;
@@ -49,7 +49,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 
 	//If we have intersected a light, add the radiance
 	if (depth == 0 && intersection.myPrimitive->isLight())
-		radiance += intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
+		radiance += intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 
 	//Light sampling strategy
 	
@@ -179,7 +179,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 			real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : light->pdf(intersection.myPoint, lightInfos);
 			real weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 
-			Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+			Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 			radiance += radianceLight * bsdfValue * weight;
 			if(radiance.isNan())
 				std::cout << "nan 2 " << std::endl;
@@ -192,7 +192,7 @@ Color RecursivePathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray
 		Light::ptr envLight = scene.getEnvironmentLight();
 		if (envLight != nullptr)
 		{
-			Color lightValue = envLight->le(reflected.direction(), Normal3d());
+			Color lightValue = envLight->le(reflected.direction(), Point3d(), Normal3d());
 			real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : envLight->pdf(intersection.myPoint, lightInfos);
 			real weight = powerHeuristic(bsdfInfos.pdf, pdfLight); //check pdf envlight = 0
 			if (!std::isnan(weight))
@@ -267,7 +267,7 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //			Light::ptr envLight = scene.getEnvironmentLight();
 //			if (envLight != nullptr)
 //			{
-//				radiance += envLight->le(ray.direction(), Normal3d());
+//				radiance += envLight->le(ray.direction(), Point3d(), Normal3d());
 //			}
 //
 //			return radiance;
@@ -280,7 +280,7 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //
 //		//If we have intersected a light, add the radiance
 //		if (depth == 0 && intersection.myPrimitive->isLight())
-//			radiance += intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
+//			radiance += intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 //
 //		//Light sampling strategy
 //		//For all the lights
@@ -346,7 +346,7 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //				Light::ptr light = toLightInter.myPrimitive->getLight();
 //				real weight = powerHeuristic(0.5, bsdfInfos.pdf, 0.5, light->pdf(intersection.myPoint, lightInfos));
 //
-//				Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+//				Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 //				radiance += throughput * radianceLight * bsdfValue * weight;
 //				if (std::isnan(radiance.r))
 //					std::cout << "nan 2 " << std::endl;
@@ -359,7 +359,7 @@ RT_REGISTER_TYPE(RecursivePathTracingMIS, Integrator)
 //			Light::ptr envLight = scene.getEnvironmentLight();
 //			if (envLight != nullptr)
 //			{
-//				Color lightValue = envLight->le(reflected.direction(), Normal3d());
+//				Color lightValue = envLight->le(reflected.direction(), Point3d(), Normal3d());
 //				real weight = powerHeuristic(0.5, bsdfInfos.pdf, 0.5, envLight->pdf(intersection.myPoint, lightInfos)); //check pdf envlight = 0
 //				if (!std::isnan(weight))
 //					radiance += throughput * lightValue * bsdfValue * weight;

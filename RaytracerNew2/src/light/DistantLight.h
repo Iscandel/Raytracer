@@ -26,7 +26,7 @@ public:
 
 	virtual Color power() const override;
 
-	virtual Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const override;
+	virtual Color le(const Vector3d& direction, const Point3d& hitPoint = Point3d(), const Normal3d& normal = Normal3d()) const override;
 
 	bool isDelta() const override { return false; }
 

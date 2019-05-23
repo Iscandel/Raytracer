@@ -399,6 +399,9 @@
     <ClCompile Include="src\ext\tinyxml\tinyxmlparser.cpp">
       <Filter>tinyxml</Filter>
     </ClCompile>
+    <ClCompile Include="src\sampler\StratifiedSampler.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -748,6 +751,9 @@
     </ClInclude>
     <ClInclude Include="src\ext\tinyxml\tinyxml.h">
       <Filter>tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sampler\StratifiedSampler.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

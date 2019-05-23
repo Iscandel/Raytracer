@@ -91,7 +91,8 @@ public:
 
 	virtual void addLight(Light::ptr light) { myLight = light; }
 
-	Color le(const Vector3d& direction, const Normal3d& normal) const { return myLight->le(direction, normal); }
+	Color le(const Vector3d& direction, const Point3d& hitPoint, const Normal3d& normal) const 
+	{ return myLight->le(direction, hitPoint, normal); }
 
 	virtual Medium::ptr getInteriorMedium() {
 		throw std::runtime_error("This primitive class shouldn't call getInteriorMedium().\n");

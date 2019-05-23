@@ -118,11 +118,35 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 			}
 			else
 			{
+				//if we caught an emissive medium
+				if (intersection.myPrimitive->getInteriorMedium() && intersection.myPrimitive->getInteriorMedium()->isEmissive())
+				{
+					Ray mediumRay(ray);
+					Intersection tmp;
+					//get back to the first inter
+					scene.computeIntersection(mediumRay, tmp); //to change
+					mediumRay.myOrigin = tmp.myPoint;
+
+					if (scene.computeIntersection(mediumRay, tmp))
+					{
+						Light::ptr lightCaught = intersection.myPrimitive->getInteriorMedium();
+						real ratio = sampler->getNextSample1D();
+						Point3d sampledPointInMedium = mediumRay.getPointAt(ratio * tmp.t);
+						Color radianceLight = intersection.myPrimitive->getInteriorMedium()->le(-mediumRay.direction(), sampledPointInMedium);
+						real pdfLight = lightCaught->pdf(intersection.myPoint, lightInfos);
+						real weight = powerHeuristic(pfInfos.pdf, pdfLight);
+						//std::cout << pfPDF << " " << weight << " " << radianceLight << std::endl;
+						radiance += throughput * radianceLight * tr * weight;
+						//std::cout << radianceLight << std::endl;
+					}
+
+				}
+
 				//If we caught a light
-				if (intersection.myPrimitive->isLight())
+				else if (intersection.myPrimitive->isLight())
 				{
 					Light::ptr lightCaught = intersection.myPrimitive->getLight();
-					Color radianceLight = lightCaught->le(-ray.direction(), intersection.myShadingGeometry.myN);
+					Color radianceLight = lightCaught->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 
 					//Color tr = medium->transmittance(Ray(ray.myOrigin, ray.direction(), 0., intersection.t), sampler);
 																		
@@ -168,7 +192,7 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 
 			//If we have intersected a light, add the radiance
 			if ((depth == 0 /*|| directRadiance*/) && intersection.myPrimitive->isLight()) {// || (fromMedia && intersection.myPrimitive->isLight()))
-				radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN); //tr ?
+				radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN); //tr ?
 				directRadiance = false;
 			}
 			
@@ -235,11 +259,29 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 			
 			if(wasIntersected)
 			{
+				//if we caught an emissive medium
+				if (intersection.myPrimitive->getInteriorMedium() && intersection.myPrimitive->getInteriorMedium()->isEmissive())
+				{
+					Ray mediumRay(ray);
+					Intersection tmp;
+					scene.computeIntersection(mediumRay, tmp);
+					mediumRay.myOrigin = tmp.myPoint;
+					
+					if (scene.computeIntersection(mediumRay, tmp))
+					{
+						lightCaught = intersection.myPrimitive->getInteriorMedium();
+						real ratio = sampler->getNextSample1D();
+						Point3d sampledPointInMedium = mediumRay.getPointAt(ratio * tmp.t);
+						radianceLight = intersection.myPrimitive->getInteriorMedium()->le(-mediumRay.direction(), sampledPointInMedium);
+						//std::cout << radianceLight << std::endl;
+					}
+
+				}
 				//If we caught a light
-				if (intersection.myPrimitive->isLight())
+				else if (intersection.myPrimitive->isLight())
 				{
 					lightCaught = intersection.myPrimitive->getLight();
-					radianceLight = lightCaught->le(-ray.direction(), intersection.myShadingGeometry.myN);
+					radianceLight = lightCaught->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 				}
 			}
 			else
@@ -476,7 +518,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //
 //			//If we have intersected a light, add the radiance
 //			if (/*depth == 0 &&*/ intersection.myPrimitive->isLight())// || (fromMedia && intersection.myPrimitive->isLight()))
-//				radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN); //tr ?
+//				radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN); //tr ?
 //
 //			//Light sampling strategy
 //			LightSamplingInfos lightInfos;
@@ -625,7 +667,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //
 //		//If we have intersected a light, add the radiance
 //		if ((depth == 0 && intersection.myPrimitive->isLight()) || (fromMedia && intersection.myPrimitive->isLight()))
-//			radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
+//			radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 //
 //		if (myMedium.sampleDistance(Ray(ray.myOrigin, ray.direction(), ray.myMinT, intersection.t), sampler->getNextSample2D(), t, weightMedium))
 //		{
@@ -703,7 +745,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //				if (intersection.myPrimitive->isLight())
 //				{
 //					Light::ptr lightCaught = intersection.myPrimitive->getLight();
-//					Color radianceLight = lightCaught->le(-ray.direction(), intersection.myShadingGeometry.myN);
+//					Color radianceLight = lightCaught->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 //
 //					Color tr = myMedium.transmittance(Ray(ray.myOrigin, ray.direction(), 0., intersection.t));
 //					real pfPDF = pfInfos.pdf; //to change
@@ -829,7 +871,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //				if (toLightInter.myPrimitive->isLight())
 //				{
 //					lightCaught = toLightInter.myPrimitive->getLight();
-//					radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+//					radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 //				}
 //			}
 //			else
@@ -860,7 +902,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //
 //				Color tr = myMedium.transmittance(Ray(reflected.myOrigin, reflected.direction(), 0., toLightInter.t));
 //
-//				//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+//				//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 //				radiance += throughput * radianceLight * bsdfValue * tr * weight /** weightMedium*/;
 //				//std::cout << depth << " " << radiance << " " << throughput << " " << radianceLight << " " << bsdfValue << " " << weight << std::endl;
 //				if (radiance.isNan())
@@ -1036,7 +1078,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //
 //			//If we have intersected a light, add the radiance
 //			if ((depth == 0 && intersection.myPrimitive->isLight()))// || (fromMedia && intersection.myPrimitive->isLight()))
-//				radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN); //tr ?
+//				radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN); //tr ?
 //
 //																															 //Light sampling strategy
 //			LightSamplingInfos lightInfos;
@@ -1187,7 +1229,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //
 //		//If we have intersected a light, add the radiance
 //		if ((depth == 0 && intersection.myPrimitive->isLight()) || (fromMedia && intersection.myPrimitive->isLight()))
-//			radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
+//			radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 //
 //		if (myMedium.sampleDistance(Ray(ray.myOrigin, ray.direction(), ray.myMinT, intersection.t), sampler->getNextSample2D(), t, weightMedium))
 //		{
@@ -1253,7 +1295,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //				if (intersection.myPrimitive->isLight())
 //				{
 //					Light::ptr lightCaught = intersection.myPrimitive->getLight();
-//					Color radianceLight = lightCaught->le(-ray.direction(), intersection.myShadingGeometry.myN);
+//					Color radianceLight = lightCaught->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 //					radiance += throughput * radianceLight;
 //				}
 //			}
@@ -1372,7 +1414,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //				if (toLightInter.myPrimitive->isLight())
 //				{
 //					lightCaught = toLightInter.myPrimitive->getLight();
-//					radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+//					radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 //				}
 //			}
 //			else
@@ -1401,7 +1443,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //				real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : lightCaught->pdf(intersection.myPoint, lightInfos);
 //				real weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 //
-//				//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+//				//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 //				radiance += throughput * radianceLight * bsdfValue * weight /** weightMedium*/;
 //				//std::cout << depth << " " << radiance << " " << throughput << " " << radianceLight << " " << bsdfValue << " " << weight << std::endl;
 //				if (radiance.isNan())
@@ -1522,7 +1564,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //		Light::ptr envLight = scene.getEnvironmentLight();
 //		if (envLight != nullptr)
 //		{
-//			radiance += envLight->le(ray.direction(), Normal3d());
+//			radiance += envLight->le(ray.direction(), Point3d(), Normal3d());
 //		}
 //
 //		return radiance;
@@ -1535,7 +1577,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //
 //	//If we have intersected a light, add the radiance
 //	if (intersection.myPrimitive->isLight())
-//		radiance += intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
+//		radiance += intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 //
 //	real t;
 //	Color weightMedium(1.);
@@ -1545,7 +1587,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //
 //	//If we have intersected a light, add the radiance
 //	if ((depth == 0 && intersection.myPrimitive->isLight()) || (fromMedia && intersection.myPrimitive->isLight()))
-//		radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
+//		radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 //
 //	if (myMedium.sampleDistance(Ray(ray.myOrigin, ray.direction(), ray.myMinT, intersection.t), sampler->getNextSample2D(), t, weightMedium))
 //	{
@@ -1640,7 +1682,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //				real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : light->pdf(intersection.myPoint, lightInfos);
 //				real weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 //
-//				Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+//				Color radianceLight = toLightInter.myPrimitive->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 //				radiance += weightMedium * radianceLight *bsdfValue * weight;
 //				if (radiance.isNan())
 //					std::cout << "nan 2 " << std::endl;
@@ -1653,7 +1695,7 @@ RT_REGISTER_TYPE(VolPathTracing, Integrator)
 //			Light::ptr envLight = scene.getEnvironmentLight();
 //			if (envLight != nullptr)
 //			{
-//				Color lightValue = envLight->le(reflected.direction(), Normal3d());
+//				Color lightValue = envLight->le(reflected.direction(), Point3d(), Normal3d());
 //				real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : envLight->pdf(intersection.myPoint, lightInfos);
 //				real weight = powerHeuristic(bsdfInfos.pdf, pdfLight); //check pdf envlight = 0
 //				if (!std::isnan(weight))

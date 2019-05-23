@@ -24,7 +24,7 @@ public:
 	}
 
 	//Shouldn't be called I think
-	Color le(const Vector3d& dir, const Normal3d& normal = Normal3d()) const;
+	Color le(const Vector3d& dir, const Point3d& hitPoint = Point3d(), const Normal3d& normal = Normal3d()) const;
 
 	bool isDelta() const override { return true; }
 

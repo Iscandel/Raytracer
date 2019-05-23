@@ -111,6 +111,7 @@
     <ClCompile Include="src\medium\PhaseFunction.cpp" />
     <ClCompile Include="src\sampler\RandomSampler.cpp" />
     <ClCompile Include="src\sampler\Sampler.cpp" />
+    <ClCompile Include="src\sampler\StratifiedSampler.cpp" />
     <ClCompile Include="src\texture\CheckerTexture.cpp" />
     <ClCompile Include="src\texture\ConstantTexture.cpp" />
     <ClCompile Include="src\texture\ImageTexture.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="src\medium\PhaseFunction.h" />
     <ClInclude Include="src\sampler\RandomSampler.h" />
     <ClInclude Include="src\sampler\Sampler.h" />
+    <ClInclude Include="src\sampler\StratifiedSampler.h" />
     <ClInclude Include="src\texture\CheckerTexture.h" />
     <ClInclude Include="src\texture\ConstantTexture.h" />
     <ClInclude Include="src\texture\ImageTexture.h" />

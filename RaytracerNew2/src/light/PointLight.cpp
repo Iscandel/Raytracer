@@ -36,7 +36,7 @@ LightSamplingInfos PointLight::sample(const Point3d & pFrom, const Point2d&)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-Color PointLight::le(const Vector3d&, const Normal3d&) const
+Color PointLight::le(const Vector3d&, const Point3d& hitPoint, const Normal3d&) const
 {
 	return Color();
 }

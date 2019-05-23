@@ -570,5 +570,11 @@ bool Heterogeneous::isEmissive() const
 	return myVolume->isEmissive(); 
 }
 
+Color Heterogeneous::le(const Vector3d& direction, const Point3d& hitPoint, const Normal3d& normal) const
+{
+	Point3d arrayPoint = myWorldToArray->transform(hitPoint);
+	return lookupEmissivity(arrayPoint);
+}
+
 
 RT_REGISTER_TYPE(Heterogeneous, Medium)

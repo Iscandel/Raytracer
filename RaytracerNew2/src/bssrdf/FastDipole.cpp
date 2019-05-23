@@ -399,11 +399,12 @@ void FastDipole::initialize(Scene & scene)
 			Point3d sampled;
 			Normal3d normal;
 			shape->sample(sample, sampled, normal);
+			DifferentialGeometry geom(normal);
+			Intersection inter; 
+			inter.myShadingGeometry = inter.myTrueGeometry = geom;
 			for (int j = 0; j < lights.size(); j++)
 			{
-				DifferentialGeometry geom(normal);
-				Intersection inter; 
-				inter.myShadingGeometry = inter.myTrueGeometry = geom;
+				
 
 				Color irrLight;
 				for (int k = 0; k < myNbSamplesLight; k++)
@@ -455,7 +456,7 @@ void FastDipole::initialize(Scene & scene)
 
 	if (myIsMultithreadedOctreeInit)
 	{
-		ILogger::log() << "Acquiring irradiance in parallel\n";
+		ILogger::log() << "Acquiring irradiance (multithreaded)\n";
 		const int nbThreads = getCoreNumber();
 		std::vector<std::unique_ptr<std::thread>> threads;
 		threads.resize(nbThreads);

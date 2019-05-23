@@ -83,7 +83,7 @@ protected:
 ///////////////////////////////////////////////////////////////////////////////
 template<class T>
 Array2D<T>::Array2D()
-:myWidth(1)
+:myWidth(0)
 ,myHeight(1)
 {
 	myArray.resize(1*1);
@@ -97,7 +97,7 @@ Array2D<T>::Array2D()
 template<class T>
 Array2D<T>::Array2D(unsigned int width, unsigned int height)
 :myWidth(width)
-,myHeight(width)
+,myHeight(height)
 {
 	myArray.resize(width * height);
 }

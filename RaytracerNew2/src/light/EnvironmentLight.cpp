@@ -156,7 +156,7 @@ real EnvironmentLight::pdf(const Point3d &, const LightSamplingInfos & infos)
 	return pdf;
 }
 
-Color EnvironmentLight::le(const Vector3d & direction, const Normal3d &) const
+Color EnvironmentLight::le(const Vector3d & direction, const Point3d&, const Normal3d &) const
 {
 	Vector3d dir = myWorldToLight->transform(direction);
 	dir.normalize();

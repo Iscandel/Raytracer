@@ -43,7 +43,7 @@ void SampleJob::run()
 		for(int x = myOffsetX; x < endX; x++)
 		{	
 			//std::cout << "x " << x << std::endl;
-
+			mySampler->startPixel();
 			for(int i = 0; i < mySampler->getSampleNumber(); i++)
 			{
 				Point2d sample = mySampler->getNextSample2D();
@@ -62,6 +62,7 @@ void SampleJob::run()
 
 				subScreen->addSample(xx, yy, col);
 				//myCamera->getScreen().addSample(xx, yy, col);
+				mySampler->advance();
 			}
 		}
 	}

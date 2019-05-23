@@ -67,7 +67,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 
 		//If we have intersected a light, add the radiance
 		if (/*depth == 0*/(radianceType & RadianceType::EMISSION) && intersection.myPrimitive->isLight())
-			radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myShadingGeometry.myN);
+			radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN);
 
 		if (intersection.myPrimitive->getBSSRDF() && (radianceType & RadianceType::SUBSURFACE_RADIANCE))
 			radiance += throughput * intersection.myPrimitive->getBSSRDF()->eval(intersection.myPoint, intersection, -ray.direction());
@@ -171,7 +171,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 			if (toLightInter.myPrimitive->isLight())
 			{
 				lightCaught = toLightInter.myPrimitive->getLight();
-				radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+				radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 			}
 		}
 		else
@@ -200,7 +200,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 			real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0.f : lightCaught->pdf(intersection.myPoint, lightInfos);
 			real weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 
-			//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+			//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter-> myPoint, toLightInter.myShadingGeometry.myN);
 			radiance += throughput * radianceLight * bsdfValue * weight;
 			//std::cout << depth << " " << radiance << " " << throughput << " " << radianceLight << " " << bsdfValue << " " << weight << std::endl;
 			if (radiance.isNan()) {
@@ -455,7 +455,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			if (toLightInter.myPrimitive->isLight())
 			{
 				lightCaught = toLightInter.myPrimitive->getLight();
-				radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+				radianceLight = lightCaught->le(-reflected.direction(), toLightInter->myPoint, toLightInter.myShadingGeometry.myN);
 			}
 		}
 		else
@@ -484,7 +484,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray)
 			real pdfLight = (bsdfInfos.sampledType & BSDF::DELTA) ? 0. : lightCaught->pdf(intersection.myPoint, lightInfos);
 			real weight = powerHeuristic(bsdfInfos.pdf, pdfLight);
 
-			//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myShadingGeometry.myN);
+			//Color radianceLight = lightCaught->le(-reflected.direction(), toLightInter.myPoint, toLightInter.myShadingGeometry.myN);
 			radiance += throughput * radianceLight * bsdfValue * weight;
 			//std::cout << depth << " " << radiance << " " << throughput << " " << radianceLight << " " << bsdfValue << " " << weight << std::endl;
 			if (radiance.isNan())

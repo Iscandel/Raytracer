@@ -26,6 +26,10 @@ public:
 
 	virtual void seed(uint64_t s, uint64_t l) = 0;
 
+	virtual void startPixel() {}
+
+	virtual void advance() {}
+
 protected:
 	int myNumber;
 };

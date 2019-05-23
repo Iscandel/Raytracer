@@ -21,7 +21,7 @@ public:
 
 	real pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override;
 
-	Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const override;
+	Color le(const Vector3d& direction, const Point3d& hitPoint = Point3d(), const Normal3d& normal = Normal3d()) const override;
 
 	bool isDelta() const override { return false; }
 

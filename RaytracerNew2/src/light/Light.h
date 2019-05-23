@@ -59,7 +59,7 @@ public:
 
 	virtual real pdf(const Point3d& pFrom, const LightSamplingInfos& infos) = 0;
 
-	virtual Color le(const Vector3d& direction, const Normal3d& normal = Normal3d()) const = 0;
+	virtual Color le(const Vector3d& direction, const Point3d& hitPoint = Point3d(), const Normal3d& normal = Normal3d()) const = 0;
 
 	virtual bool isDelta() const = 0;
 

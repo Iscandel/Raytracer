@@ -110,7 +110,7 @@
 	
 	
 
-     <shape type="Sphere"> 
+     <!--<shape type="Sphere"> 
        <transform name="toWorld"> 
          <translation> 
            <y>2</y> 
@@ -124,7 +124,7 @@
        <light type="AreaLight"> 
          <color name="radiance" value="400 400 400"/> 
        </light> 
-     </shape>
+     </shape>-->
 
   </objects>
 </scene>
