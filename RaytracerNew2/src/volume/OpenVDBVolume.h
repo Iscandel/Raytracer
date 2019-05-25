@@ -18,6 +18,8 @@ public:
 
 	Point3d sample(const Point2d& samplePoint) override;
 
+	Color getAverageEmission() const override;
+
 protected:
 	openvdb::FloatGrid::Ptr myDensityGrid;
 	openvdb::FloatGrid::Ptr myTemperatureGrid;

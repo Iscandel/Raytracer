@@ -22,6 +22,7 @@ public:
 	virtual const BoundingBox& getBoundingBox() const = 0;
 	virtual bool isEmissive() const = 0;
 	virtual Point3d sample(const Point2d& samplePoint) = 0;
+	virtual Color getAverageEmission() const = 0;
 
 protected:
 	real myMaxSigmaT;

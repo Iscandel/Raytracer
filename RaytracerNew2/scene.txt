@@ -1,1 +1,1 @@
-./Scenes/Buddha-MIS.xml
+./Scenes/fire.xml

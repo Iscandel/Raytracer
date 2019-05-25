@@ -22,17 +22,17 @@ public:
 	}
 
 	//For emissive volumes, behaving like lights
-	Color power() const {
-		return Color(1.); //to change
-	}
+	Color power() const override;// {
+	//	return Color(1.); //to change
+	//}
 
 	LightSamplingInfos sample(const Point3d& pFrom, const Point2d& sample) override;
 
-	virtual real pdf(const Point3d& pFrom, const LightSamplingInfos& infos) {
-		return 1. / myWorldBoundingBox.getVolumeValue();
-	}
+	real pdf(const Point3d& pFrom, const LightSamplingInfos& infos) override;// {
+	//	return 1. / myWorldBoundingBox.getVolumeValue();
+	//}
 
-	virtual Color le(const Vector3d& direction, const Point3d& hitPoint = Point3d(), const Normal3d& normal = Normal3d()) const
+	Color le(const Vector3d& direction, const Point3d& hitPoint = Point3d(), const Normal3d& normal = Normal3d()) const
 	{ return myEmission * myScaleEmissivity; } //to change
 
 	bool isDelta() const { return false; }

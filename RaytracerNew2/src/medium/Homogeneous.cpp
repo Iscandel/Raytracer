@@ -105,4 +105,20 @@ LightSamplingInfos Homogeneous::sample(const Point3d& pFrom, const Point2d& samp
 	return infos;
 }
 
+real Homogeneous::pdf(const Point3d& pFrom, const LightSamplingInfos& infos)
+{
+	real volume = myWorldBoundingBox.getVolumeValue();
+	Vector3d lightToShape = pFrom - infos.sampledPoint;
+	real distance = lightToShape.norm();
+	lightToShape.normalize();
+
+	//real cosine = infos.normal.dot(lightToShape);
+	return distance * distance / (volume);
+}
+
+Color Homogeneous::power() const
+{
+	return math::PI * myEmission * myWorldBoundingBox.getSurfaceValue();
+}
+
 RT_REGISTER_TYPE(Homogeneous, Medium)

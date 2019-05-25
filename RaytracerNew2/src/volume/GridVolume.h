@@ -15,6 +15,7 @@ public:
 	const BoundingBox& getBoundingBox() const override;
 	bool isEmissive() const { return false;  } //to change
 	Point3d sample(const Point2d& samplePoint) override { throw std::runtime_error("Not implemented"); }
+	Color getAverageEmission() const override { return Color(); } //To change !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 protected:
 	Point3i myResolution;

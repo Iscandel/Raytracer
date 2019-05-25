@@ -8,6 +8,8 @@
 OpenVDBVolume::OpenVDBVolume(const Parameters& params)
 :Volume(params)
 ,myIsEmissive(false)
+,myMinGridTemperature((real)0.f)
+,myMaxGridTemperature((real)0.f)
 {
 	static bool isInit = false;
 	if (!isInit) {
@@ -224,6 +226,8 @@ real OpenVDBVolume::lookupSigmaT(const Point3d &_p) const
 
 Color OpenVDBVolume::lookupEmissivity(const Point3d &_p) const
 {
+	//return Color::fromBlackbody(2700);
+
 	if (myTemperatureGrid == nullptr)
 		return Color();
 
@@ -282,6 +286,12 @@ Point3d OpenVDBVolume::sample(const Point2d& samplePoint)
 	res.z() =  ((int)u / myDensityResolution.x()) / (real)myDensityResolution.z();
 
 	return res;
+}
+
+//Very rough approximation...
+Color OpenVDBVolume::getAverageEmission() const
+{
+	return Color::fromBlackbody(myTemperatureScale) / (real)2.f;
 }
 
 RT_REGISTER_TYPE(OpenVDBVolume, Volume)

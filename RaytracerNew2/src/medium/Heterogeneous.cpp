@@ -576,5 +576,20 @@ Color Heterogeneous::le(const Vector3d& direction, const Point3d& hitPoint, cons
 	return lookupEmissivity(arrayPoint);
 }
 
+real Heterogeneous::pdf(const Point3d& pFrom, const LightSamplingInfos& infos)
+{
+	real volume = myWorldBoundingBox.getVolumeValue();
+	Vector3d lightToShape = pFrom - infos.sampledPoint;
+	real distance = lightToShape.norm();
+	lightToShape.normalize();
+
+	//real cosine = infos.normal.dot(lightToShape);
+	return distance * distance / (volume);
+}
+
+Color Heterogeneous::power() const {
+	return math::PI * myVolume->getAverageEmission() * myWorldBoundingBox.getSurfaceValue();
+}
+
 
 RT_REGISTER_TYPE(Heterogeneous, Medium)
