@@ -21,7 +21,7 @@ public:
 
 public:
 	PhaseFunction();
-	~PhaseFunction();
+	virtual ~PhaseFunction();
 
 	/**
 	* \brief Sample the phase function and return the importance weight (i.e. the

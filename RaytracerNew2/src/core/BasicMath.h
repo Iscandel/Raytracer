@@ -18,7 +18,7 @@ namespace math
 	const real INV_FOUR_PI = 0.07957747154594766788450883936693f;
 	const real MAX_REAL = 10e7f;
 	const real EPSILON = 1e-4f;
-	const real ONE_MINUS_EPS = 0.99999994;
+	const real ONE_MINUS_EPS = 0.99999994f;
 #endif
 
 	inline real toRadian(real degres)
@@ -29,6 +29,16 @@ namespace math
 	inline real toDegre(real radian)
 	{
 		return (radian * (real)180.) / math::PI;
+	}
+
+	template<typename T>
+	T min(T a) {
+		return a;
+	}
+
+	template<typename T, typename... Args>
+	T min(T first, Args... args) {
+		return std::min(first, min(args...));
 	}
 
 	template<typename T>

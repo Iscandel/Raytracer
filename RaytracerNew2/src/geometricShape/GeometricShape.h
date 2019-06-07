@@ -49,7 +49,7 @@ public:
 	///
 	/// \return The position of the centroid in world coordinates
 	///////////////////////////////////////////////////////////////////////////
-	virtual Point3d getCentroid() { throw std::runtime_error("no"); }
+	virtual Point3d getCentroid() { throw std::runtime_error("[GeometricShape] centroid not implemented (not redefined in child ?)"); }
 
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Computes the normal vector at the given point

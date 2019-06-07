@@ -6,7 +6,8 @@
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-NormalIntegrator::NormalIntegrator(const Parameters&)
+NormalIntegrator::NormalIntegrator(const Parameters& params)
+:Integrator(params)
 {
 }
 

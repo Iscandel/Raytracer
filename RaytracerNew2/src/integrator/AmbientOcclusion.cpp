@@ -7,6 +7,7 @@
 #include "core/Scene.h"
 
 AmbientOcclusion::AmbientOcclusion(const Parameters& params)
+:Integrator(params)
 {
 	myRayLength = params.getReal("length", 10);
 }

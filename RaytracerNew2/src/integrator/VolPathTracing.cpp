@@ -7,10 +7,11 @@
 #include "core/Scene.h"
 
 VolPathTracing::VolPathTracing(const Parameters& params)
+:Integrator(params)
 	//:myMedium(Parameters())
 {
-	std::string sStrategy = params.getString("strategy", lightStrategy::STRING[LightSamplingStrategy::ONE_LIGHT_UNIFORM]);
-	myStrategy = myStrategiesByName[sStrategy];
+	//std::string sStrategy = params.getString("strategy", lightStrategy::STRING[LightSamplingStrategy::ONE_LIGHT_UNIFORM]);
+	//myStrategy = myStrategiesByName[sStrategy];
 
 	myMinDepth = params.getInt("minDepth", 3);
 	myMaxDepth = params.getInt("maxDepth", 1000);
@@ -165,16 +166,18 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 				throughput *= weightMedium;
 			}
 
-			//Should not happen. Medium should be bounded, especially with env maps
+			//Should not happen. Medium should be bounded, especially with env maps (???)
 			if (!wasIntersected)
 			{
-				Light::ptr envLight = scene.getEnvironmentLight();
-				if (envLight != nullptr)
+				if (radianceType & RadianceType::EMISSION)
 				{
-					radiance += throughput * envLight->le(ray.direction()); //tr ?
+					Light::ptr envLight = scene.getEnvironmentLight();
+					if (envLight != nullptr)
+					{
+						radiance += throughput * envLight->le(ray.direction()); //tr ?
+					}
 				}
-
-				return radiance;
+				return radiance;	
 			}
 
 			fromMedia = false;
@@ -191,10 +194,14 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 			}
 
 			//If we have intersected a light, add the radiance
-			if ((depth == 0 /*|| directRadiance*/) && intersection.myPrimitive->isLight()) {// || (fromMedia && intersection.myPrimitive->isLight()))
+			//if ((depth == 0 /*|| directRadiance*/) && intersection.myPrimitive->isLight()) {// || (fromMedia && intersection.myPrimitive->isLight()))
+			if ((radianceType & RadianceType::EMISSION) && intersection.myPrimitive->isLight()) {
 				radiance += throughput * intersection.myPrimitive->le(-ray.direction(), intersection.myPoint, intersection.myShadingGeometry.myN); //tr ?
 				directRadiance = false;
 			}
+
+			if (intersection.myPrimitive->getBSSRDF() && (radianceType & RadianceType::SUBSURFACE_RADIANCE))
+				radiance += throughput * intersection.myPrimitive->getBSSRDF()->eval(intersection.myPoint, intersection, -ray.direction());
 			
 			//Light sampling strategy
 			LightSamplingInfos lightInfos;
@@ -203,7 +210,7 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 			{
 				Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 				Vector3d localWo = intersection.toLocal(-ray.direction());
-				real cosTheta = DifferentialGeometry::cosTheta(localWi);
+				real cosTheta = std::abs(DifferentialGeometry::cosTheta(localWi));
 
 				BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 				bsdfInfos.uv = intersection.myUv;
@@ -351,6 +358,7 @@ Color VolPathTracing::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 		}
 
 		wasIntersected = scene.computeIntersection(ray, intersection);
+		radianceType = RadianceType::NO_EMISSION;
 		depth++;
 	}
 

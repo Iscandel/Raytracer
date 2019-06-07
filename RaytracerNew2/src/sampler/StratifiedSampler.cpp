@@ -25,9 +25,8 @@ StratifiedSampler::StratifiedSampler(const Parameters& params)
 
 	int i = 0;
 	for (i = 0; i < myNumber; i++)
-		if (i * i > myNumber)
+		if (i * i >= myNumber)
 			break;
-	i -= 1;
 
 	if (i * i != myNumber)
 	{

@@ -1,14 +1,18 @@
 #include "Integrator.h"
 #include "core/Intersection.h"
+#include "core/Mapping.h"
 #include "core/Math.h"
 #include "core/Scene.h"
 
-Integrator::Integrator()
+Integrator::Integrator(const Parameters& params)
 {
 	for (unsigned int i = 0; i < LightSamplingStrategy::END; i++)
 	{
 		myStrategiesByName[lightStrategy::STRING[i]] = (LightSamplingStrategy) i;
 	}
+
+	std::string sStrategy = params.getString("strategy", lightStrategy::STRING[LightSamplingStrategy::ONE_LIGHT_UNIFORM]);
+	myLightStrategy = myStrategiesByName[sStrategy];
 }
 
 Integrator::~Integrator()
@@ -18,13 +22,54 @@ Integrator::~Integrator()
 void Integrator::initialize(Scene & scene)
 {
 	const Scene::LightVector& lights = scene.getLights();
+	real pdfUniform = (real)1. / lights.size();
 
 	for (Light::ptr light : lights)
 	{
-		myLightWeights.add(light->power().luminance());
+		if(myLightStrategy == LightSamplingStrategy::ONE_LIGHT_WEIGHTED)
+			myLightWeights.add(light->power().luminance());
+		else
+			myLightWeights.add(pdfUniform);
 	}
 
 	myLightWeights.normalize();
+}
+
+Color Integrator::irradiance(Scene& scene, int lightSamples, const Intersection& inter,
+		Medium::ptr medium,  Sampler::ptr& sampler, bool catchIndirect)
+{
+	Color irrLight;
+	static int access = 0;
+	for (int i = 0; i < lightSamples; i++)
+	{
+		sampler->startPixel();
+		LightSamplingInfos infos;
+		Color direct = sampleAttenuatedLightDirect(inter.myPoint, sampler, scene, infos, medium);
+		if (!direct.isZero())
+		{
+			real cosTheta = infos.interToLight.dot(inter.myShadingGeometry.myN);
+			if (cosTheta > 0)
+				irrLight += direct * cosTheta;
+		}
+
+		if (catchIndirect)
+		{
+			Vector3d dir = inter.toWorld(Mapping::squareToCosineWeightedHemisphere(sampler->getNextSample2D()));
+			Integrator::RadianceType::ERadianceType type = Integrator::RadianceType::INDIRECT_RADIANCE;
+			Ray ray(inter.myPoint, dir);
+			//Indirect irradiance is E = integral(Li (n.w) dw) = Li / pdf * (n.w)
+			//pdf is a weighted cosine -> cos / pi
+			//so E = Li * pi
+			access++;
+			irrLight += li(scene, sampler, ray, type) * math::PI;
+		}
+
+		if (irrLight.minCoeff() < -1.5)
+			std::cout << "neg " << i << " " <<access << " " << irrLight;
+		sampler->advance();
+	}
+
+	return irrLight / (real)lightSamples;
 }
 
 Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::ptr medium, Sampler::ptr sampler)
@@ -113,16 +158,16 @@ Color Integrator::sampleLightDirect(const Point3d& interPoint, const Point2d& _s
 			return Color();
 		Point2d sample = _sample;
 
-		if (strategy == LightSamplingStrategy::ONE_LIGHT_WEIGHTED)
-		{
+		//if (strategy == LightSamplingStrategy::ONE_LIGHT_WEIGHTED)
+		//{
 			int index = myLightWeights.sampleAndReuse(sample.x(), lightWeight);
 			light = lights[index];
-		}
-		else
-		{
-			light = lights[(int)(sample.x() * lights.size())];
-			lightWeight = 1.f / lights.size();
-		}
+		//}
+		//else
+		//{
+		//	light = lights[(int)(sample.x() * lights.size())];
+		//	lightWeight = 1.f / lights.size();
+		//}
 
 		Color value = sampleOneLight(light, interPoint, sample, scene, infos);
 		infos.pdf *= lightWeight;

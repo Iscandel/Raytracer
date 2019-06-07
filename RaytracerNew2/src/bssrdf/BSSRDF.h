@@ -13,7 +13,7 @@ class BSSRDF : public RaytracerObject, public WithSmartPtr<BSSRDF>
 {
 public:
 	BSSRDF();
-	~BSSRDF();
+	virtual ~BSSRDF();
 	
 	void setShape(std::shared_ptr<ISampledShape> shape) { myShape = shape; }
 

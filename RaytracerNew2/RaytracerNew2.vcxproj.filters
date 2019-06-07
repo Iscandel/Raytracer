@@ -399,8 +399,23 @@
     <ClCompile Include="src\ext\tinyxml\tinyxmlparser.cpp">
       <Filter>tinyxml</Filter>
     </ClCompile>
+    <ClCompile Include="src\texture\ScaleTexture.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdf\TwoSides.cpp">
+      <Filter>BSDF</Filter>
+    </ClCompile>
     <ClCompile Include="src\sampler\StratifiedSampler.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\medium\MediumPreset.cpp">
+      <Filter>Medium</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\PerlinNoise.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bsdf\BumpMapping.cpp">
+      <Filter>BSDF</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -752,8 +767,23 @@
     <ClInclude Include="src\ext\tinyxml\tinyxml.h">
       <Filter>tinyxml</Filter>
     </ClInclude>
+    <ClInclude Include="src\texture\ScaleTexture.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\TwoSides.h">
+      <Filter>BSDF</Filter>
+    </ClInclude>
     <ClInclude Include="src\sampler\StratifiedSampler.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\medium\MediumPreset.h">
+      <Filter>Medium</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\PerlinNoise.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bsdf\BumpMapping.h">
+      <Filter>BSDF</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -818,5 +848,11 @@
       <Filter>Scenes</Filter>
     </Xml>
     <Xml Include="Scenes\dragon-sss.xml" />
+    <Xml Include="Scenes\cbox-sss.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
+    <Xml Include="Scenes\kingsTreasure.xml">
+      <Filter>Scenes</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

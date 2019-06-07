@@ -6,6 +6,7 @@
 #include "core/Scene.h"
 
 RecursivePathTracingMIS::RecursivePathTracingMIS(const Parameters& params)
+:Integrator(params)
 {
 	myStrategy = LightSamplingStrategy::ONE_LIGHT_UNIFORM;// params.getString("strategy", "uniform");
 	myMaxDepth = params.getInt("maxDepth", 1000);

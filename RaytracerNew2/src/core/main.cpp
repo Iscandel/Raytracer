@@ -423,6 +423,7 @@ int main(int argc, char* argv[])
 	catch(std::exception& e)
 	{
 		ILogger::log() << e.what() << "\n";
+		getchar();
 	}
 	catch(...)
 	{
@@ -470,6 +471,21 @@ void run(int argc, char* argv[])
 	//		remaining = tmp;
 	//	}
 	//}
+
+	//Parameters p;
+	//p.addReal("persistence", 0.4f);
+	//p.addInt("octaves", 4);
+	//p.addReal("scale", 1.f);
+	//p.addColor("color1", Color::fromRGB(0., 0, 0));
+	//p.addColor("color2", Color::fromRGB(1., 1, 1));
+	//int width = 500;
+	//int height = 500;
+	//PerlinNoiseTexture _tex(p);_tex.eval(Point2d());
+	//Screen s(width, height, 0, 0, ReconstructionFilter::ptr(new BoxFilter(1, 1)));
+	//for (int i = 0; i < width; i++)
+	//	for (int j = 0; j < height; j++)
+	//		s.addSample(i, j, _tex.eval(Point2d(i / (real)width, j / (real)height)));
+	//s.postProcessColor();
 
 	ILogger::log() << "Scene computed\n";
 #ifdef VS_2010

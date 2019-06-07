@@ -1,0 +1,1362 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<scene>
+  <camera type="NoriPerspective">
+    <!--<transform name="toWorld">
+      <lookAt>
+        <origin>3.69558 -3.46243 3.25463</origin>
+        <lookAt>3.04072 -2.85176 2.80939</lookAt>
+        <up>-0.317366 0.312466 0.895346</up>
+      </lookAt>
+    </transform>-->
+     <transform name="toWorld">
+      <lookAt>
+        <origin>0 20 60</origin>
+		<!-- <lookAt>-9.4 1.3 -1.2</lookAt> -->
+		<!-- <lookAt>9.5 2.8 2.93</lookAt>-->
+        <lookAt>0 10 -20</lookAt> 
+        <up>0 1 0</up>
+      </lookAt>
+    </transform>
+
+    <!--<double name="focal" value="0.15"/>
+    <double name="meterPixelSize" value="0.0001"/>-->
+    <double name="fov" value="40.8664"/>
+    <integer name="sizeX" value="1600"/>
+    <integer name="sizeY" value="1200"/>
+
+    <filter type="MitchellNetravaliFilter">
+      <double name = "radiusX" value = "2."/>
+      <double name = "radiusY" value = "2."/>
+    </filter>
+  </camera>
+
+  <parameters>
+    <threadNumber>4</threadNumber>
+    <blockSizeX>32</blockSizeX>
+    <blockSizeY>32</blockSizeY>
+    <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
+  </parameters>
+
+  <sampler type="StratifiedSampler">
+    <integer name="sampleNumber" value="16"/>
+  </sampler>
+
+  <!-- Use the path tracer with multiple importance sampling -->
+  <integrator type="VolPathTracing">
+    <integer name="depth" value="20"/>
+    <integer name="sampleNumber" value="4"/>
+  </integrator>
+
+   <lights> 
+     <light type="EnvironmentLight"> 
+       <string name="path" value="./data/envmap.exr"/> 
+      <transform name="toWorld"> 
+          <rotation> 
+           <x>0.</x> 
+           <y>0.</y> 
+           <z>0.</z> 
+         </rotation> 
+       </transform> 
+     </light> 
+   </lights> 
+
+  <objects>
+	  <!-- <shape type="Plane"> -->
+      <!-- <light type="AreaLight"> -->
+        <!-- <color name="radiance" value="3 3 3"/> -->
+      <!-- </light> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0 0 0"/> -->
+      <!-- </bsdf> -->
+
+      <!-- <transform name="toWorld"> -->
+        <!-- <scale> -->
+          <!-- <x>400</x> -->
+          <!-- <y>400</y> -->
+        <!-- </scale> -->
+		<!-- <rotation> -->
+			<!-- <x>180</x> -->
+		<!-- </rotation> -->
+        <!-- <translation> -->
+          <!-- <x>0</x> -->
+          <!-- <y>0.</y> -->
+          <!-- <z>-500</z> -->
+        <!-- </translation> -->
+      <!-- </transform> -->
+    <!-- </shape> -->
+	
+	<!-- <shape type="Plane"> -->
+      <!-- <light type="AreaLight"> -->
+        <!-- <color name="radiance" value="3 3 3"/> -->
+      <!-- </light> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0 0 0"/> -->
+      <!-- </bsdf> -->
+
+      <!-- <transform name="toWorld"> -->
+        <!-- <scale> -->
+          <!-- <x>400</x> -->
+          <!-- <y>400</y> -->
+        <!-- </scale> -->
+		<!-- <rotation> -->
+			<!-- <x>-90</x> -->
+		<!-- </rotation> -->
+		<!-- <rotation> -->
+			<!-- <y>180</y> -->
+		<!-- </rotation> -->
+        <!-- <translation> -->
+          <!-- <y>-800</y> -->
+        <!-- </translation> -->
+      <!-- </transform> -->
+    <!-- </shape> -->
+				
+
+	
+    <!-- <shape type="Mesh"> -->
+      <!-- <string name="path" value="./data/Kings treasure/KingsTreasureTri.obj"/> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0.5 0.5 0.5"/> -->
+      <!-- </bsdf> -->
+    <!-- </shape> -->
+	
+	<!--<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/anneaux1.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.08"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/anneaux2.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.19"/>
+        <string name="material" value="iron"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/assietteDessousVF.obj"/>
+
+		--><!-- <bsdf type="diffuse"> --><!--
+			--><!-- <color name="albedo" value="0.5 0.5 0.5"/> --><!--
+			--><!-- </bsdf> --><!--
+      <bsdf type="SmoothLayeredBSDF">
+			<color name="absorbance" value="0.0000001 0.0000001 0.0000001"/>
+			<double name="thickness" value="0.0000001"/>
+			<bsdf name="baseBSDF" type="Diffuse">
+				<color name="albedo" value="0.99 0.99 0.99"/>
+			</bsdf>
+		</bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/assietteDessusVF.obj"/>
+
+      <bsdf type="SmoothLayeredBSDF">
+			<color name="absorbance" value="0.0000001 0.0000001 0.0000001"/>
+			<double name="thickness" value="0.0000001"/>
+			<bsdf name="baseBSDF" type="Diffuse">
+				<color name="albedo" value="0.99 0.99 0.99"/>
+			</bsdf>
+		</bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague1Metal.obj"/>
+	<transform name="toWorld">
+			<translation>
+				<y>0.2</y>
+			</translation>
+		</transform>
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.07"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague1Rubis.obj"/>
+	<transform name="toWorld">
+		<translation>
+			<y>0.1</y>
+		</translation>
+	</transform>
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.4 0.94 0.89"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="3"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+		<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague2Metal.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.07"/>
+        <string name="material" value="gold"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague2Saphir.obj"/>
+
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.94 0.67 0.27"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+		<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague3Metal.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.03"/>
+        <string name="material" value="gold"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague3Amethyste.obj"/>
+
+	  --><!-- amethyste --><!--
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.4 0.6 0.2"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.55"/>	
+      </bsdf>
+    </shape>
+	
+		<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague4Metal.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.12"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague4Topaze.obj"/>
+
+	  --><!-- topaze --><!--
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.001 0.22 0.51"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="roughdielectric">
+		<real name="etaInt" value="1.60"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague5Metal.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.14"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague5Emeraude.obj"/>
+
+	--><!--Emeraude--><!--
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.69 0.22 0.53"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="roughdielectric">
+		<real name="etaInt" value="1.56"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bague6Metal.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.18"/>
+        <string name="material" value="nickel"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bourse.obj"/>
+
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/cuirAncien2.png"/>
+			<real name="scale" value="0.1"/>
+		</texture>			
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/bourseCordeletteVF.obj"/>
+
+	  <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/cuirAncien.png"/>
+			<real name="scale" value="3"/>
+		</texture>			
+      </bsdf>
+      --><!-- <bsdf type="Diffuse"> --><!--
+        --><!-- <color name="albedo" value="0.35 0.22 0.14"/> --><!--
+      --><!-- </bsdf> --><!--
+    </shape>
+	
+		--><!--chandelle gauche--><!--
+	<shape type="Mesh">
+      <string name="path" value="./data/candle/candleStand/candle_stand_highCenteredVFCorr.obj"/>
+		--><!-- <transform name="toWorld"> --><!--
+			--><!-- <translation> --><!--
+				--><!-- <x>0.</x> --><!--
+				--><!-- <y>-0.25</y> --><!--
+				--><!-- </translation> --><!--
+		--><!-- </transform> --><!--
+<bsdf type="twosides">
+		<bsdf name="bsdf" type="roughconductor">
+			<real name="alpha" value="0.2"/>
+			<string name="material" value="nickel"/>
+		</bsdf>
+	</bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/candle/candlestick6/cireOnlyCenteredVF.obj"/>
+		<transform name="toWorld">
+			<translation>
+				<x>0.</x>
+				<y>0.01</y>
+				</translation>
+			</transform>
+      <bssrdf type="FastDipole">
+        <integer name="numberPoints" value="500000"/>
+		<string name="preset" value="Skin2"/>
+        --><!-- <color name="sigmaPrimeS" value="1.09 1.59 1.79"/> --><!--
+        --><!-- <color name="sigmaA" value="0.013 0.070 0.145"/> --><!--
+        <real name="scale" value="0.114"/> --><!--now, max 0.714.  10 min avant, 70 max --><!--
+        --><!-- <real name="eta" value="1.3"/> --><!--
+		<real name="etaExt" value="1."/>
+        <real name="error" value="0.2"/>
+		<bool name="indirectIrradiance" value="true"/>
+		<bool name="squeezeZeroIrradiance" value="true"/>
+		<real name="scaleResult" value="0.1"/> 
+      </bssrdf>
+	  <bsdf type="twosides">
+		<bsdf name="bsdf" type="SmoothLayeredBSDF">
+        <color name="absorbance" value="0.0001 0.0001 0.0001"/>
+        <double name="thickness" value="0.002"/>
+        <bsdf name="baseBSDF" type="Diffuse">
+          <color name="albedo" value="0. 0. 0."/>
+        </bsdf>
+		</bsdf>
+	 </bsdf>
+     --><!-- <bsdf type="Diffuse">  --><!--
+        --><!-- <color name="albedo" value="0. 0. 0."/> --><!--
+      --><!-- </bsdf>  --><!--
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/candle/candlestick6/mecheCenteredVF.obj"/>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.05 0.05 0.05"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Cube">
+		<transform name="toWorld">
+		<scale>
+		  <x>2</x>
+          <y>2</y>
+          <z>2</z>
+		</scale>
+         <translation>
+          <x>-9.1</x>
+          <y>8.7</y>
+          <z>10</z>
+        </translation>
+      </transform> 
+	  --><!-- <bsdf type="Diffuse"> --><!--
+        --><!-- <color name="albedo" value="0.9 0.1 0.1"/> --><!--
+      --><!-- </bsdf> --><!--
+	  --><!-- <medium name="interior" type="Heterogeneous"> --><!--
+
+        --><!-- <volume name="volume" type="OpenVDBVolume"> --><!--
+          --><!-- <string name="path" value="./data/Kings treasure/flammeBougie.vdb"/> --><!--
+		      --><!-- <real name="temperatureScale" value="2500"/> --><!--
+			  --><!-- <string name="gridTemperatureName" value="flame"/> --><!--
+        --><!-- </volume> --><!--
+        --><!-- <color name="albedo" value="0.8 0.8 0.8"/> --><!--
+        --><!-- <double name="scale" value="100"/> --><!--
+        --><!-- <double name="scaleEmissivity" value="10"/> --><!--
+        --><!-- <bool name="centered" value="0"/> --><!--
+      --><!-- </medium> --><!--
+	  
+	  --><!-- <medium name="interior" type="Homogeneous"> --><!--
+		--><!-- <real name="temperature" value="2800"/> --><!--
+		--><!-- <real name="scaleEmissivity" value="0.01"/> --><!--
+		--><!-- </medium> --><!--
+	  --><!-- </medium> --><!--
+	  	  --><!--<medium name="interior" type="Heterogeneous">
+	<transform name="toWorld">
+	<translation>
+          <x>9.1</x>
+          <y>-8.7</y>
+          <z>-10</z>
+        </translation>
+		<scale>
+			<x>1.3</x>
+		</scale>
+		<rotation>
+			<x>-90</x>
+		</rotation>
+		<translation>
+          <x>-9.1</x>
+          <y>8.7</y>
+          <z>10</z>
+        </translation>
+		</transform>
+        <volume name="volume" type="OpenVDBVolume">
+          <string name="path" value="./data/Kings treasure/flammeBougie.vdb"/>
+		      <real name="temperatureScale" value="2800"/>
+			  <string name="gridTemperatureName" value="flame"/>
+        </volume>
+        <color name="albedo" value="0.8 0.8 0.8"/>
+        <double name="scale" value="100"/>
+        <double name="scaleEmissivity" value="10"/>  --><!--avec scale cube 2--><!--
+        <bool name="centered" value="1"/>
+      </medium>--><!--
+	</shape>
+	
+	--><!--chandelle droite--><!--
+	<shape type="Mesh">
+      <string name="path" value="./data/candle/candleStand/2emeCandle_stand_highCenteredVF.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.2"/>
+        <string name="material" value="nickel"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/candle/candlestick6/2emeCireOnlyCenteredVF.obj"/>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.5 0.5 0.5"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/candle/candlestick6/2emeMecheCenteredVF.obj"/>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.05 0.05 0.05"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Cube">
+		<transform name="toWorld">
+		<scale>
+		  <x>2</x>
+          <y>2</y>
+          <z>2</z>
+		</scale>
+         <translation>
+          <x>28.7</x>
+          <y>9</y>
+          <z>9.6</z>
+        </translation>
+      </transform> 
+	  
+	  <medium name="interior" type="Heterogeneous">
+	<transform name="toWorld">
+	<translation>
+          <x>-28.7</x>
+          <y>-9</y>
+          <z>-9.6</z>
+        </translation>
+		<scale>
+			<x>1.3</x>
+		</scale>
+		<rotation>
+			<x>-90</x>
+		</rotation>
+		<translation>
+          <x>28.7</x>
+          <y>9</y>
+          <z>9.6</z>
+        </translation>
+		</transform>
+        <volume name="volume" type="OpenVDBVolume">
+          <string name="path" value="./data/Kings treasure/flammeBougie.vdb"/>
+		      <real name="temperatureScale" value="2800"/>
+			  <string name="gridTemperatureName" value="flame"/>
+        </volume>
+        <color name="albedo" value="0.8 0.8 0.8"/>
+        <double name="scale" value="100"/>
+        <double name="scaleEmissivity" value="10"/>  --><!--avec scale cube 2--><!--
+        <bool name="centered" value="1"/>
+      </medium>
+	</shape>
+	
+	--><!-- chaise --><!--
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/chaiseBois.obj"/>
+
+       <bsdf type="LayeredBSDF">
+			<real name="alphaTop" value="0.12"/>
+			<color name="absorbance" value="0.001 0.001 0.001"/>
+			<double name="thickness" value="0.001"/>
+			<bsdf name="baseBSDF" type="Diffuse">
+				<texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/boisSombre.png"/>
+		</texture>	
+			</bsdf>
+		</bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/chaiseVelours.obj"/>
+
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/velours2.png"/>
+			<real name="scale" value="3"/>
+		</texture>			
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/collierPerles.obj"/>
+
+      <bsdf type="Microfacet">
+			<real name="alpha" value="0.0001"/>
+			<color name="absorbance" value="0.0000001 0.0000001 0.0000001"/>
+			<double name="thickness" value="0.0000001"/>
+			<color name="kd" value="0.99 0.99 0.99"/>
+			<real name="probabilitySpecular" value="0.01"/>
+		</bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/coupeContenantVF.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.28"/>
+        <string name="material" value="nickel"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/coupeContenantRenforts.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.19"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/coupeDiamants.obj"/>
+
+      <bsdf type="dielectric">
+	  <real name="etaInt" value="2.4175"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/coupeEcrinsBijoux.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.22"/>
+        <string name="material" value="copper"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/coupeInterEcrinsHaut.obj"/>
+
+	  <bsdf type="twosides">
+		  <bsdf name="bsdf" type="roughconductor">
+			<real name="alpha" value="0.11"/>
+			<string name="material" value="silver"/>
+		  </bsdf>
+		</bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/coupePied.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.22"/>
+        <string name="material" value="nickel"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/coupeRubis.obj"/>
+
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.4 0.94 0.89"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="15"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/coupeSaphirs.obj"/>
+
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.94 0.67 0.27"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="15"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneArceaux.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.15"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneBase.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.18"/>
+        <string name="material" value="gold"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneCroix.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.05"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneCroixGemmesDroiteGauche.obj"/>
+
+      --><!--Emeraude--><!--
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.69 0.22 0.53"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="roughdielectric">
+		<real name="etaInt" value="1.56"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneCroixGemmesExtremites.obj"/>
+
+	  --><!-- topaze --><!--
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.001 0.22 0.51"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="15"/>
+	  </medium>
+      <bsdf type="roughdielectric">
+		<real name="etaInt" value="1.60"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneCroixGemmesHautBas.obj"/>
+	
+		--><!--rubis--><!--
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.4 0.94 0.89"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="15"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneDemiCroix.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.2"/>
+        <string name="material" value="gold"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneDemiCroixGemmes.obj"/>
+	  
+		--><!-- saphir --><!--
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.94 0.67 0.27"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="15"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneDemiCroixPerles.obj"/>
+
+	  <bsdf type="Microfacet">
+			<real name="alpha" value="0.0001"/>
+			<color name="absorbance" value="0.0000001 0.0000001 0.0000001"/>
+			<double name="thickness" value="0.0000001"/>
+			<color name="kd" value="0.99 0.99 0.99"/>
+			<real name="probabilitySpecular" value="0.1"/>
+		</bsdf>
+	  --><!-- topaze --><!--
+      --><!-- <medium name="interior" type="Homogeneous"> --><!--
+			--><!-- <color name="sigmaA" value="0.001 0.22 0.51"/> --><!--
+			--><!-- <color name="sigmaS" value="0 0 0"/> --><!--
+			--><!-- <real name="scale" value="10"/> --><!--
+	  --><!-- </medium> --><!--
+      --><!-- <bsdf type="roughdielectric"> --><!--
+		--><!-- <real name="etaInt" value="1.60"/>	 --><!--
+      --><!-- </bsdf> --><!--
+	  --><!-- <bsdf type="diffuse"> --><!--
+		--><!-- <color name="albedo" value="0.5 0.5 0.5"/> --><!--
+	  --><!-- </bsdf> --><!--
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneGemmesArceaux.obj"/>
+		--><!-- diamant --><!--
+      <bsdf type="dielectric">
+		<real name="etaInt" value="2.4175"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneSommet.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.08"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneSommetBas.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.08"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/couronneVelours.obj"/>
+
+	  <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/velours.png"/>
+			<real name="scale" value="2."/>
+		</texture>			
+      </bsdf>
+      --><!-- <bsdf type="Diffuse"> --><!--
+        --><!-- <color name="albedo" value="0.8 0.3 0.8"/> --><!--
+      --><!-- </bsdf> --><!--
+    </shape>
+	
+	--><!-- diamant --><!--
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/diamant.obj"/>
+
+      <bsdf type="dielectric">
+	  <real name="etaInt" value="2.4175"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/diamant2.obj"/>
+
+      <bsdf type="dielectric">
+	  <real name="etaInt" value="2.4175"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeEcrinsBijoux.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.13"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeEcrinsBijoux2.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.18"/>
+        <string name="material" value="tin"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeEmeraude.obj"/>
+
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.69 0.22 0.53"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="roughdielectric">
+		<real name="etaInt" value="1.56"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeFourreau.obj"/>
+
+	  <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/bois.png"/>
+			<real name="scale" value="1"/>
+		</texture>			
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeFourreauExtremiteVF.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.11"/>
+		<string name="material" value="iron"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeGarde.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.15"/>
+		<string name="material" value="iron"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeLame.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.09"/>
+		<string name="material" value="iron"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeePoignee.obj"/>
+
+      <bsdf type="microfacet">
+			<real name="alpha" value="0.2"/>
+		  <color name="kd" value="0.03 0.03 0.03"/>
+		  <real name="probabilitySpecular" value="0.05"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeePoigneeExtremite.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.18"/>
+		<string name="material" value="iron"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeePoigneeExtremiteCentre.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.17"/>
+		<string name="material" value="iron"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeRubis.obj"/>
+	  <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.4 0.94 0.89"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="4"/>
+	  </medium>
+      <bsdf type="roughdielectric">
+		<real name="alpha" value="0.01"/>
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeSaphir.obj"/>
+
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.94 0.67 0.27"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/epeeTopaze.obj"/>
+
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.001 0.22 0.51"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="roughdielectric">
+		<real name="etaInt" value="1.60"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/fourreauSerre.obj"/>
+
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/cuirAncien.png"/>
+			<real name="scale" value="5"/>
+		</texture>			
+      </bsdf>
+    </shape>-->
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/mur.obj"/>
+
+		<!-- <bsdf type="normalmapping"> -->
+			<!-- <texture name="normalMap" type="ImageTexture"> -->
+				<!-- <string name="path" value="./data/Kings treasure/textures/pierreChateau9Normal.jpg"/> -->
+				<!-- <real name="scale" value="15"/> -->
+			<!-- </texture> -->
+			<!-- <bsdf name="bsdf" type="diffuse"> -->
+				<!-- <texture name="albedo" type="ImageTexture"> -->
+					<!-- <string name="path" value="./data/Kings treasure/textures/pierreChateau9.jpg"/> -->
+					<!-- <real name="scale" value="15"/> -->
+				<!-- </texture> -->
+			<!-- </bsdf> -->
+		<!-- </bsdf> -->
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.6 0.6 0.6"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+    <string name="path" value="./data/Kings treasure/murDalles.obj"/>
+
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			    <string name="path" value="./data/Kings treasure/textures/pierreChateau8.jpg"/>
+			    <bool name="invertY" value="0"/>
+			    <real name="scale" value="1"/>
+		    </texture>			
+      </bsdf>
+		
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/murDalleSimple.obj"/>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.6 0.6 0.6"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/nappeVF.obj"/>
+
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/nappe2.png"/>
+			<real name="scale" value="1.15"/>
+			<bool name="invertX" value="true"/>
+			<bool name="invertY" value="true"/>
+		</texture>			
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/petiteBague1Diamants.obj"/>
+
+      <bsdf type="dielectric">
+        <real name="etaInt" value="2.4175"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/petiteBague1Metal.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.16"/>
+		<string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/petiteBague1Saphir.obj"/>
+
+	  <!-- saphir -->
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.94 0.67 0.27"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/petiteBague2Diamants.obj"/>
+
+      <bsdf type="dielectric">
+        <real name="etaInt" value="2.4175"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/petiteBague2MetalCentre.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.1"/>
+		<string name="material" value="gold"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/petiteBague2MetalTour.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.16"/>
+		<string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/petiteBague2Rubis.obj"/>
+
+	  <!-- rubis -->
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.4 0.94 0.89"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="15"/>
+	  </medium>
+      <bsdf type="roughdielectric">
+		<real name="alpha" value="0.01"/>
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/pieces1.obj"/>
+	
+      <bsdf type="roughconductor">
+	  
+		<texture name="reflectanceTexture" type="imageTexture">
+				<string name="path" value="./data/Kings treasure/textures/metalRoughness.png"/>
+				<real name="scale" value="0.1"/>
+			</texture>
+		<real name="alpha" value="0.14"/>
+		<!-- <texture name="alpha" type="scaletexture"> -->
+			<!-- <texture name="texture" type="imageTexture"> -->
+				<!-- <string name="path" value="./data/Kings treasure/textures/metalRoughness.png"/> -->
+				<!-- <real name="scale" value="1"/> -->
+			<!-- </texture> -->
+			<!-- <real name="scale" value="1."/> -->
+		<!-- </texture>	 -->
+        <string name="material" value="gold"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/pieces2.obj"/>
+		  <!-- <texture name="reflectanceTexture" type="imageTexture"> -->
+				<!-- <string name="path" value="./data/Kings treasure/textures/metalRoughness.png"/> -->
+				<!-- <real name="scale" value="0.2"/> -->
+		   <!-- </texture> -->
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.14"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/pieces3.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.25"/>
+        <string name="material" value="copper"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/pieces4.obj"/>
+
+      <bsdf type="roughconductor">
+		 <!-- <texture name="alpha" type="scaletexture"> -->
+			<!-- <texture name="texture" type="imageTexture"> -->
+				<!-- <string name="path" value="./data/Kings treasure/textures/metalRoughness.png"/> -->
+				<!-- <real name="scale" value="0.3"/> -->
+			<!-- </texture> -->
+			<!-- <real name="scale" value="0.1"/> -->
+		<!-- </texture>	 -->
+		<real name="alpha" value="0.21"/>
+        <string name="material" value="silver"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/pieces5.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.17"/>
+        <string name="material" value="gold"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/pieces6.obj"/>
+
+      <bsdf type="roughconductor">
+		<real name="alpha" value="0.2"/>
+        <string name="material" value="nickel"/>
+      </bsdf>
+    </shape>
+	
+	<!--plafond-->
+	<!--<shape type="plane">
+		<transform name="toWorld">		
+			<scale>
+				<x>400</x>
+				<y>400</y>
+			</scale>
+			<rotation>
+				<x>90</x>
+			</rotation>
+			<translation>
+				<y>130</y>
+				</translation>		
+		</transform>
+		<bsdf type="twosides">
+			<bsdf name="bsdf" type="Diffuse">
+				<color name="albedo" value="0.4 0.4 0.4"/>
+			</bsdf>			
+		</bsdf>
+    </shape>-->
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/potCorpsVF.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.26"/>
+		<string name="material" value="tin"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/potDiamants.obj"/>
+
+      <!-- amethyste -->
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.4 0.6 0.2"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.55"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/potEcrinsBijoux.obj"/>
+
+      <bsdf type="roughconductor">
+        <real name="alpha" value="0.21"/>
+		<string name="material" value="copper"/>
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/potEmeraudesVF.obj"/>
+
+	  <!-- émeraude -->
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.69 0.22 0.53"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="10"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.56"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/potExtremitesVF2.obj"/>
+
+	  <bsdf type="twosides">
+		  <bsdf name="bsdf" type="roughconductor">
+			<real name="alpha" value="0.26"/>
+			<string name="material" value="tin"/>
+		  </bsdf>
+	      <bsdf name="bsdf2" type="Diffuse">
+			<color name="albedo" value="0.6 0.6 0.6"/>
+		  </bsdf>
+	  </bsdf>
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0.6 0.6 0.6"/> -->
+      <!-- </bsdf> -->
+    </shape>
+
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/potSaphir.obj"/>
+
+	  <!-- saphir -->
+      <medium name="interior" type="Homogeneous">
+			<color name="sigmaA" value="0.94 0.67 0.27"/>
+			<color name="sigmaS" value="0 0 0"/>
+			<real name="scale" value="15"/>
+	  </medium>
+      <bsdf type="dielectric">
+		<real name="etaInt" value="1.76"/>	
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/sol.obj"/>
+
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/carrelage6.png"/>
+			<real name="scale" value="6"/>
+		</texture>			
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/table.obj"/>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0.35 0.22 0.14"/>
+      </bsdf>
+    </shape>
+	
+	<!-- <shape type="Mesh"> -->
+      <!-- <string name="path" value="./data/Kings treasure/tapisserieBarreBois.obj"/> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0.6 0.6 0.6"/> -->
+      <!-- </bsdf> -->
+    <!-- </shape> -->
+	
+	<!-- <shape type="Mesh"> -->
+      <!-- <string name="path" value="./data/Kings treasure/tapisserieCorde.obj"/> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0.6 0.6 0.6"/> -->
+      <!-- </bsdf> -->
+    <!-- </shape> -->
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/tapisseriesDroite.obj"/>
+
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/retour chasse-cluny.png"/>
+			<bool name="invertY" value="1"/>
+			<!-- <real name="scale" value="1"/> -->
+		</texture>			
+      </bsdf>
+    </shape>
+	
+	<shape type="Mesh">
+      <string name="path" value="./data/Kings treasure/tapisseriesGauche.obj"/>
+
+      <bsdf type="Diffuse">
+        <texture name="albedo" type="imageTexture">
+			<string name="path" value="./data/Kings treasure/textures/Flora Edward_3.png"/>
+			<bool name="invertY" value="1"/>
+			<!-- <real name="scale" value="1"/> -->
+		</texture>			
+      </bsdf>
+    </shape>
+	
+	<!-- <shape type="Mesh"> -->
+      <!-- <string name="path" value="./data/Kings treasure/toitArmature.obj"/> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0.6 0.6 0.6"/> -->
+      <!-- </bsdf> -->
+    <!-- </shape> -->
+		
+    <!-- <shape type="Mesh"> -->
+      <!-- <string name="path" value="./data/Kings treasure/toitVitres.obj"/> -->
+
+      <!-- <bsdf type="Diffuse"> -->
+        <!-- <color name="albedo" value="0.6 0.6 0.6"/> -->
+      <!-- </bsdf> -->
+    <!-- </shape> -->
+	
+  <!--<shape type="Plane">
+    <transform name="toWorld">
+        <scale>
+          <x>70</x>
+          <y>70</y>
+        </scale>
+        <rotation>
+          <x>90.</x>
+        </rotation>
+      <translation>
+        <y>150</y>
+      </translation>
+      </transform>
+  
+    <light type="AreaLight">
+        <color name="radiance" value="5 5 5"/>
+      </light>
+
+      <bsdf type="Diffuse">
+        <color name="albedo" value="0 0 0"/>
+      </bsdf>
+  </shape>-->
+
+  </objects> 
+</scene>

@@ -75,6 +75,10 @@ Color LayeredBSDF::fresnel(real etaExt, real etaInt, real cosThetaI, real& etaI,
 
 Color LayeredBSDF::eval(const BSDFSamplingInfos & infos)
 {
+	if (DifferentialGeometry::cosTheta(infos.wi) <= 0. ||
+		DifferentialGeometry::cosTheta(infos.wo) <= 0.)
+		return Color();
+
 	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
 	//real alpha = (1.2 - 0.2 * std::sqrt(std::abs(cosThetaI))) * myAlphaTop;
@@ -151,6 +155,9 @@ Color LayeredBSDF::evalReflection(const BSDFSamplingInfos & infos, const Color& 
 
 Color LayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 {
+	if (DifferentialGeometry::cosTheta(infos.wi) <= 0.)
+		return Color();
+
 	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
 	real alpha = (1.2f - 0.2f * std::sqrt(std::abs(cosThetaI))) * myAlphaTop;

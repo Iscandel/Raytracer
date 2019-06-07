@@ -12,11 +12,14 @@ public:
 	~ImageTexture();
 
 	Color eval(const Point2d & uv);
+	Color getAverage() const override;
+	Color getMin() const override;
+	Color getMax() const override;
 
 protected:
 	Array2D<Color3> myArray;
 	bool myInvertY;
 	bool myInvertX;
-	real myScale;
+	real myScale; //for texture repetition
 };
 

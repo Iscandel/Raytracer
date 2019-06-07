@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="src\accelStruct\Bvh.cpp" />
     <ClCompile Include="src\bsdf\BSDF.cpp" />
+    <ClCompile Include="src\bsdf\BumpMapping.cpp" />
     <ClCompile Include="src\bsdf\CarPaint.cpp" />
     <ClCompile Include="src\bsdf\Conductor.cpp" />
     <ClCompile Include="src\bsdf\Dielectric.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="src\bsdf\SheetDielectric.cpp" />
     <ClCompile Include="src\bsdf\SmoothLayeredBSDF.cpp" />
     <ClCompile Include="src\bsdf\SpectralDielectric.cpp" />
+    <ClCompile Include="src\bsdf\TwoSides.cpp" />
     <ClCompile Include="src\bssrdf\BSSRDF.cpp" />
     <ClCompile Include="src\bssrdf\FastDipole.cpp" />
     <ClCompile Include="src\camera\Camera.cpp" />
@@ -55,6 +57,7 @@
     <ClCompile Include="src\core\main.cpp" />
     <ClCompile Include="src\core\Mapping.cpp" />
     <ClCompile Include="src\core\Parameters.cpp" />
+    <ClCompile Include="src\core\PerlinNoise.cpp" />
     <ClCompile Include="src\core\Primitive.cpp" />
     <ClCompile Include="src\core\Ray.cpp" />
     <ClCompile Include="src\core\RaytracerObject.cpp" />
@@ -108,6 +111,7 @@
     <ClCompile Include="src\medium\Homogeneous.cpp" />
     <ClCompile Include="src\medium\IsotropicPhaseFunction.cpp" />
     <ClCompile Include="src\medium\Medium.cpp" />
+    <ClCompile Include="src\medium\MediumPreset.cpp" />
     <ClCompile Include="src\medium\PhaseFunction.cpp" />
     <ClCompile Include="src\sampler\RandomSampler.cpp" />
     <ClCompile Include="src\sampler\Sampler.cpp" />
@@ -116,6 +120,7 @@
     <ClCompile Include="src\texture\ConstantTexture.cpp" />
     <ClCompile Include="src\texture\ImageTexture.cpp" />
     <ClCompile Include="src\texture\PerlinNoiseTexture.cpp" />
+    <ClCompile Include="src\texture\ScaleTexture.cpp" />
     <ClCompile Include="src\texture\Texture.cpp" />
     <ClCompile Include="src\tools\Common.cpp" />
     <ClCompile Include="src\tools\Logger.cpp" />
@@ -130,6 +135,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\accelStruct\Bvh.h" />
     <ClInclude Include="src\bsdf\BSDF.h" />
+    <ClInclude Include="src\bsdf\BumpMapping.h" />
     <ClInclude Include="src\bsdf\CarPaint.h" />
     <ClInclude Include="src\bsdf\Conductor.h" />
     <ClInclude Include="src\bsdf\Dielectric.h" />
@@ -147,6 +153,7 @@
     <ClInclude Include="src\bsdf\SheetDielectric.h" />
     <ClInclude Include="src\bsdf\SmoothLayeredBSDF.h" />
     <ClInclude Include="src\bsdf\SpectralDielectric.h" />
+    <ClInclude Include="src\bsdf\TwoSides.h" />
     <ClInclude Include="src\bssrdf\BSSRDF.h" />
     <ClInclude Include="src\bssrdf\FastDipole.h" />
     <ClInclude Include="src\camera\Camera.h" />
@@ -167,6 +174,7 @@
     <ClInclude Include="src\core\Mapping.h" />
     <ClInclude Include="src\core\Math.h" />
     <ClInclude Include="src\core\Parameters.h" />
+    <ClInclude Include="src\core\PerlinNoise.h" />
     <ClInclude Include="src\core\Primitive.h" />
     <ClInclude Include="src\core\Ray.h" />
     <ClInclude Include="src\core\RaytracerObject.h" />
@@ -222,6 +230,7 @@
     <ClInclude Include="src\medium\Homogeneous.h" />
     <ClInclude Include="src\medium\IsotropicPhaseFunction.h" />
     <ClInclude Include="src\medium\Medium.h" />
+    <ClInclude Include="src\medium\MediumPreset.h" />
     <ClInclude Include="src\medium\PhaseFunction.h" />
     <ClInclude Include="src\sampler\RandomSampler.h" />
     <ClInclude Include="src\sampler\Sampler.h" />
@@ -230,6 +239,7 @@
     <ClInclude Include="src\texture\ConstantTexture.h" />
     <ClInclude Include="src\texture\ImageTexture.h" />
     <ClInclude Include="src\texture\PerlinNoiseTexture.h" />
+    <ClInclude Include="src\texture\ScaleTexture.h" />
     <ClInclude Include="src\texture\Texture.h" />
     <ClInclude Include="src\tools\Array2D.h" />
     <ClInclude Include="src\tools\Common.h" />
@@ -273,8 +283,12 @@
     <Xml Include="Scenes\cbox_path_vol.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="Scenes\cbox-sss.xml" />
     <Xml Include="Scenes\DepthOfField.xml" />
     <Xml Include="Scenes\dragon-sss.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="Scenes\kingsTreasure.xml">
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="Scenes\lamborghiniAventador.xml">
@@ -292,7 +306,9 @@
     <Xml Include="Scenes\steam.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="Scenes\Table-bssrdf.xml" />
+    <Xml Include="Scenes\Table-bssrdf.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="Scenes\Table-MIS.xml">
       <SubType>Designer</SubType>
     </Xml>

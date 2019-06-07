@@ -24,7 +24,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Transforms the given vector in a local coordinates vector.
 	///////////////////////////////////////////////////////////////////////////
-	Vector3d toLocal(const Vector3d& v)
+	Vector3d toLocal(const Vector3d& v) const
 	{
 		return myShadingGeometry.toLocal(v);
 	}
@@ -32,7 +32,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	/// \brief Transforms the given local vector in a world coordinates vector.
 	///////////////////////////////////////////////////////////////////////////
-	Vector3d toWorld(const Vector3d& v)
+	Vector3d toWorld(const Vector3d& v) const
 	{
 		return myShadingGeometry.toWorld(v);
 	}

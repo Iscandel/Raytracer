@@ -146,15 +146,18 @@ OpenVDBVolume::OpenVDBVolume(const Parameters& params)
 		myDensityIndexSpaceBoundingBoxMin = Point3i(bbox.getStart().x(), bbox.getStart().y(), bbox.getStart().z());
 		myDensityIndexSpaceBoundingBoxMax = Point3i(bbox.getEnd().x(), bbox.getEnd().y(), bbox.getEnd().z());
 	
-		myBoundingBox = BoundingBox(//Point3d(grid->indexToWorld(openvdb::Coord(0, 0, 0)).x(), 
-									//		grid->indexToWorld(openvdb::Coord(0, 0, 0)).y(),
-									//		grid->indexToWorld(openvdb::Coord(0, 0, 0)).z()),
-									Point3d(myDensityGrid->indexToWorld(bbox.getStart()).x(),
-											myDensityGrid->indexToWorld(bbox.getStart()).y(),
-											myDensityGrid->indexToWorld(bbox.getStart()).z()),
-									Point3d(myDensityGrid->indexToWorld(bbox.getEnd()).x(),
-											myDensityGrid->indexToWorld(bbox.getEnd()).y(),
-											myDensityGrid->indexToWorld(bbox.getEnd()).z()));
+		//Compute the world bbox
+		computeBoundingBox();
+		std::cout << myBoundingBox << std::endl;
+		//myBoundingBox = BoundingBox(//Point3d(grid->indexToWorld(openvdb::Coord(0, 0, 0)).x(), 
+		//							//		grid->indexToWorld(openvdb::Coord(0, 0, 0)).y(),
+		//							//		grid->indexToWorld(openvdb::Coord(0, 0, 0)).z()),
+		//							Point3d(myDensityGrid->indexToWorld(bbox.getStart()).x(),
+		//									myDensityGrid->indexToWorld(bbox.getStart()).y(),
+		//									myDensityGrid->indexToWorld(bbox.getStart()).z()),
+		//							Point3d(myDensityGrid->indexToWorld(bbox.getEnd()).x(),
+		//									myDensityGrid->indexToWorld(bbox.getEnd()).y(),
+		//									myDensityGrid->indexToWorld(bbox.getEnd()).z()));
 	//	xmin = grid->indexToWorld(openvdb::Coord(0,0,0)).x(); ymin = grid->indexToWorld(openvdb::Coord(0, 0, 0)).y();  zmin = grid->indexToWorld(openvdb::Coord(0, 0, 0)).z();
 	//	xmax = grid->indexToWorld(bbox.getEnd()).x(); ymax = grid->indexToWorld(bbox.getEnd()).y(); zmax = grid->indexToWorld(bbox.getEnd()).z();
 		//grid->setTransform(
@@ -169,6 +172,31 @@ OpenVDBVolume::~OpenVDBVolume()
 {
 }
 
+void OpenVDBVolume::computeBoundingBox()
+{
+	auto bboxDensity = myDensityGrid->evalActiveVoxelBoundingBox();
+	myBoundingBox = BoundingBox(
+		Point3d(myDensityGrid->indexToWorld(bboxDensity.getStart()).x(),
+			myDensityGrid->indexToWorld(bboxDensity.getStart()).y(),
+			myDensityGrid->indexToWorld(bboxDensity.getStart()).z()),
+		Point3d(myDensityGrid->indexToWorld(bboxDensity.getEnd()).x(),
+			myDensityGrid->indexToWorld(bboxDensity.getEnd()).y(),
+			myDensityGrid->indexToWorld(bboxDensity.getEnd()).z()));
+
+	if (myTemperatureGrid)
+	{
+		auto bboxEmission = myTemperatureGrid->evalActiveVoxelBoundingBox();
+		BoundingBox worldBboxEmission(
+			Point3d(myTemperatureGrid->indexToWorld(bboxEmission.getStart()).x(),
+				myTemperatureGrid->indexToWorld(bboxEmission.getStart()).y(),
+				myTemperatureGrid->indexToWorld(bboxEmission.getStart()).z()),
+			Point3d(myTemperatureGrid->indexToWorld(bboxEmission.getEnd()).x(),
+				myTemperatureGrid->indexToWorld(bboxEmission.getEnd()).y(),
+				myTemperatureGrid->indexToWorld(bboxEmission.getEnd()).z()));
+
+		myBoundingBox = BoundingBox::unionBox(myBoundingBox, worldBboxEmission);
+	}
+}
 
 real OpenVDBVolume::getMaxSigmaT() const
 {
@@ -259,7 +287,7 @@ Color OpenVDBVolume::lookupEmissivity(const Point3d &_p) const
 		// Compute the value via triquadratic (second-order) interpolation.
 		v0 = openvdb::tools::QuadraticSampler::sample(myTemperatureGrid->tree(), ijk);
 	}
-	
+	v0 = v0 < (real)0 ? (real)0 : v0;
 	Color c = Color::fromBlackbody((v0 - myMinGridTemperature) / (myMaxGridTemperature - myMinGridTemperature) * myTemperatureScale);
 	return c;
 	//if (c.r < 0 || c.g < 0 || c.b < 0)

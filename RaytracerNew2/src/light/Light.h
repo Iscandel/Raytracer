@@ -67,6 +67,6 @@ public:
 public:
 	Light() {}
 	//Light(const Point3d& center, const Color& col);
-	~Light(void);
+	virtual ~Light(void);
 };
 

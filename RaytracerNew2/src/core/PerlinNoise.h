@@ -1,35 +1,16 @@
 #pragma once
-#include "Texture.h"
-#include "core/Color.h"
-#include "core/PerlinNoise.h"
 
-#include <map>
-#include <string>
+#include "core/Geometry.h"
 
-class Parameters;
-
-//Macro to associate strings and enum
-#define MYLIST(x)       \
-x(NORMAL_MAP, "normalMap") \
-x(BLEND, "blend") \
-x(END, "null") \
-
-#define USE_FIRST_ELEMENT(x, y)  x,
-#define USE_SECOND_ELEMENT(x, y) y,
-
-class PerlinNoiseTexture :
-	public Texture
+class PerlinNoise
 {
 public:
-	enum TextureType
-	{
-		MYLIST(USE_FIRST_ELEMENT)
-	};
-public:
-	PerlinNoiseTexture(const Parameters& params);
-	~PerlinNoiseTexture();
+	PerlinNoise(real persistence=0.f, int numberOfOctaves=0.f, real testScale=1);
+	~PerlinNoise();
 
-	Color eval(const Point2d& uv) override;
+	//real eval(const Point2d& uv);
+
+	//real eval(real x, real y);
 
 	real noise(real x, real y, real z) {
 		int X = (int)floor(x) & 255,                  // FIND UNIT CUBE THAT
@@ -62,42 +43,16 @@ public:
 		return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 	}
 
-	Color getAverage() const override { throw std::runtime_error("not implemented yet"); }
-	Color getMin() const override { throw std::runtime_error("not implemented yet"); }
-	Color getMax() const override { throw std::runtime_error("not implemented yet"); }
-
-
-	real PerlinNoise_2D(real x, real y);
+	real eval(real x, real y);//PerlinNoise_2D(real x, real y);
 	real InterpolatedNoise_1(real x, real y);
 	real SmoothedNoise_1(int x, int y);
 	real Noise1(int x, int y);
 
+protected:
 	int p[512];
-	Color myColor1;
-	Color myColor2;
 
-	PerlinNoise myNoise;
-
-
-	PerlinNoise noise2;
-
-	//Array2D<Color> myArray;
-
-	std::map<std::string, TextureType> myTypeByName;
-	TextureType myType;
-	//real myPersistence;
-	//int myNumberOfOctaves;
-	//real testScale;
+	real myPersistence;
+	int myNumberOfOctaves;
+	real testScale;
 };
 
-namespace rtPriv
-{
-	static const char *STRING[] =
-	{
-		MYLIST(USE_SECOND_ELEMENT)
-	};
-};
-
-#undef MYLIST
-#undef USE_FIRST_ELEMENT
-#undef USE_SECOND_ELEMENT

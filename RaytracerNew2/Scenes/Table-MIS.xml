@@ -39,9 +39,10 @@
   </sampler>
 
 	<!-- Use the path tracer with multiple importance sampling -->
-  <integrator type="PathTracingMIS">
+  <integrator type="VolPathTracing">
     <integer name="depth" value="20"/>
     <integer name="sampleNumber" value="4"/>
+    <!--<string name="strategy" value="one_light_weighted"/>-->
     <!--<bool name="bsdfSampling" value="true"/>-->
   </integrator>
   

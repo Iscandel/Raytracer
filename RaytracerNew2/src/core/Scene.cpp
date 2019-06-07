@@ -65,7 +65,7 @@ void Scene::compute(const std::string& filePath)
 	xml::XMLLoader loader;
 	if (!loader.loadScene(*this, filePath))
 	{
-		ILogger::log(ILogger::ERRORS) << "File not parsed.\n";
+		ILogger::log(ILogger::ERRORS) << "File " << filePath << " not parsed.\n";
 		return;
 	}
 

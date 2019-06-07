@@ -9,6 +9,7 @@
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 DirectLightingIS::DirectLightingIS(const Parameters& params)
+:Integrator(params)
 {
 	myDepth = params.getInt("depth", 5);
 	mySampleNumber = params.getInt("sampleNumber", 1);

@@ -21,7 +21,7 @@ public:
 
 public:
 	Medium(const Parameters& params);
-	~Medium();
+	virtual ~Medium();
 
 	virtual bool sampleDistance(const Ray& ray, Sampler::ptr sample, real &t, Color &weight, Color& emissivity) = 0;
 

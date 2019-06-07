@@ -1,1 +1,1 @@
-./Scenes/fire.xml
+./Scenes/kingsTreasure.xml

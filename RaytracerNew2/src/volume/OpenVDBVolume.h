@@ -21,6 +21,9 @@ public:
 	Color getAverageEmission() const override;
 
 protected:
+	void computeBoundingBox();
+
+protected:
 	openvdb::FloatGrid::Ptr myDensityGrid;
 	openvdb::FloatGrid::Ptr myTemperatureGrid;
 	openvdb::Vec3SGrid::Ptr myTempGrid;

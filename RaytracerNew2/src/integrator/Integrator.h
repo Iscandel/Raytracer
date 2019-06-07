@@ -4,6 +4,7 @@
 #include "core/Color.h"
 #include "light/Light.h"
 #include "medium/Medium.h"
+#include "core/Parameters.h"
 #include "core/Ray.h"
 #include "core/RaytracerObject.h"
 #include "sampler/Sampler.h"
@@ -47,10 +48,13 @@ public:
 		MYLIST(USE_FIRST_ELEMENT)
 	};
 public:
-	Integrator();
+	Integrator(const Parameters& params);
 	virtual ~Integrator();
 
 	void initialize(Scene& scene) override;
+
+	Color irradiance(Scene& scene, int lightSamples, const Intersection& inter,
+		Medium::ptr medium, Sampler::ptr& sampler, bool catchIndirect = true);
 
 	///Chooses a light in the scene according to the given strategy and then samples it.
 	Color sampleLightDirect(const Point3d& interPoint, const Point2d& sample, 
@@ -81,6 +85,7 @@ public:
 protected:
 	CDF myLightWeights;
 
+	LightSamplingStrategy myLightStrategy;
 	std::map<std::string, LightSamplingStrategy> myStrategiesByName;
 };
 

@@ -35,6 +35,32 @@ public:
 			
 	}
 
+	Color getAverage() const override
+	{
+		return (myFirstColor + mySecondColor) / (real)2;
+	}
+
+	Color getMin() const override
+	{
+		Color res(+std::numeric_limits<real>::infinity());
+		for (int i = 0; i < Color::NB_SAMPLES; i++)
+		{
+			res(i) = math::min(res(i), myFirstColor(i), mySecondColor(i));
+		}
+
+		return res;
+	}
+	Color getMax() const override
+	{
+		Color res(-std::numeric_limits<real>::infinity());
+		for (int i = 0; i < Color::NB_SAMPLES; i++)
+		{
+			res(i) = math::max(res(i), myFirstColor(i), mySecondColor(i));
+		}
+
+		return res;
+	}
+
 protected:
 	real mySquareSize;
 	Color myFirstColor;

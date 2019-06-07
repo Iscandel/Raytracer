@@ -137,6 +137,10 @@ Color SmoothLayeredBSDF::fresnel(real etaExt, real etaInt, real cosThetaI, real&
 
 Color SmoothLayeredBSDF::eval(const BSDFSamplingInfos & infos)
 {
+	if (DifferentialGeometry::cosTheta(infos.wi) <= 0. ||
+		DifferentialGeometry::cosTheta(infos.wo) <= 0.)
+		return Color();
+
 	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
 	//Vector3d wh = (infos.wi + infos.wo).normalized();
@@ -202,6 +206,9 @@ Color SmoothLayeredBSDF::eval(const BSDFSamplingInfos & infos)
 
 Color SmoothLayeredBSDF::sample(BSDFSamplingInfos & infos, const Point2d & sample)
 {
+	if (DifferentialGeometry::cosTheta(infos.wi) <= 0.)
+		return Color();
+
 	real cosThetaI = DifferentialGeometry::cosTheta(infos.wi);
 
 	infos.sampledType = BSDF::GLOSSY_REFLECTION;

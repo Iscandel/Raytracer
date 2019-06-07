@@ -158,7 +158,21 @@ namespace fresnel
 	inline real estimateDiffuseReflectance(real eta)
 	{
 		real invEta = 1 / eta;
-		return -1.440f * invEta * invEta + 0.710f * invEta + 0.668f + 0.0636f * eta;
+		if(invEta < 1)
+			return -1.440f * invEta * invEta + 0.710f * invEta + 0.668f + 0.0636f * eta;
+		else
+		{
+			real eta2 = eta*eta,
+				eta3 = eta2*eta,
+				eta4 = eta3*eta,
+				eta5 = eta4*eta;
+
+			return 0.919317f - 3.4793f * eta
+				+ 6.75335f * eta2
+				- 7.80989f * eta3
+				+ 4.98554f * eta4
+				- 1.36881f * eta5;
+		}
 	}
 }
 

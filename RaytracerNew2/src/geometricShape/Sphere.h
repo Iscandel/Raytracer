@@ -71,6 +71,11 @@ public:
 	//-> cos theta = ...
 	real pdf(const Point3d& pFrom, const Point3d& sampled, const Normal3d& normal);
 
+	Point3d getCentroid() override
+	{
+		return myObjectToWorld->transform(Point3d(0.f, 0.f, 0.f));
+	}
+
 	real surfaceArea()
 	{
 		//Consider scale factor ??????!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

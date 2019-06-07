@@ -43,6 +43,12 @@ public:
 		return mySurface;
 	}
 
+	Point3d getCentroid() override
+	{
+		Point3d mid = (myMax + myMin) / (real)2;
+		return myObjectToWorld->transform(mid);
+	}
+
 protected:
 	Point3d myMin;
 	Point3d myMax;

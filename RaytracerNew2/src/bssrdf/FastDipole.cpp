@@ -9,6 +9,9 @@
 #include "factory/ObjectFactoryManager.h"
 #include "tools/Rng.h"
 #include "core/Scene.h"
+#include "medium/MediumPreset.h"
+
+#include "sampler/RandomSampler.h"
 
 struct IrradianceSample
 {
@@ -65,6 +68,11 @@ struct OctreeNode
 			Pv /= weight;
 		if (points.size() > 0)
 			Ev /= (real)points.size();
+
+		if (std::isinf(Pv(0)) || std::isinf(Pv(1)) || std::isinf(Pv(2))) {
+			Pv = Point3d();
+			Ev = Color();
+		}
 	}
 
 	Color Ev; //total irradiance in voxel
@@ -78,13 +86,14 @@ struct OctreeNode
 struct Octree
 {
 public:
+	Octree() { myMaxDepth = 24; }
 	void build(const std::vector<IrradianceSample>& points)
 	{
 		rootNode = std::make_unique<OctreeNode>(getBbox(points));
-		recurseBuild(*rootNode, points);
+		recurseBuild(*rootNode, points, 0);
 	}
 
-	void recurseBuild(OctreeNode& node, const std::vector<IrradianceSample>& points)
+	void recurseBuild(OctreeNode& node, const std::vector<IrradianceSample>& points, int depth)
 	{
 		//real weight = 0.f;
 		//for (const IrradianceSample& s : points)
@@ -148,15 +157,17 @@ public:
 
 		for (const IrradianceSample& s : points)
 			for (int i = 0; i < 8; i++)
-				if (bbox[i].contains(s.pos))
+				if (bbox[i].contains(s.pos)) {
 					p[i].push_back(s);
+					break;
+				}
 
 		real weight = 0.f;
 
 		for (int i = 0; i < 8; i++)
 		{
 			//Collect points
-			if (p[i].size() < 8)
+			if (p[i].size() < 8 || depth > myMaxDepth)
 			{
 				//for (const IrradianceSample& s : p[i])
 				//{
@@ -180,7 +191,7 @@ public:
 					//	node.Pv += s.pos * s.irradiance.average();
 					//}
 					//node.Pv /= node.Ev.average();
-					recurseBuild(*node.active.children[i], p[i]);
+					recurseBuild(*node.active.children[i], p[i], depth + 1);
 				}
 			}
 			
@@ -194,10 +205,13 @@ public:
 			}
 		}
 
-		if (weight > 0.f)
+		if (weight > 0.f)// && (node.Pv.array() > 0.).any())
 			node.Pv /= weight;
-		if (points.size() > 0)
+		if (node.Av > 0.f)
 			node.Ev /= (real)node.Av;
+
+		if (std::isinf(node.Pv(0)) || std::isinf(node.Pv(1)) || std::isinf(node.Pv(2)))
+			node.Pv = Point3d();;
 	}
 
 	BoundingBox getBbox(const std::vector<IrradianceSample>& points)
@@ -229,49 +243,32 @@ public:
 	Color eval(const Point3d& pos, real maxError, real Fdt, const Color& zr, const Color& zv, const Color& sigmaTr, const OctreeNode& node)
 	{
 		Color MoVal;
-		if (!isInside(node, pos)) 
-		{
-			real error = node.Av / ((pos - node.Pv).squaredNorm());
-			if (std::isnan(error))
-				return MoVal;
-			if (error > maxError)
-			{
-				if (!node.isLeaf)
-				{
-					for (int i = 0; i < 8; i++)
-					{
-						OctreeNode* child = node.active.children[i].get();
-						if (child)
-							MoVal += eval(pos, maxError, Fdt, zr, zv, sigmaTr, *child);
-							//MoVal += eval(pos, maxError, eta, sigmaPrimeT, sigmaA, *child);
-					}
-				}
-				else
-					for (IrradianceSample s : node.active.samples)
-						MoVal += Mo(Fdt, zr, zv, sigmaTr, pos, s.pos, s.irradiance, s.area);
-			}
-			else
-			{
-				MoVal += Mo(Fdt, zr, zv, sigmaTr, pos, node.Pv, node.Ev, node.Av);
-				//MoVal += Mo(eta, sigmaPrimeT, sigmaA, pos, node.Pv, node.Ev, node.Av);
-			}
+		real error = node.Av / ((pos - node.Pv).squaredNorm());
+		if (std::isnan(error)) {
+			ILogger::log() << "[FastDipole] nan error\n";
+			return MoVal;
 		}
-		else 
+
+		if (!isInside(node, pos) && error < maxError)
+		{
+			MoVal += Mo(Fdt, zr, zv, sigmaTr, pos, node.Pv, node.Ev, node.Av);
+		}
+		else
 		{
 			if (node.isLeaf)
 			{
-				for(IrradianceSample s : node.active.samples)
+				for (IrradianceSample s : node.active.samples)
 					MoVal += Mo(Fdt, zr, zv, sigmaTr, pos, s.pos, s.irradiance, s.area);
-					//MoVal += Mo(eta, sigmaPrimeT, sigmaA, pos, s.pos, s.irradiance, s.area);
+				//MoVal += Mo(eta, sigmaPrimeT, sigmaA, pos, s.pos, s.irradiance, s.area);
 			}
 			else
 			{
 				for (int i = 0; i < 8; i++)
 				{
 					OctreeNode* child = node.active.children[i].get();
-					if(child)
+					if (child)
 						MoVal += eval(pos, maxError, Fdt, zr, zv, sigmaTr, *child);
-						//MoVal += eval(pos, maxError, eta, sigmaPrimeT, sigmaA, *child);
+					//MoVal += eval(pos, maxError, eta, sigmaPrimeT, sigmaA, *child);
 				}
 			}
 		}
@@ -282,10 +279,12 @@ public:
 	Color Mo(real Fdt, const Color& zr, const Color& zv, const Color& sigmaTr, const Point3d& x0, const Point3d& xi, const Color& Ep, real Ap)
 	{
 		real r = (x0 - xi).norm();
+		//r = r*r*r*r*r*r;
+		Color r2 = Color((x0 - xi).squaredNorm());
 		//Color dr = Color(std::sqrt(r * r + zr.r * zr.r), std::sqrt(r * r + zr.g * zr.g), std::sqrt(r * r + zr.b * zr.b));
 		//Color dv = Color(std::sqrt(r * r + zv.r * zv.r), std::sqrt(r * r + zv.g * zv.g), std::sqrt(r * r + zv.b * zv.b));
-		Color dr = math::fastSqrt(r * r + zr * zr);
-		Color dv = math::fastSqrt(r * r + zv * zv);
+		Color dr = math::fastSqrt(r2 + zr * zr);
+		Color dv = math::fastSqrt(r2 + zv * zv);
 		Color C1 = zr * (sigmaTr + Color(1.) / dr);
 		Color C2 = zv * (sigmaTr + Color(1.) / dv);
 		//Color term = math::INV_FOUR_PI * (C1 * Color(std::exp(-sigmaTr.r * dr.r), std::exp(-sigmaTr.g * dr.g), std::exp(-sigmaTr.b * dr.b)) / (dr * dr) +
@@ -293,7 +292,7 @@ public:
 		Color term = math::INV_FOUR_PI * (C1 * math::fastExp(-sigmaTr * dr) / (dr * dr) +
 										   C2 * math::fastExp(-sigmaTr * dv) / (dv * dv));
 
-		return /*Fdt **/ term * Ep * Ap;
+		return Fdt * term * Ep * Ap;
 	}
 
 	//Color Mo(real eta, const Color& sigmaPrimeT, const Color& sigmaA, const Point3d& x0, const Point3d& xi, const Color& Ep, real Ap)
@@ -330,26 +329,39 @@ public:
 	}
 
 	std::unique_ptr<OctreeNode> rootNode;
+	int myMaxDepth;
 };
 
 FastDipole::FastDipole(const Parameters& params)
 {
 	myNumberOfPoints = params.getInt("numberPoints", 100);
-	myEta = params.getReal("eta", 1.);
+	myEtaExt = params.getReal("etaExt", 1.);
+	//myEtaInt = params.getReal("etaInt", 1.5);
 	myMaxError = params.getReal("error", 0.05f);
-	Color sigmaPrimeS = params.getColor("sigmaPrimeS", Color());
-	mySigmaA = params.getColor("sigmaA", Color());
+	//Color sigmaPrimeS = params.getColor("sigmaS", Color());
+	//mySigmaA = params.getColor("sigmaA", Color());
+	Color sigmaS;
+	Color g;
+	MediumPreset::fromParams(params, mySigmaA, sigmaS, g, myEtaInt);
 	real scale = params.getReal("scale", 1.f);
 	myNbSamplesLight = params.getInt("lightSamples", 16);
 	myIsMultithreadedOctreeInit = params.getBool("multithreadedInit", true);
 	myIsIndirectIrradiance = params.getBool("indirectIrradiance", true);
 
+	mySqueezeZeroIrradiance = params.getBool("squeezeZeroIrradiance", false);
+	myScaleResult = params.getReal("scaleResult", 1.); //hack in case the light is close the bssrdf, Mo exceeds float max value
+
 	mySigmaA *= scale;
-	sigmaPrimeS *= scale;
+	sigmaS *= scale;
+
+	Color sigmaPrimeS = sigmaS * (Color(1.f) - g);
+
+	//mySigmaA *= scale;
+	//sigmaPrimeS *= scale;
 
 	mySigmaPrimeT = sigmaPrimeS + mySigmaA;
 
-	myFdr = fresnel::estimateDiffuseReflectance(myEta);
+	myFdr = fresnel::estimateDiffuseReflectance(myEtaInt / myEtaExt);
 
 
 	Color lu = Color(1.f) / mySigmaPrimeT;
@@ -382,14 +394,15 @@ void FastDipole::initialize(Scene & scene)
 
 	real area = shape->surfaceArea() / myNumberOfPoints;
 
+	Integrator* integrator = scene.getIntegrator().get();
 	std::vector<IrradianceSample> irrVector;
 
 	irrVector.resize(myNumberOfPoints);
-	auto computeIrradiance = [&](int nbPoints, int threadNumber, Sampler::ptr sampler)
+	auto computeIrradiance = [&](int start, int end, Sampler::ptr sampler)
 	{
 		const Scene::LightVector& lights = scene.getLights();
 		//for (int i = 0; i < myNumberOfPoints; i++)
-		for (int i = 0; i < nbPoints; i++)
+		for (int i = 0; i < (end - start) + 1; i++)
 		{
 			//if (i % 10000 == 0)
 			//	std::cout << i << std::endl;
@@ -400,55 +413,60 @@ void FastDipole::initialize(Scene & scene)
 			Normal3d normal;
 			shape->sample(sample, sampled, normal);
 			DifferentialGeometry geom(normal);
-			Intersection inter; 
+			Intersection inter;
+			inter.myPoint = sampled;
 			inter.myShadingGeometry = inter.myTrueGeometry = geom;
-			for (int j = 0; j < lights.size(); j++)
-			{
-				
 
-				Color irrLight;
-				for (int k = 0; k < myNbSamplesLight; k++)
-				{
-					//sample = Point2d(rng.nextReal(), rng.nextReal());
-					sample = sampler->getNextSample2D();
-					LightSamplingInfos infos = lights[j]->sample(sampled, sample);
-					Ray shadowRay(sampled, infos.interToLight, math::EPSILON, infos.distance - math::EPSILON);
-					Intersection tmp;
+			Medium::ptr medium = scene.getCameraMedium();
+			irradiance = integrator->irradiance(scene, myNbSamplesLight, inter, medium, sampler, myIsIndirectIrradiance);
 
-					if (!scene.computeIntersection(shadowRay, tmp, true))
-					{
-						real cosTheta = infos.interToLight.dot(normal);
-						if (cosTheta > 0.)
-						{
-							Medium::ptr medium = scene.getCameraMedium();
-							//if(!medium)
-							//	medium = 
-							//Medium::ptr = scene.getMedium(sampled);
+			//for (int j = 0; j < lights.size(); j++)
+			//{
+			//	
 
-							Color tr = scene.getIntegrator()->evalTransmittance(scene, shadowRay, medium, scene.getSampler());
-							irrLight += tr * infos.intensity * infos.interToLight.dot(normal) / infos.pdf;
-						}
-					}
+			//	Color irrLight;
+			//	for (int k = 0; k < myNbSamplesLight; k++)
+			//	{
+			//		//sample = Point2d(rng.nextReal(), rng.nextReal());
+			//		sample = sampler->getNextSample2D();
+			//		LightSamplingInfos infos = lights[j]->sample(sampled, sample);
+			//		Ray shadowRay(sampled, infos.interToLight, math::EPSILON, infos.distance - math::EPSILON);
+			//		Intersection tmp;
 
-					if (myIsIndirectIrradiance)
-					{
-						Vector3d dir = inter.toWorld(Mapping::squareToCosineWeightedHemisphere(sampler->getNextSample2D()));
-						Integrator::RadianceType::ERadianceType type = Integrator::RadianceType::INDIRECT_RADIANCE;
-						Ray ray(sampled, dir);
-						//Indirect irradiance is E = integral(Li (n.w) dw) = Li / pdf * (n.w)
-						//pdf is a weighted cosine -> cos / pi
-						//so E = Li * pi
-						irrLight += scene.getIntegrator()->li(scene, sampler, ray, type) * math::PI;
-					}
-				}
+			//		if (!scene.computeIntersection(shadowRay, tmp, true))
+			//		{
+			//			real cosTheta = infos.interToLight.dot(normal);
+			//			if (cosTheta > 0.)
+			//			{
+			//				Medium::ptr medium = scene.getCameraMedium();
+			//				//if(!medium)
+			//				//	medium = 
+			//				//Medium::ptr = scene.getMedium(sampled);
 
-				irrLight /= (real)myNbSamplesLight;
-				irradiance += irrLight;
-			}
+			//				Color tr = scene.getIntegrator()->evalTransmittance(scene, shadowRay, medium, scene.getSampler());
+			//				irrLight += tr * infos.intensity * infos.interToLight.dot(normal) / infos.pdf;
+			//			}
+			//		}
+
+			//		if (myIsIndirectIrradiance)
+			//		{
+			//			Vector3d dir = inter.toWorld(Mapping::squareToCosineWeightedHemisphere(sampler->getNextSample2D()));
+			//			Integrator::RadianceType::ERadianceType type = Integrator::RadianceType::INDIRECT_RADIANCE;
+			//			Ray ray(sampled, dir);
+			//			//Indirect irradiance is E = integral(Li (n.w) dw) = Li / pdf * (n.w)
+			//			//pdf is a weighted cosine -> cos / pi
+			//			//so E = Li * pi
+			//			irrLight += scene.getIntegrator()->li(scene, sampler, ray, type) * math::PI;
+			//		}
+			//	}
+
+			//	irrLight /= (real)myNbSamplesLight;
+			//	irradiance += irrLight;
+			//}
 			//if (!irradiance.isZero())
 			{
 				IrradianceSample irrSample(sampled, irradiance, area);
-				irrVector[i + nbPoints * threadNumber] = irrSample;
+				irrVector[start + i] = irrSample;
 				//irrVector.push_back(irrSample);
 			}
 		}
@@ -457,20 +475,29 @@ void FastDipole::initialize(Scene & scene)
 	if (myIsMultithreadedOctreeInit)
 	{
 		ILogger::log() << "Acquiring irradiance (multithreaded)\n";
-		const int nbThreads = getCoreNumber();
+		int nbThreads = getCoreNumber();
 		std::vector<std::unique_ptr<std::thread>> threads;
 		threads.resize(nbThreads);
 		int nbPointsThread = myNumberOfPoints / nbThreads;
-		Sampler::ptr sampler = scene.getSampler();
+		if (myNumberOfPoints < nbThreads)
+		{
+			nbPointsThread = myNumberOfPoints;
+			nbThreads = 1;
+		}
+		Sampler::ptr sampler(new RandomSampler(scene.getSampler()->getSampleNumber()));
 		std::vector<Sampler::ptr> samplers(nbThreads);
+		int start = 0; int end = nbPointsThread - 1;
 		for (auto i = 0; i < nbThreads; i++)
 		{
 			samplers[i] = sampler->clone();
 			samplers[i]->seed(i * nbPointsThread, myNumberOfPoints - (i * nbPointsThread));
-			if (i == nbThreads - 1)
-				threads[i] = std::unique_ptr<std::thread>(new std::thread(computeIrradiance, myNumberOfPoints - (nbThreads - 1) * nbPointsThread, i, samplers[i]));
-			else
-				threads[i] = std::unique_ptr<std::thread>(new std::thread(computeIrradiance, nbPointsThread, i, samplers[i]));
+			threads[i] = std::unique_ptr<std::thread>(new std::thread(computeIrradiance, start, end, samplers[i]));
+			//if (i == nbThreads - 1)
+			//	threads[i] = std::unique_ptr<std::thread>(new std::thread(computeIrradiance, (myNumberOfPoints - (nbThreads - 1) * nbPointsThread) - 1, i, samplers[i]));
+			//else
+			//	threads[i] = std::unique_ptr<std::thread>(new std::thread(computeIrradiance, nbPointsThread, i, samplers[i]));
+			start = end + 1;
+			end = std::min(myNumberOfPoints, end + nbPointsThread);
 		}
 
 		for (auto i = 0; i < nbThreads; i++)
@@ -481,12 +508,31 @@ void FastDipole::initialize(Scene & scene)
 	else
 	{
 		ILogger::log() << "Acquiring irradiance\n";
-		computeIrradiance(myNumberOfPoints, 0, scene.getSampler());
+		Sampler::ptr sampler(new RandomSampler(scene.getSampler()->getSampleNumber()));
+		sampler->seed(myNumberOfPoints, 1);
+		computeIrradiance(0, myNumberOfPoints - 1, scene.getSampler());
+	}
+
+	if (mySqueezeZeroIrradiance)
+	{
+		std::vector<IrradianceSample>::iterator it = irrVector.begin();
+		irrVector.erase(std::remove_if(irrVector.begin(), irrVector.end(), [](const IrradianceSample& s) {return s.irradiance.average() < 1e-10f;}));
 	}
 
 	std::cout << irrVector.size() << std::endl;
-	for(IrradianceSample& s : irrVector)
+	real min = std::numeric_limits<real>::max();
+	real max = std::numeric_limits<real>::min();
+	for (IrradianceSample& s : irrVector) {
 		s.area = shape->surfaceArea() / irrVector.size();
+		if (s.irradiance.average() < min)
+			min = s.irradiance.average();
+		if (s.irradiance.average() > max)
+			max = s.irradiance.average();
+
+		s.irradiance *= myScaleResult;
+	}
+	std::cout << min << std::endl;
+	std::cout << max << std::endl;
 	myOctree = std::make_unique<Octree>();
 	myOctree->build(irrVector);
 
@@ -498,11 +544,11 @@ Color FastDipole::eval(const Point3d& pos, const Intersection& inter, const Vect
 	if (!myIsInitialized || dir.dot(inter.myShadingGeometry.myN) < 0.)
 		return Color();
 
-	Color ft = Color(1.f) - fresnel::estimateDielectric(1., myEta, dir.dot(inter.myShadingGeometry.myN));
+	Color ft = Color(1.f) - fresnel::estimateDielectric(myEtaExt, myEtaInt, dir.dot(inter.myShadingGeometry.myN));
 	Color Mo = myOctree->eval(pos, myMaxError, myFdr, myZr, myZv, mySigmaTr);
 	//if ((Mo * math::INV_PI * ft / myFdr).isZero())
 	//	std::cout << "nop" << std::endl;
-	return Mo * math::INV_PI * ft;// / myFdr;
+	return Mo * math::INV_PI * ft / myFdr;
 	//real Fdr = 1.440 / (myEta * myEta) + 0.710 / myEta + 0.0636 * myEta;
 	//real fDt = 1. - Fdr;
 	//real lu = 1. / mySigmaPrimeT;

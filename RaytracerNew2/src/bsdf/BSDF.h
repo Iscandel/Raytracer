@@ -40,7 +40,7 @@ public:
 
 public:
 	BSDF();
-	~BSDF();
+	virtual ~BSDF();
 
 	//in local coords, N = (0,0,1) -> Reflected = 2 N (N.D) - D = (0,0,2dz) - (dx, dy, dz) = (-dx, -dy, dz) ?
 	Vector3d reflect(const Vector3d& vect) { return Vector3d(-vect.x(), -vect.y(), vect.z()); }

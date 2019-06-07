@@ -2,9 +2,11 @@
 <scene>
   <camera type="NoriPerspective">
     <transform type="lookAt" name="toWorld">
-      <origin>0 2.8 -7</origin>
-      <lookAt>0 0.52 0</lookAt>
-      <up>0 1 0</up>
+        <lookAt>
+        <origin>0 2.8 -7</origin>
+        <lookAt>0 0.52 0</lookAt>
+        <up>0 1 0</up>
+      </lookAt>
     </transform>
     <focal>0.05</focal>
     <mPerPixel>0.0002</mPerPixel>
@@ -23,19 +25,20 @@
   </camera>
 
   <parameters>
-    <threadNumber>8</threadNumber>
+    <threadNumber>4</threadNumber>
     <!--<samplesPerPixel>1</samplesPerPixel>-->
     <!--<recursionLevel>10</recursionLevel>-->
     <blockSizeX>32</blockSizeX>
     <blockSizeY>32</blockSizeY>
     <fileName>./testRendu.png</fileName>
+    <showProgress>1</showProgress>
   </parameters>
 
-  <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="128"/>
+  <sampler type="StratifiedSampler">
+    <integer name="sampleNumber" value="32"/>
   </sampler>
 
-  <integrator type="DirectLightingMIS">
+  <integrator type="PathTracingMIS">
     <integer name="depth" value="10"/>
     <integer name="sampleNumber" value="8"/>
     <!--<bool name="bsdfSampling" value="true"/>-->
@@ -55,14 +58,14 @@
   </lights>
 
   <objects>
-    <shape type="Mesh">
+    <!--<shape type="Mesh">
       <string name="path" value ="./data/mitsuba2.obj"/>
-      <!--<bsdf type="Diffuse">
+      --><!--<bsdf type="Diffuse">
         <color name="albedo" value="0.9 0.2 0.9"/>
         <double name="alpha" value="150"/>
-      </bsdf>-->
-      <!--<bsdf type="Mirror">
-      </bsdf>-->
+      </bsdf>--><!--
+      --><!--<bsdf type="Mirror">
+      </bsdf>--><!--
       <transform name="toWorld">
         <rotation>
           <x>0.</x>
@@ -70,32 +73,52 @@
           <z>0.</z>
         </rotation>
       </transform>
-      <!--Gold-->
-      <bsdf type="Conductor">
+      --><!--Gold--><!--
+      <bsdf type="roughconductor">
+        <texture name="alpha" type="scaletexture">
+          <texture name="texture" type="imagetexture">
+            <string name="path" value="./data/roughnessMetal.png"/>
+          </texture>
+        </texture>
+        <string name="material" value="gold"/>
+      </bsdf>
+      --><!--<bsdf type="Conductor">
         <color name="albedo" value="1. 1. 1."/>
         <color name="eta" value="0.22273 0.42791 1.2597 "/>
         <color name="absorption" value="3.0325 2.3345 1.7531"/>
-      </bsdf>
-      <!--<bsdf type="Microfacet">
-        <color name="kd" value="0.4 0.8 0.2"/>-->
-      <!--0.0175 0.0225 0.0325"/>-->
-      <!--
+      </bsdf>--><!--
+      --><!--<bsdf type="Microfacet">
+        <color name="kd" value="0.4 0.8 0.2"/>--><!--
+      --><!--0.0175 0.0225 0.0325"/>--><!--
+      --><!--
         <double name="alpha" value="0.0005"/>
-      </bsdf>-->
-      <!--Copper-->
-      <!--<bsdf type="Conductor">
+      </bsdf>--><!--
+      --><!--Copper--><!--
+      --><!--<bsdf type="Conductor">
         <color name="albedo" value="1. 1. 1."/>
-        -->
-      <!--611 549 464 nm -->
-      <!--
+        --><!--
+      --><!--611 549 464 nm --><!--
+      --><!--
         <color name="eta" value="0.36892 0.68384 1.27 "/>
         <color name="absorption" value="3.2112 2.6165 2.2880"/>
-      </bsdf>-->
-    </shape>
+      </bsdf>--><!--
+    </shape>-->
     <shape type="Mesh">
       <string name="path" value ="./data/mitsubaInterior.obj"/>
-      <bsdf type="Diffuse">
-        <color name="albedo" value="0.2 0.8 0.8"/>
+      <bsdf type="roughconductor">
+        <!--<texture name="reflectanceTexture" type="imagetexture">
+            <string name="path" value="./data/roughnessMetal.png"/>
+            <real name="scale" value="10"/>
+          </texture>-->
+        <!--<real name="alpha" value="0.14"/>-->
+        <texture name="alpha" type="scaletexture">
+          <real name="scale" value="0.1"/>
+          <texture name="texture" type="imagetexture">
+            <string name="path" value="./data/roughnessMetal.png"/>
+            <real name="scale" value="10"/>
+          </texture>
+        </texture>
+        <string name="material" value="gold"/>
       </bsdf>
       <transform name="toWorld">
         <rotation>

@@ -10,9 +10,10 @@
 //In path tracing, we trace 1 ray at each point, so N = 1. In direct lighting, 
 //we casted N shadow rays for each inter point.
 PathTracingMIS::PathTracingMIS(const Parameters& params)
+:Integrator(params)
 {
-	std::string sStrategy = params.getString("strategy", lightStrategy::STRING[LightSamplingStrategy::ONE_LIGHT_UNIFORM]);
-	myStrategy = myStrategiesByName[sStrategy];
+	//std::string sStrategy = params.getString("strategy", lightStrategy::STRING[LightSamplingStrategy::ONE_LIGHT_UNIFORM]);
+	//myStrategy = myStrategiesByName[sStrategy];
 
 	myMinDepth = params.getInt("minDepth", 3);
 	myMaxDepth = params.getInt("maxDepth", 1000);
@@ -37,10 +38,13 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 	Intersection intersection;
 	if (!scene.computeIntersection(ray, intersection))
 	{
-		Light::ptr envLight = scene.getEnvironmentLight();
-		if (envLight != nullptr)
+		if (radianceType & RadianceType::EMISSION)
 		{
-			radiance += envLight->le(ray.direction());
+			Light::ptr envLight = scene.getEnvironmentLight();
+			if (envLight != nullptr)
+			{
+				radiance += envLight->le(ray.direction());
+			}
 		}
 
 		return radiance;
@@ -73,7 +77,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 			radiance += throughput * intersection.myPrimitive->getBSSRDF()->eval(intersection.myPoint, intersection, -ray.direction());
 
 		//Light sampling strategy
-		if (myStrategy == LightSamplingStrategy::ALL_LIGHT)
+		if (myLightStrategy == LightSamplingStrategy::ALL_LIGHT)
 		{
 			LightSamplingInfos lightInfos;
 			const Scene::LightVector& lights = scene.getLights();
@@ -114,7 +118,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 		else
 		{
 			LightSamplingInfos lightInfos;
-			Color value = sampleLightDirect(intersection.myPoint, sampler->getNextSample2D(), scene, lightInfos, myStrategy);
+			Color value = sampleLightDirect(intersection.myPoint, sampler->getNextSample2D(), scene, lightInfos, myLightStrategy);
 			if (!value.isZero())
 			{
 				Vector3d localWi = intersection.toLocal(lightInfos.interToLight);

@@ -39,7 +39,7 @@
   </parameters>
 
   <sampler type="RandomSampler">
-    <integer name="sampleNumber" value="32"/>
+    <integer name="sampleNumber" value="16"/>
   </sampler>
 
   <!-- Use the path tracer with multiple importance sampling -->
@@ -74,11 +74,12 @@
       </transform>
        
       <bssrdf type="FastDipole">
-        <integer name="numberPoints" value="5000000"/>
-        <color name="sigmaPrimeS" value="1.09, 1.59, 1.79"/>
-        <color name="sigmaA" value="0.013 0.070 0.145"/>
+        <integer name="numberPoints" value="550000"/>
+        <string name="preset" value="apple juice"/>
+        <!--<color name="sigmaS" value="1.09, 1.59, 1.79"/>
+        <color name="sigmaA" value="0.013 0.070 0.145"/>-->
         <real name="scale" value="0.8"/>
-        <real name="eta" value="1.3"/>
+        <!--<real name="etaInt" value="1.3"/>-->
         <real name="error" value="0.2"/>
         <bool name="multithreadedInit" value="true"/>
         <bool name="indirectIrradiance" value="false"/>

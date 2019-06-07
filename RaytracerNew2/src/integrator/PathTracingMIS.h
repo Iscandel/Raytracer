@@ -13,7 +13,7 @@ public:
 	Color li(Scene & scene, Sampler::ptr sampler, const Ray & ray, RadianceType::ERadianceType radianceType = RadianceType::ALL_RADIANCE) override;
 
 protected:
-	LightSamplingStrategy myStrategy;
+	//LightSamplingStrategy myStrategy;
 
 	int myMinDepth;
 	int myMaxDepth;

@@ -20,7 +20,8 @@ protected:
 	std::unique_ptr<Octree> myOctree;
 
 	real myMaxError;
-	real myEta;
+	real myEtaExt;
+	real myEtaInt;
 	Color mySigmaPrimeT;
 	Color mySigmaA;
 	real myFdr;
@@ -30,5 +31,8 @@ protected:
 	bool myIsMultithreadedOctreeInit;
 	bool myIsIndirectIrradiance;
 	bool myIsInitialized;
+
+	real myScaleResult; //hack
+	bool mySqueezeZeroIrradiance;
 };
 
