@@ -417,7 +417,7 @@ void FastDipole::initialize(Scene & scene)
 			inter.myPoint = sampled;
 			inter.myShadingGeometry = inter.myTrueGeometry = geom;
 
-			Medium::ptr medium = scene.getCameraMedium();
+			Medium::ptr medium = scene.getCameraMedium(); //to modify !!!!!!!!!!!!!!! Use also primitive->getExteriorMedium() (some changes to do)
 			irradiance = integrator->irradiance(scene, myNbSamplesLight, inter, medium, sampler, myIsIndirectIrradiance);
 
 			//for (int j = 0; j < lights.size(); j++)
