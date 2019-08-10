@@ -6,7 +6,7 @@ https://www.pbrt.org/
 https://wjakob.github.io/nori/  
 # Features  
 -Fully multithreaded (CPU) on available cores  
--BSDF: smooth and rough metal (resp. dielectric), Bump / normal mapping, car paint, lambert, multi layered, mirror, shadow catcher...  
+-BSDF: smooth and rough metal (resp. dielectric), Bump / normal mapping, car paint, lambertian, multi layered, mirror, shadow catcher...  
 -BSSRDF: fast dipole model  
 -Textures: image (png, bmp, jpeg, OpenEXR support), Perlin noise based  
 -Basic tone mapping  
