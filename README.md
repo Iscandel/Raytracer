@@ -1,10 +1,14 @@
-<img src="https://github.com/Iscandel/Raytracer/blob/master/RaytracerNew2/main.jpg" width="50%"> <img src="https://github.com/Iscandel/Raytracer/blob/master/RaytracerNew2/main2.jpg" width="48%">
+|![Sample 1](https://github.com/Iscandel/Raytracer/blob/master/RaytracerNew2/main.jpg)|
+ <img src="https://github.com/Iscandel/Raytracer/blob/master/RaytracerNew2/main2.jpg" width="94%" alt="Bedroom scene" />|
+|:---:|:---:|
+| Bedroom scene from  <a href="http://forums.cgsociety.org/t/lighting-challenge-21-the-bedroom/1382064">3dRender</a> | King's treasure scene from <a href="http://forums.cgsociety.org/t/lighting-challenge-19-the-kings-treasure/1313195">3dRender</a> | 
+
 
 Physically based renderer, written in C++11. It comes with a strong inspiration from PBRT, Mitsuba and Nori, from which it follows the same design ideas.   
 See: https://www.mitsuba-renderer.org/  
 https://www.pbrt.org/  
 https://wjakob.github.io/nori/  
-# Features  
+## Features  
 -Fully multithreaded (CPU) on available cores  
 -BSDF: smooth and rough metal (resp. dielectric), Bump / normal mapping, car paint, lambertian, multi layered, mirror, shadow catcher...  
 -BSSRDF: fast dipole model  
@@ -17,3 +21,4 @@ https://wjakob.github.io/nori/
 -Participating media: homogeneous, heterogenous, emissive medium  
 -Volumes: Mitsuba grid, openVDB volume  
 -Shapes: cube, sphere, triangle mesh, plane, implicit surfaces (currently, only extended to the mandelbulb fractal)  
+ 
