@@ -1,13 +1,12 @@
-|![Sample 1](https://github.com/Iscandel/Raytracer/blob/master/RaytracerNew2/main.jpg)|
- <img src="https://github.com/Iscandel/Raytracer/blob/master/RaytracerNew2/main2.jpg" width="94%" alt="Bedroom scene" />|
+|![Sample 1](RaytracerNew2/main.jpg)|
+ <img src="RaytracerNew2/main2.jpg" width="94%" alt="Bedroom scene" />|
 |:---:|:---:|
 | Bedroom scene from  <a href="http://forums.cgsociety.org/t/lighting-challenge-21-the-bedroom/1382064">3dRender</a> | King's treasure scene from <a href="http://forums.cgsociety.org/t/lighting-challenge-19-the-kings-treasure/1313195">3dRender</a> | 
 
 
-Physically based renderer, written in C++11. It comes with a strong inspiration from PBRT, Mitsuba and Nori, from which it follows the same design ideas.   
-See: https://www.mitsuba-renderer.org/  
-https://www.pbrt.org/  
-https://wjakob.github.io/nori/  
+Physically based renderer, written in C++11. It comes with a strong inspiration from [PBRT](https://www.pbrt.org/), [Mitsuba](https://www.mitsuba-renderer.org/) and [Nori](https://wjakob.github.io/nori/), from which it follows the same design ideas.   
+
+
 ## Features  
 -Fully multithreaded (CPU) on available cores  
 -BSDF: smooth and rough metal (resp. dielectric), Bump / normal mapping, car paint, lambertian, multi layered, mirror, shadow catcher...  
