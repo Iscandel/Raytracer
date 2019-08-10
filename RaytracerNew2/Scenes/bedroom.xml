@@ -74,13 +74,13 @@
   </lights>
 
   <objects>
-    <shape type="Mesh">
-      <string name="path" value ="./data/bedroom/murs.obj"/>
-      <bsdf type="Diffuse">
-        <texture name="albedo" type="ImageTexture">
-          <string name="path" value="./data/bedroom/textures/papier-peintEcru.jpg"/>
-        </texture>
-      </bsdf>
+     <shape type="Mesh"> 
+       <string name="path" value ="./data/bedroom/murs.obj"/> 
+       <bsdf type="Diffuse"> 
+         <texture name="albedo" type="ImageTexture"> 
+           <string name="path" value="./data/bedroom/textures/papier-peintEcru.jpg"/> 
+         </texture> 
+       </bsdf> 
       
     
     <!--<transform name="toWorld">
@@ -92,15 +92,15 @@
       </transform>-->
     
     
-    </shape>
-    <shape type="Mesh">
-      <string name="path" value ="./data/bedroom/murFond.obj"/>
-      <bsdf type="Diffuse">
-        <texture name="albedo" type="ImageTexture">
-          <string name="path" value="./data/bedroom/textures/papier-peintEcru.jpg"/>
-        </texture>
-      </bsdf>
-    </shape>
+     </shape> 
+     <shape type="Mesh"> 
+       <string name="path" value ="./data/bedroom/murFond.obj"/> 
+       <bsdf type="Diffuse"> 
+         <texture name="albedo" type="ImageTexture"> 
+           <string name="path" value="./data/bedroom/textures/papier-peintEcru.jpg"/> 
+         </texture> 
+       </bsdf> 
+     </shape> 
 
     <!--Bouteille-->
     <shape type="Mesh">
@@ -421,9 +421,11 @@
     </shape>
     <shape type="Mesh">
       <string name="path" value ="./data/bedroom/lampeChevetCache.obj"/>
-      <bsdf type="Diffuse">
-        <color name="albedo" value="0.7 0.7 0.7"/>
-      </bsdf>
+      <bsdf type="twosides">
+		<bsdf name="bsdf" type="Diffuse">
+			<color name="albedo" value="0.7 0.7 0.7"/>
+		</bsdf>
+	  </bsdf>
     </shape>
     <shape type="Mesh">
       <string name="path" value ="./data/bedroom/lampeChevetCulot.obj"/>
@@ -439,9 +441,11 @@
     </shape>
     <shape type="Mesh">
       <string name="path" value ="./data/bedroom/lampeChevetStruct.obj"/>
-      <bsdf type="Diffuse">
-        <color name="albedo" value="0.7 0.7 0.7"/>
-      </bsdf>
+	  <bsdf type="twosides">
+		<bsdf name="bsdf" type="Diffuse">
+			<color name="albedo" value="0.7 0.7 0.7"/>
+		</bsdf>
+	  </bsdf>
     </shape>
 
     <!--Lit-->
