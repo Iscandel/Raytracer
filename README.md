@@ -4,7 +4,7 @@
 | Bedroom scene from  <a href="http://forums.cgsociety.org/t/lighting-challenge-21-the-bedroom/1382064">3dRender</a> | King's treasure scene from <a href="http://forums.cgsociety.org/t/lighting-challenge-19-the-kings-treasure/1313195">3dRender</a> | 
 
 
-Physically based renderer, written in C++11. It comes with a strong inspiration from [PBRT](https://www.pbrt.org/), [Mitsuba](https://www.mitsuba-renderer.org/) and [Nori](https://wjakob.github.io/nori/), from which it follows the same design ideas.   
+Physically based renderer, written in C++11. It gets its inspiration from [PBRT](https://www.pbrt.org/), [Mitsuba](https://www.mitsuba-renderer.org/) and [Nori](https://wjakob.github.io/nori/), from which it follows the same design ideas.   
 
 
 ## Features  
