@@ -4,7 +4,8 @@
 #include "factory/ObjectFactoryManager.h"
 #include "core/Parameters.h"
 
-Mirror::Mirror(const Parameters&)
+Mirror::Mirror(const Parameters& params)
+:BSDF(params)
 {
 	//myAlbedo = params.getColor("albedo", Color(0.));
 	////myEta = params.getReal("eta", 0.);

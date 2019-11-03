@@ -201,15 +201,15 @@ void OpenVDBVolume::computeBoundingBox()
 real OpenVDBVolume::getMaxSigmaT() const
 {
 	openvdb::FloatGrid::ValueOnCIter iter = myDensityGrid->cbeginValueOn();
-	real myMaxSigmaT = *iter;
+	real maxSigmaT = *iter;
 	for (; iter; ++iter) {
-		if (myMaxSigmaT < *iter)
-			myMaxSigmaT = *iter;
+		if (maxSigmaT < *iter)
+			maxSigmaT = *iter;
 		//	std::cout << "Grid" << iter.getCoord() << " = " << *iter << std::endl;
 	}
 	//myMaxSigmaT *= myScale;
 
-	return myMaxSigmaT;
+	return maxSigmaT;
 }
 
 real OpenVDBVolume::lookupSigmaT(const Point3d &_p) const

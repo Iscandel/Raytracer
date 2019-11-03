@@ -35,6 +35,7 @@ bool XMLLoader::loadScene(Scene& scene, const std::string& path)
 	TiXmlDocument doc(path.c_str());
 	if(!doc.LoadFile())
 	{
+		ILogger::log(ILogger::ERRORS) << doc.ErrorDesc() << " Line " << doc.ErrorRow() << ", col " << doc.ErrorCol() << "\n";
 		return false;
 	}
 

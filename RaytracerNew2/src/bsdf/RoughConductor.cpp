@@ -11,6 +11,7 @@
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 RoughConductor::RoughConductor(const Parameters& params)
+:BSDF(params)
 {
 	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
 

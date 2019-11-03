@@ -3,6 +3,7 @@
 #include "factory/ObjectFactoryManager.h"
 
 TwoSides::TwoSides(const Parameters& params)
+:BSDF(params)
 {
 	myBSDF[0] = params.getBSDF("bsdf", BSDF::ptr());
 	myBSDF[1] = params.getBSDF("bsdf2", BSDF::ptr());

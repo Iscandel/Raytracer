@@ -12,8 +12,9 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 	myWorldToLight = Transform::ptr(new Transform(myLightToWorld->inv()));
 	myFactor = params.getReal("scale", 1.);
 	myIsProbe = params.getBool("isProbe", false);
+	real gamma = params.getReal("gamma", (real)0.);
 
-	ImageLoader::load(path, myArray);
+	ImageLoader::load(path, myArray, gamma);
 
 	if (myFactor != 1.)
 	{

@@ -4,7 +4,7 @@ class EmptyBSDF :
 	public BSDF
 {
 public:
-	EmptyBSDF();
+	EmptyBSDF(const Parameters&);
 	~EmptyBSDF();
 };
 

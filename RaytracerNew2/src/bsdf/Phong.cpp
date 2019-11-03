@@ -5,6 +5,7 @@
 #include "core/Math.h"
 
 Phong::Phong(const Parameters& list)
+:BSDF(list)
 {
 	myKd = list.getReal("kd", 0.5);
 	myKs = list.getReal("ks", 1 - myKd);

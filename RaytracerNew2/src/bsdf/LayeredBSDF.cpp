@@ -15,7 +15,8 @@
 #include <algorithm>
 
 LayeredBSDF::LayeredBSDF(const Parameters& params)
-	: myThickness(1.2f)
+	: BSDF(params)
+	, myThickness(1.2f)
 	, myDistribution("ggx")
 {
 	myThickness = params.getReal("thickness", 1.2f);

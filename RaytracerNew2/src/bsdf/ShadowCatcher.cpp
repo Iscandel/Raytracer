@@ -6,6 +6,7 @@
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 ShadowCatcher::ShadowCatcher(const Parameters& params)
+:BSDF(params)
 {
 	myHighThreshold = params.getReal("highThreshhold", 0.7f);
 	myRatio = params.getReal("ratio", 10);

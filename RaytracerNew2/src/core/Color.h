@@ -88,8 +88,11 @@ struct SamplesHelper
 #endif
 };
 
+///////////////////////////////////////////////////////////////////////////////
+/// Base class for spectrum
+///////////////////////////////////////////////////////////////////////////////
 template<class T, int Samples>
-class TplColorV2 : public Eigen::Array<T, SamplesHelper<Samples>::ALIGNED, 1>
+class TplColor : public Eigen::Array<T, SamplesHelper<Samples>::ALIGNED, 1>
 {
 public:
 	typedef Eigen::Array<T, SamplesHelper<Samples>::ALIGNED, 1> BaseArray;
@@ -100,45 +103,48 @@ public:
 public:
 //#if NB_SPECTRUM_SAMPLES == 3
 #ifdef USE_ALIGN
-	TplColorV2(T x, T y, T z, T w = (priv::real)0)
-		: TplColorV2::BaseArray(x, y, z, w)
+	TplColor(T x, T y, T z, T w = (priv::real)0)
+		: TplColor::BaseArray(x, y, z, w)
 	{
 	}
 
 #else
-	TplColorV2(T x, T y, T z)
-		: TplColorV2::BaseArray(x, y, z)
+	TplColor(T x, T y, T z)
+		: TplColor::BaseArray(x, y, z)
 	{
 	}
 #endif
 //#endif
 
-	explicit TplColorV2(T val = 0.)
+	explicit TplColor(T val = 0.)
 	{
 		BaseArray::setConstant(val);
 	}
 
-	explicit TplColorV2(T spectrum[NB_SPECTRUM_SAMPLES])
+	explicit TplColor(T spectrum[NB_SPECTRUM_SAMPLES])
 		:BaseArray(spectrum)
 	{
 	}
 
-	TplColorV2& operator = (const TplColorV2& c) {
+	TplColor& operator = (const TplColor& c) {
 		for (int i = 0; i < NB_SAMPLES; i++)
 			coeffRef(i) = c.coeff(i);
 
 		return *this;
 	}
 
-	template <typename Derived> TplColorV2(const Eigen::ArrayBase<Derived>& p)
+	template <typename Derived> TplColor(const Eigen::ArrayBase<Derived>& p)
 		: BaseArray(p)
 	{ }
 
-	template <typename Derived> TplColorV2 &operator=(const Eigen::ArrayBase<Derived>& p) {
+	template <typename Derived> TplColor &operator=(const Eigen::ArrayBase<Derived>& p) {
 		this->Base::operator=(p);
 		return *this;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Computes the average spectrum value over the samples
+	//////////////////////////////////////////////////////////////////////////////
 	T average() const
 	{
 		T sum = (T)0;
@@ -148,6 +154,9 @@ public:
 		return sum / (T)NB_SAMPLES;//coeff(0) + coeff(1) + coeff(2)) / (T)3.;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Returns whether the spectrum has only zero values
+	//////////////////////////////////////////////////////////////////////////////
 	bool isZero() const
 	{
 #ifdef DOUBLE_PRECISION
@@ -162,6 +171,9 @@ public:
 		//return true;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Returns whether the spectrum contains at leat a NaN value
+	//////////////////////////////////////////////////////////////////////////////
 	bool isNan() const
 	{
 		//return hasNaN();
@@ -174,6 +186,10 @@ public:
 		//return false;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Converts the XYZ triplet to RGB values and clamp resulting values if
+	/// required
+	//////////////////////////////////////////////////////////////////////////////
 	void XYZToRGB(const T _xyz[3], T rgb[3], bool clamp = true) const {
 		rgb[0] = 3.240479f * _xyz[0] - 1.537150f * _xyz[1] - 0.498535f * _xyz[2];
 		rgb[1] = -0.969256f * _xyz[0] + 1.875991f * _xyz[1] + 0.041556f * _xyz[2];
@@ -185,6 +201,9 @@ public:
 		}
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Computes the rgb triplet to XYZ values
+	//////////////////////////////////////////////////////////////////////////////
 	void RGBToXYZ(const T rgb[3], T xyz[3]) const {
 
 		xyz[0] = 0.412453f*rgb[0] + 0.357580f*rgb[1] + 0.180423f*rgb[2];
@@ -192,6 +211,9 @@ public:
 		xyz[2] = 0.019334f*rgb[0] + 0.119193f*rgb[1] + 0.950227f*rgb[2];
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// From Pbrt, utility function for sampled spectrum
+	//////////////////////////////////////////////////////////////////////////////
 	template <typename Predicate>
 	int findInterval(int size, const Predicate &pred) {
 		int first = 0, len = size;
@@ -208,6 +230,9 @@ public:
 		return math::thresholding(first - 1, 0, size - 2);
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// From Pbrt, interpolates the spectrum samples, according to lambda
+	//////////////////////////////////////////////////////////////////////////////
 	priv::real interpolateSpectrumSamples(const priv::real *lambda, const priv::real *vals, int n,
 		priv::real l) {
 		//for (int i = 0; i < n - 1; ++i) CHECK_GT(lambda[i + 1], lambda[i]);
@@ -219,6 +244,9 @@ public:
 		return math::interp1(t, vals[offset], vals[offset + 1]);
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Clamp negative values
+	//////////////////////////////////////////////////////////////////////////////
 	void clampNeg()
 	{
 		for (int i = 0; i < NB_SAMPLES; i++)
@@ -227,6 +255,9 @@ public:
 		}
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// From Pbrt
+	//////////////////////////////////////////////////////////////////////////////
 	static T averageSpectrumSamples(const priv::real *lambda, const T *vals,
 		int n, priv::real lambdaStart, priv::real lambdaEnd) {
 		//for (int i = 0; i < n - 1; ++i) assert(lambda[i + 1] > lambda[i]);
@@ -263,6 +294,9 @@ public:
 	}
 
 protected:
+	//////////////////////////////////////////////////////////////////////////////
+	/// Computes a spectrum from a blackbody
+	//////////////////////////////////////////////////////////////////////////////
 	static void fromBlackbodyToSpect(priv::real temperature, std::vector<priv::real>& lambdaVect, std::vector<priv::real>& spectrum)
 	{
 		/* Convert inputs to meters and kelvins */
@@ -288,10 +322,25 @@ protected:
 			spectrum.push_back((priv::real)I);
 		}
 	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	/// Converts sRGB to linear RGB
+	//////////////////////////////////////////////////////////////////////////////
+	template<class T>
+	static T tplFromSRGB(priv::real sr, priv::real sg, priv::real sb)
+	{
+		auto fromSRGBVal = [&](priv::real value) {
+			if (value <= (priv::real) 0.04045)
+				return (value * (priv::real)(1. / 12.92));
+			else
+				return std::pow((priv::real)((value + 0.055) * (1. / 1.055)), (priv::real)2.4);
+		};
+		return T::fromRGB(fromSRGBVal(sr), fromSRGBVal(sg), fromSRGBVal(sb));
+	}
 };
 
 template<class T, int N>
-inline std::ostream& operator << (std::ostream& o, const TplColorV2<T, N>& color)
+inline std::ostream& operator << (std::ostream& o, const TplColor<T, N>& color)
 {
 	o << "[";
 	for (int i = 0; i < N; i++)
@@ -305,25 +354,32 @@ inline std::ostream& operator << (std::ostream& o, const TplColorV2<T, N>& color
 	return o;
 }
 
-class Color3 : public TplColorV2<priv::real, 3>
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+/// Specialized class dedicated to 3-channels (r,g,b) colors
+///////////////////////////////////////////////////////////////////////////////
+class Color3 : public TplColor<priv::real, 3>
 {
 public:
 	static void init() {}
 public:
 #ifdef USE_ALIGN
 	Color3(priv::real x, priv::real y, priv::real z, priv::real w = (priv::real)0)
-		: TplColorV2<priv::real, 3>(x, y, z, w)
+		: TplColor<priv::real, 3>(x, y, z, w)
 	{
 	}
 
 #else
 	Color3(T x, T y, T z)
-		: TplColorV2(x, y, z)
+		: TplColor(x, y, z)
 	{
 	}
 #endif
 	template <typename Derived> Color3(const Eigen::ArrayBase<Derived>& p)
-		: TplColorV2(p)
+		: TplColor(p)
 	{ }
 
 	template <typename Derived> Color3 &operator=(const Eigen::ArrayBase<Derived>& p) {
@@ -332,7 +388,7 @@ public:
 	}
 
 	/// Copy constructor
-	inline Color3(const TplColorV2<priv::real, 3>& s) : TplColorV2<priv::real, 3>(s) { }
+	inline Color3(const TplColor<priv::real, 3>& s) : TplColor<priv::real, 3>(s) { }
 
 	explicit Color3(priv::real val = 0.)
 	{
@@ -340,10 +396,13 @@ public:
 	}
 
 	explicit Color3(priv::real spectrum[NB_SPECTRUM_SAMPLES])
-		:TplColorV2<priv::real, 3>(spectrum)
+		:TplColor<priv::real, 3>(spectrum)
 	{
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Computes a rgb spectrum from a blackbody
+	//////////////////////////////////////////////////////////////////////////////
 	static Color3 fromBlackbody(priv::real temperature)
 	{
 		std::vector<priv::real> lambdaVect;
@@ -355,17 +414,26 @@ public:
 		return res;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Computes the luminance value
+	//////////////////////////////////////////////////////////////////////////////
 	priv::real luminance() const
 	{
 		return 0.2126f * coeff(0) + 0.7152f * coeff(1) + 0.0722f *coeff(2);
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Returns the max value over the samples
+	//////////////////////////////////////////////////////////////////////////////
 	priv::real max()const
 	{
 		return math::max(coeff(0), coeff(1), coeff(2));
 		//return std::max(coeff(0), std::max(coeff(1), coeff(2)));
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Converts to RGB (straightforward)
+	//////////////////////////////////////////////////////////////////////////////
 	void toRGB(priv::real& r, priv::real& g, priv::real& b) const
 	{
 		r = coeff(0);
@@ -373,6 +441,9 @@ public:
 		b = coeff(2);
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Converts this linear RGB color to sRGB
+	//////////////////////////////////////////////////////////////////////////////
 	void toSRGB(priv::real& r, priv::real& g, priv::real& b) const
 	{
 		auto toSRGBVal = [&](priv::real value) {
@@ -386,11 +457,33 @@ public:
 		b = toSRGBVal(coeff(2));
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Returns a Color3 from sRGB components
+	//////////////////////////////////////////////////////////////////////////////
+	static Color3 fromSRGB(priv::real sr, priv::real sg, priv::real sb)
+	{
+		return tplFromSRGB<Color3>(sr, sg, sb);
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	/// Sets this color from sRGB components
+	//////////////////////////////////////////////////////////////////////////////
+	Color3 setFromSRGB(priv::real sr, priv::real sg, priv::real sb)
+	{
+		*this = tplFromSRGB<Color3>(sr, sg, sb);
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	/// Returns a Color from RGB components (straightforward)
+	//////////////////////////////////////////////////////////////////////////////
 	static Color3 fromRGB(priv::real r, priv::real g, priv::real b)
 	{
 		return Color3(r, g, b);
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Set this color from RGB components (straightforward)
+	//////////////////////////////////////////////////////////////////////////////
 	void setfromRGB(priv::real r, priv::real g, priv::real b)
 	{
 		coeffRef(0) = r;
@@ -398,12 +491,16 @@ public:
 		coeffRef(2) = b;
 	}
 
+	//////////////////////////////////////////////////////////////////////////////
+	/// Converts to XYZ values
+	//////////////////////////////////////////////////////////////////////////////
 	void toXYZ(priv::real _xyz[3]) const {
 		RGBToXYZ(data(), _xyz);
 	}
 
-
-
+	//////////////////////////////////////////////////////////////////////////////
+	/// Computes a RGB color from a sampled spectrum
+	//////////////////////////////////////////////////////////////////////////////
 	void setFromSampledSpectrum(const std::vector<priv::real>& lambda, const std::vector<priv::real>& spectrum);
 	//{
 	//	priv::real xyz[3] = { 0, 0, 0 };
@@ -450,7 +547,10 @@ public:
 	}
 };
 
-class ColorN : public TplColorV2<priv::real, NB_SPECTRUM_SAMPLES>
+//////////////////////////////////////////////////////////////////////////////
+/// Class representing a N samples spectrum
+//////////////////////////////////////////////////////////////////////////////
+class ColorN : public TplColor<priv::real, NB_SPECTRUM_SAMPLES>
 {
 public:
 	static void init();
@@ -462,12 +562,12 @@ public:
 	}
 
 	explicit ColorN(priv::real spectrum[NB_SPECTRUM_SAMPLES])
-		:TplColorV2(spectrum)
+		:TplColor(spectrum)
 	{
 	}
 
 	template <typename Derived> ColorN(const Eigen::ArrayBase<Derived>& p)
-		: TplColorV2(p)
+		: TplColor(p)
 	{ }
 
 	ColorN(Color3& p)
@@ -520,6 +620,16 @@ public:
 		r = toSRGBVal(tmpR);
 		g = toSRGBVal(tmpG);
 		b = toSRGBVal(tmpB);
+	}
+
+	static ColorN fromSRGB(priv::real sr, priv::real sg, priv::real sb)
+	{
+		return tplFromSRGB<ColorN>(sr, sg, sb);
+	}
+
+	ColorN setFromSRGB(priv::real sr, priv::real sg, priv::real sb)
+	{
+		*this = tplFromSRGB<ColorN>(sr, sg, sb);
 	}
 
 	static ColorN fromRGB(priv::real r, priv::real g, priv::real b)

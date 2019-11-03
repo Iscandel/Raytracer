@@ -8,6 +8,7 @@
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Dielectric::Dielectric(const Parameters& params)
+	:BSDF(params)
 {
 	myReflectanceTexture = params.getTexture("reflectanceTexture", Texture::ptr(new ConstantTexture(Color(1.))));
 	myTransmittedTexture = params.getTexture("transmittedTexture", Texture::ptr(new ConstantTexture(Color(1.))));

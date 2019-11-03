@@ -10,7 +10,8 @@
 #include <algorithm>
 
 SmoothLayeredBSDF::SmoothLayeredBSDF(const Parameters& params)
-	: myBaseBSDF()
+	:BSDF(params)
+	, myBaseBSDF()
 	, myThickness(1.2f)
 {
 	myEtaExt = params.getReal("etaExt", 1.000277f); //incident

@@ -2,7 +2,8 @@
 
 #include "core/Intersection.h"
 
-BSDF::BSDF()
+BSDF::BSDF(const Parameters& params)
+	:RaytracerObject(params)
 {
 }
 

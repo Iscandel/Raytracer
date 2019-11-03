@@ -3,6 +3,7 @@
 #include "factory/ObjectFactoryManager.h"
 
 ScaleTexture::ScaleTexture(const Parameters& params)
+:Texture(params)
 {
 	myScale = params.getReal("scale", 1.);
 	myTexture = params.getTexture("texture", Texture::ptr());

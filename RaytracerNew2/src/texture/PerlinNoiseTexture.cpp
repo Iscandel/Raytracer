@@ -18,6 +18,7 @@
 //};
 
 PerlinNoiseTexture::PerlinNoiseTexture(const Parameters& params)
+:Texture(params)
 {
 	for (unsigned int i = 0; i < PerlinNoiseTexture::END; i++)
 	{

@@ -3,6 +3,7 @@
 #include "factory/ObjectFactoryManager.h"
 
 BumpMapping::BumpMapping(const Parameters& params)
+:BSDF(params)
 {
 }
 

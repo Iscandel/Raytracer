@@ -8,6 +8,7 @@
 #include <cmath>
 
 CarPaint::CarPaint(const Parameters& params)
+	:BSDF(params)
 {
 	myDistribution = MicrofacetDistribution("beckmann");
 

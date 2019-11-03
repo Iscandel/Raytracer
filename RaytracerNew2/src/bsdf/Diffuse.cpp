@@ -9,6 +9,7 @@
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Diffuse::Diffuse(const Parameters& list)
+:BSDF(list)
 {
 	if(list.hasTexture("albedo"))
 		myAlbedoTexture = list.getTexture("albedo", nullptr);

@@ -125,7 +125,8 @@ void shToneMapper()
 	shader.setParameter("gamma", std::pow(2.f, (0.5f - 0.5f) * 20));
 }
 
-void toneMapper(Screen& film, sf::Image& out, real gamma)
+// Tone mapper based on sRGB and a scale factor for adjust f-stops
+void toneMapper(Screen& film, sf::Image& out, real exposure, real gamma)
 {
 	auto toSRGB = [&](real value) {
 		if (value < 0.0031308)
@@ -133,15 +134,26 @@ void toneMapper(Screen& film, sf::Image& out, real gamma)
 		return 1.055f * pow(value, 0.41666f) - 0.055f;
 	};
 
-	//real gamma = std::pow(2., (0.5 - 0.5) * 20);
+	exposure = std::pow(2., (exposure - 0.5)* 20);
 
 	for (unsigned int y = 0; y < out.getSize().y; y++)
 	{
 		for (unsigned int x = 0; x < out.getSize().x; x++)
 		{
-			Color col = film(x, y) * gamma;
+			Color col = film(x, y) * exposure;
 			real r, g, b;
-			col.toSRGB(r, g, b);
+			
+			if (gamma == -1.)
+				col.toSRGB(r, g, b);
+			else if (gamma != 1.) {
+				col.toRGB(r, g, b);
+				real invGamma = 1. / gamma;
+				r = std::pow(r, invGamma);
+				g = std::pow(g, invGamma);
+				b = std::pow(b, invGamma);
+			} else
+				col.toRGB(r, g, b);
+
 			//col.r() = toSRGB(col.r()); col.g() = toSRGB(col.g()); col.b() = toSRGB(col.b());
 			out.setPixel(x, y, sf::Color((sf::Uint8)math::thresholding(r * 255, (real) 0., (real) 255.),
 										 (sf::Uint8)math::thresholding(g * 255, (real) 0., (real) 255.),
@@ -166,11 +178,11 @@ void EXRToRGB(Screen& film, sf::Image& out)
 	}
 }
 
-void applyProcessing(bool toneMap, Screen& filmOrig, sf::Image& image, real gamma)
+void applyProcessing(bool toneMap, Screen& filmOrig, sf::Image& image, real exposure)
 {
 	if (toneMap)
 	{
-		toneMapper(filmOrig, image, gamma);
+		toneMapper(filmOrig, image, exposure, -1.);
 	}
 	else
 	{
@@ -432,9 +444,13 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
+#include "tools/MitsubaConverter.h"
 void run(int argc, char* argv[])
 {
+	std::string fileIn = "./livingRoom.xml";
+	std::string fileOut = "./testConversion.xml";
+	MitsubaConverter converter;
+	//converter.convert(fileIn, fileOut);
 	std::string filePath;
 	if (argc > 1)
 	{
@@ -508,9 +524,9 @@ void run(int argc, char* argv[])
 	filmOrig.postProcessColor();
 
 	bool toneMap = false;
-	real gamma = std::pow(2.f, (0.5f - 0.5f) * 20);
+	real exposure = real(0.5);//std::pow(2.f, (0.5f - 0.5f) * 20);
 
-	applyProcessing(toneMap, filmOrig, image, gamma);
+	applyProcessing(toneMap, filmOrig, image, exposure);
 //	for(int y = 0; y < height; y++)
 //	{
 //		for(int x = 0; x < width; x++)
@@ -541,7 +557,7 @@ void run(int argc, char* argv[])
 		writeEXR(fileName.substr(0, fileName.size() - 4) + ".exr", filmOrig);
 	}
 
-	DisplayableText gammaText(0.f, 0.f);
+	DisplayableText exposureText(0.f, 0.f);
 	DisplayableText toneMapText(width / 2.f, height / 2.f);//height);
 
 	while (window.isOpen())
@@ -560,7 +576,7 @@ void run(int argc, char* argv[])
 				{
 					toneMap = !toneMap;
 
-					applyProcessing(toneMap, filmOrig, image, gamma);
+					applyProcessing(toneMap, filmOrig, image, exposure);
 
 					texture.loadFromImage(image);
 					sp.setTexture(texture);
@@ -572,7 +588,7 @@ void run(int argc, char* argv[])
 				}
 				else if (ev.key.code == sf::Keyboard::Return)
 				{
-					applyProcessing(toneMap, filmOrig, image, gamma);
+					applyProcessing(toneMap, filmOrig, image, exposure);
 					texture.loadFromImage(image);
 					sp.setTexture(texture);
 				}
@@ -591,28 +607,29 @@ void run(int argc, char* argv[])
 			}
 			else if (ev.type == sf::Event::TextEntered)
 			{
+				real step = real(0.05);
 				if (ev.text.unicode == '+')
 				{
-					gamma += 0.1f;
-					gammaText.setText("gamma = " + tools::numToString(gamma));
+					exposure += step;
+					exposureText.setText("exposure = " + tools::numToString(exposure));
 				}
 				else if (ev.text.unicode == '-')
 				{
-					gamma -= 0.1f;
-					gammaText.setText("gamma = " + tools::numToString(gamma));
+					exposure -= step;
+					exposureText.setText("exposure = " + tools::numToString(exposure));
 				}
 			}
 		}
 
 		//update
-		gammaText.update();
+		exposureText.update();
 		toneMapText.update();
 
 		//draw
 		window.clear();
 	
 		window.draw(sp);
-		gammaText.show(window);
+		exposureText.show(window);
 		toneMapText.show(window);
 
 		window.display();

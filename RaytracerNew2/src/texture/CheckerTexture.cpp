@@ -4,6 +4,7 @@
 #include "core/Parameters.h"
 
 CheckerTexture::CheckerTexture(const Parameters& params)
+:Texture(params)
 {
 	mySquareSize = params.getReal("squareSize", 0.2f);
 	myFirstColor = params.getColor("firstColor", Color(1.));

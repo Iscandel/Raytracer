@@ -11,6 +11,7 @@
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Microfacet::Microfacet(const Parameters& params)
+:BSDF(params)
 {
 	if (params.hasTexture("kd"))
 		myKdTexture = params.getTexture("kd", nullptr);

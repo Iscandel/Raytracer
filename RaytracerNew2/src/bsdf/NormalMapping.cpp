@@ -2,13 +2,19 @@
 
 #include "texture/ConstantTexture.h"
 #include "core/DifferentialGeometry.h"
+#include "core/Parameters.h"
 #include "Diffuse.h"
 #include "factory/ObjectFactoryManager.h"
 
 NormalMapping::NormalMapping(const Parameters& params)
+:BSDF(params)
 {
+	//Don't forget to put gamma == 1 in the scene file for the texture...
 	myNormalMap = params.getTexture("normalMap", Texture::ptr(new ConstantTexture(Color(0.))));
 	myBSDF = params.getBSDF("bsdf", BSDF::ptr(new Diffuse(Parameters())));
+
+	//auto childParams = myNormalMap->getParameters();
+	//childParams->hasReal("gamma")
 }
 
 

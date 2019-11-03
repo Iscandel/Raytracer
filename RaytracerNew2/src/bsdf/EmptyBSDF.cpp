@@ -1,8 +1,9 @@
 #include "EmptyBSDF.h"
 
+#include "core/Parameters.h"
 
-
-EmptyBSDF::EmptyBSDF()
+EmptyBSDF::EmptyBSDF(const Parameters& params)
+:BSDF(params)
 {
 }
 
