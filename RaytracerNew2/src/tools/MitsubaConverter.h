@@ -18,6 +18,7 @@ public:
 		std::string name;
 		std::string id;
 		std::string value;
+		std::string textValue;
 		//Parameters params;
 		std::vector<std::shared_ptr<Bloc>> childs;
 
@@ -34,9 +35,9 @@ public:
 
 	void handleProperty(TiXmlElement* element, Bloc& bloc);
 
-	void handleTransform(Bloc& bloc, TiXmlElement* element);
+	void handleAndCorrectTransform(Bloc& bloc, TiXmlElement* element);
 
-	std::map<std::string, std::string> myDictionary;
+	
 
 protected:
 	void writeXML(const std::string& path);
@@ -57,11 +58,15 @@ protected:
 
 	void writeBloc(std::ofstream& file, Bloc& bloc, int nIndent = 0);
 
-	std::string getValue(const Bloc& bloc, const std::string& value);
+	std::string getValueWithName(const Bloc& bloc, const std::string& value);
+	std::vector<std::vector<std::shared_ptr<Bloc>>::iterator> getSubBlocFromElemType(Bloc& bloc, const std::string& elemType);
 
-	std::string findFromDictionary(const std::string& key, const std::string msg = "");
+	std::string findFromDictionary(std::map<std::string, std::string>& map, 
+		const std::string& key, const std::string msg = "");
 
+	void handleAndCorrectSensor(Bloc& bloc);
 	void handleAndCorrectBsdf(Bloc& bloc);
+	void handleAndCorrectTextures(Bloc& bloc);
 
 	std::string lowerCase(const std::string& s)
 	{
@@ -74,7 +79,10 @@ protected:
 protected:
 	Bloc myIntegrator;
 	Bloc mySensor;
+	Bloc mySampler;
+	//Bloc myFilter;
 	std::vector<Bloc> myBsdfs;
+	std::vector<Bloc> myLights;
 	std::vector<Bloc> myTextures;
 	std::vector<Bloc> myShapes;
 
@@ -94,11 +102,23 @@ protected:
 	std::string FILTER;
 	std::string INTEGRATOR;
 	std::string OBJECTS;
+	std::string LIGHTS;
 	std::string NAME;
 	std::string VALUE;
-
+	std::string STRING;
+	std::string REAL;
+	std::string INTEGER;
+	std::string SAMPLE_NUMBER;
+	
 	std::string _BSDF;
 	std::string _DIFFUSE;
 	std::string _ROUGH_PLASTIC;
+	
+	std::map<std::string, std::string> myDictionary;
+	std::map < std::string, std::map < std::string, std::string >> myDictionaryByBsdf;
+	std::map < std::string, std::map < std::string, std::string >> myDictionaryBySensor;
+	std::map < std::string, std::map < std::string, std::string >> myDictionaryByShape;
+	std::map < std::string, std::map < std::string, std::string >> myDictionaryByLight;
+	std::map < std::string, std::map < std::string, std::string >> myDictionaryByTexture;
 };
 

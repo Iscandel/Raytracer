@@ -85,13 +85,6 @@ void ImageLoader::load(const std::string & path, Array2D<Color3>& array, real ga
 			for (unsigned int x = 0; x < im.getSize().x; x++)
 			{
 				sf::Color col = im.getPixel(x, y);
-				//auto finalCol = Color3::fromRGB(col.r / 255.f, col.g / 255.f, col.b / 255.f);
-				//float r, g, b;
-				//finalCol.toSRGB(r, g, b);
-				//finalCol = Color3::fromRGB(r, g, b);
-				////array(x, y) = finalCol;//Color3::fromRGB(col.r / 255.f, col.g / 255.f, col.b / 255.f);//Color(col.r / 255.f, col.g / 255.f, col.b / 255.f);
-				//array(x, y) = Color3::fromRGB(std::pow(col.r / 255.f, 2.2),
-				//	std::pow(col.g / 255.f, 2.2), std::pow(col.b / 255.f, 2.2));
 
 				real invGammaDest = gammaDest == 1. ? (real)1. : (real)1. / gammaDest;
 				Color3 pixel;

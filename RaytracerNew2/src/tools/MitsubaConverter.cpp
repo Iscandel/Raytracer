@@ -5,63 +5,6 @@
 
 MitsubaConverter::MitsubaConverter()
 {
-	myDictionary["rgb"] = "color";
-	myDictionary["spectrum"] = "color";
-	myDictionary["integer"] = "integer";
-	myDictionary["string"] = "string";
-	myDictionary["boolean"] = "bool";
-	myDictionary["float"] = "double";
-
-	myDictionary["point"] = "point";
-	myDictionary["vector"] = "vector";
-	myDictionary["transform"] = "transform";
-	myDictionary["texture"] = "texture";
-
-	myDictionary["filename"] = "path";
-	myDictionary["fov"] = "fov";
-	myDictionary["toWorld"] = "toWorld";
-	myDictionary["width"] = "sizeX";
-	myDictionary["height"] = "sizeY";
-
-	myDictionary["obj"] = "mesh";
-
-	myDictionary["perspective"] = "NoriPerspective";
-
-	myDictionary["envmap"] = "environmentLight";
-	
-	myDictionary["twosided"] = "twosides";
-	myDictionary["bumpmap"] = "bumpmapping";
-	myDictionary["coating"] = "smoothlayeredbsdf";
-	myDictionary["conductor"] = "conductor";
-	myDictionary["dielectric"] = "dielectric";
-	myDictionary["diffuse"] = _DIFFUSE;
-	myDictionary["normalmap"] = "normalmapping";
-	myDictionary["phong"] = "phong";
-	myDictionary["plastic"] = "smoothLayeredBSDF";
-	myDictionary["roughcoating"] = "layeredbsdf";
-	myDictionary["roughconductor"] = "roughconductor";
-	myDictionary["roughdielectric"] = "roughdielectric";
-	myDictionary["roughdiffuse"] = "diffuse";
-	myDictionary[_ROUGH_PLASTIC] = "layeredbsdf";
-	myDictionary["thindielectric"] = "sheetdielectric";
-
-	myDictionary["k"] = "absorption";
-	myDictionary["reflectance"] = "albedo";
-	myDictionary["specularReflectance"] = "reflectanceTexture";
-
-	myDictionary["path"] = "pathtracingmis";
-	myDictionary["volpath"] = "volpathtracing";
-
-	myDictionary["bitmap"] = "imagetexture";
-	myDictionary["checkerboard"] = "checkertexture";
-	myDictionary["scale"] = "scaletexture";
-
-	myDictionary["alpha"] = "alpha";
-	myDictionary["distribution"] = "distribution";
-	myDictionary["intior"] = "etaInt";
-	myDictionary["extior"] = "etaExt";
-	myDictionary["diffusereflectance"] = "reflectanceTexture";
-
 	SCENE = "scene";
 	CAMERA = "camera";
 	TYPE = "type";
@@ -76,19 +19,187 @@ MitsubaConverter::MitsubaConverter()
 	FILTER = "filter";
 	INTEGRATOR = "integrator";
 	OBJECTS = "objects";
+	LIGHTS = "lights";
 	NAME = "name";
 	VALUE = "value";
+	STRING = "string";
+	REAL = "real";
+	SAMPLE_NUMBER = "sampleNumber";
+	INTEGER = "integer";
 
 	_BSDF = "bsdf";
 	_DIFFUSE = "diffuse";
 	_ROUGH_PLASTIC = "roughplastic";
+
+	myDictionaryByBsdf["diffuse"].insert(std::make_pair("reflectance", "albedo"));
+	myDictionaryByBsdf["diffuse"].insert(std::make_pair("diffusereflectance", "albedo"));
+
+	myDictionaryByBsdf["roughdiffuse"].insert(std::make_pair("reflectance", "albedo"));
+	myDictionaryByBsdf["roughdiffuse"].insert(std::make_pair("diffusereflectance", "albedo"));
+
+	myDictionaryByBsdf["smoothdielectric"].insert(std::make_pair("intIOR", "etaInt"));
+	myDictionaryByBsdf["smoothdielectric"].insert(std::make_pair("extIOR", "etaExt"));
+	myDictionaryByBsdf["smoothdielectric"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
+	myDictionaryByBsdf["smoothdielectric"].insert(std::make_pair("specularTransmittance", "transmittedTexture"));
+
+	myDictionaryByBsdf["thindielectric"].insert(std::make_pair("intIOR", "etaInt"));
+	myDictionaryByBsdf["thindielectric"].insert(std::make_pair("extIOR", "etaExt"));
+	myDictionaryByBsdf["thindielectric"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
+	myDictionaryByBsdf["thindielectric"].insert(std::make_pair("specularTransmittance", "transmittedTexture"));
+
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("intIOR", "etaInt"));
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("extIOR", "etaExt"));
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("specularTransmittance", "transmittedTexture"));
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("alpha", "alpha"));
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("distribution", "distribution"));
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("beckmann", "beckmann"));
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("phong", "phong"));
+	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("ggx", "ggx"));
+
+	myDictionaryByBsdf["smoothconductor"].insert(std::make_pair("eta", "eta"));
+	myDictionaryByBsdf["smoothconductor"].insert(std::make_pair("k", "absorption"));
+	myDictionaryByBsdf["smoothconductor"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
+	myDictionaryByBsdf["smoothconductor"].insert(std::make_pair("material", "material"));
+
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("eta", "eta"));
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("k", "absorption"));
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("material", "material"));
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("alpha", "alpha"));
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("distribution", "distribution"));
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("beckmann", "beckmann"));
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("phong", "phong"));
+	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("ggx", "ggx"));
+
+	myDictionaryByBsdf["smoothplastic"].insert(std::make_pair("intIOR", "etaInt"));
+	myDictionaryByBsdf["smoothplastic"].insert(std::make_pair("extIOR", "etaExt"));
+
+	myDictionaryByBsdf["roughplastic"].insert(std::make_pair("alpha", "alphaTop"));
+	myDictionaryByBsdf["roughplastic"].insert(std::make_pair("intIOR", "etaInt"));
+	myDictionaryByBsdf["roughplastic"].insert(std::make_pair("extIOR", "etaExt"));
+
+	myDictionaryByBsdf["coating"].insert(std::make_pair("intIOR", "etaInt"));
+	myDictionaryByBsdf["coating"].insert(std::make_pair("extIOR", "etaExt"));
+	myDictionaryByBsdf["coating"].insert(std::make_pair("thickness", "thickness"));
+	myDictionaryByBsdf["coating"].insert(std::make_pair("sigmaA", "absorbance"));
+
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("intIOR", "etaInt"));
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("extIOR", "etaExt"));
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("thickness", "thickness"));
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("sigmaA", "absorbance"));
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("alpha", "alphaTop"));
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("distribution", "distribution"));
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("beckmann", "beckmann"));
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("phong", "phong"));
+	myDictionaryByBsdf["roughcoating"].insert(std::make_pair("ggx", "ggx"));
+
+	myDictionaryByBsdf["mask"].insert(std::make_pair("opacity", "alpha"));
+
+	myDictionaryBySensor["perspective"].insert(std::make_pair("fov", "fov"));
+	//myDictionaryBySensor["perspective"].insert(std::make_pair("width", "sizeX"));
+	//myDictionaryBySensor["perspective"].insert(std::make_pair("height", "sizeY"));
+
+	myDictionaryByShape["obj"].insert(std::make_pair("filename", "path"));
+
+	myDictionaryByShape["envmap"].insert(std::make_pair("filename", "path"));
+
+	myDictionaryByTexture["bitmap"].insert(std::make_pair("filename", "path"));
+	//myDictionaryByTexture["bitmap"].insert(std::make_pair("wrapMode", "boundaryCondition"));
+	myDictionaryByTexture["bitmap"].insert(std::make_pair("gamma", "gamma"));
+
+	myDictionary["rgb"] = "color";
+	myDictionary["spectrum"] = "color";
+	myDictionary["integer"] = "integer";
+	myDictionary["string"] = "string";
+	myDictionary["boolean"] = "bool";
+	myDictionary["float"] = "real";
+
+	myDictionary["point"] = "point";
+	myDictionary["vector"] = "vector";
+	myDictionary["transform"] = "transform";
+	myDictionary["texture"] = "texture";
+
+	myDictionary["rfilter"] = "filter";
+	myDictionary["tent"] = "MitchellNetravaliFilter";
+	myDictionary["gaussian"] = "MitchellNetravaliFilter";
+	myDictionary["mitchell"] = "MitchellNetravaliFilter";
+
+	myDictionary["translate"] = "translation";
+	myDictionary["rotate"] = "rotation";
+	myDictionary["scale"] = "scale";
+	myDictionary["lookAt"] = "lookAt";
+	myDictionary["origin"] = "origin";
+	myDictionary["target"] = "lookAt";
+	myDictionary["up"] = "up";
+	myDictionary["matrix"] = "matrix";
+
+	myDictionary["sensor"] = "camera";
+	myDictionary["perspective"] = "NoriPerspective";
+	myDictionary["orthographic"] = "othographic";
+
+	myDictionary["sampler"] = "sampler";
+	myDictionary["independant"] = "RandomSampler";
+	myDictionary["stratified"] = "StratifiedSampler";
+	myDictionary["ldsampler"] = "StratifiedSampler";
+	myDictionary["hammersley"] = "StratifiedSampler";
+	myDictionary["sobol"] = "StratifiedSampler";
+	myDictionary["halton"] = "StratifiedSampler";
+
+	//myDictionary["filename"] = "path";
+	//myDictionary["fov"] = "fov";
+	myDictionary["toWorld"] = "toWorld";
+	//myDictionary["width"] = "sizeX";
+	//myDictionary["height"] = "sizeY";
+
+	myDictionary["shape"] = "shape";
+	myDictionary["obj"] = "mesh";
+	myDictionary["cube"] = "cube";
+	myDictionary["rectangle"] = "plane";
+	myDictionary["sphere"] = "sphere";
+
+	myDictionary["emitter"] = "light";
+	myDictionary["point"] = "pointlight";
+	myDictionary["envmap"] = "environmentLight";
+	myDictionary["area"] = "arealight";
+	myDictionary["spot"] = "spotlight";
+	myDictionary["emitter"] = "light";
+	myDictionary["constant"] = "distantlight";
+
+	myDictionary["bsdf"] = "bsdf";
+	myDictionary["twosided"] = "twosides";
+	myDictionary["bumpmap"] = "bumpmapping";
+	myDictionary["coating"] = "smoothlayeredbsdf";
+	myDictionary["conductor"] = "conductor";
+	myDictionary["dielectric"] = "dielectric";
+	myDictionary["diffuse"] = _DIFFUSE;
+	myDictionary["normalmap"] = "normalmapping";
+	myDictionary["mask"] = "alphabsdf";
+	myDictionary["phong"] = "phong";
+	myDictionary["plastic"] = "smoothLayeredBSDF";
+	myDictionary["roughcoating"] = "layeredbsdf";
+	myDictionary["roughconductor"] = "roughconductor";
+	myDictionary["roughdielectric"] = "roughdielectric";
+	myDictionary["roughdiffuse"] = "diffuse";
+	myDictionary[_ROUGH_PLASTIC] = "layeredbsdf";
+	myDictionary["thindielectric"] = "sheetdielectric";
+
+	myDictionary["path"] = "pathtracingmis";
+	myDictionary["volpath"] = "volpathtracing";
+
+	myDictionary["bitmap"] = "imagetexture";
+	myDictionary["checkerboard"] = "checkertexture";
+	myDictionary["scale"] = "scaletexture";
 }
 
-
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 MitsubaConverter::~MitsubaConverter()
 {
 }
 
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 bool MitsubaConverter::convert(const std::string& pathFrom, const std::string& pathDest)
 {
 	TiXmlDocument doc(pathFrom.c_str());
@@ -123,6 +234,14 @@ bool MitsubaConverter::convert(const std::string& pathFrom, const std::string& p
 			handleElement(mySensor, element);
 			ILogger::log(ILogger::ALL) << "sensor parsed...\n";
 		}
+		else if (key == "emitter")
+		{
+			ILogger::log(ILogger::ALL) << "Parsing emitters...\n";
+			Bloc bloc;
+			handleElement(bloc, element);
+			myLights.push_back(bloc);
+			ILogger::log(ILogger::ALL) << "Emitters parsed...\n";
+		}
 		else if (key == "bsdf")
 		{
 			ILogger::log(ILogger::ALL) << "Parsing bsdf id...\n";
@@ -156,569 +275,704 @@ bool MitsubaConverter::convert(const std::string& pathFrom, const std::string& p
 	return true;
 }
 
-	//=============================================================================
-	///////////////////////////////////////////////////////////////////////////////
-	void MitsubaConverter::handleElement(Bloc& bloc, TiXmlElement* element)
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::handleElement(Bloc& bloc, TiXmlElement* element)
+{
+	//std::string elemType = findFromDictionary(element->ValueStr(), "Element type ");
+
+	//std::string type = element->Attribute("type");
+	//const std::string* name = element->Attribute(std::string("name"));
+	const std::string* id = element->Attribute(std::string("id"));
+	//element = element->FirstChildElement();
+	//vec.push_back(MitsubaConverter::Bloc());
+
+	//vec.back().elemType = elemType;
+
+	//type = findFromDictionary(type, "Type ");
+
+	//vec.back().type = type;
+	//if(name)
+	//	vec.back().name = *name;
+	//	
+	//for (element; element; element = element->NextSiblingElement())
+	//{
+	//	handleProperty(element, vec.back());
+	//}
+
+
+	//TiXmlAttribute* att = element->FirstAttribute();
+	const std::string* attName = element->Attribute(std::string("name"));
+	const std::string* attValue = element->Attribute(std::string("value"));
+	const std::string* type = element->Attribute(std::string("type"));
+
+	std::string elemType = findFromDictionary(myDictionary, element->ValueStr(), "Element type ");
+
+	//std::string finalAttName;
+	//if (attName)
+	//	finalAttName = findFromDictionary(myDictionary, *attName, "Att name ");
+
+	if (attName)
+		bloc.name = *attName;
+	bloc.elemType = element->ValueStr();//elemType;
+	if (type)
+		bloc.type = *type;
+
+	auto childElement = element->FirstChildElement();
+	for (childElement; childElement; childElement = childElement->NextSiblingElement())
 	{
-		//std::string elemType = findFromDictionary(element->ValueStr(), "Element type ");
-
-		//std::string type = element->Attribute("type");
-		//const std::string* name = element->Attribute(std::string("name"));
-		const std::string* id = element->Attribute(std::string("id"));
-		//element = element->FirstChildElement();
-		//vec.push_back(MitsubaConverter::Bloc());
-
-		//vec.back().elemType = elemType;
-
-		//type = findFromDictionary(type, "Type ");
-
-		//vec.back().type = type;
-		//if(name)
-		//	vec.back().name = *name;
-		//	
-		//for (element; element; element = element->NextSiblingElement())
-		//{
-		//	handleProperty(element, vec.back());
-		//}
-
-		if (id) {
-			bloc.id = *id;
-			myBlocsById[*id] = bloc;
-		}
-
-		//TiXmlAttribute* att = element->FirstAttribute();
-		const std::string* attName = element->Attribute(std::string("name"));
-		const std::string* attValue = element->Attribute(std::string("value"));
-
-		std::string elemType = findFromDictionary(element->ValueStr(), "Element type ");
-
-
-		std::string finalAttName;
-		if (attName)
-			finalAttName = findFromDictionary(*attName, "Att name ");
-
-		bloc.name = finalAttName;
-		bloc.elemType = elemType;
-
-		auto childElement = element->FirstChildElement();
-		for (childElement; childElement; childElement = childElement->NextSiblingElement())
-		{
-			std::shared_ptr<Bloc> child(new Bloc);
-			handleProperty(childElement, *child);
-			bloc.addChild(child);
-		}
-
-		if (element->ValueStr() == "boolean" ||
-			element->ValueStr() == "integer" ||
-			element->ValueStr() == "float" ||
-			element->ValueStr() == "string")
-		{
-			if (finalAttName == "path")
-				bloc.value = "./data/living-room/" + *attValue; //to change
-			else
-				bloc.value = *attValue;
-		}
-
-		else if (element->ValueStr() == "point" ||
-			element->ValueStr() == "vector")
-		{
-			const std::string* x = element->Attribute(std::string("x"));
-			const std::string* y = element->Attribute(std::string("y"));
-			const std::string* z = element->Attribute(std::string("z"));
-
-			bloc.value = *x + " " + *y + " " + *z;
-		}
-		else if (element->ValueStr() == "rgb" ||
-			element->ValueStr() == "spectrum")
-		{
-			bloc.value = *attValue;
-		}
-		else if (element->ValueStr() == "transform")
-		{
-			handleTransform(bloc, element);
-		}
-		else if (element->ValueStr() == "texture")
-		{
-			std::string type = element->Attribute("type");
-
-			bloc.type = myDictionary[type];
-		}
-		else if (element->ValueStr() == "bsdf")
-		{
-			std::string type = element->Attribute("type");
-			//const std::string* id = element->Attribute(std::string("id")); //shouldn't appear here
-
-			if (myDictionary.find(type) == myDictionary.end())
-			{
-				ILogger::log() << "Type " << type << " not found\n";
-			}
-
-			bloc.type = myDictionary[type];
-
-			handleAndCorrectBsdf(bloc); //move to handleElement()
-		}
-		else if (element->ValueStr() == "sampler")
-		{
-			std::string type = element->Attribute("type");
-
-			bloc.type = myDictionary[type];
-		}
-		else if (element->ValueStr() == "film")
-		{
-			std::string type = element->Attribute("type");
-
-			//child->type = myDictionary[type];
-
-			//bloc.addChild(child);
-		}
-		else if (element->ValueStr() == "ref")
-		{
-			std::string id = element->Attribute("id");
-			const std::string* name = element->Attribute(std::string("name"));
-			bloc = myBlocsById[id];
-			//child = std::make_shared<Bloc>(myBlocsById[id]);
-			if (name)
-				bloc.name = *name;
-		}
-		//else if (element->ValueStr() == "medium")
-		//{
-		//	Medium::ptr medium = handleMedium(scene, element);
-		//	params.addMedium(*attName, medium);
-		//	if (medium->isEmissive())
-		//	{
-		//		scene.addLight(medium);
-		//	}
-		//}
-		//else if (element->ValueStr() == "phase")
-		//{
-		//	PhaseFunction::ptr phase = handlePhase(scene, element);
-		//	params.addPhaseFunction(*attName, phase);
-		//}
-		//else if (element->ValueStr() == "volume")
-		//{
-		//	Volume::ptr volume = handleVolume(scene, element);
-		//	params.addVolume(*attName, volume);
-		//}
-		else
-		{
-			ILogger::log() << "Unknown property " << element->ValueStr() << " with name  " << (attName ? *attName : " not given") << "\n";
-		}
-	}
-
-	//=============================================================================
-	///////////////////////////////////////////////////////////////////////////////
-	void MitsubaConverter::handleProperty(TiXmlElement* element, Bloc& bloc)
-	{
-		//TiXmlAttribute* att = element->FirstAttribute();
-		const std::string* attName = element->Attribute(std::string("name"));
-		const std::string* attValue = element->Attribute(std::string("value"));
-
-		std::string elemType = findFromDictionary(element->ValueStr(), "Element type ");
-
-
-		std::string finalAttName;
-		if (attName)
-		{
-			finalAttName = findFromDictionary(*attName, "Att name ");
-		}
-
 		std::shared_ptr<Bloc> child(new Bloc);
-		child->name = finalAttName; 
-		child->elemType = elemType;
+		handleElement(*child, childElement);
+		bloc.addChild(child);
+	}
 
-		if (element->ValueStr() == "boolean" ||
-			element->ValueStr()== "integer" ||
-			element->ValueStr() == "float" || 
-			element->ValueStr() == "string")
+	if (element->ValueStr() == "boolean" ||
+		element->ValueStr() == "integer" ||
+		element->ValueStr() == "float" ||
+		element->ValueStr() == "string" ||
+		element->ValueStr() == "matrix")
+	{
+		if (attName && *attName == "filename")
+			bloc.value = "./data/living-room2/" + *attValue; //to change
+		else
+			bloc.value = *attValue;
+	}
+	else if (element->ValueStr() == "rotate")
+	{
+		handleAndCorrectTransform(bloc, element);
+	}
+	else if (element->ValueStr() == "translate")
+	{
+		handleAndCorrectTransform(bloc, element);
+	}
+	else if (element->ValueStr() == "scale")
+	{
+		handleAndCorrectTransform(bloc, element);
+	}
+	else if (element->ValueStr() == "point" ||
+		element->ValueStr() == "vector")
+	{
+		const std::string* x = element->Attribute(std::string("x"));
+		const std::string* y = element->Attribute(std::string("y"));
+		const std::string* z = element->Attribute(std::string("z"));
+
+		bloc.value = *x + " " + *y + " " + *z;
+	}
+	else if (element->ValueStr() == "rgb" ||
+		element->ValueStr() == "spectrum")
+	{
+		bloc.value = *attValue;
+	}
+	else if (element->ValueStr() == "sensor")
+	{
+		//bloc.type = *type;
+		handleAndCorrectSensor(bloc);
+	}
+	else if (element->ValueStr() == "transform")
+	{
+		//handleAndCorrectTransform(bloc, element);
+	}
+	else if (element->ValueStr() == "emitter")
+	{
+		//Finish by correcting the names
+		for (std::shared_ptr<Bloc> child : bloc.childs)
 		{
-			if (finalAttName == "path")
-				child->value = "./data/living-room/" + *attValue; //to change
-			else
-				child->value = *attValue;
-			bloc.addChild(child);
+			//handleAndCorrectShape(bloc);
+			child->name = findFromDictionary(myDictionaryByLight[lowerCase(bloc.type)], child->name, "");
+			child->type = findFromDictionary(myDictionary, child->type, "");
+			child->elemType = findFromDictionary(myDictionary, child->elemType, "");
 		}
+		bloc.elemType = findFromDictionary(myDictionary, bloc.elemType, "");
+		bloc.type = findFromDictionary(myDictionary, bloc.type, "");
+	}
+	else if (element->ValueStr() == "texture")
+	{
+		//std::string type = element->Attribute("type");
+
+		//bloc.type = *type;
+		handleAndCorrectTextures(bloc);
+	}
+	else if (element->ValueStr() == "bsdf")
+	{
+		handleAndCorrectBsdf(bloc);
+	}
+	else if (element->ValueStr() == "integrator")
+	{
+		//Finish by correcting the names
+		for (std::shared_ptr<Bloc> child : bloc.childs)
+		{
+			//handleAndCorrectShape(bloc);
+			//child->name = findFromDictionary(myDictionaryByIntegrator[lowerCase(bloc.type)], child->name, "");
+			child->type = findFromDictionary(myDictionary, child->type, "");
+			child->elemType = findFromDictionary(myDictionary, child->elemType, "");
+		}
+		bloc.elemType = findFromDictionary(myDictionary, bloc.elemType, "");
+		bloc.type = findFromDictionary(myDictionary, bloc.type, "");
+		//handleAndCorrectIntegrator(bloc); 
+	}
+	else if (element->ValueStr() == "sampler")
+	{
+	}
+	else if (element->ValueStr() == "shape")
+	{
+		//Finish by correcting the names
+		for (std::shared_ptr<Bloc> child : bloc.childs)
+		{
+			//handleAndCorrectShape(bloc);
+			child->name = findFromDictionary(myDictionaryByShape[lowerCase(bloc.type)], child->name, "");
+			child->type = findFromDictionary(myDictionary, child->type, "");
+			child->elemType = findFromDictionary(myDictionary, child->elemType, "");
+		}
+		bloc.elemType = findFromDictionary(myDictionary, bloc.elemType, "");
+		bloc.type = findFromDictionary(myDictionary, bloc.type, "");
+	}
+	else if (element->ValueStr() == "ref")
+	{
+		std::string id = element->Attribute("id");
+		const std::string* name = element->Attribute(std::string("name"));
+		bloc = myBlocsById[id];
+		//child = std::make_shared<Bloc>(myBlocsById[id]);
+		if (name)
+			bloc.name = *name;
+	}
+	//else if (element->ValueStr() == "medium")
+	//{
+	//	Medium::ptr medium = handleMedium(scene, element);
+	//	params.addMedium(*attName, medium);
+	//	if (medium->isEmissive())
+	//	{
+	//		scene.addLight(medium);
+	//	}
+	//}
+	//else if (element->ValueStr() == "phase")
+	//{
+	//	PhaseFunction::ptr phase = handlePhase(scene, element);
+	//	params.addPhaseFunction(*attName, phase);
+	//}
+	//else if (element->ValueStr() == "volume")
+	//{
+	//	Volume::ptr volume = handleVolume(scene, element);
+	//	params.addVolume(*attName, volume);
+	//}
+	else
+	{
+		ILogger::log() << "Unknown property " << element->ValueStr() << " with name  " << (attName ? *attName : " not given") << "\n";
+	}
+
+	//when everything is done, copy the bloc
+	if (id) {
+		bloc.id = *id;
+		myBlocsById[*id] = bloc;
+	}
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+std::string MitsubaConverter::findFromDictionary(std::map<std::string, std::string>& map,
+	const std::string& key, const std::string msg)
+{
+	std::string res;
+	std::string keyTmp = key;
+	std::transform(key.begin(), key.end(), keyTmp.begin(), ::tolower);
+	if (map.find(keyTmp) == map.end()) {
+		res = key;
+		if (msg != "")
+			ILogger::log() << msg << " " << key << " not found\n";
+	}
+	else
+		res = map[keyTmp];
+
+	return res;
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::handleAndCorrectBsdf(Bloc& bloc)
+{
+	std::string blocType = lowerCase(bloc.type);
+
+	if (blocType == "roughplastic" ||
+		blocType == "plastic")
+	{
+		std::shared_ptr<Bloc> childBsdf(new Bloc);
+		childBsdf->elemType = _BSDF;
+		childBsdf->type = _DIFFUSE;
+		childBsdf->name = "baseBSDF";
+
+		int cpt = 0;
+		for (std::shared_ptr<Bloc> child : bloc.childs)
+		{
+			if (child->name == "diffuseReflectance") {
+				childBsdf->addChild(child);
+				bloc.childs.erase(bloc.childs.begin() + cpt);
+				break;
+			}
+			cpt++;
+		}
+
+		bloc.addChild(childBsdf);
+
+
+	}
+	else if (blocType == "conductor")
+	{
+		std::string material = getValueWithName(bloc, "material");
+		if (material == "none") {
+			bloc.type = "mirror";
+		}
+
+	}
+	else if (blocType == "coating" || blocType == "roughcoating")
 		
-		else if (element->ValueStr() == "point" ||
-			element->ValueStr() == "vector")
+	{
+		auto childBSDF = getSubBlocFromElemType(bloc, "bsdf");
+		if (childBSDF.size() == 1)
+		{
+			(*childBSDF[0])->name = "baseBSDF";
+		}
+	}
+	else if (blocType == "normalmap" || blocType == "bumpmap" ||
+		blocType == "mask")
+	{
+		auto childBSDF = getSubBlocFromElemType(bloc, "bsdf");
+		if (childBSDF.size() == 1)
+		{
+			(*childBSDF[0])->name = "bsdf";
+		}
+	}
+	else if (blocType == "twosided")
+	{
+		//bloc.type = myDictionary[bloc.type];
+		bool doneOne = false;
+		for (std::shared_ptr<Bloc> child : bloc.childs)
+		{
+			if (child->elemType == _BSDF)
+				if (child->name == "")
+					if (!doneOne) {
+						child->name = _BSDF;
+						doneOne = true;
+					}
+					else
+						child->name = "bsdf2";
+		}
+	}
+
+	//Finish by correcting the names
+	for (std::shared_ptr<Bloc> child : bloc.childs)
+	{
+		handleAndCorrectBsdf(*child);
+		child->name = findFromDictionary(myDictionaryByBsdf[blocType], child->name, "");
+		child->type = findFromDictionary(myDictionary, child->type, "");
+		child->elemType = findFromDictionary(myDictionary, child->elemType, "");
+	}
+	bloc.elemType = findFromDictionary(myDictionary, bloc.elemType, "");
+	bloc.type = findFromDictionary(myDictionary, bloc.type, "");
+
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::handleAndCorrectTextures(Bloc& bloc)
+{
+	if (lowerCase(bloc.type) == "bitmap")
+	{
+		std::shared_ptr<Bloc> childT(new Bloc);
+		childT->elemType = "bool";
+		childT->name = "invertY";
+		childT->value = "true";
+
+		bloc.addChild(childT);
+	}
+
+	//Finish by correcting the names
+	for (std::shared_ptr<Bloc> child : bloc.childs)
+	{
+		handleAndCorrectBsdf(*child);
+		child->name = findFromDictionary(myDictionaryByTexture[lowerCase(bloc.type)], child->name, "");
+		child->type = findFromDictionary(myDictionary, child->type, "");
+		child->elemType = findFromDictionary(myDictionary, child->elemType, "");
+	}
+	bloc.elemType = findFromDictionary(myDictionary, bloc.elemType, "");
+	bloc.type = findFromDictionary(myDictionary, bloc.type, "");
+
+}
+
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::handleAndCorrectSensor(Bloc& bloc)
+{
+	bloc.elemType = findFromDictionary(myDictionary, bloc.elemType);
+	bloc.type = myDictionary[bloc.type];
+
+	auto addProperty = [](Bloc& parent, const std::string& elemType,
+		const std::string& name, const std::string& value) {
+		std::shared_ptr<Bloc> b(new Bloc);
+		b->elemType = elemType; b->name = name; b->value = value;
+		parent.addChild(b);
+	};
+
+	auto film = getSubBlocFromElemType(bloc, "film");
+	std::string sizeX = getValueWithName(*(*film[0]), "width");
+	std::string sizeY = getValueWithName(*(*film[0]), "height");
+
+	auto rfilter = getSubBlocFromElemType(*(*film[0]), "rfilter");
+	std::shared_ptr<Bloc> filter(new Bloc);
+	filter->elemType = findFromDictionary(myDictionary, (*rfilter[0])->elemType, "");
+	filter->type = findFromDictionary(myDictionary, (*rfilter[0])->type, "Filter type");
+	addProperty(*filter, REAL, "radiusX", "2.");
+	addProperty(*filter, REAL, "radiusY", "2.");
+
+	//call addProperty after all operations on film[0] because it invalidates the iterator	
+	bloc.childs.erase(film[0]);
+	addProperty(bloc, INTEGER, SIZE_X, sizeX);
+	addProperty(bloc, INTEGER, SIZE_Y, sizeY);
+
+	bloc.addChild(filter);
+
+	auto sampler = getSubBlocFromElemType(bloc, "sampler");
+	mySampler.elemType = findFromDictionary(myDictionary, (*sampler[0])->elemType, "");
+	mySampler.type = findFromDictionary(myDictionary, (*sampler[0])->type, "Sampler type");
+	std::string nbSamples = getValueWithName(*(*sampler[0]), "sampleCount");
+	addProperty(mySampler, INTEGER, SAMPLE_NUMBER, nbSamples);
+	bloc.childs.erase(sampler[0]);
+
+	//int cpt = 0;
+	//for (std::shared_ptr<Bloc> child : bloc.childs)
+	//{
+	//	if (lowerCase(child->name) == "film") {
+	//		addProperty(bloc, STRING, SIZE_X, getValueWithName(*child, "width"));
+	//		addProperty(bloc, STRING, SIZE_Y, getValueWithName(*child, "height"));
+
+	//		for (std::shared_ptr<Bloc> child2 : bloc.childs)
+	//		{
+	//			if (lowerCase(child->name) == "rfilter") {
+	//				myFilter.type = findFromDictionary(myDictionary, child2->name, "Filter type");
+	//				addProperty(myFilter, REAL, "radiusX", "2.");
+	//				addProperty(myFilter, REAL, "radiusY", "2.");
+	//			}
+	//		}
+
+	//		bloc.childs.erase(bloc.childs.begin() + cpt);
+	//		break;
+	//	}
+	//	else if (lowerCase(child->name) == "sampler") {
+	//		mySampler.type = findFromDictionary(myDictionary, child->name, "Sampler type");
+	//		std::string nbSamples = getValueWithName(*child, "sampleCount");
+	//		addProperty(mySampler, STRING, SAMPLE_NUMBER, nbSamples);
+
+	//		bloc.childs.erase(bloc.childs.begin() + cpt);
+	//		break;
+	//	}
+	//	cpt++;
+	//}
+
+	//Finish by correcting the names
+	for (std::shared_ptr<Bloc> child : bloc.childs)
+	{
+		child->name = findFromDictionary(myDictionaryBySensor[lowerCase(bloc.type)], child->name, "");
+		child->type = findFromDictionary(myDictionary, child->type, "");
+		child->elemType = findFromDictionary(myDictionary, child->elemType, "");
+	}
+	bloc.elemType = findFromDictionary(myDictionary, bloc.elemType, "");
+	bloc.type = findFromDictionary(myDictionary, bloc.type, "");
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::handleAndCorrectTransform(Bloc& bloc, TiXmlElement* element)
+{
+	auto addProperty = [](Bloc& parent, const std::string& elemType, const std::string& value) {
+		std::shared_ptr<Bloc> b(new Bloc);
+		b->elemType = elemType;
+		b->textValue = value;
+		parent.addChild(b);
+	};
+
+	//bloc.elemType = findFromDictionary(myDictionary, element->ValueStr(), "");
+
+	//element = element->FirstChildElement();
+
+	//for (element; element; element = element->NextSiblingElement())
+	{
+		if (element->ValueStr() == "rotate")
+		{
+		}
+		else if (element->ValueStr() == "translate")
 		{
 			const std::string* x = element->Attribute(std::string("x"));
 			const std::string* y = element->Attribute(std::string("y"));
 			const std::string* z = element->Attribute(std::string("z"));
+			bloc.elemType = findFromDictionary(myDictionary, element->ValueStr(), "");
 			
-			child->value = *x + " " + *y + " " + *z;
-			bloc.addChild(child);
+			if (x) 
+				addProperty(bloc, "x", *x);
+			if (y)
+				addProperty(bloc, "y", *y);
+			if (z)
+				addProperty(bloc, "z", *z);
 		}
-		else if (element->ValueStr() == "rgb" ||
-				element->ValueStr() == "spectrum")
+		else if (element->ValueStr() == "scale")
 		{
-			child->value = *attValue;
-			bloc.addChild(child);
+			const std::string* x = element->Attribute(std::string("x"));
+			const std::string* y = element->Attribute(std::string("y"));
+			const std::string* z = element->Attribute(std::string("z"));
+			const std::string* value = element->Attribute(std::string("value"));
 
-		}
-		else if (element->ValueStr() == "transform")
-		{
-			handleTransform(*child, element);
-			bloc.addChild(child);
-		}
-		else if (element->ValueStr() == "texture")
-		{
-			std::string type = element->Attribute("type");
-			
-			child->type = myDictionary[type];
-			
-			//ILogger::log() << "texture " << type << " not implemented\n";
-			//child->type = correctTextureType(type);
-			element = element->FirstChildElement();
-			for (element; element; element = element->NextSiblingElement())
-			{
-				handleProperty(element, *child);
+			bloc.elemType = findFromDictionary(myDictionary, element->ValueStr(), "");
+
+			if (value) {
+				addProperty(bloc, "x", *value);
+				addProperty(bloc, "y", *value);
+				addProperty(bloc, "z", *value);
+			}
+			else {
+				if (x)
+					addProperty(bloc, "x", *x);
+				if (y)
+					addProperty(bloc, "y", *y);
+				if (z)
+					addProperty(bloc, "z", *z);
 			}
 			
+		}
+		else if (element->ValueStr() == "matrix")
+		{
+			std::string value = element->Attribute("value");
+			std::shared_ptr<Bloc> child(new Bloc);
+			child->value = value;
 			bloc.addChild(child);
 		}
-		else if (element->ValueStr() == "bsdf")
+		else if (element->ValueStr() == "lookAt")
 		{
-			std::string type = element->Attribute("type");
-			//const std::string* id = element->Attribute(std::string("id")); //shouldn't appear here
+			const std::string* origin = element->Attribute(std::string("origin"));
+			const std::string* target = element->Attribute(std::string("target"));
+			const std::string* up = element->Attribute(std::string("up"));
+			bloc.elemType = findFromDictionary(myDictionary, element->ValueStr(), "");
 
-			if (myDictionary.find(type) == myDictionary.end())
-			{
-				ILogger::log() << "Type " << type << " not found\n";
-			}
-
-			child->type = myDictionary[type];
-			
-			element = element->FirstChildElement();
-			for (element; element; element = element->NextSiblingElement())
-			{
-				handleProperty(element, *child);
-			}
-
-			bloc.addChild(child);
-
-			handleAndCorrectBsdf(bloc); //move to handleElement()
+			if (origin)
+				addProperty(bloc, "origin", *origin);
+			if (target)
+				addProperty(bloc, "lookAt", *target);
+			if (up)
+				addProperty(bloc, "up", *up);
 		}
-		else if (element->ValueStr() == "sampler")
-		{
-			std::string type = element->Attribute("type");
-
-			child->type = myDictionary[type];
-
-			element = element->FirstChildElement();
-			for (element; element; element = element->NextSiblingElement())
-			{
-				handleProperty(element, *child);
-			}
-
-			bloc.addChild(child);
-		}
-		else if (element->ValueStr() == "film")
-		{
-			std::string type = element->Attribute("type");
-
-			//child->type = myDictionary[type];
-
-			element = element->FirstChildElement();
-			for (element; element; element = element->NextSiblingElement())
-			{
-				//handleProperty(element, *child);
-				handleProperty(element, bloc); //add film properties to camera
-			}
-
-			//bloc.addChild(child);
-		}
-		else if(element->ValueStr() == "ref")
-		{
-			std::string id = element->Attribute("id");
-			const std::string* name = element->Attribute(std::string("name"));
-			child = std::make_shared<Bloc>(myBlocsById[id]);
-			if (name)
-				child->name = *name;
-
-			bloc.addChild(child);
-		}
-		//else if (element->ValueStr() == "medium")
-		//{
-		//	Medium::ptr medium = handleMedium(scene, element);
-		//	params.addMedium(*attName, medium);
-		//	if (medium->isEmissive())
-		//	{
-		//		scene.addLight(medium);
-		//	}
-		//}
-		//else if (element->ValueStr() == "phase")
-		//{
-		//	PhaseFunction::ptr phase = handlePhase(scene, element);
-		//	params.addPhaseFunction(*attName, phase);
-		//}
-		//else if (element->ValueStr() == "volume")
-		//{
-		//	Volume::ptr volume = handleVolume(scene, element);
-		//	params.addVolume(*attName, volume);
-		//}
 		else
 		{
-			ILogger::log() << "Unknown property " << element->ValueStr() << " with name  " << (attName ? *attName : " not given") << "\n";
+			ILogger::log() << "Unknown parameter " << element->ValueStr() << ".\n";
 		}
 	}
+}
 
-	std::string MitsubaConverter::findFromDictionary(const std::string& key, const std::string msg)
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::writeXML(const std::string& path)
+{
+	std::ofstream file(path);
+
+	writeHeader(file);
+
+	addElement(file, SCENE);
+
+	//addElementWithAtt(file, CAMERA);
+
+
+	//addAttribute(file, TYPE, mySensor.type);
+	//addClosing(file);
+	//addElement(file, TRANSFORM);
+	//	addElement(file, LOOK_AT);
+	//		addElement(file, ORIGIN);
+	//		file << getValue(mySensor, ORIGIN);
+	//		addEndElement(file, ORIGIN);
+	//		addElement(file, LOOK_AT);
+	//		file << getValue(mySensor, LOOK_AT);
+	//		addEndElement(file, LOOK_AT);
+	//		addElement(file, UP);
+	//		file << getValue(mySensor, UP);
+	//		addEndElement(file, UP);
+	//	addEndElement(file, LOOK_AT);
+	//addEndElement(file, TRANSFORM);
+
+	writeBloc(file, mySensor, 1);
+	file << "\n";
+	writeBloc(file, myIntegrator, 1);
+	file << "\n";
+	writeBloc(file, mySampler, 1);
+	file << "\n";
+
+	addElement(file, LIGHTS, 1);
+	for (Bloc& bloc : myLights)
 	{
-		std::string res;
-		std::string keyTmp = key;
-		std::transform(key.begin(), key.end(), keyTmp.begin(), ::tolower);
-		if (myDictionary.find(keyTmp) == myDictionary.end()) {
-			res = key;
-			if(msg != "")
-				ILogger::log() << msg << " " << key << " not found\n";
-		}
-		else
-			res = myDictionary[keyTmp];
-
-		return res;
+		writeBloc(file, bloc, 2);
 	}
+	addEndElement(file, LIGHTS, 1);
+	file << "\n";
 
-	void MitsubaConverter::handleAndCorrectBsdf(Bloc& bloc)
+	//addElementWithAtt(file, DOUBLE);
+	//addAttribute(file, NAME, FOV);
+	//addAttribute(file, VALUE, getValue(mySensor, FOV)); //to change if fov is not present
+	//addAttribute(file, NAME, SIZE_X);
+	//addAttribute(file, VALUE, getValue(mySensor, SIZE_X));
+	//addAttribute(file, NAME, SIZE_Y);
+	//addAttribute(file, VALUE, getValue(mySensor, SIZE_Y));
+	//addEndElementWithAtt(file);
+	//
+	//addElementWithAtt(file, FILTER);
+	//addAttribute(file, TYPE, "MitchellNetravaliFilter");
+	//addEndElementWithAtt(file);
+	//addEndElement(file, CAMERA);
+
+	file << "\n";
+	file << "<parameters>\n"
+		"\t<threadNumber>4</threadNumber>\n"
+		"\t<blockSizeX>32</blockSizeX>\n"
+		"\t<blockSizeY>32</blockSizeY>\n"
+		"\t<fileName>./testRendu.png</fileName>\n"
+		"\t<showProgress>1</showProgress>\n"
+		"\t</parameters>\n";
+
+	//addElementWithAtt(file, INTEGRATOR);
+	//addAttribute(file, TYPE, myIntegrator.type);
+	//addEndElementWithAtt(file);
+
+	file << "\n";
+	addElement(file, OBJECTS, 1);
+
+
+	for (Bloc& bloc : myShapes)
 	{
-		if (lowerCase(bloc.type) == "roughplastic")
-		{
-			std::shared_ptr<Bloc> childBsdf(new Bloc);
-			childBsdf->elemType = _BSDF;
-			childBsdf->type = _DIFFUSE;
-			
-			int cpt = 0;
-			for (std::shared_ptr<Bloc> child : bloc.childs)
-			{
-				if (child->name == "diffuseReflectance") {
-					childBsdf->addChild(child);
-					bloc.childs.erase(bloc.childs.begin() + cpt);
-					break;
-				}
-				cpt++;
-			}
-
-			bloc.addChild(childBsdf);
-		}
-		if (lowerCase(bloc.type) == "twosided")
-		{
-			//bloc.type = myDictionary[bloc.type];
-			bool doneOne = false;
-			for (std::shared_ptr<Bloc> child : bloc.childs)
-			{
-				if (child->elemType == _BSDF)
-					if (child->name == "")
-						if (!doneOne) {
-							child->name = _BSDF;
-							doneOne = true;
-						}
-						else
-							child->name = "bsdf2";
-			}
-		}
-
-		bloc.type = myDictionary[bloc.type];
-		for (std::shared_ptr<Bloc> child : bloc.childs)
-		{
-			handleAndCorrectBsdf(*child);
-		}
-	}
-
-	//=============================================================================
-	///////////////////////////////////////////////////////////////////////////////
-	void MitsubaConverter::handleTransform(Bloc& bloc, TiXmlElement* element)
-	{
-		Transform::ptr transform(new Transform);
-		std::vector<real> translateVect(3, 0.);
-		std::vector<real> rot(3, 0.);
-		std::vector<real> scaleVect(3, 1.);
-
-		element = element->FirstChildElement();
-
-		for (element; element; element = element->NextSiblingElement())
-		{
-			if (element->ValueStr() == "rotate")
-			{
-			}
-			else if (element->ValueStr() == "translation")
-			{
-			}
-			else if (element->ValueStr() == "scale")
-			{
-			}
-			else if (element->ValueStr() == "matrix")
-			{
-				std::shared_ptr<Bloc> child(new Bloc);
-
-				child->elemType = element->ValueStr();
-				std::string value = element->Attribute("value");
-
-				child->value = value;
-				bloc.addChild(child);
-			}
-			else if (element->ValueStr() == "lookAt")
-			{
-			}
-			else
-			{
-				ILogger::log() << "Unknown parameter " << element->ValueStr() << ".\n";
-			}
-		}
-	}
-
-	void MitsubaConverter::writeXML(const std::string& path)
-	{
-		std::ofstream file(path);
-
-		writeHeader(file);
-
-		addElement(file, SCENE);
-
-		addElementWithAtt(file, CAMERA);
-		
-		
-		addAttribute(file, TYPE, mySensor.type);
-		addClosing(file);
-		addElement(file, TRANSFORM);
-			addElement(file, LOOK_AT);
-				addElement(file, ORIGIN);
-				file << getValue(mySensor, ORIGIN);
-				addEndElement(file, ORIGIN);
-				addElement(file, LOOK_AT);
-				file << getValue(mySensor, LOOK_AT);
-				addEndElement(file, LOOK_AT);
-				addElement(file, UP);
-				file << getValue(mySensor, UP);
-				addEndElement(file, UP);
-			addEndElement(file, LOOK_AT);
-		addEndElement(file, TRANSFORM);
-
-		//writeBloc(file, mySensor, 1);
-		//file << "\n";
-		//writeBloc(file, myIntegrator, 1);
-		//file << "\n";
-
-		addElementWithAtt(file, DOUBLE);
-		addAttribute(file, NAME, FOV);
-		addAttribute(file, VALUE, getValue(mySensor, FOV)); //to change if fov is not present
-		addAttribute(file, NAME, SIZE_X);
-		addAttribute(file, VALUE, getValue(mySensor, SIZE_X));
-		addAttribute(file, NAME, SIZE_Y);
-		addAttribute(file, VALUE, getValue(mySensor, SIZE_Y));
-		addEndElementWithAtt(file);
-		
-		addElementWithAtt(file, FILTER);
-		addAttribute(file, TYPE, "MitchellNetravaliFilter");
-		addEndElementWithAtt(file);
-		addEndElement(file, CAMERA);
-
+		writeBloc(file, bloc, 2);
 		file << "\n";
-		file << "<parameters>\n"
-			"\t<threadNumber>4</threadNumber>\n"
-			"\t<blockSizeX>32</blockSizeX>\n"
-			"\t<blockSizeY>32</blockSizeY>\n"
-			"\t<fileName>./testRendu.png</fileName>\n"
-			"\t<showProgress>1</showProgress>\n"
-			"\t</parameters>\n"
-			"\t<sampler type = \"RandomSampler\">\n"
-			"\t<integer name = \"sampleNumber\" value = \"16\"/>\n"
-			"\t</sampler>\n";
-
-		addElementWithAtt(file, INTEGRATOR);
-		addAttribute(file, TYPE, myIntegrator.type);
-		addEndElementWithAtt(file);
-			
-		file << "\n";
-		addElement(file, OBJECTS);
-
-		
-		for (Bloc& bloc : myShapes)
-		{
-			writeBloc(file, bloc, 1);
-			file << "\n";
-		}
-
-		addEndElement(file, OBJECTS);
-		addEndElement(file, SCENE);
-
-		file.close();
 	}
 
-	std::string MitsubaConverter::getValue(const Bloc& bloc, const std::string& name)
+	addEndElement(file, OBJECTS, 1);
+	addEndElement(file, SCENE);
+
+	file.close();
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+std::string MitsubaConverter::getValueWithName(const Bloc& bloc, const std::string& name)
+{
+	std::string res;
+
+	if (bloc.name == name)
+		return bloc.value;
+
+	for (std::shared_ptr<Bloc> child : bloc.childs)
 	{
-		std::string res;
-
-		if (bloc.name == name)
-			return bloc.value;
-
-		for (std::shared_ptr<Bloc> child : bloc.childs)
-		{
-			res = getValue(*child, name);
-			if (res != "")
-				return res;
-		}
-
-		return res;
+		res = getValueWithName(*child, name);
+		if (res != "")
+			return res;
 	}
 
-	void MitsubaConverter::writeBloc(std::ofstream& file, Bloc& bloc, int nIndent)
-	{
-		addElementWithAtt(file, bloc.elemType, nIndent);
-		if (bloc.type != "")
-			addAttribute(file, TYPE, bloc.type);
-		if (bloc.name != "")
-			addAttribute(file, NAME, bloc.name);
-		if (bloc.value != "")
-			addAttribute(file, VALUE, bloc.value);
+	return res;
+}
 
-		if (bloc.childs.size() == 0)
-			addEndElementWithAtt(file);
-		else
-		{
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+std::vector<std::vector<std::shared_ptr<MitsubaConverter::Bloc>>::iterator> MitsubaConverter::getSubBlocFromElemType(
+	MitsubaConverter::Bloc& bloc, const std::string& elemType)
+{
+	std::vector<std::vector<std::shared_ptr<MitsubaConverter::Bloc>>::iterator> res;
+
+	//if (bloc.elemType == elemType)
+	//	res.push_back(&bloc);
+
+	std::vector<std::shared_ptr<MitsubaConverter::Bloc>>::iterator it = bloc.childs.begin();
+	for (; it != bloc.childs.end(); ++it)
+	{
+		if (lowerCase((*it)->elemType) == elemType)
+			res.push_back(it);
+	}
+
+	return res;
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::writeBloc(std::ofstream& file, Bloc& bloc, int nIndent)
+{
+	addElementWithAtt(file, bloc.elemType, nIndent);
+	if (bloc.type != "")
+		addAttribute(file, TYPE, bloc.type);
+	if (bloc.name != "")
+		addAttribute(file, NAME, bloc.name);
+	if (bloc.value != "")
+		addAttribute(file, VALUE, bloc.value);
+
+	if (bloc.childs.size() == 0) {
+		if (bloc.textValue != "") {
 			addClosing(file);
-			for (std::shared_ptr<Bloc> child : bloc.childs)
-			{
-				writeBloc(file, *child, nIndent + 1);
-			}
-
+			file << bloc.textValue;
 			addEndElement(file, bloc.elemType, nIndent);
 		}
-	}
+		else {
+			addEndElementWithAtt(file);
+		}	
+	}	
+	else
+	{
+		addClosing(file);
+		for (std::shared_ptr<Bloc> child : bloc.childs)
+		{
+			writeBloc(file, *child, nIndent + 1);
+		}
 
-	void MitsubaConverter::addAttribute(std::ofstream& file, const std::string& name, const std::string& value) {
-		file << " " + name + "=\"" + value + "\"";
+		addEndElement(file, bloc.elemType, nIndent);
 	}
+}
 
-	void MitsubaConverter::addElement(std::ofstream& file, const std::string& element, int nIndent) {
-		for (int i = 0; i < nIndent; i++)
-			file << "\t";
-		file << "<" + element + ">\n";
-	}
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::addAttribute(std::ofstream& file, const std::string& name, const std::string& value) {
+	file << " " + name + "=\"" + value + "\"";
+}
 
-	void MitsubaConverter::addEndElement(std::ofstream& file, const std::string& element, int nIndent) {
-		for (int i = 0; i < nIndent; i++)
-			file << "\t";
-		file << "</" + element + ">\n";
-	}
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::addElement(std::ofstream& file, const std::string& element, int nIndent) {
+	for (int i = 0; i < nIndent; i++)
+		file << "\t";
+	file << "<" + element + ">\n";
+}
 
-	void MitsubaConverter::addElementWithAtt(std::ofstream& file, const std::string& element, int nIndent) {
-		for (int i = 0; i < nIndent; i++)
-			file << "\t";
-		file << "<" + element;// +" ";
-	}
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::addEndElement(std::ofstream& file, const std::string& element, int nIndent) {
+	for (int i = 0; i < nIndent; i++)
+		file << "\t";
+	file << "</" + element + ">\n";
+}
 
-	void MitsubaConverter::addEndElementWithAtt(std::ofstream& file) {
-		file << "/>\n";
-	}
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::addElementWithAtt(std::ofstream& file, const std::string& element, int nIndent) {
+	for (int i = 0; i < nIndent; i++)
+		file << "\t";
+	file << "<" + element;// +" ";
+}
 
-	void MitsubaConverter::addClosing(std::ofstream& file) {
-		file << ">\n";
-	}
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::addEndElementWithAtt(std::ofstream& file) {
+	file << "/>\n";
+}
 
-	void MitsubaConverter::writeHeader(std::ofstream& file) {
-		file << "<?xml version='1.0' encoding='utf-8'?>\n";
-		file << "\n";
-	}
-	
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::addClosing(std::ofstream& file) {
+	file << ">\n";
+}
+
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
+void MitsubaConverter::writeHeader(std::ofstream& file) {
+	file << "<?xml version='1.0' encoding='utf-8'?>\n";
+	file << "\n";
+}
+
 
 
 
