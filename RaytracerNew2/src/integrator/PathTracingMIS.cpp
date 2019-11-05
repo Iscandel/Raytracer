@@ -89,7 +89,8 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 
 					Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 					Vector3d localWo = intersection.toLocal(-ray.direction());
-					real cosTheta = DifferentialGeometry::cosTheta(localWi);
+					//Take abs value of cos(theta) as Two sides BSDF lead to a negative cos
+					real cosTheta = std::abs(DifferentialGeometry::cosTheta(localWi));
 
 					BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 					bsdfInfos.uv = intersection.myUv; //
@@ -123,7 +124,7 @@ Color PathTracingMIS::li(Scene & scene, Sampler::ptr sampler, const Ray & _ray, 
 			{
 				Vector3d localWi = intersection.toLocal(lightInfos.interToLight);
 				Vector3d localWo = intersection.toLocal(-ray.direction());
-				real cosTheta = DifferentialGeometry::cosTheta(localWi);
+				real cosTheta = std::abs(DifferentialGeometry::cosTheta(localWi));
 
 				BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
 				bsdfInfos.uv = intersection.myUv;
