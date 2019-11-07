@@ -1,5 +1,6 @@
 #pragma once
 
+#include "tools/Common.h"
 #include "core/Parameters.h"
 
 #include "ext/tinyxml/tinyxml.h"
@@ -11,6 +12,11 @@
 
 class MitsubaConverter
 {
+public:
+	//NB: case independant maps
+	typedef std::map < std::string, std::string, Ci_less> MapDictionary;
+	typedef std::map < std::string, std::map < std::string, std::string, Ci_less >, Ci_less> MapDictionaryByElement;
+
 public:
 	struct Bloc {
 		std::string elemType;
@@ -61,7 +67,7 @@ protected:
 	std::string getValueWithName(const Bloc& bloc, const std::string& value);
 	std::vector<std::vector<std::shared_ptr<Bloc>>::iterator> getSubBlocFromElemType(Bloc& bloc, const std::string& elemType);
 
-	std::string findFromDictionary(std::map<std::string, std::string>& map, 
+	std::string findFromDictionary(MapDictionary& map,
 		const std::string& key, const std::string msg = "");
 
 	void handleAndCorrectSensor(Bloc& bloc);
@@ -114,11 +120,12 @@ protected:
 	std::string _DIFFUSE;
 	std::string _ROUGH_PLASTIC;
 	
-	std::map<std::string, std::string> myDictionary;
-	std::map < std::string, std::map < std::string, std::string >> myDictionaryByBsdf;
-	std::map < std::string, std::map < std::string, std::string >> myDictionaryBySensor;
-	std::map < std::string, std::map < std::string, std::string >> myDictionaryByShape;
-	std::map < std::string, std::map < std::string, std::string >> myDictionaryByLight;
-	std::map < std::string, std::map < std::string, std::string >> myDictionaryByTexture;
+	//Case independant maps
+	MapDictionary myDictionary;
+	MapDictionaryByElement myDictionaryByBsdf;
+	MapDictionaryByElement myDictionaryBySensor;
+	MapDictionaryByElement myDictionaryByShape;
+	MapDictionaryByElement myDictionaryByLight;
+	MapDictionaryByElement myDictionaryByTexture;
 };
 

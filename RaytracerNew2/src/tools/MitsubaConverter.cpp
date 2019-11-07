@@ -37,10 +37,10 @@ MitsubaConverter::MitsubaConverter()
 	myDictionaryByBsdf["roughdiffuse"].insert(std::make_pair("reflectance", "albedo"));
 	myDictionaryByBsdf["roughdiffuse"].insert(std::make_pair("diffusereflectance", "albedo"));
 
-	myDictionaryByBsdf["smoothdielectric"].insert(std::make_pair("intIOR", "etaInt"));
-	myDictionaryByBsdf["smoothdielectric"].insert(std::make_pair("extIOR", "etaExt"));
-	myDictionaryByBsdf["smoothdielectric"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
-	myDictionaryByBsdf["smoothdielectric"].insert(std::make_pair("specularTransmittance", "transmittedTexture"));
+	myDictionaryByBsdf["dielectric"].insert(std::make_pair("intIOR", "etaInt"));
+	myDictionaryByBsdf["dielectric"].insert(std::make_pair("extIOR", "etaExt"));
+	myDictionaryByBsdf["dielectric"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
+	myDictionaryByBsdf["dielectric"].insert(std::make_pair("specularTransmittance", "transmittedTexture"));
 
 	myDictionaryByBsdf["thindielectric"].insert(std::make_pair("intIOR", "etaInt"));
 	myDictionaryByBsdf["thindielectric"].insert(std::make_pair("extIOR", "etaExt"));
@@ -57,10 +57,10 @@ MitsubaConverter::MitsubaConverter()
 	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("phong", "phong"));
 	myDictionaryByBsdf["roughdielectric"].insert(std::make_pair("ggx", "ggx"));
 
-	myDictionaryByBsdf["smoothconductor"].insert(std::make_pair("eta", "eta"));
-	myDictionaryByBsdf["smoothconductor"].insert(std::make_pair("k", "absorption"));
-	myDictionaryByBsdf["smoothconductor"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
-	myDictionaryByBsdf["smoothconductor"].insert(std::make_pair("material", "material"));
+	myDictionaryByBsdf["conductor"].insert(std::make_pair("eta", "eta"));
+	myDictionaryByBsdf["conductor"].insert(std::make_pair("k", "absorption"));
+	myDictionaryByBsdf["conductor"].insert(std::make_pair("specularReflectance", "reflectanceTexture"));
+	myDictionaryByBsdf["conductor"].insert(std::make_pair("material", "material"));
 
 	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("eta", "eta"));
 	myDictionaryByBsdf["roughconductor"].insert(std::make_pair("k", "absorption"));
@@ -333,7 +333,7 @@ void MitsubaConverter::handleElement(Bloc& bloc, TiXmlElement* element)
 		element->ValueStr() == "matrix")
 	{
 		if (attName && *attName == "filename")
-			bloc.value = "./data/living-room2/" + *attValue; //to change
+			bloc.value = "./data/bathroom2/" + *attValue; //to change
 		else
 			bloc.value = *attValue;
 	}
@@ -468,7 +468,7 @@ void MitsubaConverter::handleElement(Bloc& bloc, TiXmlElement* element)
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
-std::string MitsubaConverter::findFromDictionary(std::map<std::string, std::string>& map,
+std::string MitsubaConverter::findFromDictionary(MapDictionary& map,
 	const std::string& key, const std::string msg)
 {
 	std::string res;
