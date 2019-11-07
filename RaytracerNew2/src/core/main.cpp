@@ -125,8 +125,64 @@ void shToneMapper()
 	shader.setParameter("gamma", std::pow(2.f, (0.5f - 0.5f) * 20));
 }
 
+#define MYLIST(x)       \
+x(T_CLAMP, "clamp") \
+x(T_GAMMA,   "gamma") \
+x(T_REINHARD,   "Reinhard") \
+x(T_END,   "off") \
+
+#define USE_FIRST_ELEMENT(x, y)  x,
+#define USE_SECOND_ELEMENT(x, y) y,
+
+enum ToneMapper
+{
+	MYLIST(USE_FIRST_ELEMENT)
+};
+
+ToneMapper& operator++(ToneMapper& enumT)
+{
+	int tmp = static_cast<int>(enumT) + 1;
+	enumT = static_cast<ToneMapper>(tmp % static_cast<int>(T_END));
+	return enumT;
+}
+
+ToneMapper operator++(ToneMapper& enumT, int)
+{
+	ToneMapper tmp(enumT);
+	++enumT;
+	return tmp;
+}
+
+ToneMapper& operator--(ToneMapper& enumT)
+{
+	int tmp = static_cast<int>(enumT) - 1;
+	if (tmp < 0)
+	{
+		tmp = static_cast<int>(T_END) - 1;
+	}
+	enumT = static_cast<ToneMapper>(tmp);
+	return enumT;
+}
+
+ToneMapper operator--(ToneMapper& enumT, int)
+{
+	ToneMapper tmp(enumT);
+	--enumT;
+	return tmp;
+}
+
+std::string getToneMapperName(ToneMapper& enumT)
+{
+	static const char *STRING[] =
+	{
+		MYLIST(USE_SECOND_ELEMENT)
+	};
+
+	return STRING[static_cast<int>(enumT)];
+}
+
 // Tone mapper based on sRGB and a scale factor for adjust f-stops
-void toneMapper(Screen& film, sf::Image& out, real exposure, real gamma)
+void gammaToneMapper(Screen& film, sf::Image& out, real exposure, real gamma)
 {
 	auto toSRGB = [&](real value) {
 		if (value < 0.0031308)
@@ -162,7 +218,46 @@ void toneMapper(Screen& film, sf::Image& out, real exposure, real gamma)
 	}
 }
 
-void EXRToRGB(Screen& film, sf::Image& out)
+void globalReinhardToneMapper(Screen& film, sf::Image& out, real gamma)
+{
+	real maxLuminance = std::numeric_limits<real>::min();
+
+	for (unsigned int y = 0; y < out.getSize().y; y++)
+		for (unsigned int x = 0; x < out.getSize().x; x++)
+			maxLuminance = std::max(maxLuminance, film(x, y).luminance());
+
+	for (unsigned int y = 0; y < out.getSize().y; y++)
+	{
+		for (unsigned int x = 0; x < out.getSize().x; x++)
+		{
+			real oldLum = film(x, y).luminance();
+			float numerator = oldLum * (1.0 + (oldLum / (maxLuminance * maxLuminance)));
+			real lum = numerator / (1.0f + oldLum);
+			Color finalCol = film(x, y) * lum / oldLum;
+
+			//gamma correction
+			real r, g, b;
+			if (gamma == -1.)
+				finalCol.toSRGB(r, g, b);
+			else if (gamma != 1.) {
+				finalCol.toRGB(r, g, b);
+				real invGamma = 1. / gamma;
+				r = std::pow(r, invGamma);
+				g = std::pow(g, invGamma);
+				b = std::pow(b, invGamma);
+			}
+			else
+				finalCol.toRGB(r, g, b);
+
+			//finalCol.toRGB(r, g, b);
+			out.setPixel(x, y, sf::Color((sf::Uint8)math::thresholding(r * 255, (real) 0., (real) 255.),
+				(sf::Uint8)math::thresholding(g * 255, (real) 0., (real) 255.),
+				(sf::Uint8)math::thresholding(b * 255, (real) 0., (real) 255.)));
+		}
+	}
+}
+
+void EXRToClampedRGB(Screen& film, sf::Image& out)
 {
 	for (unsigned int y = 0; y < out.getSize().y; y++)
 	{
@@ -178,15 +273,19 @@ void EXRToRGB(Screen& film, sf::Image& out)
 	}
 }
 
-void applyProcessing(bool toneMap, Screen& filmOrig, sf::Image& image, real exposure)
+void applyProcessing(ToneMapper toneMap, Screen& filmOrig, sf::Image& image, real exposure)
 {
-	if (toneMap)
+	if (toneMap == T_CLAMP)
 	{
-		toneMapper(filmOrig, image, exposure, -1.);
+		EXRToClampedRGB(filmOrig, image);
+	}
+	else if(toneMap == T_GAMMA)
+	{
+		gammaToneMapper(filmOrig, image, exposure, -1.);
 	}
 	else
 	{
-		EXRToRGB(filmOrig, image);
+		globalReinhardToneMapper(filmOrig, image, -1);
 	}
 }
 
@@ -264,117 +363,6 @@ protected:
 	bool myIsShown;
 };
 
-class Col2
-{
-	float a; 
-	float b;
-	float c;
-	float d;
-	int e;
-};
-
-template<class T>
-class Col : public Eigen::Array<T, 5, 1>/*public DiscreteSpectrum,*/ //public Eigen::Array<T, DiscreteSpectrum::NB_SAMPLES + 1, 1>//Color3<T>::nbSamples, 1>
-{
-protected:
-	//#ifdef USE_ALIGN
-	//	static constexpr int ALIGNED_SAMPLES = 4;//DiscreteSpectrum::NB_SAMPLES + 1;
-	//#else
-	//	static constexpr int ALIGNED_SAMPLES = 3;//DiscreteSpectrum::NB_SAMPLES;
-	//#endif
-
-//public:
-//	explicit Col(T val = 0.)
-//		:r(coeffRef(0))
-//		, g(coeffRef(1))
-//		, b(coeffRef(2))
-//	{
-//		Eigen::Array<T, 4, 1>::setConstant(val);
-//	}
-//
-//	Color3(T x, T y, T z, T w = (T)0)
-//		: Eigen::Array<T, 4, 1>(x, y, z, w)
-//		, r(coeffRef(0))
-//		, g(coeffRef(1))
-//		, b(coeffRef(2))
-//	{
-//	}
-//
-//	Col(const Color3<T>& c)
-//		:r(coeffRef(0))
-//		, g(coeffRef(1))
-//		, b(coeffRef(2))
-//	{
-//		r = c.r;
-//		g = c.g;
-//		b = c.b;
-//	}
-//
-//	Color3& operator = (const Color3<T>& c) {
-//		coeffRef(0) = c.coeff(0);
-//		coeffRef(1) = c.coeff(1);
-//		coeffRef(2) = c.coeff(2);
-//
-//		return *this;
-//	}
-//
-//	template <typename Derived> Color3(const Eigen::ArrayBase<Derived>& p)
-//		: Eigen::Array<T, 4, 1>(p)
-//		, r(coeffRef(0))
-//		, g(coeffRef(1))
-//		, b(coeffRef(2))
-//	{ }
-//
-//	template <typename Derived> Color3 &operator=(const Eigen::ArrayBase<Derived>& p) {
-//		this->Base::operator=(p);
-//		return *this;
-//	}
-//
-//	void validate()
-//	{
-//		r = r > 1.f ? 1.f : r < 0. ? 0.f : r;
-//		g = g > 1.f ? 1.f : g < 0. ? 0.f : g;
-//		b = b > 1.f ? 1.f : b < 0. ? 0.f : b;
-//	}
-//
-//	T average() const
-//	{
-//		return (r + b + g) / (T)3.;
-//	}
-//
-//	T max()
-//	{
-//		return std::max(r, std::max(g, b));
-//	}
-//
-//	T luminance() const
-//	{
-//		return 0.2126f * r + 0.7152f * g + 0.0722f *b;
-//	}
-//
-//	bool isZero() const
-//	{
-//#ifdef DOUBLE_PRECISION
-//		const priv::real eps = 1e-9;
-//#else
-//		const priv::real eps = 1e-5f;
-//#endif
-//		return r < eps && g < eps && b < eps;
-//	}
-//
-	//bool isNan() const
-	//{
-	//	if (std::isnan(r) || std::isnan(g) || std::isnan(b))
-	//		return true;
-	//	return false;
-	//}
-
-	//T& r;
-	//T& g;
-	//T& b;
-};
-
-
 
 int main(int argc, char* argv[])
 {
@@ -447,10 +435,10 @@ int main(int argc, char* argv[])
 #include "tools/MitsubaConverter.h"
 void run(int argc, char* argv[])
 {
-	std::string fileIn = "./livingRoom.xml";
+	std::string fileIn = "./bathroom.xml";
 	std::string fileOut = "./testConversion.xml";
 	MitsubaConverter converter;
-	//converter.convert(fileIn, fileOut);
+	converter.convert(fileIn, fileOut);
 	std::string filePath;
 	if (argc > 1)
 	{
@@ -523,7 +511,7 @@ void run(int argc, char* argv[])
 	//Array2D<Pixel> film = filmOrig.getPixels();
 	filmOrig.postProcessColor();
 
-	bool toneMap = false;
+	ToneMapper toneMap = T_CLAMP;
 	real exposure = real(0.5);//std::pow(2.f, (0.5f - 0.5f) * 20);
 
 	applyProcessing(toneMap, filmOrig, image, exposure);
@@ -574,17 +562,17 @@ void run(int argc, char* argv[])
 			{
 				if (ev.key.code == sf::Keyboard::T)
 				{
-					toneMap = !toneMap;
+					toneMap++;
 
 					applyProcessing(toneMap, filmOrig, image, exposure);
 
 					texture.loadFromImage(image);
 					sp.setTexture(texture);
 
-					if (toneMap)
-						toneMapText.setText("Tone map ON");
-					else
-						toneMapText.setText("Tone map OFF");
+					//if (toneMap)
+						toneMapText.setText("Tone map " + getToneMapperName(toneMap));
+					//else
+					//	toneMapText.setText("Tone map OFF");
 				}
 				else if (ev.key.code == sf::Keyboard::Return)
 				{
@@ -635,6 +623,9 @@ void run(int argc, char* argv[])
 		window.display();
 	}
 }
+
+#undef USE_FIRST_ELEMENT
+#undef USE_SECOND_ELEMENT
 
 
 /*
