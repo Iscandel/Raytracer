@@ -121,6 +121,8 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 	VertexMap vertexMap;
 
 	int meshIndex = -1;
+	bool nameIsGivenAfter = false;
+	std::string materialName;
 
 	std::string line;
 	while (std::getline(is, line))
@@ -197,7 +199,7 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 		{
 			meshIndex++;
 		}
-		else if (type == "mtllib" && useMtl)
+		else if (type == "mtllib" && useMtl && myBSDFByName.size() == 0)
 		{
 			std::string mtlPath = tools::trim(line.substr(6, line.size() - 1));
 			Filesystem tmp;
@@ -211,10 +213,27 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 			//Assume usemtl is given after geometry and before faces
 			//myNewMtlIndice = (int)vertices.size();
 
-			std::string mtlName = tools::trim(line.substr(6, line.size() - 1));
-
-			BSDF::ptr bsdf = myBSDFByName[mtlName];
-			BSDFAndTriangleIndexTimes3->push_back(std::make_pair(meshIndex * 3, bsdf));
+			//If name is given ater geometry
+			if (meshIndex == -1) {
+				nameIsGivenAfter = true;
+				materialName = tools::trim(line.substr(6, line.size() - 1));
+			}
+			else
+			{
+				if (nameIsGivenAfter) {
+					BSDF::ptr bsdf = myBSDFByName[materialName];
+					int index = int(indices.size());
+					BSDFAndTriangleIndexTimes3->push_back(std::make_pair(index, bsdf));
+					materialName = tools::trim(line.substr(6, line.size() - 1));
+				}
+				else {
+					materialName = tools::trim(line.substr(6, line.size() - 1));
+					BSDF::ptr bsdf = myBSDFByName[materialName];
+					int index = int(indices.size());
+					BSDFAndTriangleIndexTimes3->push_back(std::make_pair(index, bsdf));
+				}
+			}
+		
 			//myBSDFByMeshIndex[]
 			//meshIndex++;
 			//myLastMtlIndice = myNewMtlIndice;
@@ -253,6 +272,12 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 
 			UVs[i] = tmpTextcoords[vertices[i].indUV - 1];
 		}
+	}
+
+	if (nameIsGivenAfter) {
+		BSDF::ptr bsdf = myBSDFByName[materialName];
+		int index = int(indices.size());
+		BSDFAndTriangleIndexTimes3->push_back(std::make_pair(index, bsdf));
 	}
 
 	return true;

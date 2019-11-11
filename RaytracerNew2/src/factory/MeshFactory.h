@@ -78,14 +78,22 @@ public:
 
 			BSDF::ptr affectedBSDF = bsdf;
 
-			if (BSDFAndTriangleIndexTimes3.size() > 0)
+			if (BSDFAndTriangleIndexTimes3.size() > 0) {
 				if (i <= BSDFAndTriangleIndexTimes3[0].first) {
 					affectedBSDF = BSDFAndTriangleIndexTimes3[0].second;
-					if (i == BSDFAndTriangleIndexTimes3[0].first)
-						BSDFAndTriangleIndexTimes3.erase(BSDFAndTriangleIndexTimes3.begin());
 				}
+				if (i >= BSDFAndTriangleIndexTimes3[0].first)
+					BSDFAndTriangleIndexTimes3.erase(BSDFAndTriangleIndexTimes3.begin());
+			}
+
+			if (affectedBSDF == bsdf) {
+				std::cout << "not affected" << std::endl;
+				std::cout << i << " " << (BSDFAndTriangleIndexTimes3.size() > 0 ? BSDFAndTriangleIndexTimes3[0].first : -1) << std::endl;
+				if (BSDFAndTriangleIndexTimes3.size() > 0)
+					affectedBSDF = BSDFAndTriangleIndexTimes3[0].second;
+			}
 			
-			IPrimitive::ptr triPrimitive(std::make_shared<SimplePrimitive>(shape, bsdf, bssrdf, interiorMedium, exteriorMedium));
+			IPrimitive::ptr triPrimitive(std::make_shared<SimplePrimitive>(shape, affectedBSDF, bssrdf, interiorMedium, exteriorMedium));
 			if (light)
 			{
 				mesh->addLightTriangle(shape);
