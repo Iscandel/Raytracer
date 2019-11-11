@@ -1,5 +1,6 @@
 #pragma once
 #include "core/Color.h"
+#include "tools/Filesystem.h"
 
 #include <map>
 
@@ -44,3 +45,6 @@ protected:
 
 	static std::map<std::string, std::string> TechNameFromConvenientName;
 };
+
+
+Filesystem& getGlobalFileSystem();

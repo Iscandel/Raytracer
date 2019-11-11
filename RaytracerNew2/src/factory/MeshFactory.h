@@ -44,12 +44,13 @@ public:
 		std::vector<Normal3d, Eigen::aligned_allocator<Normal3d>> normals;
 		std::vector<Point2d, Eigen::aligned_allocator<Point2d>> UVs;
 		std::vector<int> indices;
+		std::vector<std::pair<int, BSDF::ptr>> BSDFAndTriangleIndexTimes3;
 
 		std::vector<IPrimitive::ptr> triangles;
 
 		//const IMeshLoader& loader = IMeshLoader::getLoader(params);
 		ObjLoader loader;
-		if (!loader.read(vertices, normals, UVs, indices, params))
+		if (!loader.read(vertices, normals, UVs, indices, params, &BSDFAndTriangleIndexTimes3))
 		{
 			ILogger::log(ILogger::ERRORS) << "Unexpected error while loading mesh file.\n";
 			return nullptr;
@@ -74,6 +75,15 @@ public:
 		for (unsigned int i = 0; i < indices.size(); i += 3)
 		{
 			GeometricShape::ptr shape = std::shared_ptr<Triangle>(new Triangle(params, mesh, i));
+
+			BSDF::ptr affectedBSDF = bsdf;
+
+			if (BSDFAndTriangleIndexTimes3.size() > 0)
+				if (i <= BSDFAndTriangleIndexTimes3[0].first) {
+					affectedBSDF = BSDFAndTriangleIndexTimes3[0].second;
+					if (i == BSDFAndTriangleIndexTimes3[0].first)
+						BSDFAndTriangleIndexTimes3.erase(BSDFAndTriangleIndexTimes3.begin());
+				}
 			
 			IPrimitive::ptr triPrimitive(std::make_shared<SimplePrimitive>(shape, bsdf, bssrdf, interiorMedium, exteriorMedium));
 			if (light)

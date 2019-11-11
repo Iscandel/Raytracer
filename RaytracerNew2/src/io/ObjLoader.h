@@ -27,6 +27,18 @@ public:
 		std::vector<Normal3d, Eigen::aligned_allocator<Normal3d>>& normals,
 		std::vector<Point2d, Eigen::aligned_allocator<Point2d>>& UVs,
 		std::vector<int>& indices, 
-		const Parameters& params) override;
+		const Parameters& params,
+		std::vector<std::pair<int, BSDF::ptr>>* BSDFAndTriangleIndexTimes3) override;
+
+protected:
+	void addBSDF(std::map<std::string, BSDF::ptr>& map,
+		const std::string& name, int illum, real Ns, real Ni,
+		Texture::ptr d, Texture::ptr Kd, Texture::ptr Ks, Texture::ptr bumpMap);
+
+	std::map<std::string, BSDF::ptr> parseMtl(const std::string& path);
+
+protected:
+	std::map<std::string, BSDF::ptr> myBSDFByName;
+	//std::vector<std::pair<int, BSDF::ptr>> myBSDFAndTriangleIndexTimes3;
 };
 

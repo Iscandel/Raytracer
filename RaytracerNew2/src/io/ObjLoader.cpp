@@ -1,8 +1,21 @@
 #include "ObjLoader.h"
 
+#include "core/Transform.h"
+
+#include "tools/Common.h"
 #include "tools/Logger.h"
 #include "tools/Tools.h"
-#include "core/Transform.h"
+
+#include "bsdf/AlphaBSDF.h"
+#include "bsdf/BumpMapping.h"
+#include "bsdf/Conductor.h"
+#include "bsdf/Diffuse.h"
+#include "bsdf/Dielectric.h"
+#include "bsdf/Phong.h"
+#include "bsdf/TwoSides.h"
+#include "texture/ConstantTexture.h"
+#include "texture/ImageTexture.h"
+
 
 #include <fstream>
 #include <unordered_map>
@@ -80,13 +93,16 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 					 std::vector<Normal3d, Eigen::aligned_allocator<Normal3d>>& normals,
 					 std::vector<Point2d, Eigen::aligned_allocator<Point2d>>& UVs,
 					 std::vector<int>& indices, 
-					 const Parameters& params)
+					 const Parameters& params, 
+					 std::vector<std::pair<int, BSDF::ptr>>* BSDFAndTriangleIndexTimes3)
 {
 	typedef std::unordered_map<VertexObj, uint32_t, VertexObjHash> VertexMap;
 
+	bool useMtl = params.getBool("useMtl", false);
+
 	Transform::ptr transform = params.getTransform("toWorld", std::shared_ptr<Transform>(new Transform));
 
-	std::string filename = params.getString("path", "");
+	std::string filename = ::getGlobalFileSystem().resolve(params.getString("path", "")).string();
 
 	ILogger::log(ILogger::ALL) << "Loading " << filename << "\n";
 
@@ -103,6 +119,8 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 	std::vector<VertexObj, Eigen::aligned_allocator<VertexObj>> vertices;
 	//std::vector<int> indices;
 	VertexMap vertexMap;
+
+	int meshIndex = -1;
 
 	std::string line;
 	while (std::getline(is, line))
@@ -175,6 +193,32 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 				}
 			}
 		}
+		else if (type == "g" && useMtl)
+		{
+			meshIndex++;
+		}
+		else if (type == "mtllib" && useMtl)
+		{
+			std::string mtlPath = tools::trim(line.substr(6, line.size() - 1));
+			Filesystem tmp;
+			std::experimental::filesystem::path f(filename);
+			tmp.addSearchPath(f.parent_path());
+			mtlPath = tmp.resolve(mtlPath).string();
+			myBSDFByName = parseMtl(mtlPath);
+		}
+		else if (type == "usemtl" && useMtl && BSDFAndTriangleIndexTimes3)
+		{
+			//Assume usemtl is given after geometry and before faces
+			//myNewMtlIndice = (int)vertices.size();
+
+			std::string mtlName = tools::trim(line.substr(6, line.size() - 1));
+
+			BSDF::ptr bsdf = myBSDFByName[mtlName];
+			BSDFAndTriangleIndexTimes3->push_back(std::make_pair(meshIndex * 3, bsdf));
+			//myBSDFByMeshIndex[]
+			//meshIndex++;
+			//myLastMtlIndice = myNewMtlIndice;
+		}
 	}
 
 	positions.resize(vertices.size());
@@ -212,4 +256,159 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 	}
 
 	return true;
+}
+
+std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
+{
+	std::map<std::string, BSDF::ptr> res;
+
+	std::ifstream is(path);
+	if (is.fail())
+	{
+		ILogger::log(ILogger::ERRORS) << "Mtl file " << path << " cannot be open.\n";
+		return res;
+	}
+
+	std::string currentName;
+	std::string line;
+	
+	int illum = 0;
+	real Ns = 0, Ni = 0;
+	Texture::ptr d, Kd, Ks, bumpMap;
+
+	while (std::getline(is, line))
+	{
+		line = tools::trim(line);
+		std::istringstream sLine(line);
+
+		std::string type;
+		sLine >> type;
+
+		if (type == "newmtl") {
+			if (currentName != "")
+			{
+				addBSDF(res, currentName, illum, Ns, Ni, d, Kd, Ks, bumpMap);
+			}
+			currentName = tools::trim(line.substr(6, line.size() - 1));
+
+		}
+		else if (type == "Ns")
+		{
+			sLine >> Ns;
+		}
+		else if (type == "Ni")
+		{
+			sLine >> Ni;
+		}
+		else if (type == "d")
+		{
+			Color3 dCol;
+			sLine >> dCol.r() >> dCol.g() >> dCol.b();
+			d = Texture::ptr(new ConstantTexture(dCol));
+		}
+		else if (type == "Tr")
+		{
+		}
+		else if (type == "Tf")
+		{
+		}
+		else if (type == "illum")
+		{
+			sLine >> illum;
+		}
+		else if (type == "Kd")
+		{
+			Color3 KdCol;
+			sLine >> KdCol.r() >> KdCol.g() >> KdCol.b();
+			Kd = Texture::ptr(new ConstantTexture(KdCol));
+		}
+		else if (type == "Ks")
+		{
+			Color3 KsCol;
+			sLine >> KsCol.r() >> KsCol.g() >> KsCol.b();
+			Ks = Texture::ptr(new ConstantTexture(KsCol));
+		}
+		else if (type == "map_Kd")
+		{
+			std::string path = tools::trim(line.substr(std::string("map_Kd").size(), line.size() - 1));
+			Parameters p;
+			p.addString("path", ::getGlobalFileSystem().resolve(path).string());
+		
+			Kd = Texture::ptr(new ImageTexture(p));
+		}
+		else if (type == "bump")
+		{
+			std::string bumpPath = tools::trim(line.substr(std::string("bump").size(), line.size() - 1));
+			Parameters p;
+			p.addString("path", ::getGlobalFileSystem().resolve(bumpPath).string());
+			p.addReal("gamma", 1.);
+
+			bumpMap = Texture::ptr(new ImageTexture(p));		
+		}
+	}
+
+	addBSDF(res, currentName, illum, Ns, Ni, d, Kd, Ks, bumpMap);
+
+	return res;
+}
+
+void ObjLoader::addBSDF(std::map<std::string, BSDF::ptr>& map, 
+	const std::string& name, int illum, real Ns, real Ni, Texture::ptr d, 
+	Texture::ptr Kd, Texture::ptr Ks, Texture::ptr bumpMap)
+{
+	Parameters p;
+	BSDF::ptr bsdf;
+
+	if (illum == 2)
+	{
+		p.addTexture("kd", Kd);
+		p.addTexture("ks", Ks);
+		p.addReal("alpha", Ns);
+		bsdf = BSDF::ptr(new Phong(p));
+	}
+	else if (illum == 4 || illum == 6 || illum == 7 || illum == 9)
+	{
+		bsdf = BSDF::ptr(new Dielectric(p));
+
+	}
+	else if (illum == 5 || illum == 8)
+	{
+		p.addString("material", "silver");
+		bsdf = BSDF::ptr(new Conductor(p));
+	}
+	else
+	{
+		bsdf = BSDF::ptr(new Diffuse(p));
+	}
+
+	if (bumpMap != nullptr)
+	{
+		Parameters bumpParams;
+		bumpParams.addBSDF("bsdf", bsdf);
+		bumpParams.addTexture("bumpMap", bumpMap);
+		
+		BSDF::ptr bump(new BumpMapping(bumpParams));
+		bsdf = bump;
+	}
+
+	if (d != nullptr)
+	{
+		Parameters alphaParams;
+		alphaParams.addBSDF("bsdf", bsdf);
+		alphaParams.addTexture("alpha", d);
+
+		BSDF::ptr bump(new AlphaBSDF(alphaParams));
+		bsdf = bump;
+	}
+
+	if (illum != 4 && illum != 6 && illum != 7 && illum != 9)
+	{
+		Parameters twoSidesParams;
+		twoSidesParams.addBSDF("bsdf", bsdf);
+
+		BSDF::ptr twoSides(new TwoSides(twoSidesParams));
+		bsdf = twoSides;
+	}
+
+	map[name] = bsdf;
 }

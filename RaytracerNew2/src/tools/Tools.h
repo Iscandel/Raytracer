@@ -308,6 +308,13 @@ Vect3<T> stringToVector(const std::string& string)
 //	return (rand() / (real) RAND_MAX) * (max - min) + min;
 //}
 
+inline std::string trim(const std::string& s)
+{
+	int first = s.find_first_not_of(" \t\r\n");
+	int end = s.find_last_not_of(" \t\r\n");
+	return s.substr(first == std::string::npos ? 0 : first, end == std::string::npos ? s.size() : end + 1);
+}
+
 inline std::string getExtension(const std::string& s)
 {
 	size_t index = s.find_last_of('.');

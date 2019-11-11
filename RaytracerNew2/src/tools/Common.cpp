@@ -35,6 +35,12 @@ int getCoreNumber()
 	#endif
 }
 
+Filesystem& getGlobalFileSystem()
+{
+	static Filesystem fs;
+	return fs;
+}
+
 void IORHelper::initMap()
 {
 	TechNameFromConvenientName["gold"] = "Au";
@@ -76,7 +82,7 @@ void IORHelper::evalConductorIOR(const Parameters & params, Color & eta, Color &
 
 void IORHelper::extractAndConvertSpectrumFromFile(const std::string & path, Color & values)
 {
-	std::ifstream file(path);
+	std::ifstream file(::getGlobalFileSystem().resolve(path).string());
 
 	if (!file)
 		ILogger::log(ILogger::ERRORS) << "Spectrum file " + path + " does not exist.\n";

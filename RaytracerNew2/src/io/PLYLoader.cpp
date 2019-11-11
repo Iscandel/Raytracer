@@ -56,11 +56,12 @@ bool PLYLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& ve
 	std::vector<Normal3d, Eigen::aligned_allocator<Normal3d>>& normals, 
 	std::vector<Point2d, Eigen::aligned_allocator<Point2d>>& UVs, 
 	std::vector<int>& indices, 
-	const Parameters & params)
+	const Parameters & params,
+	std::vector<std::pair<int, BSDF::ptr>>* BSDFAndTriangleIndexTimes3)
 {
 	Transform::ptr transform = params.getTransform("toWorld", std::shared_ptr<Transform>(new Transform));
 
-	std::string filename = params.getString("path", "");
+	std::string filename = ::getGlobalFileSystem().resolve(params.getString("path", "")).string();
 
 	ILogger::log(ILogger::ALL) << "Loading " << filename << "\n";
 

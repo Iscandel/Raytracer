@@ -28,8 +28,9 @@ ImageLoader::~ImageLoader()
 {
 }
 
-void ImageLoader::load(const std::string & path, Array2D<Color3>& array, real gammaFrom, real gammaDest)
+void ImageLoader::load(const std::string & _path, Array2D<Color3>& array, real gammaFrom, real gammaDest)
 {
+	std::string path = getGlobalFileSystem().resolve(_path).string();
 	CacheMap::iterator it = myCache.find(path);
 	if (it != myCache.end())
 	{

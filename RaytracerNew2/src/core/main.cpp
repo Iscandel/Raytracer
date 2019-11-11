@@ -181,7 +181,7 @@ std::string getToneMapperName(ToneMapper& enumT)
 	return STRING[static_cast<int>(enumT)];
 }
 
-// Tone mapper based on sRGB and a scale factor for adjust f-stops
+// Tone mapper based on sRGB and a scale factor to adjust f-stops
 void gammaToneMapper(Screen& film, sf::Image& out, real exposure, real gamma)
 {
 	auto toSRGB = [&](real value) {
@@ -437,8 +437,8 @@ void run(int argc, char* argv[])
 {
 	std::string fileIn = "./bathroom.xml";
 	std::string fileOut = "./testConversion.xml";
-	MitsubaConverter converter;
-	converter.convert(fileIn, fileOut);
+	//MitsubaConverter converter;
+	//converter.convert(fileIn, fileOut);
 	std::string filePath;
 	if (argc > 1)
 	{

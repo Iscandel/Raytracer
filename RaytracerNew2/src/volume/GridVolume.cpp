@@ -1,12 +1,13 @@
 #include "GridVolume.h"
 
+#include "tools/Common.h"
 #include "factory/ObjectFactoryManager.h"
 
 
 GridVolume::GridVolume(const Parameters& params)
 :Volume(params)
 {
-	std::string path = params.getString("path", "");
+	std::string path = ::getGlobalFileSystem().resolve(params.getString("path", "")).string();
 
 	std::ifstream file(path, std::ios::binary);
 

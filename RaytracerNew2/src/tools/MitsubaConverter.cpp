@@ -108,6 +108,9 @@ MitsubaConverter::MitsubaConverter()
 	//myDictionaryByTexture["bitmap"].insert(std::make_pair("wrapMode", "boundaryCondition"));
 	myDictionaryByTexture["bitmap"].insert(std::make_pair("gamma", "gamma"));
 
+	myDictionary["id"] = "id";
+	myDictionary["ref"] = "ref";
+
 	myDictionary["rgb"] = "color";
 	myDictionary["spectrum"] = "color";
 	myDictionary["integer"] = "integer";

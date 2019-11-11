@@ -2,6 +2,7 @@
 
 #include "BSDF.h"
 #include "core/Parameters.h"
+#include "texture/Texture.h"
 
 class Phong : public BSDF
 {
@@ -16,11 +17,10 @@ public:
 	real pdf(const BSDFSamplingInfos& infos);
 
 protected:
-	real myKd;
-	real myKs;
-	real myAlpha;
+	Texture::ptr myKd;
+	Texture::ptr myKs;
+	real myN;
 	real myR;
-
-	Color myAlbedo;
+	real mySamplingWeight;
 };
 
