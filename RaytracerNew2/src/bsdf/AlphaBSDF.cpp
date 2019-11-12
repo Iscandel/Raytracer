@@ -25,31 +25,32 @@ AlphaBSDF::~AlphaBSDF()
 
 Color AlphaBSDF::eval(const BSDFSamplingInfos& infos)
 {
-	return myBSDF->eval(infos) * myAlphaMap->eval(infos.uv).average();
+	return myBSDF->eval(infos) * myAlphaMap->eval(infos.uv);
 }
 
-Color AlphaBSDF::sample(BSDFSamplingInfos& infos, const Point2d& sample)
+Color AlphaBSDF::sample(BSDFSamplingInfos& infos, const Point2d& _sample)
 {
-	real probaPassThrough = myAlphaMap->eval(infos.uv).average();
-	if (sample.x() < probaPassThrough)
+	Point2d sample(_sample);
+	real probaBeingBlocked = myAlphaMap->eval(infos.uv).average();
+	if (sample.x() < probaBeingBlocked)
 	{
-		infos.wo = -infos.wi;
-		infos.pdf = probaPassThrough;
-		return Color(probaPassThrough);
+		sample.x() /= probaBeingBlocked;
+		real pdfAlpha = probaBeingBlocked;
+		Color res = myBSDF->sample(infos, sample);// / pdfAlpha;
+		infos.pdf *= pdfAlpha;
+		return res;
 	}
 	else
 	{
-		real pdfAlpha = 1. - probaPassThrough;
-		Color res = myBSDF->sample(infos, sample) / pdfAlpha;
-		infos.pdf *= pdfAlpha;
-
-		return res;
+		infos.wo = -infos.wi;
+		infos.pdf = 1. - probaBeingBlocked;
+		return Color(1.) - myBSDF->eval(infos);//1- (eval / pdf) 
 	}
 }
 
 real AlphaBSDF::pdf(const BSDFSamplingInfos& infos)
 {
-	return myAlphaMap->eval(infos.uv).average();
+	return myBSDF->pdf(infos) * myAlphaMap->eval(infos.uv).average();
 }
 
 RT_REGISTER_TYPE(AlphaBSDF, BSDF)

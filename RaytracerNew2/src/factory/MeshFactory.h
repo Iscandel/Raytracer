@@ -87,8 +87,8 @@ public:
 			}
 
 			if (affectedBSDF == bsdf) {
-				std::cout << "not affected" << std::endl;
-				std::cout << i << " " << (BSDFAndTriangleIndexTimes3.size() > 0 ? BSDFAndTriangleIndexTimes3[0].first : -1) << std::endl;
+				//std::cout << "not affected" << std::endl;
+				//std::cout << i << " " << (BSDFAndTriangleIndexTimes3.size() > 0 ? BSDFAndTriangleIndexTimes3[0].first : -1) << std::endl;
 				if (BSDFAndTriangleIndexTimes3.size() > 0)
 					affectedBSDF = BSDFAndTriangleIndexTimes3[0].second;
 			}
