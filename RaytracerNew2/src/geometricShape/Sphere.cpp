@@ -114,8 +114,28 @@ bool Sphere::intersection(const Ray& ray, real& t, Point2d& uv) //DifferentialGe
 ///////////////////////////////////////////////////////////////////////////////
 void Sphere::getDifferentialGeometry(DifferentialGeometry & trueGeometry, DifferentialGeometry & shadingGeometry, Intersection & inter)
 {
+	Point3d localInterPoint = myObjectToWorld->inv().transform(inter.myPoint); //like a vector centered to the origin
+
 	trueGeometry = DifferentialGeometry(myObjectToWorld->transform(normal(inter.myPoint)));
+	
+	//dpx / du = d(r sinPhi sinTheta)
+	//-> dpx / du = r sinTheta d/du(sinPhi)
+	//-> dpx / du = r sinTheta cos phi
+	//-> dpx / du = -z, as (z = -r cosPhi sinTheta in cartesian mapping)
+	//and so on...
+	Vector3d dpdu(-localInterPoint.z(), real(0.), localInterPoint.x());
+	real theta = sphericalThetaFromCartesian(localInterPoint);
+	real phi = sphericalPhiFromCartesian(localInterPoint);
+	real sinPhi = std::sin(phi);
+	real cosPhi = std::cos(phi);
+	real sinTheta = std::sin(theta);
+	Vector3d dpdv(sinPhi * localInterPoint.y(), -myRadius * sinTheta, -cosPhi * localInterPoint.y());
+	trueGeometry.dpdu = myObjectToWorld->transform(dpdu);
+	trueGeometry.dpdv = myObjectToWorld->transform(dpdv);
+
 	shadingGeometry = trueGeometry;
+	
+
 }
 
 //=============================================================================

@@ -85,6 +85,11 @@ void Plane::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 	DifferentialGeometry& shadingGeometry, Intersection& inter)
 {
 	trueGeometry = DifferentialGeometry(myObjectToWorld->transform(normal(inter.myPoint)));
+	Vector3d dpdu(1., 0, 0);
+	Vector3d dpdv(0, 1, 0);
+	trueGeometry.dpdu = myObjectToWorld->transform(dpdu);
+	trueGeometry.dpdv = myObjectToWorld->transform(dpdv);
+
 	shadingGeometry = trueGeometry;
 }
 

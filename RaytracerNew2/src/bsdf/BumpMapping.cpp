@@ -1,10 +1,16 @@
 #include "BumpMapping.h"
 
+#include "bsdf/Diffuse.h"
 #include "factory/ObjectFactoryManager.h"
+#include "texture/ConstantTexture.h"
 
 BumpMapping::BumpMapping(const Parameters& params)
 :BSDF(params)
 {
+	//Don't forget to put gamma == 1 in the scene file for the texture... !!!!!!!!!!!!!
+
+	myBumpMap = params.getTexture("bumpMap", Texture::ptr(new ConstantTexture(Color(0.))));
+	myBSDF = params.getBSDF("bsdf", BSDF::ptr(new Diffuse(Parameters())));
 }
 
 
@@ -14,13 +20,6 @@ BumpMapping::~BumpMapping()
 
 Color BumpMapping::eval(const BSDFSamplingInfos & infos)
 {
-	//Color tmp = myNormalMap->eval(infos.uv);
-	//Normal3d normal(tmp.r, tmp.g, tmp.b);
-	//for (int i = 0; i < 3; i++)
-	//	normal[i] = 2 * normal[i] - 1.;
-	//
-	//DifferentialGeometry perturbedShading = DifferentialGeometry(infos.shadingFrame.toWorld(normal));
-
 	DifferentialGeometry perturbedShading = getFrame(infos);
 	BSDFSamplingInfos perturbedInfos = getPerturbedInfos(perturbedShading, infos);
 
@@ -32,12 +31,25 @@ Color BumpMapping::eval(const BSDFSamplingInfos & infos)
 
 DifferentialGeometry BumpMapping::getFrame(const BSDFSamplingInfos & infos)
 {
-	Color tmp = myBumpMap->eval(infos.uv);
-	Normal3d normal(tmp(0), tmp(1), tmp(2));
-	for (int i = 0; i < 3; i++)
-		normal[i] = 2 * normal[i] - 1.f;
+	Color grad[2];
+	myBumpMap->evalGradient(infos.uv, grad);
+	real gradX = grad[0].luminance();
+	real gradY = grad[1].luminance();
 
-	DifferentialGeometry perturbedShading = DifferentialGeometry(infos.shadingFrame.toWorld(normal));
+	Vector3d dpdu = infos.shadingFrame.toLocal(infos.shadingFrame.dpdu);
+	Vector3d dpdv = infos.shadingFrame.toLocal(infos.shadingFrame.dpdv);
+	Normal3d n(0, 0, 1);
+
+	//From Blinn's paper: Simulation of wreckled surfaces
+#ifdef USE_ALIGN
+	Normal3d bumped = n + gradX * n.cross3(dpdv) - gradY * n.cross3(dpdu);
+#else
+	Normal3d bumped = n + gradX * n.cross(dpdv) - gradY * n.cross(dpdu);
+#endif
+
+	bumped.normalize();
+
+	DifferentialGeometry perturbedShading = DifferentialGeometry(infos.shadingFrame.toWorld(bumped));
 
 	return perturbedShading;
 }

@@ -20,10 +20,12 @@ public:
 	Texture(const Parameters& params);
 	virtual ~Texture();
 
-	virtual Color eval(const Point2d&) = 0;
+	virtual Color eval(const Point2d& uv) = 0;
 	virtual Color getAverage() const = 0;
 	virtual Color getMin() const = 0;
 	virtual Color getMax() const = 0;
+
+	void evalGradient(const Point2d& uv, Color gradient[2]);
 
 protected:
 	BoundaryCondition parseBoundaryCondition(const std::string& condition);

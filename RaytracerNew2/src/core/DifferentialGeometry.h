@@ -123,8 +123,13 @@ public:
 		return sin2 / (v.z() * v.z());
 	}
 
+	//Local frame 
 	Vector3d myS;
 	Vector3d myT;
 	Normal3d myN;
+
+	//tangent and bitangent. Not always orthogonal
+	Vector3d dpdu;
+	Vector3d dpdv;
 };
 

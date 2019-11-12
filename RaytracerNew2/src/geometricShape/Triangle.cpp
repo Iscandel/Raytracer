@@ -138,6 +138,9 @@ void Triangle::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 	const Point3d& p1 = myMesh->myVertices[index1];
 	const Point3d& p2 = myMesh->myVertices[index2];
 
+	Point2d duv02;
+	Point2d duv12;
+
 	Vector3d bary;
 #ifdef USE_ALIGN
 	bary << 1 - inter.myUv.sum(), inter.myUv, 0;
@@ -157,6 +160,15 @@ void Triangle::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 		const Point2d& uv2 = myMesh->myUVs[index2];
 
 		inter.myUv = bary.x() * uv0 + bary.y() * uv1 + bary.z() * uv2;
+
+		duv02 = uv0 - uv2;
+		duv12 = uv1 - uv2;
+	}
+	else
+	{
+		Point2d uv0(0, 0); Point2d uv1(1, 0); Point2d uv2(1, 1);
+		duv02 = uv0 - uv2;
+		duv12 = uv1 - uv2;
 	}
 
 	//Compute the geometric normal
@@ -181,6 +193,21 @@ void Triangle::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 	else {
 		shadingGeometry = trueGeometry;
 	}
+
+	//Solve
+	//with T = dpdpu and B = dpdv
+	//dp02 = duv1.x * T + duv1.y * B
+	//dp12 = duv2.x * T + duv2.y * B
+
+	Point3d dp02 = p0 - p2;
+	Point3d dp12 = p1 - p2;
+
+	real invDet = 1. / (duv02.x() * duv12.y() - duv02.y() * duv12.x());
+	Vector3d dpdu = (dp02 * duv12.y() - dp12 * duv02.y()) * invDet;
+	Vector3d dpdv = (dp12 * duv02.x() - dp02 * duv12.x()) * invDet;
+
+	shadingGeometry.dpdu = dpdu; shadingGeometry.dpdv = dpdv;
+	trueGeometry.dpdu = dpdu; trueGeometry.dpdv = dpdv;
 }
 
 //=============================================================================
