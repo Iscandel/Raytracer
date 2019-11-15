@@ -308,10 +308,18 @@ Vect3<T> stringToVector(const std::string& string)
 //	return (rand() / (real) RAND_MAX) * (max - min) + min;
 //}
 
+inline std::string lowerCase(const std::string& s)
+{
+	std::string res = s;
+	std::transform(s.begin(), s.end(), res.begin(), ::tolower);
+
+	return res;
+}
+
 inline std::string trim(const std::string& s)
 {
-	int first = s.find_first_not_of(" \t\r\n");
-	int end = s.find_last_not_of(" \t\r\n");
+	std::size_t first = s.find_first_not_of(" \t\r\n");
+	std::size_t end = s.find_last_not_of(" \t\r\n");
 	return s.substr(first == std::string::npos ? 0 : first, end == std::string::npos ? s.size() : end + 1);
 }
 

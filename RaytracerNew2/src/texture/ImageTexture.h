@@ -17,9 +17,16 @@ public:
 	Color getMax() const override;
 
 protected:
-	Array2D<Color3> myArray;
+	void init();
+
+protected:
+	std::shared_ptr<Array2D<Color3>> myArray;
 	bool myInvertY;
 	bool myInvertX;
 	real myScale; //for texture repetition
+
+	Color myMin;
+	Color myAverage;
+	Color myMax;
 };
 

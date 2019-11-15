@@ -27,14 +27,16 @@ public:
 
 	//Color interp2(const Point2d& xy) const;
 
-	std::vector<CDF> myRowCDFs;
-	CDF myMarginalCDF; //to choose a row (sum of the columns on a row)
-
-	Array2D<Color3> myArray;
-
-	std::vector<real> myWeight;
+	
 
 	void initialize(Scene& scene) override;
+
+	Color getValue(int x, int y, bool scale = true)
+	{
+		if (scale)
+			return (*myArray)(x, y) * myFactor;
+		return (*myArray)(x, y);
+	}
 
 protected:
 	Transform::ptr myLightToWorld;
@@ -46,5 +48,12 @@ protected:
 	real mySphereRadius;
 	Point3d myCenter;
 	bool myIsProbe;
+	
+	std::vector<CDF> myRowCDFs;
+	CDF myMarginalCDF; //to choose a row (sum of the columns on a row)
+
+	std::shared_ptr<Array2D<Color3>> myArray;
+
+	std::vector<real> myWeight;
 };
 

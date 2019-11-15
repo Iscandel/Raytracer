@@ -339,6 +339,16 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
 			}
 			d = Texture::ptr(new ConstantTexture(dCol));
 		}
+		else if (type == "map_d")
+		{
+			std::string path(tools::trim(line.substr(type.size(), line.size())));
+			Parameters p;
+			p.addString("path", ::getGlobalFileSystem().resolve(path).string());
+			p.addReal("gamma", 1.);
+			p.addString("channel", "a");
+
+			d = Texture::ptr(new ImageTexture(p));
+		}
 		else if (type == "Tr")
 		{
 		}

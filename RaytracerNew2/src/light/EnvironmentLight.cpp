@@ -14,38 +14,26 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 	myIsProbe = params.getBool("isProbe", false);
 	real gamma = params.getReal("gamma", (real)0.);
 
-	ImageLoader::load(path, myArray, gamma);
+	myArray = ImageLoader::load(path, ImageLoader::ALL, gamma);
 
-	if (myFactor != 1.)
-	{
-		for (unsigned int i = 0; i < myArray.getHeight(); i++)
-		{
-			for (unsigned int j = 0; j < myArray.getWidth(); j++)
-			{
-				myArray(j, i) *= myFactor;
-			}
-		}
-	}
-
-	//sf::Image im;
-	//im.loadFromFile(path);
-	//myArray.setSize(im.getSize().x, im.getSize().y);
-	//for (unsigned int y = 0; y < im.getSize().y; y++)
+	//if (myFactor != 1.)
 	//{
-	//	for (unsigned int x = 0; x <im.getSize().x; x++)
+	//	for (unsigned int i = 0; i < myArray->getHeight(); i++)
 	//	{
-	//		sf::Color col = im.getPixel(x, y);
-	//		myArray(x, y) = Color(col.r / 255., col.g / 255., col.b / 255.) * 0.3;
+	//		for (unsigned int j = 0; j < myArray->getWidth(); j++)
+	//		{
+	//			myArray(j, i) *= myFactor;
+	//		}
 	//	}
 	//}
 
-	for (unsigned int i = 0; i < myArray.getHeight(); i++)
+	for (unsigned int i = 0; i < myArray->getHeight(); i++)
 	{
-		real weight = std::sin(math::PI * (i + 0.5f) / myArray.getHeight());//.getSize().y);
+		real weight = std::sin(math::PI * (i + 0.5f) / myArray->getHeight());//.getSize().y);
 		myRowCDFs.push_back(CDF());
-		for (unsigned int j = 0; j < myArray.getWidth(); j++)
+		for (unsigned int j = 0; j < myArray->getWidth(); j++)
 		{
-			myRowCDFs[i].add(myArray(j, i).luminance());
+			myRowCDFs[i].add(getValue(j, i).luminance());
 		}
 		
 		myWeight.push_back(weight);
@@ -79,15 +67,15 @@ LightSamplingInfos EnvironmentLight::sample(const Point3d & pFrom, const Point2d
 	if (myIsProbe)
 	{
 		//u and v in [-1,1]
-		real v = (row / (real)myArray.getHeight()) * 2.f - 1;
-		real u = (col / (real)myArray.getWidth()) * 2.f - 1;
+		real v = (row / (real)myArray->getHeight()) * 2.f - 1;
+		real u = (col / (real)myArray->getWidth()) * 2.f - 1;
 		theta = std::atan2(v, u);
 		phi = math::PI * math::fastSqrt(u*u + v*v);
 	}
 	else
 	{
-		theta = math::PI * row / (real) myArray.getHeight();
-		phi = 2 * math::PI * col / (real)myArray.getWidth();
+		theta = math::PI * row / (real) myArray->getHeight();
+		phi = 2 * math::PI * col / (real)myArray->getWidth();
 	}
 
 	//real cosTheta = std::cos(theta);
@@ -108,12 +96,13 @@ LightSamplingInfos EnvironmentLight::sample(const Point3d & pFrom, const Point2d
 	//else
 	{		
 #if NB_SPECTRUM_SAMPLES == 3
-		infos.intensity = myArray(math::thresholding((int)col, 0, (int)myArray.getWidth() - 1), math::thresholding((int)row, 0, (int)myArray.getHeight() - 1));
+		infos.intensity = getValue(math::thresholding((int)col, 0, (int)myArray->getWidth() - 1), math::thresholding((int)row, 0, (int)myArray->getHeight() - 1));
+		//infos.intensity = myArray(math::thresholding((int)col, 0, (int)myArray.getWidth() - 1), math::thresholding((int)row, 0, (int)myArray.getHeight() - 1));
 #else
 		Color3 res = myArray(math::thresholding((int)col, 0, (int)myArray.getWidth() - 1), math::thresholding((int)row, 0, (int)myArray.getHeight() - 1));
 		infos.intensity = Color::fromRGB(res(0), res(1), res(2));
 #endif
-		infos.pdf = infos.intensity.luminance() * myWeight[row] / (myMarginalCDF.getSum() * (2 * math::PI / myArray.getWidth()) * (math::PI / myArray.getHeight()));//(pdfRow * pdfCol) / (2 * math::PI * math::PI * std::max(std::abs(sinTheta), math::EPSILON); //To change ?
+		infos.pdf = infos.intensity.luminance() * myWeight[row] / (myMarginalCDF.getSum() * (2 * math::PI / myArray->getWidth()) * (math::PI / myArray->getHeight()));//(pdfRow * pdfCol) / (2 * math::PI * math::PI * std::max(std::abs(sinTheta), math::EPSILON); //To change ?
 		infos.pdf /= std::max(std::abs(sinTheta), math::EPSILON);
 	}
 
@@ -135,21 +124,22 @@ real EnvironmentLight::pdf(const Point3d &, const LightSamplingInfos & infos)
 		//See Paul debevec website
 		real r = (1 / math::PI) * std::acos(dir.z()) / std::sqrt(dir.x() * dir.x() + dir.y() * dir.y());
 		//get u, v and rescale in [0,1]
-		fromPhi = ((dir.x() * r + (real)1.) / (real)2) * myArray.getWidth();
-		fromTheta = ((dir.y() * r + (real)1.) / (real)2) * myArray.getHeight();
+		fromPhi = ((dir.x() * r + (real)1.) / (real)2) * myArray->getWidth();
+		fromTheta = ((dir.y() * r + (real)1.) / (real)2) * myArray->getHeight();
 	}
 	else
 	{
-		fromPhi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray.getWidth();
-		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray.getHeight();
+		fromPhi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray->getWidth();
+		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray->getHeight();
 	}
 	//real phi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray.getWidth();
 	//real theta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray.getHeight();
 	//if(isnan((float)theta))
 	//	std::cout << infos.interToLight << " " << dir << std::endl;
 	real sinTheta = std::sin(fromTheta);
-	real normalizationFactor = myWeight[(int)fromTheta] / (myMarginalCDF.getSum() * (2 * math::PI / myArray.getWidth()) * (math::PI / myArray.getHeight()));
-	real luminance = math::interp2(Point2d(fromPhi, fromTheta), myArray).luminance();
+
+	real normalizationFactor = myWeight[(int)fromTheta] / (myMarginalCDF.getSum() * (2 * math::PI / myArray->getWidth()) * (math::PI / myArray->getHeight()));
+	real luminance = Color(math::interp2(Point2d(fromPhi, fromTheta), *myArray) * myFactor).luminance();
 	real pdf = luminance * normalizationFactor;
 	//real pdf = myArray((int)phi, (int)theta).luminance() / normalizationFactor;
 	pdf /= std::max(std::abs(sinTheta), math::EPSILON);
@@ -169,19 +159,19 @@ Color EnvironmentLight::le(const Vector3d & direction, const Point3d&, const Nor
 		//See Paul debevec website
 		real r = (1 / math::PI) * std::acos(dir.z()) / math::fastSqrt(dir.x() * dir.x() + dir.y() * dir.y());
 		//get u, v and rescale in [0,1]
-		fromPhi = ((dir.x() * r + (real)1.) / (real)2) * myArray.getWidth();
-		fromTheta = ((dir.y() * r + (real)1.) / (real)2) * myArray.getHeight();
+		fromPhi = ((dir.x() * r + (real)1.) / (real)2) * myArray->getWidth();
+		fromTheta = ((dir.y() * r + (real)1.) / (real)2) * myArray->getHeight();
 	}
 	else
 	{
-		fromPhi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray.getWidth();
-		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray.getHeight();
+		fromPhi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray->getWidth();
+		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray->getHeight();
 	}
 	
 #if NB_SPECTRUM_SAMPLES == 3
-		return math::interp2(Point2d(fromPhi, fromTheta), myArray);
+		return math::interp2(Point2d(fromPhi, fromTheta), *myArray) * myFactor;
 #else
-		Color3 res = math::interp2(Point2d(fromPhi, fromTheta), myArray);
+		Color3 res = math::interp2(Point2d(fromPhi, fromTheta), myArray) * myFactor;
 		return Color::fromRGB(res(0), res(1), res(2));
 #endif
 	//real advanceX = phi - (int)phi;
