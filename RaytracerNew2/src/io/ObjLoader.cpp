@@ -328,7 +328,15 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
 		else if (type == "d")
 		{
 			Color3 dCol;
-			sLine >> dCol.r() >> dCol.g() >> dCol.b();
+			real g, b;
+			sLine >> dCol.r();
+			if (sLine >> g >> b) {
+				dCol.g() = g; dCol.b() = b;
+			}
+			else {
+				dCol.g() = dCol.r();
+				dCol.b() = dCol.r();
+			}
 			d = Texture::ptr(new ConstantTexture(dCol));
 		}
 		else if (type == "Tr")
@@ -355,15 +363,15 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
 		}
 		else if (type == "map_Kd")
 		{
-			std::string path = tools::trim(line.substr(std::string("map_Kd").size(), line.size() - 1));
+			std::string path = tools::trim(line.substr(type.size(), line.size() - 1));
 			Parameters p;
 			p.addString("path", ::getGlobalFileSystem().resolve(path).string());
 		
 			Kd = Texture::ptr(new ImageTexture(p));
 		}
-		else if (type == "bump")
+		else if (type == "bump" || type == "map_Bump")
 		{
-			std::string bumpPath = tools::trim(line.substr(std::string("bump").size(), line.size() - 1));
+			std::string bumpPath = tools::trim(line.substr(type.size(), line.size() - 1));
 			Parameters p;
 			p.addString("path", ::getGlobalFileSystem().resolve(bumpPath).string());
 			p.addReal("gamma", 1.);
@@ -394,7 +402,6 @@ void ObjLoader::addBSDF(std::map<std::string, BSDF::ptr>& map,
 	else if (illum == 4 || illum == 6 || illum == 7 || illum == 9)
 	{
 		bsdf = BSDF::ptr(new Dielectric(p));
-
 	}
 	else if (illum == 5 || illum == 8)
 	{
@@ -416,14 +423,14 @@ void ObjLoader::addBSDF(std::map<std::string, BSDF::ptr>& map,
 		bsdf = bump;
 	}
 
-	if (d != nullptr)
+	if (d != nullptr && d->getAverage().average() < real(1.))
 	{
 		Parameters alphaParams;
 		alphaParams.addBSDF("bsdf", bsdf);
 		alphaParams.addTexture("alpha", d);
 
-		BSDF::ptr bump(new AlphaBSDF(alphaParams));
-		bsdf = bump;
+		BSDF::ptr alpha(new AlphaBSDF(alphaParams));
+		bsdf = alpha;
 	}
 
 	if (illum != 4 && illum != 6 && illum != 7 && illum != 9)

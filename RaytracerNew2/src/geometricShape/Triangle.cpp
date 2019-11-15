@@ -179,12 +179,7 @@ void Triangle::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 #endif
 
 	if (myMesh->myNormals.size() > 0) {
-		/* Compute the shading frame. Note that for simplicity,
-		the current implementation doesn't attempt to provide
-		tangents that are continuous across the surface. That
-		means that this code will need to be modified to be able
-		use anisotropic BRDFs, which need tangent continuity */
-
+		//Compute the shading frame
 		Normal3d tmpN = bary.x() * myMesh->myNormals[index0] +
 			bary.y() * myMesh->myNormals[index1] +
 			bary.z() * myMesh->myNormals[index2];
@@ -202,12 +197,21 @@ void Triangle::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 	Point3d dp02 = p0 - p2;
 	Point3d dp12 = p1 - p2;
 
-	real invDet = 1. / (duv02.x() * duv12.y() - duv02.y() * duv12.x());
-	Vector3d dpdu = (dp02 * duv12.y() - dp12 * duv02.y()) * invDet;
-	Vector3d dpdv = (dp12 * duv02.x() - dp02 * duv12.x()) * invDet;
+	real det = duv02.x() * duv12.y() - duv02.y() * duv12.x();
+	if (det == 0.)
+	{
+		shadingGeometry.dpdu = trueGeometry.myS; shadingGeometry.dpdv = trueGeometry.myT;
+		trueGeometry.dpdu = trueGeometry.myS; trueGeometry.dpdv = trueGeometry.myT;
+	}
+	else
+	{
+		real invDet = 1. / det;
+		Vector3d dpdu = (dp02 * duv12.y() - dp12 * duv02.y()) * invDet;
+		Vector3d dpdv = (dp12 * duv02.x() - dp02 * duv12.x()) * invDet;
 
-	shadingGeometry.dpdu = dpdu; shadingGeometry.dpdv = dpdv;
-	trueGeometry.dpdu = dpdu; trueGeometry.dpdv = dpdv;
+		shadingGeometry.dpdu = dpdu; shadingGeometry.dpdv = dpdv;
+		trueGeometry.dpdu = dpdu; trueGeometry.dpdv = dpdv;
+	}
 }
 
 //=============================================================================
