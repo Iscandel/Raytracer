@@ -33,9 +33,10 @@ public:
 protected:
 	void addBSDF(std::map<std::string, BSDF::ptr>& map,
 		const std::string& name, int illum, real Ns, real Ni,
-		Texture::ptr d, Texture::ptr Kd, Texture::ptr Ks, Texture::ptr bumpMap);
+		Texture::ptr d, Texture::ptr Kd, Texture::ptr Ks, Texture::ptr bumpMap, 
+		bool bumpIsNormal);
 
-	std::map<std::string, BSDF::ptr> parseMtl(const std::string& path);
+	std::map<std::string, BSDF::ptr> parseMtl(const std::string& path, const Parameters& params);
 
 protected:
 	std::map<std::string, BSDF::ptr> myBSDFByName;

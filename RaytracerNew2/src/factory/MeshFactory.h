@@ -79,11 +79,17 @@ public:
 			BSDF::ptr affectedBSDF = bsdf;
 
 			if (BSDFAndTriangleIndexTimes3.size() > 0) {
-				if (i <= BSDFAndTriangleIndexTimes3[0].first) {
-					affectedBSDF = BSDFAndTriangleIndexTimes3[0].second;
-				}
 				if (i >= BSDFAndTriangleIndexTimes3[0].first)
 					BSDFAndTriangleIndexTimes3.erase(BSDFAndTriangleIndexTimes3.begin());
+
+				if (BSDFAndTriangleIndexTimes3.size() > 0) { //check again, but should not happen
+					if (i <= BSDFAndTriangleIndexTimes3[0].first) {
+						affectedBSDF = BSDFAndTriangleIndexTimes3[0].second;
+					}
+				}
+				else {
+					ILogger::log() << "Mesh factory: bsdf list incoherent\n";
+				}			
 			}
 
 			if (affectedBSDF == bsdf) {

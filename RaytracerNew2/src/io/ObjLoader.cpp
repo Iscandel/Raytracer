@@ -11,6 +11,7 @@
 #include "bsdf/Conductor.h"
 #include "bsdf/Diffuse.h"
 #include "bsdf/Dielectric.h"
+#include "bsdf/NormalMapping.h"
 #include "bsdf/Phong.h"
 #include "bsdf/TwoSides.h"
 #include "texture/ConstantTexture.h"
@@ -206,7 +207,7 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 			std::experimental::filesystem::path f(filename);
 			tmp.addSearchPath(f.parent_path());
 			mtlPath = tmp.resolve(mtlPath).string();
-			myBSDFByName = parseMtl(mtlPath);
+			myBSDFByName = parseMtl(mtlPath, params);
 		}
 		else if (type == "usemtl" && useMtl && BSDFAndTriangleIndexTimes3)
 		{
@@ -283,7 +284,7 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 	return true;
 }
 
-std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
+std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path, const Parameters& params)
 {
 	std::map<std::string, BSDF::ptr> res;
 
@@ -301,6 +302,8 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
 	real Ns = 0, Ni = 0;
 	Texture::ptr d, Kd, Ks, bumpMap;
 
+	bool bumpIsNormal = params.getBool("bumpIsNormal", false);
+
 	while (std::getline(is, line))
 	{
 		line = tools::trim(line);
@@ -312,7 +315,7 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
 		if (type == "newmtl") {
 			if (currentName != "")
 			{
-				addBSDF(res, currentName, illum, Ns, Ni, d, Kd, Ks, bumpMap);
+				addBSDF(res, currentName, illum, Ns, Ni, d, Kd, Ks, bumpMap, bumpIsNormal);
 			}
 			currentName = tools::trim(line.substr(6, line.size() - 1));
 
@@ -346,6 +349,7 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
 			p.addString("path", ::getGlobalFileSystem().resolve(path).string());
 			p.addReal("gamma", 1.);
 			p.addString("channel", "a");
+			p.addBool("invertY", true);
 
 			d = Texture::ptr(new ImageTexture(p));
 		}
@@ -376,6 +380,7 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
 			std::string path = tools::trim(line.substr(type.size(), line.size() - 1));
 			Parameters p;
 			p.addString("path", ::getGlobalFileSystem().resolve(path).string());
+			p.addBool("invertY", true);
 		
 			Kd = Texture::ptr(new ImageTexture(p));
 		}
@@ -385,19 +390,20 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path)
 			Parameters p;
 			p.addString("path", ::getGlobalFileSystem().resolve(bumpPath).string());
 			p.addReal("gamma", 1.);
+			p.addBool("invertY", true);
 
 			bumpMap = Texture::ptr(new ImageTexture(p));		
 		}
 	}
 
-	addBSDF(res, currentName, illum, Ns, Ni, d, Kd, Ks, bumpMap);
+	addBSDF(res, currentName, illum, Ns, Ni, d, Kd, Ks, bumpMap, bumpIsNormal);
 
 	return res;
 }
 
 void ObjLoader::addBSDF(std::map<std::string, BSDF::ptr>& map, 
 	const std::string& name, int illum, real Ns, real Ni, Texture::ptr d, 
-	Texture::ptr Kd, Texture::ptr Ks, Texture::ptr bumpMap)
+	Texture::ptr Kd, Texture::ptr Ks, Texture::ptr bumpMap, bool bumpIsNormal)
 {
 	Parameters p;
 	BSDF::ptr bsdf;
@@ -427,10 +433,17 @@ void ObjLoader::addBSDF(std::map<std::string, BSDF::ptr>& map,
 	{
 		Parameters bumpParams;
 		bumpParams.addBSDF("bsdf", bsdf);
-		bumpParams.addTexture("bumpMap", bumpMap);
 		
-		BSDF::ptr bump(new BumpMapping(bumpParams));
-		bsdf = bump;
+		if (bumpIsNormal) {
+			bumpParams.addTexture("normalMap", bumpMap);
+			BSDF::ptr bump(new NormalMapping(bumpParams));
+			bsdf = bump;
+		}
+		else {
+			bumpParams.addTexture("bumpMap", bumpMap);
+			BSDF::ptr bump(new BumpMapping(bumpParams));
+			bsdf = bump;
+		}
 	}
 
 	if (d != nullptr && d->getAverage().average() < real(1.))
