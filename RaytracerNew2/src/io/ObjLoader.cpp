@@ -215,7 +215,7 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 			//myNewMtlIndice = (int)vertices.size();
 
 			//If name is given ater geometry
-			if (meshIndex == -1) {
+			if (indices.size() == 0) {
 				nameIsGivenAfter = true;
 				materialName = tools::trim(line.substr(6, line.size() - 1));
 			}
@@ -317,6 +317,8 @@ std::map<std::string, BSDF::ptr> ObjLoader::parseMtl(const std::string& path, co
 			{
 				addBSDF(res, currentName, illum, Ns, Ni, d, Kd, Ks, bumpMap, bumpIsNormal);
 			}
+			Ns = 0, Ni = 0;
+			d = Kd = Ks = bumpMap = nullptr;
 			currentName = tools::trim(line.substr(6, line.size() - 1));
 
 		}
@@ -426,6 +428,7 @@ void ObjLoader::addBSDF(std::map<std::string, BSDF::ptr>& map,
 	}
 	else
 	{
+		p.addTexture("albedo", Kd);
 		bsdf = BSDF::ptr(new Diffuse(p));
 	}
 
