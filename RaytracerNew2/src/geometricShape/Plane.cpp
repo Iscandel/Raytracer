@@ -84,11 +84,11 @@ bool Plane::intersection(const Ray& _ray, real& t, Point2d& uv)
 void Plane::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 	DifferentialGeometry& shadingGeometry, Intersection& inter)
 {
-	trueGeometry = DifferentialGeometry(myObjectToWorld->transform(normal(inter.myPoint)));
+	trueGeometry = DifferentialGeometry(myObjectToWorld->transform(normal(inter.myPoint)).normalized());
 	Vector3d dpdu(1., 0, 0);
 	Vector3d dpdv(0, 1, 0);
-	trueGeometry.dpdu = myObjectToWorld->transform(dpdu);
-	trueGeometry.dpdv = myObjectToWorld->transform(dpdv);
+	trueGeometry.dpdu = myObjectToWorld->transform(dpdu).normalized();
+	trueGeometry.dpdv = myObjectToWorld->transform(dpdv).normalized();
 
 	shadingGeometry = trueGeometry;
 }
@@ -96,7 +96,7 @@ void Plane::getDifferentialGeometry(DifferentialGeometry& trueGeometry,
 void Plane::sample(const Point2d& p, Point3d& sampled, Normal3d& n)
 {
 	sampled = myObjectToWorld->transform(Point3d(1 - 2 * p.x(), 1 - 2 * p.y(), 0));
-	n = myObjectToWorld->transform(normal(sampled));
+	n = myObjectToWorld->transform(normal(sampled)).normalized();
 }
 
 RT_REGISTER_TYPE_WITH_FACTORY(Plane, IPrimitive, GeometricShapeFactory)

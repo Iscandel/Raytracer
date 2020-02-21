@@ -18,6 +18,7 @@ public:
 
 	real pdf(const BSDFSamplingInfos& infos) override;
 
+	virtual bool isTransparent() const override { return true; } 
 protected:
 	Texture::ptr myAlphaMap;
 	BSDF::ptr myBSDF;

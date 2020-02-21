@@ -19,6 +19,8 @@ Integrator::~Integrator()
 {
 }
 
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 void Integrator::initialize(Scene & scene)
 {
 	const Scene::LightVector& lights = scene.getLights();
@@ -35,6 +37,8 @@ void Integrator::initialize(Scene & scene)
 	myLightWeights.normalize();
 }
 
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 Color Integrator::irradiance(Scene& scene, int lightSamples, const Intersection& inter,
 		Medium::ptr medium,  Sampler::ptr& sampler, bool catchIndirect)
 {
@@ -72,6 +76,8 @@ Color Integrator::irradiance(Scene& scene, int lightSamples, const Intersection&
 	return irrLight / (real)lightSamples;
 }
 
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::ptr medium, Sampler::ptr sampler)
 {
 	Ray trRay(ray);
@@ -84,7 +90,7 @@ Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::
 	{
 		bool inter = scene.computeIntersection(trRay, intersection);
 		//If we had a surface intersection
-		if (inter && intersection.myPrimitive->getBSDF() != nullptr)
+		if (inter && (intersection.myPrimitive->getBSDF() != nullptr && !intersection.myPrimitive->getBSDF()->isTransparent()))
 			return Color(0.);
 
 		//If we had an intersection with bounded media only, decrement transmittance length calculation
@@ -103,6 +109,20 @@ Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::
 		if (!inter || tr.isZero())
 			return tr;
 
+		//
+		if (intersection.myPrimitive->getBSDF())
+		{
+			Vector3d localWi = intersection.toLocal(-trRay.direction());
+			Vector3d localWo = intersection.toLocal(trRay.direction());
+			BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
+			bsdfInfos.uv = intersection.myUv; //
+			bsdfInfos.measure = Measure::DISCRETE;
+			tr *= intersection.myPrimitive->getBSDF()->eval(bsdfInfos);
+		}
+
+		if (tr.isZero())
+			return tr;
+
 		//Update the ray
 		trRay = Ray(trRay.getPointAt(intersection.t), trRay.direction(), math::EPSILON, distInterLight);
 
@@ -112,6 +132,8 @@ Color Integrator::evalTransmittance(const Scene& scene, const Ray& ray, Medium::
 	
 }
 
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 Color Integrator::sampleAttenuatedLightDirect(const Point3d& interPoint, Sampler::ptr sampler, const Scene& scene, LightSamplingInfos& infos, Medium::ptr medium)
 {
 	Color value;
@@ -149,6 +171,8 @@ Color Integrator::sampleAttenuatedLightDirect(const Point3d& interPoint, Sampler
 	return value;
 }
 
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 Color Integrator::sampleLightDirect(const Point3d& interPoint, const Point2d& _sample, const Scene& scene, LightSamplingInfos& infos, LightSamplingStrategy strategy)
 {
 		real lightWeight;
@@ -193,6 +217,8 @@ Color Integrator::sampleLightDirect(const Point3d& interPoint, const Point2d& _s
 		return value;
 	}
 
+//=============================================================================
+///////////////////////////////////////////////////////////////////////////////
 Color Integrator::sampleOneLight(Light::ptr light, const Point3d & interPoint, const Point2d & sample, const Scene & scene, LightSamplingInfos & lightInfos)
 {
 	//Sample the light

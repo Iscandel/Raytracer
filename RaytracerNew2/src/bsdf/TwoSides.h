@@ -14,6 +14,8 @@ public:
 	Color sample(BSDFSamplingInfos& infos, const Point2d& sample) override;
 	real pdf(const BSDFSamplingInfos& infos) override;
 
+	virtual bool isTransparent() const override { return myBSDF[0]->isTransparent(); }
+
 protected:
 	BSDF::ptr myBSDF[2];
 };

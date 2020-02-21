@@ -54,7 +54,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	Vector3d toLocal(const Vector3d& v) const
 	{
-		return Vector3d(v.dot(myS), v.dot(myT), v.dot(myN)).normalized(); //normalize for rounded errors...
+		return Vector3d(v.dot(myS), v.dot(myT), v.dot(myN));//.normalized(); //normalize for rounded errors...
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ public:
 	///////////////////////////////////////////////////////////////////////////
 	Vector3d toWorld(const Vector3d& v) const
 	{
-		return (myS * v.x() + myT * v.y() + myN * v.z()).normalized(); //normalize for rounded errors...
+		return (myS * v.x() + myT * v.y() + myN * v.z());//.normalized(); //normalize for rounded errors...
 	}
 
 	///////////////////////////////////////////////////////////////////////////

@@ -43,6 +43,10 @@ struct VertexObj
 
 	VertexObj(const std::string& objLine)
 	{
+		indPos = 1;
+		indN = 1;
+		indUV = 1;
+
 		//VertexObj();
 		//if (objLine.find("//") != std::string::npos)
 		//{

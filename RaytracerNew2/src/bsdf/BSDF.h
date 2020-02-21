@@ -31,6 +31,7 @@ public:
 		GLOSSY_TRANSMISSION = 0x00000010,
 		ENABLE_BACK_SIDE    = 0x00000100,
 		DIFFUSE				= 0x00000200,
+		SHADOW_CATCHER      = 0x00000400,
 		DELTA = DELTA_REFLECTION | DELTA_TRANSMISSION,
 		GLOSSY = GLOSSY_REFLECTION | GLOSSY_TRANSMISSION,
 		REFLECTION = DIFFUSE_REFLECTION | DELTA_REFLECTION | GLOSSY_REFLECTION,
@@ -73,6 +74,8 @@ public:
 	virtual real pdf(const BSDFSamplingInfos& infos) = 0;
 
 	virtual bool isShadowCatcher() const { return false; }
+
+	virtual bool isTransparent() const { return false; }
 };
 
 

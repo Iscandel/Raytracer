@@ -116,7 +116,7 @@ void Sphere::getDifferentialGeometry(DifferentialGeometry & trueGeometry, Differ
 {
 	Point3d localInterPoint = myObjectToWorld->inv().transform(inter.myPoint); //like a vector centered to the origin
 
-	trueGeometry = DifferentialGeometry(myObjectToWorld->transform(normal(inter.myPoint)));
+	trueGeometry = DifferentialGeometry(myObjectToWorld->transform(normal(inter.myPoint)).normalized());
 	
 	//dpx / du = d(r sinPhi sinTheta)
 	//-> dpx / du = r sinTheta d/du(sinPhi)

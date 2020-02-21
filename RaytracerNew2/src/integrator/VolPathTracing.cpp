@@ -390,12 +390,26 @@ Color VolPathTracing::evalTransmittanceFromSampledBSDF(Scene& scene,
 											firstPass ? trRay.myMinT : 0.f, 
 											wasIntersected ? intersection.t : trRay.myMaxT), sampler);
 
-		if (wasIntersected && intersection.myPrimitive->getBSDF() != nullptr)
+		if (wasIntersected && (intersection.myPrimitive->getBSDF() != nullptr && !intersection.myPrimitive->getBSDF()->isTransparent()))
 			return tr;
 
 		firstPass = false;
 		//No intersection, leave
 		if (!wasIntersected || tr.isZero())
+			return tr;
+
+		//
+		if (intersection.myPrimitive->getBSDF())
+		{
+			Vector3d localWi = intersection.toLocal(-trRay.direction());
+			Vector3d localWo = intersection.toLocal(trRay.direction());
+			BSDFSamplingInfos bsdfInfos(intersection, localWi, localWo);
+			bsdfInfos.uv = intersection.myUv; //
+			bsdfInfos.measure = Measure::DISCRETE;
+			tr *= intersection.myPrimitive->getBSDF()->eval(bsdfInfos);
+		}
+
+		if (tr.isZero())
 			return tr;
 
 		//Update the ray

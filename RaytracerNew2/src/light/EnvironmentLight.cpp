@@ -16,6 +16,32 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 
 	myArray = ImageLoader::load(path, ImageLoader::ALL, gamma);
 
+	//Color res((real)0.);
+	//for (int i = 0; i < myArray->getWidth(); i++)
+	//	for (int j = 0; j < myArray->getHeight(); j++)
+	//		res += (*myArray)(i, j);
+
+	//res /= myArray->getWidth() * myArray->getHeight();
+	//Color average = res;
+
+	//res = Color(+std::numeric_limits<real>::infinity());
+	//for (int i = 0; i < myArray->getWidth(); i++)
+	//	for (int j = 0; j < myArray->getHeight(); j++)
+	//		for (int k = 0; k < Color::NB_SAMPLES; k++)
+	//			res(k) = std::min(res(k), (*myArray)(i, j)(k));
+
+	//Color min = res;
+
+	//res = Color(-std::numeric_limits<real>::infinity());
+	//for (int i = 0; i < myArray->getWidth(); i++)
+	//	for (int j = 0; j < myArray->getHeight(); j++)
+	//		for (int k = 0; k < Color::NB_SAMPLES; k++)
+	//			res(k) = std::max(res(k), ((*myArray)(i, j))(k));
+
+	//Color max = res;
+
+	//ILogger::log() << "Texture min: " << min << "Texture max: " << max << "Texture average: " << average;
+
 	//if (myFactor != 1.)
 	//{
 	//	for (unsigned int i = 0; i < myArray->getHeight(); i++)
