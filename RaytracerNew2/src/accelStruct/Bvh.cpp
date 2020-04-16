@@ -6,6 +6,8 @@
 #include <thread>
 #include <ppl.h>
 
+#include "thread/ThreadPool.h"
+
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 Bvh::Bvh()
@@ -629,19 +631,26 @@ void Bvh::buildBinNode(int startIndex, int endIndex, BvhNode::ptr currentNode, c
 
 	Bin bins[Bin::BIN_NUMBER];
 	
-	const int nbThreads = 7;
-	Bin tmpBin[nbThreads * Bin::BIN_NUMBER];
+	//const int nbThreads = 2;
+	const int nbSubTasks = 8;//getCoreNumber();
+	Bin tmpBin[nbSubTasks * Bin::BIN_NUMBER];
 
-	//auto binCreation = [&](int minT, int maxT, int threadNumber)
+	//auto binCreation = [&](int threadNumber)//int minT, int maxT, int threadNumber)
 	{
-		//Create the bins
-		//for (auto i = minT; i < maxT; i++)
-		//{
-		//	BoundingBox box = myPrimitives[i]->getWorldBoundingBox();
-		//	int index = std::min(std::max((int)((myPrimitives[i]->getCentroid()[axis] - min) * binConstant), 0), Bin::BIN_NUMBER - 1);
-		//	tmpBin[index + Bin::BIN_NUMBER * threadNumber].myBox = BoundingBox::unionBox(tmpBin[index + Bin::BIN_NUMBER * threadNumber].myBox, box);
-		//	tmpBin[index + Bin::BIN_NUMBER * threadNumber].myNumberPrimitives++;
-		//}
+	//	//std::cout << threadNumber << std::endl;
+	//	int threadSize = number / nbSubTasks;
+	//	int minT = startIndex + threadSize * threadNumber;
+	//	int maxT = threadNumber == nbSubTasks - 1 ? endIndex : startIndex + threadSize * (threadNumber + 1);
+
+	//	//Create the bins
+	//		for (auto i = minT; i < maxT; i++)
+	//		{
+	//			BoundingBox box = myPrimitives[i]->getWorldBoundingBox();
+	//			int index = std::min(std::max((int)((myPrimitives[i]->getCentroid()[axis] - min) * binConstant), 0), Bin::BIN_NUMBER - 1);
+	//			tmpBin[index + Bin::BIN_NUMBER * threadNumber].myBox = BoundingBox::unionBox(tmpBin[index + Bin::BIN_NUMBER * threadNumber].myBox, box);
+	//			tmpBin[index + Bin::BIN_NUMBER * threadNumber].myNumberPrimitives++;
+	//		}
+	//};
 
 		////Create the bins
 		for (auto i = startIndex; i < endIndex; i++)
@@ -652,23 +661,27 @@ void Bvh::buildBinNode(int startIndex, int endIndex, BvhNode::ptr currentNode, c
 			bins[index].myNumberPrimitives++;
 		}
 	};
-	//std::unique_ptr<std::thread> threads[nbThreads];
+
+	//std::unique_ptr<std::thread> threads[nbSubTasks];
+	
+	//thread::pool->addTask(binCreation, nbSubTasks, true);
+	//std::cout << "Youhouuu" << std::endl;
 	//int tmpStart = startIndex;
-	//for (auto i = 0; i < nbThreads; i++)
+	//for (auto i = 0; i < nbSubTasks; i++)
 	//{
-	//	int threadSize = number / nbThreads;
-	//	if(i == nbThreads - 1)
+	//	int threadSize = number / nbSubTasks;
+	//	if(i == nbSubTasks - 1)
 	//		threads[i] = std::unique_ptr<std::thread>(new std::thread(binCreation, tmpStart, endIndex, i));
 	//	else
 	//		threads[i] = std::unique_ptr<std::thread>(new std::thread(binCreation, tmpStart, tmpStart + threadSize, i));
 	//	tmpStart = tmpStart + threadSize;
 	//}
-	//for (auto i = 0; i < nbThreads; i++)
+	//for (auto i = 0; i < nbSubTasks; i++)
 	//{
 	//	threads[i]->join();
 	//}
 
-	//for (auto i = 0; i < nbThreads; i++)
+	//for (auto i = 0; i < nbSubTasks; i++)
 	//{
 	//	for (auto j = 0; j < Bin::BIN_NUMBER; j++)
 	//	{

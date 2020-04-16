@@ -38,7 +38,7 @@ Color ImageTexture::eval(const Point2d & uv)
 	}
 
 	if (!myInvertX) {
-		x = uv.x() * (myArray->getWidth() - 1.);
+		x = uv.x() * (myArray->getWidth() - real(1.));
 	} else {
 		//x = (1.f - uv.x()) * (myArray.getWidth() - 1.);
 		x = (int)uv.x() + (math::sign(uv.x()) * 1.f - (uv.x() - (int)uv.x())) * myArray->getWidth();
@@ -77,24 +77,24 @@ Color ImageTexture::eval(const Point2d & uv)
 void ImageTexture::init()
 {
 	Color res((real)0.);
-	for (int i = 0; i < myArray->getWidth(); i++)
-		for (int j = 0; j < myArray->getHeight(); j++)
+	for (unsigned int i = 0; i < myArray->getWidth(); i++)
+		for (unsigned int j = 0; j < myArray->getHeight(); j++)
 			res += (*myArray)(i, j);
 
 	res /= myArray->getWidth() * myArray->getHeight();
 	myAverage = res;
 
 	res = Color(+std::numeric_limits<real>::infinity());
-	for (int i = 0; i < myArray->getWidth(); i++)
-		for (int j = 0; j < myArray->getHeight(); j++)
+	for (unsigned int i = 0; i < myArray->getWidth(); i++)
+		for (unsigned int j = 0; j < myArray->getHeight(); j++)
 			for (int k = 0; k < Color::NB_SAMPLES; k++)
 				res(k) = std::min(res(k), (*myArray)(i, j)(k));
 
 	myMin = res;
 
 	res = Color(-std::numeric_limits<real>::infinity());
-	for (int i = 0; i < myArray->getWidth(); i++)
-		for (int j = 0; j < myArray->getHeight(); j++)
+	for (unsigned int i = 0; i < myArray->getWidth(); i++)
+		for (unsigned int j = 0; j < myArray->getHeight(); j++)
 			for (int k = 0; k < Color::NB_SAMPLES; k++)
 				res(k) = std::max(res(k), ((*myArray)(i, j))(k));
 

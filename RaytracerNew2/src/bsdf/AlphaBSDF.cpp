@@ -58,7 +58,7 @@ Color AlphaBSDF::sample(BSDFSamplingInfos& infos, const Point2d& _sample)
 	else
 	{
 		infos.wo = -infos.wi;
-		infos.pdf = 1. - probaBeingBlocked;
+		infos.pdf = real(1. - probaBeingBlocked);
 		infos.sampledType = BSDFType::UNKNOWN;
 		return (Color(1.) - myAlphaMap->eval(infos.uv)) / infos.pdf;//1- (eval / pdf) 
 	}

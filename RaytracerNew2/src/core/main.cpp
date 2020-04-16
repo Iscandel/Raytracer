@@ -52,6 +52,7 @@
 #include "core/Scene.h"
 #include "tools/Timer.h"
 #include "tools/Tools.h"
+#include "thread/ThreadPool.h"
 
 //#ifdef _DEBUG 
 //#pragma comment(lib,"sfml-graphics-d.lib")
@@ -78,7 +79,6 @@
 
 void run(int argc, char* argv[]);
 
-//#include "RandomSampler.h"
 
 	//Gamma tonemapper
 void shToneMapper()
@@ -363,9 +363,25 @@ protected:
 	bool myIsShown;
 };
 
-
 int main(int argc, char* argv[])
 {
+	thread::startPool();
+	//int start = 0;
+	//int size = 500;
+	//int nbTasks = 8;//getCoreNumber();
+	//int stepSize = (int) (size / nbTasks);
+	//int* tab = new int[size];
+	//thread::pool->addTask([&](int threadNumber) {
+	//	int minV = start + threadNumber * stepSize;
+	//	int maxV = threadNumber == nbTasks - 1 ? size : start + (threadNumber + 1) * stepSize;
+	//	for (int i = minV; i < maxV; i++) {
+	//		tab[i] = 4;
+	//		std::cout << i << std::endl;
+	//	}
+	//}, nbTasks, true);
+	//
+	//std::cout << "ok" << std::endl;
+	//return 0;
 	try {
 		////Point3d p(0.1, 0.2, 0.3);
 		////Point3d resP;
@@ -429,6 +445,8 @@ int main(int argc, char* argv[])
 	{
 		ILogger::log() << "Unknown error. Program aborted. \n";
 	}
+
+	thread::cleanup();
 
 	return 0;
 }
