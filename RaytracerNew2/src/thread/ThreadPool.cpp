@@ -28,6 +28,12 @@ void ThreadPool::reset(int nbThreads)
 		myThreads.emplace_back(new std::thread(&ThreadPool::run, this));
 }
 
+void ThreadPool::cancel() {
+	myIsRunning = false;
+	std::unique_ptr<std::mutex> lock;
+	myCondition.notify_all();
+}
+
 void ThreadPool::run()
 {
 	while(myIsRunning)
@@ -37,9 +43,9 @@ void ThreadPool::run()
 		{
 			std::unique_lock<std::mutex> lock(myRunningMutex);
 			myCondition.wait(lock, [&]() {return !myIsRunning || !myTasks.empty();});
-			auto res  = nextTask(); //structured binding declaration to add with c++17: auto [task, subTaskId]
-			task = res.first;
-			subTaskId = res.second;
+			std::tie(task, subTaskId) = nextTask(); //structured binding declaration to add with c++17: auto [task, subTaskId]
+			//task = std::move(res.first);
+			//subTaskId = res.second;
 		}
 
 		if(task)
@@ -62,7 +68,7 @@ std::pair<TaskSet::ptr, int> ThreadPool::nextTask()
 	
 	return{ task, subTaskId };
 }
-#include <chrono>
+
 void ThreadPool::addTask(TaskSet::Function function, int nbSubTasks, bool waitForComplete)
 {
 	TaskSet::ptr task(new TaskSet(std::move(function), nbSubTasks));
@@ -76,10 +82,11 @@ void ThreadPool::addTask(TaskSet::Function function, int nbSubTasks, bool waitFo
 			myCondition.notify_all();
 	}
 
-	using namespace std::chrono_literals;
 	if (waitForComplete) {
 		while (!task->finished()) {}
 	}
+
+	//not working...
 	//if (waitForComplete)
 	//	//std::this_thread::sleep_for(20s);
 	//	task->wait();

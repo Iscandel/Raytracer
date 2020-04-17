@@ -13,14 +13,16 @@ class TaskSet
 public:
 	typedef std::shared_ptr<TaskSet> ptr;
 	typedef std::function<void(int)> Function;
+	typedef std::function<void()> CallbackFunc;
 
 public:
-	TaskSet(Function function, int nbTasks)
+	TaskSet(Function function, int nbTasks, CallbackFunc callback = nullptr)
 		:myFunction(std::move(function))
 		, myNumberTasks(nbTasks)
 		, myTasksRemaining(nbTasks)
 		, myTasksThatFinished(0)
 		, myIsFinished(false)
+		, myIsCanceled(false)
 	{
 	}
 
@@ -36,6 +38,14 @@ public:
 		return myTasksRemaining == 0;
 	}
 
+	void cancel() {
+		myIsCanceled = true;
+	}
+
+	bool isCanceled() const {
+		return myIsCanceled;
+	}
+
 	bool finished() {
 		return myIsFinished;
 	}
@@ -48,10 +58,13 @@ public:
 			ILogger::log() << ex.what() << "\n";
 		}
 
-		int tmp = ++myTasksThatFinished;
+		int tmp = -1;
+		if(!myIsCanceled)
+			tmp = ++myTasksThatFinished;
 
-		if (tmp == myNumberTasks) {
-			//myCallback();
+		if (tmp == myNumberTasks || myIsCanceled) {
+			if(myCallback)
+				myCallback();
 			//std::cout << "finito" << std::endl;
 			myIsFinished = true;
 			std::unique_lock<std::mutex> lock(myMutex);
@@ -70,7 +83,9 @@ protected:
 	std::atomic<int> myTasksRemaining; //Tasks which have started
 	std::atomic<int> myTasksThatFinished;
 	std::atomic<bool> myIsFinished;
+	std::atomic<bool> myIsCanceled;
 	Function myFunction;
+	CallbackFunc myCallback;
 	std::mutex myMutex;
 	std::condition_variable myCondition;
 };

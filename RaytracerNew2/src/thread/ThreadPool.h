@@ -21,6 +21,8 @@ public:
 	void reset(int nbThreads);
 
 	void addTask(TaskSet::Function function, int nbSubTasks, bool waitForComplete);
+
+	void cancel();
 	
 	int getThreadNumber() const { return myThreads.size(); }
 
