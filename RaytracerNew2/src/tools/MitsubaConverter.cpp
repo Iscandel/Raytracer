@@ -142,7 +142,7 @@ MitsubaConverter::MitsubaConverter()
 	myDictionary["orthographic"] = "othographic";
 
 	myDictionary["sampler"] = "sampler";
-	myDictionary["independant"] = "RandomSampler";
+	myDictionary["independent"] = "RandomSampler";
 	myDictionary["stratified"] = "StratifiedSampler";
 	myDictionary["ldsampler"] = "StratifiedSampler";
 	myDictionary["hammersley"] = "StratifiedSampler";
@@ -162,7 +162,7 @@ MitsubaConverter::MitsubaConverter()
 	myDictionary["sphere"] = "sphere";
 
 	myDictionary["emitter"] = "light";
-	myDictionary["point"] = "pointlight";
+	myDictionary["point"] = "pointlight"; ///////////////////////////////////////// !! point...
 	myDictionary["envmap"] = "environmentLight";
 	myDictionary["area"] = "arealight";
 	myDictionary["spot"] = "spotlight";

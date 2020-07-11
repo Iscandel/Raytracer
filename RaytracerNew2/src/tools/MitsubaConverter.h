@@ -39,7 +39,7 @@ public:
 
 	void handleElement(Bloc& vec, TiXmlElement* element);
 
-	void handleProperty(TiXmlElement* element, Bloc& bloc);
+	//void handleProperty(TiXmlElement* element, Bloc& bloc);
 
 	void handleAndCorrectTransform(Bloc& bloc, TiXmlElement* element);
 

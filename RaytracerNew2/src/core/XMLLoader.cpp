@@ -105,6 +105,27 @@ bool XMLLoader::loadScene(Scene& scene, const std::string& path)
 			
 			ILogger::log(ILogger::ALL) << "Objects parsed...\n";
 		}
+		else if (key == "bsdf")
+		{
+			auto bsdf = handleBSDF(scene, element);
+			std::string id = element->Attribute("id");
+			std::string name = element->Attribute("name") ? element->Attribute("name") : "";
+			myRefBSDFs[id] = std::make_pair(name, bsdf);
+		}
+		else if (key == "transform")
+		{
+			auto transform = handleTransform(element);
+			std::string id = element->Attribute("id");
+			std::string name = element->Attribute("name") ? element->Attribute("name") : "";
+			myRefTransforms[id] = std::make_pair(name, transform);
+		}
+		else if (key == "medium")
+		{
+			auto medium = handleMedium(scene, element);
+			std::string id = element->Attribute("id");
+			std::string name = element->Attribute("name") ? element->Attribute("name") : "";
+			myRefMedia[id] = std::make_pair(name, medium);
+		}
 		//else
 		//{
 		//	handleProperty(element, params);
@@ -317,18 +338,25 @@ void XMLLoader::handleObject(Scene& scene, TiXmlElement* element)
 			}
 			else
 			{
-				std::string bsdfType = element->Attribute("type");
-				TiXmlElement* bsdfElement = element->FirstChildElement();
-				
-				Parameters bsdfParams;
-				for (bsdfElement; bsdfElement; bsdfElement = bsdfElement->NextSiblingElement())
+				if (element->Attribute("ref"))
 				{
-					handleProperty(scene, bsdfElement, bsdfParams);
+					params.addBSDF("bsdf", myRefBSDFs[element->Attribute("ref")].second);
 				}
-				ObjectFactory<BSDF>::ptr factory = ObjectFactoryManager<BSDF>::getInstance()->getFactory(bsdfType);
-				bsdf = factory->create(bsdfParams);
-				//Ou spécialiser bvh.setBSDF() et ne pas passer par params
-				params.addBSDF("bsdf", bsdf);
+				else
+				{
+					std::string bsdfType = element->Attribute("type");
+					TiXmlElement* bsdfElement = element->FirstChildElement();
+
+					Parameters bsdfParams;
+					for (bsdfElement; bsdfElement; bsdfElement = bsdfElement->NextSiblingElement())
+					{
+						handleProperty(scene, bsdfElement, bsdfParams);
+					}
+					ObjectFactory<BSDF>::ptr factory = ObjectFactoryManager<BSDF>::getInstance()->getFactory(bsdfType);
+					bsdf = factory->create(bsdfParams);
+					//Ou spécialiser bvh.setBSDF() et ne pas passer par params
+					params.addBSDF("bsdf", bsdf);
+				}
 			}
 		}
 		else if (element->ValueStr() == "bssrdf")
@@ -661,7 +689,7 @@ void XMLLoader::handleProperty(Scene& scene, TiXmlElement* element, Parameters& 
 	//TiXmlAttribute* att = element->FirstAttribute();
 	const std::string* attName = element->Attribute(std::string("name"));
 	const std::string* attValue = element->Attribute(std::string("value"));
-	if (attName == nullptr)
+	if (attName == nullptr && !element->Attribute("ref"))
 	{
 		ILogger::log() << "No name attribut specified for " << 
 			element->ValueStr() << " property.\n";
@@ -714,8 +742,17 @@ void XMLLoader::handleProperty(Scene& scene, TiXmlElement* element, Parameters& 
 	}
 	else if (element->ValueStr() == "transform")
 	{
-		Transform::ptr transform = handleTransform(element);
-		params.addTransform(*attName, transform);
+		if (element->Attribute("ref"))
+		{
+			std::string name;
+			Transform::ptr transfo;
+			std::tie(name, transfo) = myRefTransforms[element->Attribute("ref")];
+			params.addTransform(name, transfo);
+		}
+		else {
+			Transform::ptr transform = handleTransform(element);
+			params.addTransform(*attName, transform);
+		}
 	}
 	else if (element->ValueStr() == "texture")
 	{
@@ -724,17 +761,39 @@ void XMLLoader::handleProperty(Scene& scene, TiXmlElement* element, Parameters& 
 	}
 	else if (element->ValueStr() == "bsdf")
 	{
-		BSDF::ptr bsdf = handleBSDF(scene, element);
-		params.addBSDF(*attName, bsdf);
+		if (element->Attribute("ref"))
+		{
+			std::string name;
+			BSDF::ptr bsdf;
+			std::tie(name, bsdf) = myRefBSDFs[element->Attribute("ref")];
+			params.addBSDF(name, bsdf);
+		}
+		else {
+			BSDF::ptr bsdf = handleBSDF(scene, element);
+			params.addBSDF(*attName, bsdf);
+		}
 	}
 	else if (element->ValueStr() == "medium")
 	{
-		Medium::ptr medium = handleMedium(scene, element);
-		params.addMedium(*attName, medium);
-		if (medium->isEmissive())
+		Medium::ptr medium;
+		
+		if (element->Attribute("ref"))
+		{
+			std::string name;
+			
+			std::tie(name, medium) = myRefMedia[element->Attribute("ref")];
+			params.addMedium(name, medium);
+		}
+		else {
+			medium = handleMedium(scene, element);
+			params.addMedium(*attName, medium);
+		}
+
+		if (medium->isEmissive()) //multiple add wrt ref media is ok
 		{
 			scene.addLight(medium);
 		}
+
 	}
 	else if (element->ValueStr() == "phase")
 	{

@@ -13,6 +13,8 @@ EnvironmentLight::EnvironmentLight(const Parameters& params)
 	myFactor = params.getReal("scale", 1.);
 	myIsProbe = params.getBool("isProbe", false);
 	real gamma = params.getReal("gamma", (real)0.);
+	myOffsetU = params.getReal("offsetU", real(0.));
+	myOffsetV = params.getReal("offsetV", real(0.));
 
 	myArray = ImageLoader::load(path, ImageLoader::ALL, gamma);
 
@@ -88,6 +90,14 @@ LightSamplingInfos EnvironmentLight::sample(const Point3d & pFrom, const Point2d
 	int row = myMarginalCDF.sample(sample.x(), pdfRow);
 	int col = myRowCDFs[row].sample(sample.y(), pdfCol);
 
+	//New
+	real rcol = col + myOffsetU * myArray->getWidth();
+	real rrow = row + myOffsetV * myArray->getHeight();
+	checkXY(rcol, rrow);
+	row = rrow;
+	col = rcol;
+	//
+
 	real theta;
 	real phi;
 	if (myIsProbe)
@@ -158,6 +168,13 @@ real EnvironmentLight::pdf(const Point3d &, const LightSamplingInfos & infos)
 		fromPhi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray->getWidth();
 		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray->getHeight();
 	}
+
+	//New
+	fromPhi += myOffsetU * myArray->getWidth();
+	fromTheta += myOffsetV * myArray->getHeight();
+	checkXY(fromPhi, fromTheta);
+	//
+
 	//real phi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray.getWidth();
 	//real theta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray.getHeight();
 	//if(isnan((float)theta))
@@ -193,6 +210,12 @@ Color EnvironmentLight::le(const Vector3d & direction, const Point3d&, const Nor
 		fromPhi = (sphericalPhiFromCartesian(dir) / (2 * math::PI)) * myArray->getWidth();
 		fromTheta = (sphericalThetaFromCartesian(dir) / math::PI) * myArray->getHeight();
 	}
+
+	//New
+	fromPhi += myOffsetU * myArray->getWidth();
+	fromTheta += myOffsetV * myArray->getHeight();
+	checkXY(fromPhi, fromTheta);
+	//
 	
 #if NB_SPECTRUM_SAMPLES == 3
 		return math::interp2(Point2d(fromPhi, fromTheta), *myArray) * myFactor;
@@ -236,6 +259,19 @@ void EnvironmentLight::initialize(Scene & scene)
 	myCenter = box.getCentroid();
 	//We double the radius just to be sure
 	mySphereRadius = 2 * std::max((box.getMin() - myCenter).norm(), (box.getMax() - myCenter).norm());
+}
+
+//Repeat mode
+void EnvironmentLight::checkXY(real& x, real& y) const
+{
+	if (x >= myArray->getWidth())
+		x = (int)x % myArray->getWidth() + (x - (int)x); //modulo + decimal part
+	else if (x < 0)
+		x = myArray->getWidth() - std::abs((int)x) % myArray->getWidth() + (x - (int)x);
+	if (y >= myArray->getHeight())
+		y = (int)y % myArray->getHeight() + (y - (int)y);
+	else if (y < 0)
+		y = myArray->getHeight() - std::abs((int)y) % myArray->getHeight() + (y - (int)y);
 }
 
 RT_REGISTER_TYPE(EnvironmentLight, Light)

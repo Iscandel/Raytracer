@@ -39,6 +39,9 @@ public:
 	}
 
 protected:
+	void checkXY(real& x, real& y) const;
+
+protected:
 	Transform::ptr myLightToWorld;
 	Transform::ptr myWorldToLight;
 
@@ -55,5 +58,8 @@ protected:
 	std::shared_ptr<Array2D<Color3>> myArray;
 
 	std::vector<real> myWeight;
+
+	real myOffsetU;
+	real myOffsetV;
 };
 

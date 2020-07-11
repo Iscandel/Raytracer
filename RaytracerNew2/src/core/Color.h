@@ -98,13 +98,16 @@ public:
 	typedef Eigen::Array<T, SamplesHelper<Samples>::ALIGNED, 1> BaseArray;
 
 public:
-	static constexpr int NB_SAMPLES = Samples;
+	//static constexpr int NB_SAMPLES = Samples;
+	enum {
+		NB_SAMPLES = Samples
+	};
 	
 public:
 //#if NB_SPECTRUM_SAMPLES == 3
 #ifdef USE_ALIGN
 	TplColor(T x, T y, T z, T w = (priv::real)0)
-		: TplColor::BaseArray(x, y, z, w)
+		: BaseArray(x, y, z, w)
 	{
 	}
 
@@ -138,7 +141,7 @@ public:
 	{ }
 
 	template <typename Derived> TplColor &operator=(const Eigen::ArrayBase<Derived>& p) {
-		this->Base::operator=(p);
+		this->BaseArray::operator=(p);
 		return *this;
 	}
 
@@ -373,7 +376,7 @@ public:
 	}
 
 #else
-	Color3(T x, T y, T z)
+	Color3(priv::real  x, priv::real  y, priv::real  z)
 		: TplColor(x, y, z)
 	{
 	}

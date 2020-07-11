@@ -44,6 +44,14 @@ public:
 	void handleCameraMedium(Scene& scene, TiXmlElement* element);
 	//std::vector<real> handleObjectPosition(TiXmlElement* element);
 	void handleProperty(Scene& scene, TiXmlElement* element, Parameters& params);
+
+//protected:
+//	std::map<std::string, std::any>
+protected:
+	std::map<std::string, std::pair<std::string, BSDF::ptr>> myRefBSDFs;
+	std::map<std::string, std::pair<std::string, Transform::ptr>> myRefTransforms;
+	std::map<std::string, std::pair<std::string, Medium::ptr>> myRefMedia;
+
 };
 
 }
