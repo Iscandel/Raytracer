@@ -12,6 +12,8 @@
 #include <ImfHeader.h>
 #include <ImfIO.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
 #include <SFML/Graphics.hpp>
 
 #include "core/Parameters.h"
@@ -41,36 +43,66 @@ std::shared_ptr<Array2D<Color3>> ImageLoader::load(const std::string & _path, Ch
 
 	std::shared_ptr<Array2D<Color3>> array(new Array2D<Color3>);
 
-	if (Imf_2_2::isOpenExrFile(path.c_str()))
+	if(isHDRFile(path)) 
 	{
 		if (gammaFrom == 0)
 			gammaFrom = (real)1;
 
-		Imf_2_2::RgbaInputFile file(path.c_str());
-		Imath::Box2i dataWindow = file.dataWindow();
-		int width = dataWindow.max.x - dataWindow.min.x + 1;
-		int height = dataWindow.max.y - dataWindow.min.y + 1;
-		Imf_2_2::Array2D<Imf_2_2::Rgba> pixels;
-		pixels.resizeErase(height, width);
-		file.setFrameBuffer(&pixels[0][0] - dataWindow.min.x - dataWindow.min.y * width, 1, width);
-		file.readPixels(dataWindow.min.y, dataWindow.max.y);
-		array->setSize(width, height);
-
-		for (int i = 0; i < width; i++)
+		if (Imf_2_2::isOpenExrFile(path.c_str()))
 		{
-			for (int j = 0; j < height; j++)
+			Imf_2_2::RgbaInputFile file(path.c_str());
+			Imath::Box2i dataWindow = file.dataWindow();
+			int width = dataWindow.max.x - dataWindow.min.x + 1;
+			int height = dataWindow.max.y - dataWindow.min.y + 1;
+			Imf_2_2::Array2D<Imf_2_2::Rgba> pixels;
+			pixels.resizeErase(height, width);
+			file.setFrameBuffer(&pixels[0][0] - dataWindow.min.x - dataWindow.min.y * width, 1, width);
+			file.readPixels(dataWindow.min.y, dataWindow.max.y);
+			array->setSize(width, height);
+
+			for (int i = 0; i < width; i++)
 			{
-				Imf_2_2::Rgba& rgba = pixels[j][i];
-				real invGammaDest = gammaDest == (real)1. ? (real)1. : real(1. / gammaDest);
-				Color3 pixel;
-			
-				pixel = setPixel(gammaFrom, invGammaDest, channel, rgba.r, rgba.g, rgba.b, rgba.a);
-		
-				(*array)(i, j) = pixel;//Color3::fromRGB(rgba.r, rgba.g, rgba.b);//Color(rgba.r, rgba.g, rgba.b);
+				for (int j = 0; j < height; j++)
+				{
+					Imf_2_2::Rgba& rgba = pixels[j][i];
+					real invGammaDest = gammaDest == (real)1. ? (real)1. : real(1. / gammaDest);
+					Color3 pixel;
+
+					pixel = setPixel(gammaFrom, invGammaDest, channel, rgba.r, rgba.g, rgba.b, rgba.a);
+
+					(*array)(i, j) = pixel;//Color3::fromRGB(rgba.r, rgba.g, rgba.b);//Color(rgba.r, rgba.g, rgba.b);
+				}
 			}
 		}
+		else
+		{
+			int x, y, n;
+			float *data = stbi_loadf(path.c_str(), &x, &y, &n, 0);
+			if (n < 3 || n > 4)
+				ILogger::log(ILogger::ERRORS) << "HDR image " << path << "has " << n << " components and should have 3 or 4\n";
 
+			array->setSize(x, y);
 
+			for (int i = 0; i < x; i++)
+			{
+				for (int j = 0; j < y; j++)
+				{
+					int idx = n * (j * x + i);
+					float r = data[idx];
+					float g = data[idx + 1];
+					float b = data[idx + 2];
+					float a = n == 4 ? data[idx + 3] : 0;
+					real invGammaDest = gammaDest == (real)1. ? (real)1. : real(1. / gammaDest);
+					Color3 pixel;
+
+					pixel = setPixel(gammaFrom, invGammaDest, channel, r, g, b, a);
+
+					(*array)(i, j) = pixel;//Color3::fromRGB(rgba.r, rgba.g, rgba.b);//Color(rgba.r, rgba.g, rgba.b);
+				}
+			}
+
+			stbi_image_free(data);
+		}
 		//myCache[key] = array;
 	}
 	else
@@ -108,11 +140,30 @@ std::shared_ptr<Array2D<Color3>> ImageLoader::load(const std::string & _path, Ch
 
 bool ImageLoader::isHDRFile(const std::string & path)
 {
-	std::ifstream f(path, std::ios_base::binary);
-	char b[4];
-	f.read(b, sizeof(b));
+	//std::ifstream f(path, std::ios_base::binary);
+	//char b[4];
+	//f.read(b, sizeof(b));
 
-	return !!f && b[0] == 0x76 && b[1] == 0x2f && b[2] == 0x31 && b[3] == 0x01;
+	//return !!f && b[0] == 0x76 && b[1] == 0x2f && b[2] == 0x31 && b[3] == 0x01;
+
+	return Imf::isOpenExrFile(path.c_str()) || isRadianceFile(path);
+}
+
+bool ImageLoader::isRadianceFile(const std::string& path)
+{
+	std::ifstream f(path, std::ios_base::binary);
+	if (!f)
+		return false;
+
+	char str[10];
+	f.read(str, sizeof(str));
+	if (memcmp(str, "#?RADIANCE", 10)) {
+		f.close();
+		return false;
+	}
+
+	f.close();
+	return true;
 }
 
 ImageLoader::Channel ImageLoader::channelToInt(const std::string& channel)

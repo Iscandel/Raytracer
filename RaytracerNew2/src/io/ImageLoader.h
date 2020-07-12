@@ -35,6 +35,8 @@ protected:
 	static Color3 spaceColorCorrection(real gammaFrom, real invGammaDest, real r, real g, real b);
 	static Color3 setPixel(real gammaFrom, real invGammaDest, Channel channel, real r, real g, real b, real a);
 
+	static bool isRadianceFile(const std::string& path);
+
 protected:
 	/// Hash function
 	//struct ImageLoaderHash : std::unary_function<ImageLoaderHash, size_t> {
