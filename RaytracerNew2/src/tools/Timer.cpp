@@ -16,14 +16,14 @@ Timer::~Timer()
 ///////////////////////////////////////////////////////////////////////////////
 void Timer::reset()
 {
-	myStart = std::chrono::system_clock::now();
+	myStart = std::chrono::steady_clock::now();
 }
 
 //=============================================================================
 ///////////////////////////////////////////////////////////////////////////////
 double Timer::elapsedTime()
 {
-	Moment time = std::chrono::system_clock::now();
+	Moment time = std::chrono::steady_clock::now();
 	std::chrono::milliseconds elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(time - myStart);
 
 	return elapsed.count() / 1000.;

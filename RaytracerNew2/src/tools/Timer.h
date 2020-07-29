@@ -8,7 +8,7 @@
 class Timer
 {
 public:
-	typedef std::chrono::system_clock::time_point Moment;
+	typedef std::chrono::steady_clock::time_point Moment;
 
 public:
 	Timer();
