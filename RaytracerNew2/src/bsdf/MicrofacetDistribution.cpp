@@ -4,7 +4,7 @@
 #include "core/Math.h"
 
 
-const char *microfacetDistributionString::STRING[];
+//const char *microfacetDistributionString::STRING[];
 
 MicrofacetDistribution::MicrofacetDistribution()
 :MicrofacetDistribution(microfacetDistributionString::STRING[0])

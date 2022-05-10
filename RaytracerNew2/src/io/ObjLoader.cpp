@@ -17,7 +17,7 @@
 #include "texture/ConstantTexture.h"
 #include "texture/ImageTexture.h"
 
-
+#include <functional>
 #include <fstream>
 #include <unordered_map>
 
@@ -83,7 +83,7 @@ struct VertexObj
 };
 
 /// Hash function for VertexObj
-struct VertexObjHash : std::unary_function<VertexObjHash, size_t> {
+struct VertexObjHash {
 	std::size_t operator()(const VertexObj &v) const {
 		size_t hash = std::hash<uint32_t>()(v.indPos);
 		hash = hash * 37 + std::hash<uint32_t>()(v.indUV);
@@ -208,7 +208,7 @@ bool ObjLoader::read(std::vector<Point3d, Eigen::aligned_allocator<Point3d>>& po
 		{
 			std::string mtlPath = tools::trim(line.substr(6, line.size() - 1));
 			Filesystem tmp;
-			std::experimental::filesystem::path f(filename);
+			std::filesystem::path f(filename);
 			tmp.addSearchPath(f.parent_path());
 			mtlPath = tmp.resolve(mtlPath).string();
 			myBSDFByName = parseMtl(mtlPath, params);

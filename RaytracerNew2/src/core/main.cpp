@@ -293,7 +293,7 @@ void writeEXR(const std::string& path, const Screen& film) //const Array2D<Pixel
 {
 	int width = film.getSizeX();//.getWidth();
 	int height = film.getSizeY();//array.getHeight();
-	Imf_2_2::Rgba* pixels = new Imf_2_2::Rgba[width * height];
+	Imf::Rgba* pixels = new Imf::Rgba[width * height];
 
 	if (Color::NB_SAMPLES != 3)
 		ILogger::log() << "Spectral EXR not implemented yet. Switch to RGB\n";
@@ -305,12 +305,12 @@ void writeEXR(const std::string& path, const Screen& film) //const Array2D<Pixel
 			
 			real r, g, b;
 			col.toRGB(r, g, b);
-			Imf_2_2::Rgba tmp((half)r, (half)g, (half)b);
+			Imf::Rgba tmp((half)r, (half)g, (half)b);
 			*(pixels + x + y * width) = tmp;
 		}
 	}
 
-	Imf_2_2::RgbaOutputFile file(path.c_str(), width, height, Imf_2_2::WRITE_RGBA);
+	Imf::RgbaOutputFile file(path.c_str(), width, height, Imf::WRITE_RGBA);
 	file.setFrameBuffer(pixels, 1, width);
 	file.writePixels(height);
 

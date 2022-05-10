@@ -164,7 +164,7 @@ inline real sphericalPhiFromCartesian(const Vector3d& v)
 {
 	//real res =  std::atan2(v.y(), v.x());
 	real res = std::atan2(v.x(), -v.z());
-	return res < 0.f ? res + 2 * (real) M_PI : res;	
+	return res < 0.f ? res + 2 * (real)3.14159265358979323846 : res;
 }
 
 inline real sphericalThetaFromCartesian(const Vector3d& v)

@@ -1,6 +1,6 @@
 #include "AmbientLightSystem.h"
 
-#include "Scene.h"
+//#include "Scene.h"
 //
 //#include "Color.h"
 //

@@ -32,7 +32,7 @@ XMLLoader::~XMLLoader(void)
 ///////////////////////////////////////////////////////////////////////////////
 bool XMLLoader::loadScene(Scene& scene, const std::string& path)
 {
-	getGlobalFileSystem().addSearchPath(std::experimental::filesystem::path(path).parent_path());
+	getGlobalFileSystem().addSearchPath(std::filesystem::path(path).parent_path());
 
 	TiXmlDocument doc(path.c_str());
 	if(!doc.LoadFile())
@@ -725,7 +725,7 @@ void XMLLoader::handleProperty(Scene& scene, TiXmlElement* element, Parameters& 
 		bool isPath = false;
 		//bug with long path on VS, so try-catch
 		try {
-			isPath = std::experimental::filesystem::exists(*attValue);
+			isPath = std::filesystem::exists(*attValue);
 		}
 		catch (const std::exception&) {
 		}

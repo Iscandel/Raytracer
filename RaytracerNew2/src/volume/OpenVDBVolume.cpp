@@ -4,6 +4,7 @@
 
 #include <openvdb\tools\Statistics.h>
 #include <openvdb\tools\Interpolation.h>
+#include <openvdb/Types.h>
 
 OpenVDBVolume::OpenVDBVolume(const Parameters& params)
 :Volume(params)
@@ -97,7 +98,7 @@ OpenVDBVolume::OpenVDBVolume(const Parameters& params)
 		file.close();
 		// From the example above, "LevelSetSphere" is known to be a FloatGrid,
 		// so cast the generic grid pointer to a FloatGrid pointer.
-		typedef openvdb::tree::Tree4<half, 5, 4, 3>::Type HalfTree;
+		//typedef openvdb::tree::Tree4<half, 5, 4, 3>::Type HalfTree;
 		//using openvdb::Grid<HalfTree> HalfGrid;
 	
 		//if (baseGrid->isType<openvdb::FloatGrid>())

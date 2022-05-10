@@ -44,7 +44,7 @@
 			std::vector<Point2d, Eigen::aligned_allocator<Point2d>> UVs;
 			std::vector<int> indices;
 
-			ObjectType::ptr object(new ObjectType(params));
+			typename ObjectType::ptr object(new ObjectType(params));
 			object->computeMeshObject(vertices,
 				normals,
 				UVs,

@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
-#include <experimental/filesystem>
+#include <filesystem>
 class Filesystem
 {
 public:
-	typedef std::experimental::filesystem::path path;
+	typedef std::filesystem::path path;
 	typedef std::vector<path>::iterator iterator;
 	
 
@@ -35,7 +35,7 @@ public:
 		for (path& s : mySearchPaths)
 		{
 			path fullPath = s / toResolve;
-			if (std::experimental::filesystem::exists(fullPath))
+			if (std::filesystem::exists(fullPath))
 				return fullPath;
 		}
 

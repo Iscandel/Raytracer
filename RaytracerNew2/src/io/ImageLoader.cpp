@@ -48,13 +48,13 @@ std::shared_ptr<Array2D<Color3>> ImageLoader::load(const std::string & _path, Ch
 		if (gammaFrom == 0)
 			gammaFrom = (real)1;
 
-		if (Imf_2_2::isOpenExrFile(path.c_str()))
+		if (Imf::isOpenExrFile(path.c_str()))
 		{
-			Imf_2_2::RgbaInputFile file(path.c_str());
+			Imf::RgbaInputFile file(path.c_str());
 			Imath::Box2i dataWindow = file.dataWindow();
 			int width = dataWindow.max.x - dataWindow.min.x + 1;
 			int height = dataWindow.max.y - dataWindow.min.y + 1;
-			Imf_2_2::Array2D<Imf_2_2::Rgba> pixels;
+			Imf::Array2D<Imf::Rgba> pixels;
 			pixels.resizeErase(height, width);
 			file.setFrameBuffer(&pixels[0][0] - dataWindow.min.x - dataWindow.min.y * width, 1, width);
 			file.readPixels(dataWindow.min.y, dataWindow.max.y);
@@ -64,11 +64,11 @@ std::shared_ptr<Array2D<Color3>> ImageLoader::load(const std::string & _path, Ch
 			{
 				for (int j = 0; j < height; j++)
 				{
-					Imf_2_2::Rgba& rgba = pixels[j][i];
+					Imf::Rgba& rgba = pixels[j][i];
 					real invGammaDest = gammaDest == (real)1. ? (real)1. : real(1. / gammaDest);
 					Color3 pixel;
 
-					pixel = setPixel(gammaFrom, invGammaDest, channel, rgba.r, rgba.g, rgba.b, rgba.a);
+					pixel = setPixel(gammaFrom, invGammaDest, channel, (real)rgba.r, (real)rgba.g, (real)rgba.b, (real)rgba.a);
 
 					(*array)(i, j) = pixel;//Color3::fromRGB(rgba.r, rgba.g, rgba.b);//Color(rgba.r, rgba.g, rgba.b);
 				}

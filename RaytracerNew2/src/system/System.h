@@ -1,6 +1,6 @@
 #pragma once
-#include "GeometricShape.h"
-#include "Geometry.h"
+#include "geometricShape/GeometricShape.h"
+#include "core/Geometry.h"
 
 #include <string>
 #include <memory>
